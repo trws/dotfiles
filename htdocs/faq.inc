@@ -2,8 +2,12 @@
 <ul>
 	<li><a class=question href="#faq-1">What are those annoying <tt>«»</tt> characters whenever I invoke a
 	mapping?</a></li>
-	<li><a class=question href="#faq-2">Compiling/Viewing does not seem to
+	<li><a class=question href="#faq-2">Compiling does not seem to
 	work for me. My gvim hangs/does nothing.</a></li>
+	<li><a class=question href="#faq-3">Viewing does not seem to work for
+	me.</a></li>
+	<li><a class=question href="#faq-4">After a recent upgrade, whenever I
+	launch gvim I get some python-ish errors</a></li>
 </ul>
 <h2>Answers</h2>
 <a name="faq-1">
@@ -39,7 +43,7 @@ in your <tt>.vimrc</tt>.
 </blockquote>
 <a name="faq-2">
 <div class=qa>
-Q: Compiling/Viewing does not seem to work for me. My gvim hangs/does
+Q: Compiling does not seem to work for me. My gvim hangs/does
 nothing.
 </div>
 <blockquote>
@@ -103,8 +107,53 @@ in your <tt>.vimrc</tt> or <tt>ftplugin/tex.vim</tt>. NOTE: There are actually 4
 </ol>
 </div>
 </blockquote>
+<a name="faq-3">
+<div class=qa>
+Q: Viewing does not seem to work for me.
+</div>
+<blockquote>
+<div class=ans>
+<ol>
+<li>First check to make sure that you can call the programs specified by
+the <a
+href="documentation/latex-suite/viewer-customization.html#Tex_ViewRule_format">viewing
+rules</a> from within vim. For example, if you specified
+the PDF viewing program as <tt>AcroRd32</tt>, then you should be able to do
+<pre>!start AcroRd32</pre>
+from within vim and get Acrobat reader to launch. On windows, this means
+setting the <tt>PATH</tt> variable to include the location in which
+<tt>AcroRd32.exe</tt> resides. See the system documentation how to do this.
+On Windows 2000/XP, the settings can be changed from
+<pre>Control Panel &gt; System &gt; Advanced &gt; Environment Variables</pre>
+</li>
+Some versions of gvim on windows have problems calling external programs
+which reside in directories containing spaces in their names even if the
+<tt>%PATH%</tt> variable contains the correct directories. In this case,
+you need to change the <tt>g:Tex_ViewRule_format</tt> variable to use the
+full path to the viewer. For example:
+<pre>let g:Tex_ViewRule_pdf = 'c:/Program\ Files/Adobe/Acrobat 5.0/Reader/AcroRd32</pre>
+</ol>
+</div>
+</blockquote>
+<a name="faq-4">
+<div class=qa>
+Q: After a recent upgrade, whenever I launch gvim I get some python-ish
+errors.
+</div>
+<blockquote>
+<div class=ans>
+Latex-suite uses python in some of the multiple compilation code if
+available because it speeds things up and also saves on some unnecessary
+buffers getting introduced in the buffer list. If your version of python is
+very old or your python via vim is not working, then you need to tell
+Latex-suite not to use python if your vim returns <tt>1</tt> for
+<tt>has('python')</tt>. This is done by setting the
+<tt>g:Tex_UsePython</tt> variable to zero.
+</div>
+</blockquote>
 
 <!-- A sample Q & A
+<a name="faq-#">
 <div class=qa>
 Q: 
 </div>
@@ -115,3 +164,6 @@ Answer
 </blockquote>
 -->
 
+<!--
+vim:ft=php
+-->
