@@ -44,7 +44,7 @@ nothing.
 </div>
 <blockquote>
 <div class=ans>
-There is a known bug when you have <tt>'shell'</tt> set to <tt>'bash'</tt>
+There is a known bug when you have <tt>&amp;shell</tt> set to <tt>'bash'</tt>
 in win32. This causes gvim to apparently hang when <tt>\ll</tt> is pressed.
 As of now, an elegant solution has not presented itself. There are two
 work-arounds as of now for this problem:
@@ -61,28 +61,35 @@ If you are not on win32 and are still having problems, then it is most
 probably because the flavor of LaTeX you are using is not supported out of
 the box by latex-suite. You will need to set the value for
 <tt>g:Tex_CompileRule_dvi</tt> in your <tt>.vimrc</tt> or
-<tt>ftplugin/tex.vim</tt>. This is a string like the following:
-<pre>
-latex  \\nonstopmode \\input\{$*\}
-</pre>
-Make sure that you set this variable to a value which permits it to be
-executed from within vim without user intervention. For example, if
-you set <tt>g:Tex_CompileRule_dvi</tt> to a value which makes the output of 
-<pre>
-set makeprg?
-</pre>
-show the above string, then you should be able to do
-<pre>
-!latex  \\nonstopmode \\input\{myfile.tex\}
-</pre>
-from within vim without any problems. <br>
+<tt>ftplugin/tex.vim</tt>.<br>
 <p></p>
-<b>NOTE:</b> Please be careful about using single or double backslashes.
-Different platforms/compilers work differently, so experiment with both.
+<b>Diagonastics:</b><br>
+Try doing <tt>:call RunLatex()</tt> from vim's command prompt. You
+should then be able to see what command latex-suite is using to fire up the
+compiler. By default, on UNIX systems you should see something like:
+<pre>
+!latex \\nonstopmode \\input\{filename.tex\}
+</pre>
+Make sure that the shell is not generating some error. Try executing the
+string which you see from <br><tt>:call RunLatex()</tt><br> on the command line.
+Does that work fine? Debug that till you can get a string which is able to
+get the latex compiler to generate the standard compiler output without any
+user intervention. When you get a value, then set this as the value of 
+<tt>g:Tex_CompileRule_dvi</tt> in your <tt>ftplugin/tex.vim</tt>
+<p></p>
+<b>NOTE:</b> Please be careful about escaping backslashes or curly braces.
+Sometimes, even though <tt>g:Tex_CompileRule_dvi</tt> has the correct
+number of backslashes, vim might execute commands
+<pre>
+bash -c "somecommand"
+</pre>
+(Note the double quotes). This makes some of the backslashes go away...
+<p></p>
 Also, If you do face problems, please <a
 href="index.php?subject=weare">contact us</a> with your setup (i.e, your
 OS, latex flavor, gvim version and any other special configuration stuff
-you might think of), so we can take care of the problem.
+you might think of), so we can take care of the problem in future
+revisions.
 </div>
 </blockquote>
 
