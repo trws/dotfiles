@@ -1,12 +1,11 @@
 #! /usr/bin/python
 
-import sys, re
+import sys, re, os
 
 try:
 	import pwd
 	username = pwd.getpwuid(os.getuid())[0]
 except ImportError:
-	import os
 	username = os.getenv('USERNAME')
 
 commit = sys.stdin.read()
