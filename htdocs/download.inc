@@ -9,6 +9,7 @@ Latest stable version of latexSuite:
 	echo date("F j, Y", filemtime("download/latexSuite.tar.gz")).")"; ?>
 </li>
 </ul>
+<a name=installation>
 <h3>Installation Instructions</h3>
 Extract one of the archives above into your ~/vimfiles directory (if you
 are using windows) or ~/.vim directory (if you are using *nix). Make sure you have the
@@ -26,8 +27,15 @@ files, start vim and do the following:
 <tt>helptags ~/vimfiles/doc</tt>  &nbsp; &nbsp; (for windows users) <br>
 </p>
 After that, you can do
-<p><tt>help latex-suite</tt> from within vim to get help for
-latex-suite</p>.
+<p><tt>help latex-suite</tt></p> from within vim to get help for
+latex-suite.
+<br>
+<p></p>
+<b>NOTE: </b>
+If you have already have a system of filetype specific files (ftplugin,
+indent etc) files set up for the 'tex' filetype, then you might want to
+read the <a href="#advanced">advanced installation instructions</a> for
+potential conflicts.
 
 <h3>Other Stuff</h3>
 
@@ -69,6 +77,44 @@ to follow the instructions for anonymous CVS access <a
 href="http://sourceforge.net/cvs/?group_id=52322">here</a>.
 </li>
 </ul>
+
+<a name="advanced">
+<h3>Advanced Installation Instructions</h3>
+The archive above will unzip in the following manner:<br>
+
+<pre>
+latexSuite.zip
+    |
+    |   ltags
+    |
+    +---plugin
+    |       imaps.vim
+    |       SyntaxFolds.vim
+    |       libList.vim
+    |
+    +---ftplugin
+    |   |   tex_latexSuite.vim
+    |   |
+    |   \---latex-suite
+    |       ... latex suite files ...
+    |          includes templates,
+    |             macros etc
+    +---doc
+    |       latex-suite.txt
+    |       latexhelp.txt
+    | <span class=conflict>
+    +---indent
+    |       tex.vim
+    |
+    \---compiler
+            tex.vim
+</span>
+</pre>
+The files shown in <span class=conflict>red</span> will potentially
+over-write files already in your system. In this case, you will want to
+unpack the archive into a temporary folder and then copy over the files
+which you need. Note however, that this is not supported. You will have to
+take care of the bugs which you encounter because of this yourself.
 
 <!-- 
 vim:ft=php 
