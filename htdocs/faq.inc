@@ -13,6 +13,8 @@
 	<li><a class=question href="#faq-5">Typing some European characters
 	becomes problematic in Latex-suite because those characters seem to be
 	mapped to something.</a></li>
+	<li><a class="question" href="#faq-8">I cannot type the e-acute
+	character! HELP!</a></li>
 	<li><a class=question href="#faq-6">Sometimes I need to insert a
 	literal double quote. But whenever I press <tt>"</tt>, I get
 	<tt>``</tt>. How do I do get around this? Can I disable the <tt>"</tt>
@@ -205,6 +207,23 @@ This will make <tt>&lt;C-b&gt;</tt> etc. assume the functionality of
 <tt>&lt;Alt&gt;</tt> keys to anything. If you wish you can use something
 like <tt>&lt;Plug&gt;foo1</tt> etc in the LHS of the mappings (do not use
 the same LHS for all three) to effectively disable any mappings.
+</div>
+</blockquote>
+<a name="faq-8">
+<div class=qa>
+Q: I cannot insert the <tt>e-acute (é)</tt> character! HELP!
+</div>
+<blockquote>
+<div class=ans>
+Insert the following line in your <tt>~/.vim/ftplugin/tex.viim</tt> file:
+<pre>
+imap &lt;buffer&gt; &lt;leader&gt;it &lt;Plug&gt;Tex_InsertItemOnThisLine
+</pre>
+Replace <tt>&lt;leader&gt;it</tt> with any other key-sequence. This will
+make <tt>&lt;leader&gt;it</tt> key insert an <tt>\item</tt> command
+corresponding to the last opened environment in the current line in insert
+mode. The <tt>&lt;M-i&gt;</tt> key which is used for inserting the
+<tt>e-acute</tt> character will remain unmapped. 
 </div>
 </blockquote>
 
