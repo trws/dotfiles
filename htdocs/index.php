@@ -21,7 +21,7 @@ if (isset($_GET['subject']))
 			$pagetitle="Links";
 			break;
 		case weare:
-			$pagetitle="We are...";
+			$pagetitle="We are ...";
 			break;
 		case download:
 			$pagetitle="Download";
@@ -32,7 +32,7 @@ if (isset($_GET['subject']))
 }
 else
 {
-	$pagetitle="VIM-latexSuite";
+	$pagetitle="VIM-LaTeX";
 	$leftpanel="left_main.inc";
 	$mainpanel="main.inc";
 }
@@ -40,36 +40,26 @@ include "head.inc";
 ?>
 
 
-<!-- End of header -->
+<!-- End of left navigation bar. -->
 
-<table class="meritum" border="0">
-<tr>
-	<td colspan="3"> 
-		<h2 class="hline"><? echo $pagetitle ?></h2>
-	</td>
-</tr>
-<tr>
-
-<td class="leftpanel" width="100">
-<!-- Begin of Left Panel -->
-
-<?  include $leftpanel ?>
-
-<!-- End of Left Panel -->
-</td>
-<td>
-&nbsp;
-</td>
-<td class="meritum">
+<td class="mainpanel">
 <!-- Begin of Main Panel -->
 
+<h2 class="hline"><? echo $pagetitle ?></h2>
 <?  include $mainpanel ?>
 
 <!-- End of Main Panel -->
-</td></tr>
-</table>
-</div>
-
+</td>
+</tr>
+<tr>
+<td colspan=2 class=footpanel>
 <!-- Begin of footer -->
 
 <? include "foot.inc" ?>
+
+</td>
+</tr>
+</table>
+
+</body>
+</html>
