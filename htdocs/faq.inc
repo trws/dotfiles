@@ -11,6 +11,10 @@
 	<li><a class=question href="#faq-5">Typing some European characters
 	becomes problematic in Latex-suite because those characters seem to be
 	mapped to something.</a></li>
+	<li><a class=question href="#faq-6">Sometimes I need to insert a
+	literal doube quote. But whenever I press <tt>"</tt>, I get
+	<tt>``</tt>. How do I do get around this? Can I disable the <tt>"</tt>
+	to <tt>``</tt> conversion permanently for certain files?</a></li>
 </ul>
 <h2>Answers</h2>
 <a name="faq-1">
@@ -177,6 +181,29 @@ This will make <tt>&lt;C-b&gt;</tt> etc. assume the functionality of
 <tt>&lt;Alt&gt;</tt> keys to anything. If you wish you can use something
 like <tt>&lt;Plug&gt;foo1</tt> etc in the LHS of the mappings (do not use
 the same LHS for all three) to effectively disable any mappings.
+</div>
+</blockquote>
+<a name="faq-6">
+<div class=qa>
+Q: Sometimes I need to insert a literal doube quote. But whenever I press
+<tt>"</tt>, I get <tt>``</tt>. How do I get around this? Can I disable the
+<tt>"</tt> to <tt>``</tt> conversion permanently for certain files?
+</div>
+<blockquote>
+<div class=ans>
+If you only need to insert a <tt>"</tt> occassionally but would like to
+retain the <tt>"</tt> to <tt>``</tt> functionality, then use Vim's
+<tt>&lt;C-v&gt;</tt> functionality.
+<pre>:help i_CTRL-v</pre>
+from within Vim for more information. In short press
+<tt>&lt;C-v&gt;"</tt> instead of just <tt>"</tt>.
+<p></p>
+If for some files, you need to permanently disable smart quotes, then you
+need to set the <tt>Tex_SmartKeyQuote</tt> setting to zero as described
+<a href="documentation/latex-suite/customizing-smart-keys.html">here</a>.
+Setting <tt>b:Tex_SmartKeyQuote</tt> to <tt>0</tt> will disable it for a
+particular buffer, setting <tt>g:Tex_SmartKeyQuote</tt> will disable it for
+all buffers.
 </div>
 </blockquote>
 
