@@ -21,10 +21,10 @@ function GetLatestDevVersion($pat) {
 $latestTgz = GetLatestDevVersion('tar.gz');
 $latestZip = GetLatestDevVersion('zip');
 
-$latestTgzTime = date("F j, Y", filemtime("download/$latestTarGz"));
+$latestTgzTime = date("F j, Y", filemtime("download/$latestTgz"));
 $latestZipTime = date("F j, Y", filemtime("download/$latestZip"));
 
-$latestTgzSize = round(filesize("download/$latestTarGz")/1024,1)." Kb";
+$latestTgzSize = round(filesize("download/$latestTgz")/1024,1)." Kb";
 $latestZipSize = round(filesize("download/$latestZip")/1024, 1)." Kb";
 
 $relName = "latexSuite-1.5";
