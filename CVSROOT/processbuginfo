@@ -1,39 +1,47 @@
 #! /usr/bin/python
 
-import sys, re, os, string
+import sys, re, os, string, getopt, pwd, time
 from cStringIO import StringIO
 
-try:
-	import pwd
-	username = pwd.getpwuid(os.getuid())[0]
-except ImportError:
-	username = os.getenv('USERNAME')
-
-try:
-	clfp = open(os.environ.get('CVSROOT', '') + '/CVSROOT/ChangeLog')
-	changeLogPrev = string.join(clfp.readlines(), '')
-	clfp.close();
-except IOError:
-	changeLogPrev = ''
+username = pwd.getpwuid(os.getuid())[0]
 
 commit = sys.stdin.read()
 
-files = []
-specs = sys.argv[1:][0]
-specfiles = string.split(specs)
-del specfiles[0]
-for specfile in specfiles:
-	file = string.split(specfile, ',')[0]
-	files.append(file)
+try:
+	opts, args = getopt.getopt(
+		sys.argv[1:], 'c:', [])
+except:
+	print 'Error in parsing input arguments'
+	sys.exit(1)
 
-file_header = string.join(files, ',')
+# find out which ChangeLog file the user wants to save info to.
+for opt, arg in opts:
+	if opt == '-c':
+		CLfname = arg
 
+# If the ChangeLog specified cannot be read, then assume it hasn't been
+# created yet...
+try:
+	clfp = open(CLfname, 'r')
+	changeLogPrev = string.join(clfp.readlines(), '')
+	print 'read in previous log messages'
+	clfp.close()
+except:
+	changeLogPrev = ''
+
+# exctract the files which changed with this commit.
+# args is of the form
+# path/to/module file1,r1,r2 file2,r1,r2
+# basically, just snip off the leading path to the module.
+file_header = string.join(string.split(args)[1:], ' ')
+
+# extract all the lines which need to go into the log file.
 islog = 0
 s = ''
 for line in string.split(commit, '\n'):
 	if re.match('Bug:|Problem:|Feature:|New:', line):
 		islog = 1
-		s = s + ('* %s (%s)' % (file_header, username)) + '\n'
+		s = s + time.strftime('%b-%d-%Y:\n', localtime(time())) + ('* %s (%s):' % (file_header, username)) + '\n'
 
 	if re.match('^\s*$', line) is not None:
 		islog = 0
@@ -43,9 +51,23 @@ for line in string.split(commit, '\n'):
 
 s = re.sub('\s*$', '\n\n', s)
 s = s + changeLogPrev
+
+print 'attempting to write new log message to [%s]' % CLfname
 try:
-	clfp = open(os.environ.get('CVSROOT', '') + '/CVSROOT/ChangeLog', 'w')
+	clfp = open(CLfname, 'w')
 	clfp.write(s)
+	clfp.close()
+	print 'successfully wrote log file to [%s]' % CLfname
 except:
+	print 'problem opening log file for writing, trying to change permissions...'
+	os.chown(CLfname, '664')
+
+try:
+	clfp = open(CLfname, 'w')
+	clfp.write(s)
+	clfp.close()
+	print 'successfully wrote log file to [%s]' % CLfname
+except:
+	print 'changing permissions didn''help.. this is what I wanted to say...'
 	print '---- Start ChangeLog ----'
 	print s
