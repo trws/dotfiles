@@ -1,7 +1,7 @@
 "        File: html.vim
 "      Author: Srinath Avadhanula
 "     Created: Tue Mar 19 09:00 PM 2002 PST
-" Last Change: Sun Apr 20 04:00 PM 2003 PDT
+" Last Change: Fri Jun 06 10:00 PM 2003 PST
 " Description: 
 " 
 " Installation: 
@@ -19,14 +19,14 @@ endif
 " maps {{{
 let s:ml = exists('g:mapleader') ? g:mapleader : '\'
 " HTML commands {{{
-call IMAP ('tab'.s:ml, "<table border=2 cellspacing=2 cellpadding=5>\<cr><tr>\<cr>\<tab><td>ä</td>\<cr>\<bs></tr>\<cr></table>", 'html')
-call IMAP ('ref'.s:ml, "<a href=\"ä\"></a>", 'html')
-call IMAP ('ol'.s:ml, "<ol>\<cr><li>ä</li>\<cr></ol>", 'html')
-call IMAP ('ul'.s:ml, "<ul>\<cr><li>ä</li>\<cr></ul>", 'html')
-call IMAP ('tr'.s:ml, "<tr>\<cr>\<tab><td>ä</td>\<cr>\<bs></tr>", 'html')
-call IMAP ('td'.s:ml, "<td>ä</td>", 'html')
-call IMAP ('bb'.s:ml, "<b>ä</b>", 'html')
-call IMAP ('it'.s:ml, "<i>ä</i>", 'html')
+call IMAP ('tab'.s:ml, "<table border=2 cellspacing=2 cellpadding=5>\<cr><tr>\<cr>\<tab><td><++></td>\<cr>\<bs></tr>\<cr></table>", 'html')
+call IMAP ('ref'.s:ml, "<a href=\"<++>\"></a>", 'html')
+call IMAP ('ol'.s:ml, "<ol>\<cr><li><++></li>\<cr></ol>", 'html')
+call IMAP ('ul'.s:ml, "<ul>\<cr><li><++></li>\<cr></ul>", 'html')
+call IMAP ('tr'.s:ml, "<tr>\<cr>\<tab><td><++></td>\<cr>\<bs></tr>", 'html')
+call IMAP ('td'.s:ml, "<td><++></td>", 'html')
+call IMAP ('bb'.s:ml, "<b><++></b>", 'html')
+call IMAP ('it'.s:ml, "<i><++></i>", 'html')
 " }}}
 " HTML greek characters {{{
 call IMAP ('a'.s:ml, "\&alpha;", 'html')
