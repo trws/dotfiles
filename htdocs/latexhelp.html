@@ -1,0 +1,2440 @@
+<html>
+<head>
+<title>Vim documentation: latexhelp</title>
+<meta name="Generator" content="Vim/6.1">
+</head>
+<body bgcolor="#ffffff" text="#000000">
+<h1>Vim documentation: latexhelp</h1><hr><pre>
+<font color="#804040">*<a name="latexhelp.txt">latexhelp.txt</a>*</font>    For <font color="#008080">Vim version 6.0.</font>  Last change: 2001 Dec 20
+
+
+                                LATEX HELP 1.6
+                   translated (with minor changes) for vim
+                             by Mikolaj Machowski
+
+This file documents LaTeX2e, a document preparation system. LaTeX2e is a
+macro package for TeX.
+
+  This is edition 1.6 of the LaTeX2e documentation, and is for the Texinfo
+that is distributed as part of Version 19 of GNU Emacs. It uses version
+2.134 or later of the texinfo.tex input file.
+
+  This is translated from LATEX.HLP v1.0a in the VMS Help Library.  The
+pre-translation version was written by George D. Greenwade of Sam Houston
+State University.
+
+  The <A HREF="latexhelp.html#LaTeX">LaTeX</A> 2.09 version was written by Stephen Gilmore &lt;stg@dcs.ed.ac.uk&gt;.
+
+  The LaTeX2e version was adapted from this by Torsten Martinsen
+&lt;bullestock@dk-online.dk&gt;.
+
+  Version for vim of this manual was written by Mikolaj Machowski
+&lt;mikmach@wp.pl&gt;
+
+  Copyright 1988,1994 Free Software Foundation, Inc.  Copyright 1994-1996
+Torsten Martinsen. Copyright for `translation' for vim Mikolaj Machowski 2001.
+
+  Permission is granted to make and distribute <A HREF="latexhelp.html#verbatim">verbatim</A> copies of this manual
+provided the copyright notice and this permission notice are preserved on
+all copies.
+
+  Permission is granted to copy and distribute modified versions of this
+manual under the conditions for <A HREF="latexhelp.html#verbatim">verbatim</A> copying, provided that the entire
+resulting derived work is distributed under the terms of a permission
+notice identical to this one.
+
+  Permission is granted to copy and distribute translations of this manual
+into another language, under the above conditions for modified versions,
+except that the sections entitled &quot;Distribution&quot; and &quot;General Public
+License&quot; may be included in a translation approved by the author instead of
+in the original English.
+
+<font color="#008080">==============================================================================</font>
+<font color="#804040">*<a name="LaTeX">LaTeX</a>*</font> <font color="#804040">*<a name="latex">latex</a>*</font>
+
+The LaTeX command typesets a file of text using the TeX program and the LaTeX
+Macro package for TeX. To be more specific, it processes an input file
+containing the text of a document with interspersed commands that describe how
+the text should be formatted.
+
+1.  Commands                                    <font color="#008080">|<A HREF="latexhelp.html#latex-commands">latex-commands</A>|</font>
+2.  Counters                                    <font color="#008080">|<A HREF="latexhelp.html#latex-counters">latex-counters</A>|</font>
+3.  Cross References                            <font color="#008080">|<A HREF="latexhelp.html#latex-references">latex-references</A>|</font>
+4.  Definitions                                 <font color="#008080">|<A HREF="latexhelp.html#latex-definitions">latex-definitions</A>|</font>
+5.  Document Classes                            <font color="#008080">|<A HREF="latexhelp.html#latex-classes">latex-classes</A>|</font>
+6.  Layout                                      <font color="#008080">|<A HREF="latexhelp.html#latex-layout">latex-layout</A>|</font>
+7.  Environments                                <font color="#008080">|<A HREF="latexhelp.html#latex-environments">latex-environments</A>|</font>
+8.  Footnotes                                   <font color="#008080">|<A HREF="latexhelp.html#latex-footnotes">latex-footnotes</A>|</font>
+9.  Lengths                                     <font color="#008080">|latex-lengths|</font>
+10. Letters                                     <font color="#008080">|<A HREF="latexhelp.html#latex-letters">latex-letters</A>|</font>
+11. Line &amp; Page Breaking                        <font color="#008080">|<A HREF="latexhelp.html#latex-breaking">latex-breaking</A>|</font>
+12. Making Paragraphs                           <font color="#008080">|<A HREF="latexhelp.html#latex-paragraphs">latex-paragraphs</A>|</font>
+13. Margin Notes                                <font color="#008080">|<A HREF="latexhelp.html#latex-margin-notes">latex-margin-notes</A>|</font>
+14. Math Formulae                               <font color="#008080">|<A HREF="latexhelp.html#latex-math">latex-math</A>|</font>
+15. Modes                                       <font color="#008080">|<A HREF="latexhelp.html#latex-modes">latex-modes</A>|</font>
+16. Page Styles                                 <font color="#008080">|<A HREF="latexhelp.html#latex-page-styles">latex-page-styles</A>|</font>
+17. Sectioning                                  <font color="#008080">|<A HREF="latexhelp.html#latex-sectioning">latex-sectioning</A>|</font>
+18. Spaces &amp; Boxes                              <font color="#008080">|<A HREF="latexhelp.html#latex-spaces-boxes">latex-spaces-boxes</A>|</font>
+19. Special Characters                          <font color="#008080">|latex-special-char|</font>
+20. Splitting the Input                         <font color="#008080">|<A HREF="latexhelp.html#latex-inputing">latex-inputing</A>|</font>
+21. Starting &amp; Ending                           <font color="#008080">|<A HREF="latexhelp.html#latex-start-end">latex-start-end</A>|</font>
+22. Table of Contents                           <font color="#008080">|<A HREF="latexhelp.html#latex-toc">latex-toc</A>|</font>
+23. Terminal Input/Output                       <font color="#008080">|<A HREF="latexhelp.html#latex-terminal">latex-terminal</A>|</font>
+24. Typefaces                                   <font color="#008080">|<A HREF="latexhelp.html#latex-typefaces">latex-typefaces</A>|</font>
+25. Parameters                                  <font color="#008080">|<A HREF="latexhelp.html#latex-parameters">latex-parameters</A>|</font>
+
+<font color="#008080">==============================================================================</font>
+1. Commands                                     <font color="#804040">*<a name="latex-commands">latex-commands</a>*</font>
+
+A <A HREF="latexhelp.html#LaTeX">LaTeX</A> command begins with the command name, which consists of a \ followed
+by either
+        (a) a string of letters or
+        (b) a single non-letter.
+
+Arguments contained in square brackets, [], are optional while arguments
+contained in braces, {}, are required.
+
+<span style="background-color: #ffff00"><font color="#0000ff">NOTE</font></span>: <A HREF="latexhelp.html#LaTeX">LaTeX</A> is case sensitive. Enter all commands in lower case unless
+explicitly directed to do otherwise.
+
+<font color="#008080">==============================================================================</font>
+2. Counters                                     <font color="#804040">*<a name="latex-counters">latex-counters</a>*</font>
+
+<font color="#008080">|<A HREF="latexhelp.html#\addtocounter">\addtocounter</A>|</font>         Add a quantity to a counter
+<font color="#008080">|<A HREF="latexhelp.html#\alph">\alph</A>|</font>                 Print value of a counter using letters
+<font color="#008080">|<A HREF="latexhelp.html#\arabic">\arabic</A>|</font>               Print value of a counter using numerals
+<font color="#008080">|<A HREF="latexhelp.html#\fnsymbol">\fnsymbol</A>|</font>             Print value of a counter using symbols
+<font color="#008080">|<A HREF="latexhelp.html#\newcounter">\newcounter</A>|</font>           Define a new counter
+<font color="#008080">|<A HREF="latexhelp.html#\refstepcounter">\refstepcounter</A>|</font>       Add to counter, resetting subsidiary counters
+<font color="#008080">|<A HREF="latexhelp.html#\roman">\roman</A>|</font>                Print value of a counter using <A HREF="latexhelp.html#roman">roman</A> numerals
+<font color="#008080">|<A HREF="latexhelp.html#\setcounter">\setcounter</A>|</font>           Set the value of a counter
+<font color="#008080">|<A HREF="latexhelp.html#\stepcounter">\stepcounter</A>|</font>          Add to counter, resetting subsidiary counters
+<font color="#008080">|<A HREF="latexhelp.html#\usecounter">\usecounter</A>|</font>           Use a specified counter in a <A HREF="latexhelp.html#list">list</A> environment
+<font color="#008080">|<A HREF="latexhelp.html#\value">\value</A>|</font>                Use the value of a counter in an expression
+
+Everything <A HREF="latexhelp.html#LaTeX">LaTeX</A> numbers for you has a counter associated with it. The name of
+the counter is the same as the name of the environment or command that
+produces the number, except with no <font color="#008080">|<A HREF="latexhelp.html#\\">\\</A>|</font>. (<font color="#008080">|lc-enumi|</font> - <font color="#008080">|lc-enumiv|</font> are used
+for the nested <font color="#008080">|\enumerate|</font> environment.) Below is a <A HREF="latexhelp.html#list">list</A> of the counters
+used in LaTeX's standard document classes to control numbering.
+
+ <font color="#008080">|part|</font>          <font color="#008080">|paragraph|</font>     <font color="#008080">|<A HREF="latexhelp.html#figure">figure</A>|</font>      <font color="#008080">|enumi|</font>    <font color="#008080">|itemi|</font>
+ <font color="#008080">|chapter|</font>       <font color="#008080">|subparagraph|</font>  <font color="#008080">|table|</font>       <font color="#008080">|enumii|</font>   <font color="#008080">|itemii|</font>
+ <font color="#008080">|section|</font>       <font color="#008080">|page|</font>          <font color="#008080">|footnote|</font>    <font color="#008080">|enumiii|</font>  <font color="#008080">|itemiii|</font>
+ <font color="#008080">|subsection|</font>    <font color="#008080">|<A HREF="latexhelp.html#equation">equation</A>|</font>      <font color="#008080">|mpfootnote|</font>  <font color="#008080">|enumiv|</font>   <font color="#008080">|itemiv|</font>
+ <font color="#008080">|subsubsection|</font>
+
+
+\addtocounter<font color="#6a5acd">{counter}{value}</font>                   <font color="#804040">*<a name="\addtocounter">\addtocounter</a>*</font>
+                Increments the <font color="#6a5acd">{counter}</font> by the amount specified by the
+                <font color="#6a5acd">{value}</font> argument. The <font color="#6a5acd">{value}</font> argument can be negative.
+
+\alph<font color="#6a5acd">{counter}</font>                                  <font color="#804040">*<a name="\alph">\alph</a>*</font> <font color="#804040">*<a name="\Alph">\Alph</a>*</font>
+\Alph<font color="#6a5acd">{counter}</font>
+                This command causes the value of the counter to be printed in
+                alphabetic characters. <font color="#008080">|<A HREF="latexhelp.html#\alph">\alph</A>|</font> command uses lower case
+                alphabetic alphabetic characters, i.e., a, b, c... while the
+                <font color="#008080">|<A HREF="latexhelp.html#\Alph">\Alph</A>|</font> command uses upper case alphabetic characters, i.e.,
+                A, B, C....
+
+\arabic<font color="#6a5acd">{counter}</font>                                <font color="#804040">*<a name="\arabic">\arabic</a>*</font>
+                Causes the value of the <font color="#6a5acd">{counter}</font> to be printed in Arabic
+                numbers, i.e., 3.
+
+\fnsymbol<font color="#6a5acd">{counter}</font>                              <font color="#804040">*<a name="\fnsymbol">\fnsymbol</a>*</font>
+                Causes the value of the <font color="#6a5acd">{counter}</font> to be printed in a specific
+                sequence of nine symbols that can be used for numbering
+                footnotes.
+                <span style="background-color: #ffff00"><font color="#0000ff">Note</font></span>: counter must have a value between 1 and 9 inclusive.
+
+\newcounter<font color="#6a5acd">{foo}</font>[counter]                       <font color="#804040">*<a name="\newcounter">\newcounter</a>*</font>
+                Defines a new counter named <font color="#6a5acd">{foo}</font>. The counter is initialized
+                to zero.  The optional argument <font color="#6a5acd">[counter]</font> causes the counter
+                <font color="#6a5acd">{foo}</font> to be reset whenever the counter named in the optional
+                argument is incremented.
+
+\refstepcounter<font color="#6a5acd">{counter}</font>                        <font color="#804040">*<a name="\refstepcounter">\refstepcounter</a>*</font>
+                Command works like <font color="#008080">|<A HREF="latexhelp.html#\stepcounter">\stepcounter</A>|</font>, except it also defines the
+                current <font color="#008080">|<A HREF="latexhelp.html#\ref">\ref</A>|</font> value to be the result of \thecounter.
+
+\roman<font color="#6a5acd">{counter}</font>                                 <font color="#804040">*<a name="\roman">\roman</a>*</font> <font color="#804040">*<a name="\Roman">\Roman</a>*</font>
+\Roman<font color="#6a5acd">{counter}</font>
+                Causes the value of the <font color="#6a5acd">{counter}</font> to be printed in Roman
+                numerals.  The <font color="#008080">|<A HREF="latexhelp.html#\roman">\roman</A>|</font> command uses lower case <A HREF="latexhelp.html#Roman">Roman</A> numerals,
+                i.e., i, ii, iii..., while the <font color="#008080">|<A HREF="latexhelp.html#\Roman">\Roman</A>|</font> command uses upper case
+                <A HREF="latexhelp.html#Roman">Roman</A> numerals, i.e., I, II, III....
+
+\stepcounter<font color="#6a5acd">{counter}</font>                           <font color="#804040">*<a name="\stepcounter">\stepcounter</a>*</font>
+                Adds one to the <font color="#6a5acd">{counter}</font> and resets all subsidiary counters.
+
+\setcounter<font color="#6a5acd">{counter}{value}</font>                     <font color="#804040">*<a name="\setcounter">\setcounter</a>*</font>
+                Sets the value of the <font color="#6a5acd">{counter}</font> to that specified by the
+                <font color="#6a5acd">{value}</font> argument.
+
+\usecounter<font color="#6a5acd">{counter}</font>                            <font color="#804040">*<a name="\usecounter">\usecounter</a>*</font>
+                Command is used in the second argument of the <font color="#008080">|<A HREF="latexhelp.html#list">list</A>|</font>
+                environment to allow the <font color="#6a5acd">{counter}</font> specified to be used to
+                number the <A HREF="latexhelp.html#list">list</A> items.
+
+\value<font color="#6a5acd">{counter}</font>                                 <font color="#804040">*<a name="\value">\value</a>*</font>
+                Produces the value of the <font color="#6a5acd">{counter}</font> named in the mandatory
+                argument. It can be used where <A HREF="latexhelp.html#LaTeX">LaTeX</A> expects an integer or
+                number, such as the second argument of a <font color="#008080">|<A HREF="latexhelp.html#\setcounter">\setcounter</A>|</font> or
+                <font color="#008080">|<A HREF="latexhelp.html#\addtocounter">\addtocounter</A>|</font> command, or in:<font color="#ffffff"> &gt;</font>
+<font color="#008000">                        \hspace{\value{foo}\parindent}</font>
+<font color="#ffffff">&lt;</font>               It is useful for doing arithmetic with counters.
+
+<font color="#008080">==============================================================================</font>
+3. Cross References                             <font color="#804040">*<a name="latex-references">latex-references</a>*</font>
+
+One reason for numbering things like figures and equations is to refer the
+reader to them, as in &quot;See Figure 3 for more details.&quot;
+
+<font color="#008080">|<A HREF="latexhelp.html#\label">\label</A>|</font>                Assign a symbolic name to a piece of text
+<font color="#008080">|<A HREF="latexhelp.html#\pageref">\pageref</A>|</font>              Refer to a page number
+<font color="#008080">|<A HREF="latexhelp.html#\ref">\ref</A>|</font>                  Refer to a section, <A HREF="latexhelp.html#figure">figure</A> or similar
+
+
+\label<font color="#6a5acd">{key}</font>                                     <font color="#804040">*<a name="\label">\label</a>*</font>
+                Command appearing in ordinary text assigns to the <font color="#6a5acd">{key}</font> the
+                number of the current sectional unit; one appearing inside a
+                numbered environment assigns that number to the <font color="#6a5acd">{key}</font>.
+
+                A <font color="#6a5acd">{key}</font> can consist of any sequence of letters, digits, or
+                punctuation characters. Upper and lowercase letters are
+                different.
+
+                To avoid accidentally creating two labels with the same name,
+                it is common to use labels consisting of a prefix and a suffix
+                separated by a colon. The prefixes conventionally used are
+<font color="#804040"><b>                        </b></font>* <font color="#008000"><b>'cha'</b></font> for chapters
+<font color="#804040"><b>                        </b></font>* <font color="#008000"><b>'sec'</b></font> for lower-level sectioning commands
+<font color="#804040"><b>                        </b></font>* <font color="#008000"><b>'fig'</b></font> for figures
+<font color="#804040"><b>                        </b></font>* <font color="#008000"><b>'tab'</b></font> for tables
+<font color="#804040"><b>                        </b></font>* <font color="#008000"><b>'eq'</b></font>  for equations
+                Thus, a label for a <A HREF="latexhelp.html#figure">figure</A> would look like:<font color="#ffffff"> &gt;</font>
+<font color="#008000">                        \label{fig:bandersnatch}</font>
+
+\pageref<font color="#6a5acd">{key}</font>                                   <font color="#804040">*<a name="\pageref">\pageref</a>*</font>
+                Command produces the page number of the place in the text
+                where the corresponding <font color="#008080">|<A HREF="latexhelp.html#\label">\label</A>|</font> command appears.  ie. where
+                <A HREF="latexhelp.html#\label">\label</A><font color="#6a5acd">{key}</font> appears.
+
+\ref<font color="#6a5acd">{key}</font>                                       <font color="#804040">*<a name="\ref">\ref</a>*</font>
+                Command produces the number of the sectional unit, equation
+                number, ... of the corresponding <font color="#008080">|<A HREF="latexhelp.html#\label">\label</A>|</font> command.
+
+<font color="#008080">==============================================================================</font>
+4. Definitions                                  <font color="#804040">*<a name="latex-definitions">latex-definitions</a>*</font>
+
+<font color="#008080">|<A HREF="latexhelp.html#\newcommand">\newcommand</A>|</font>           Define a new command
+<font color="#008080">|<A HREF="latexhelp.html#\newenvironment">\newenvironment</A>|</font>       Define a new environment
+<font color="#008080">|<A HREF="latexhelp.html#\newtheorem">\newtheorem</A>|</font>           Define a new theorem-like environment
+<font color="#008080">|<A HREF="latexhelp.html#\newfont">\newfont</A>|</font>              Define a new font name
+
+
+\newcommand<font color="#6a5acd">{cmd}</font>[args]<font color="#6a5acd">{definition}</font>              <font color="#804040">*<a name="\newcommand">\newcommand</a>*</font> <font color="#804040">*<a name="\renewcommand">\renewcommand</a>*</font>
+\newcommand<font color="#6a5acd">{cmd}</font>[args][default]<font color="#6a5acd">{definition}</font>
+\renewcommand<font color="#6a5acd">{cmd}</font>[args]<font color="#6a5acd">{definition}</font>
+\renewcommand<font color="#6a5acd">{cmd}</font>[args][default]<font color="#6a5acd">{definition}</font>
+
+These commands define (or redefine) a command.
+
+<font color="#6a5acd">{cmd}</font>           A command name beginning with a <font color="#008080">|<A HREF="latexhelp.html#\\">\\</A>|</font>. For <font color="#008080">|<A HREF="latexhelp.html#\newcommand">\newcommand</A>|</font> it must
+                not be already defined and must not begin with <font color="#008080">|<A HREF="latexhelp.html#\end">\end</A>|</font>; for
+                <font color="#008080">|<A HREF="latexhelp.html#\renewcommand">\renewcommand</A>|</font> it must already be defined.
+
+<font color="#6a5acd">{args}</font>          An integer from 1 to 9 denoting the number of arguments of the
+                command being defined. The default is for the command to have
+                no arguments.
+
+<font color="#6a5acd">{default}</font>       If this optional parameter is present, it means that the
+                command's first argument is optional. The default value of the
+                optional argument is default.
+
+<font color="#6a5acd">{definition}</font>    The text to be substituted for every occurrence of <font color="#6a5acd">{cmd}</font>; a
+                parameter of the form #n in <font color="#6a5acd">{cmd}</font> is replaced by the text of
+                the nth argument when this substitution takes place.
+
+<font color="#804040"><b>                                        </b></font><font color="#804040">*<a name="\newenvironment">\newenvironment</a>*</font> <font color="#804040">*<a name="\renewenvironment">\renewenvironment</a>*</font>
+\newenvironment<font color="#6a5acd">{nam}</font>[args]<font color="#6a5acd">{begdef}{enddef}</font>
+\newenvironment<font color="#6a5acd">{nam}</font>[args][default]<font color="#6a5acd">{begdef}{enddef}</font>
+\renewenvironment<font color="#6a5acd">{nam}</font>[args]<font color="#6a5acd">{begdef}{enddef}</font>
+
+These commands define or redefine an environment.
+
+<font color="#6a5acd">{nam}</font>           The name of the environment. For <font color="#008080">|<A HREF="latexhelp.html#\newenvironment">\newenvironment</A>|</font> there must
+                be no currently defined environment by that name, and the
+                command \nam must be undefined.  For <font color="#008080">|<A HREF="latexhelp.html#\renewenvironment">\renewenvironment</A>|</font> the
+                environment must already be defined.
+
+<font color="#6a5acd">{args}</font>          An integer from 1 to 9 denoting the number of arguments of
+                the newly-defined environment. The default is no arguments.
+
+<font color="#6a5acd">{default}</font>       If this is specified, the first argument is optional, and
+                default gives the default value for that argument.
+
+<font color="#6a5acd">{begdef}</font>        The text substituted for every occurrence of <A HREF="latexhelp.html#\begin">\begin</A><font color="#6a5acd">{nam}</font>; a
+                parameter of the form #n in <font color="#6a5acd">{cmd}</font> is replaced by the text of
+                the nth argument when this substitution takes place.
+
+<font color="#6a5acd">{enddef}</font>        The text substituted for every occurrence of <A HREF="latexhelp.html#\end">\end</A><font color="#6a5acd">{nam}</font>. It
+                may not contain any argument parameters.
+
+
+\newtheorem<font color="#6a5acd">{envname}{caption}</font>[within]                   <font color="#804040">*<a name="\newtheorem">\newtheorem</a>*</font>
+\newtheorem<font color="#6a5acd">{envname}</font>[numberedlike]<font color="#6a5acd">{caption}</font>
+
+This command defines a theorem-like environment.
+
+<font color="#6a5acd">{envname}</font>       The name of the environment to be defined. A string of
+                letters. It must not be the name of an existing environment or
+                counter.
+
+<font color="#6a5acd">{caption}</font>       The text printed at the beginning of the environment, right
+                before the number. This may simply say &quot;Theorem&quot;, for example.
+
+<font color="#6a5acd">{within}</font>        The name of an already defined counter, usually of a sectional
+                unit. Provides a means of resetting the new <A HREF="latexhelp.html#theorem">theorem</A> counter
+                within the sectional unit.
+
+<font color="#6a5acd">{numberedlike}</font>  The name of an already defined theorem-like environment.
+
+The <font color="#008080">|<A HREF="latexhelp.html#\newtheorem">\newtheorem</A>|</font> command may have at most one optional argument.
+
+
+\newfont<font color="#6a5acd">{cmd}{fontname}</font>                                 <font color="#804040">*<a name="\newfont">\newfont</a>*</font>
+                Defines the command name <font color="#6a5acd">{cmd}</font>, which must not be currently
+                defined, to be a declaration that selects the font named
+                <font color="#6a5acd">{fontname}</font> to be the current font.
+
+<font color="#008080">==============================================================================</font>
+5. Document Classes                             <font color="#804040">*<a name="latex-classes">latex-classes</a>*</font>
+
+
+\documentclass[options]<font color="#6a5acd">{class}</font>                  <font color="#804040">*<a name="\documentclass">\documentclass</a>*</font>
+
+Valid <A HREF="latexhelp.html#LaTeX">LaTeX</A> document classes include:
+<font color="#804040"><b>        </b></font>*article                <font color="#804040">*<a name="article-class">article-class</a>*</font>
+<font color="#804040"><b>        </b></font>*report                 <font color="#804040">*<a name="report-class">report-class</a>*</font>
+<font color="#804040"><b>        </b></font>*letter                 <font color="#804040">*<a name="letter-class">letter-class</a>*</font>
+<font color="#804040"><b>        </b></font>*book                   <font color="#804040">*<a name="book-class">book-class</a>*</font>
+<font color="#804040"><b>        </b></font>*slides                 <font color="#804040">*<a name="slides-class">slides-class</a>*</font>
+
+All the standard classes (except slides) accept the following options for
+selecting the typeface size (10 pt is default):
+
+10pt, 11pt, 12pt
+
+All classes accept these options for selecting the paper size (default is
+letter):
+
+a4paper, a5paper, b5paper, letterpaper, legalpaper, executivepaper
+
+Miscellaneous options:
+
+landscape                                       <font color="#804040">*<a name="landscape">landscape</a>*</font>
+        Selects landscape format. Default is portrait.
+
+titlepage, notitlepage                          <font color="#804040">*<a name="notitlepage">notitlepage</a>*</font>
+                Selects if there should be a separate title page.
+
+leqno                                           <font color="#804040">*<a name="leqno">leqno</a>*</font> <font color="#804040">*<a name="rqno">rqno</a>*</font>
+                Equation number on left side of equations.  Default is
+                right side.
+
+fleqn                                           <font color="#804040">*<a name="fleqn">fleqn</a>*</font>
+                Displayed formulas flush left.  Default is centred.
+
+openbib                                         <font color="#804040">*<a name="openbib">openbib</a>*</font>
+                Use &quot;open&quot; bibliography format.
+
+draft, final                                    <font color="#804040">*<a name="draft">draft</a>*</font> <font color="#804040">*<a name="final">final</a>*</font>
+                Mark/do not mark overfull boxes with a rule. Default is
+                final.
+
+These options are not available with the slides class:
+
+oneside, twoside                                <font color="#804040">*<a name="oneside">oneside</a>*</font> <font color="#804040">*<a name="twoside">twoside</a>*</font>
+                Selects one- or twosided layout. Default is oneside,
+                except for the book class.
+
+openright, openany                              <font color="#804040">*<a name="openright">openright</a>*</font> <font color="#804040">*<a name="openany">openany</a>*</font>
+                Determines if a chapter should start on a right-hand page.
+                Default is openright for book.
+
+onecolumn, twocolumn                            <font color="#804040">*<a name="onecolumn">onecolumn</a>*</font> <font color="#804040">*<a name="twocolumn">twocolumn</a>*</font>
+                One or two columns.  Defaults to one column.
+
+The slides class offers the option clock for printing the time at the bottom
+of each <font color="#008080">|\note|</font>.
+
+If you specify more than one option, they must be separated by a comma.
+
+\usepackage[options]<font color="#6a5acd">{pkg}</font>                       <font color="#804040">*<a name="\usepackage">\usepackage</a>*</font>
+                Additional packages are loaded by this. If you
+                specify more than one package, they must be separated by a
+                comma.
+
+Any options given in the <font color="#008080">|<A HREF="latexhelp.html#\documentclass">\documentclass</A>|</font> command that are unknown by the
+selected document class are passed on to the packages loaded with <font color="#008080">|<A HREF="latexhelp.html#\usepackage">\usepackage</A>|</font>.
+
+<font color="#008080">==============================================================================</font>
+6. Layout                                       <font color="#804040">*<a name="latex-layout">latex-layout</a>*</font>
+
+Miscellaneous commands for controlling the general layout of the page.
+
+<font color="#008080">|<A HREF="latexhelp.html#\flushbottom">\flushbottom</A>|</font>          Make all text pages the same height.
+<font color="#008080">|<A HREF="latexhelp.html#\onecolumn">\onecolumn</A>|</font>            Use one-column layout.
+<font color="#008080">|<A HREF="latexhelp.html#\raggedbottom">\raggedbottom</A>|</font>         Allow text pages of differing height.
+<font color="#008080">|<A HREF="latexhelp.html#\twocolumn">\twocolumn</A>|</font>            Use two-column layout.
+
+\flushbottom                                    <font color="#804040">*<a name="\flushbottom">\flushbottom</a>*</font>
+                Makes all text pages the same height, adding extra vertical
+                space when necessary to fill out the page.  This is the
+                standard if <A HREF="latexhelp.html#twocolumn">twocolumn</A> mode is selected.
+
+\onecolumn                                      <font color="#804040">*<a name="\onecolumn">\onecolumn</a>*</font>
+                Starts a new page and produces single-column output.
+
+\raggedbottom                                   <font color="#804040">*<a name="\raggedbottom">\raggedbottom</a>*</font>
+                Makes all pages the height of the text on that page.  No extra
+                vertical space is added.
+
+\twocolumn[text]                                <font color="#804040">*<a name="\twocolumn">\twocolumn</a>*</font>
+                Starts a new page and produces two-column output.  If the
+                optional <font color="#6a5acd">[text]</font> argument is present, it is typeset in
+                one-column mode.
+
+<font color="#008080">==============================================================================</font>
+7. Environments                                 <font color="#804040">*<a name="latex-environments">latex-environments</a>*</font>
+
+<font color="#804040"><b>                                                </b></font><font color="#804040">*<a name="\begin">\begin</a>*</font> <font color="#804040">*<a name="\end">\end</a>*</font>
+<A HREF="latexhelp.html#LaTeX">LaTeX</A> provides a number of different paragraph-making environments. Each
+environment begins and ends in the same manner:<font color="#ffffff"> &gt;</font>
+
+<font color="#008000">        \begin{environment-name}</font>
+<font color="#008000">        .</font>
+<font color="#008000">        .</font>
+<font color="#008000">        .</font>
+<font color="#008000">        \end{environment-name}</font>
+<font color="#ffffff">&lt;</font>
+a. <font color="#008080">|<A HREF="latexhelp.html#array">array</A>|</font>              Math arrays
+b. <font color="#008080">|<A HREF="latexhelp.html#center">center</A>|</font>             Centred lines
+c. <font color="#008080">|<A HREF="latexhelp.html#description">description</A>|</font>        Labelled lists
+d. <font color="#008080">|<A HREF="latexhelp.html#enumerate">enumerate</A>|</font>          Numbered lists
+e. <font color="#008080">|<A HREF="latexhelp.html#eqnarray">eqnarray</A>|</font>           Sequences of aligned equations
+f. <font color="#008080">|<A HREF="latexhelp.html#equation">equation</A>|</font>           Displayed equation
+g. <font color="#008080">|<A HREF="latexhelp.html#figure">figure</A>|</font>             Floating figures
+h. <font color="#008080">|<A HREF="latexhelp.html#flushleft">flushleft</A>|</font>          Flushed left lines
+i. <font color="#008080">|<A HREF="latexhelp.html#flushright">flushright</A>|</font>         Flushed right lines
+j. <font color="#008080">|<A HREF="latexhelp.html#itemize">itemize</A>|</font>            Bulleted lists
+k. <font color="#008080">|letter|</font>             Letters
+l. <font color="#008080">|<A HREF="latexhelp.html#list">list</A>|</font>               Generic <A HREF="latexhelp.html#list">list</A> environment
+m. <font color="#008080">|<A HREF="latexhelp.html#minipage">minipage</A>|</font>           Miniature page
+n. <font color="#008080">|<A HREF="latexhelp.html#picture">picture</A>|</font>            Picture with text, arrows, lines and circles
+o. <font color="#008080">|<A HREF="latexhelp.html#quotation">quotation</A>|</font>          Indented environment with paragraph indentation
+p. <font color="#008080">|<A HREF="latexhelp.html#quote-l">quote-l</A>|</font>            Indented environment with no paragraph indentation
+q. <font color="#008080">|<A HREF="latexhelp.html#tabbing">tabbing</A>|</font>            Align text arbitrarily
+r. <font color="#008080">|table|</font>              Floating tables
+s. <font color="#008080">|<A HREF="latexhelp.html#tabular">tabular</A>|</font>            Align text in columns
+t. <font color="#008080">|thebibliography|</font>    Bibliography or reference list
+u. <font color="#008080">|<A HREF="latexhelp.html#theorem">theorem</A>|</font>            Theorems, lemmas, etc
+v. <font color="#008080">|<A HREF="latexhelp.html#titlepage">titlepage</A>|</font>          For hand crafted title pages
+x. <font color="#008080">|<A HREF="latexhelp.html#verbatim">verbatim</A>|</font>           Simulating typed input
+y. <font color="#008080">|<A HREF="latexhelp.html#verse">verse</A>|</font>              For poetry and other things
+
+<font color="#008080">==============================================================================</font>
+ a. array                                       <font color="#804040">*<a name="array">array</a>*</font>
+<font color="#ffffff">&gt;</font>
+<font color="#008000">        \begin{array}{col1col2...coln}</font>
+<font color="#008000">                column 1 entry &amp; column 2 entry ... &amp; column n entry <A HREF="latexhelp.html#\\">\\</A></font>
+<font color="#008000">                .</font>
+<font color="#008000">                .</font>
+<font color="#008000">                .</font>
+<font color="#008000">        \end{array}</font>
+
+Math arrays are produced with the <font color="#008080">|<A HREF="latexhelp.html#array">array</A>|</font> environment. It has a single mandatory
+argument describing the number of columns and the alignment within them. Each
+column, coln, is specified by a single letter that tells how items in that row
+should be formatted.
+<font color="#804040"><b>        </b></font>* c -- for centred
+<font color="#804040"><b>        </b></font>* l -- for flush left
+<font color="#804040"><b>        </b></font>* r -- for flush right
+Column entries must be separated by an <font color="#008080">|&amp;|</font>. Column entries may include other
+<A HREF="latexhelp.html#LaTeX">LaTeX</A> commands. Each row of the array must be terminated with the string <font color="#008080">|<A HREF="latexhelp.html#\\">\\</A>|</font>.
+
+<span style="background-color: #ffff00"><font color="#0000ff">Note</font></span> that the <font color="#008080">|<A HREF="latexhelp.html#array">array</A>|</font> environment can only be used in <font color="#008080">|<A HREF="latexhelp.html#math-mode">math-mode</A>|</font>, so normally
+it is used inside an <font color="#008080">|<A HREF="latexhelp.html#equation">equation</A>|</font> environment.
+
+<font color="#008080">==============================================================================</font>
+b. center                                       <font color="#804040">*<a name="center">center</a>*</font>
+<font color="#ffffff">&gt;</font>
+<font color="#008000">        \begin{center}</font>
+<font color="#008000">                Text on line 1 <A HREF="latexhelp.html#\\">\\</A></font>
+<font color="#008000">                Text on line 2 <A HREF="latexhelp.html#\\">\\</A></font>
+<font color="#008000">                .</font>
+<font color="#008000">                .</font>
+<font color="#008000">                .</font>
+<font color="#008000">        \end{center}</font>
+
+The <font color="#008080">|\center|</font> environment allows you to create a paragraph consisting of lines
+that are centred within the left and right margins on the current page. Each
+line must be terminated with the string <font color="#008080">|<A HREF="latexhelp.html#\\">\\</A>|</font>.
+
+\centering                                      <font color="#804040">*<a name="\centering">\centering</a>*</font>
+                This declaration corresponds to the <font color="#008080">|<A HREF="latexhelp.html#center">center</A>|</font> environment. This
+                declaration can be used inside an environment such as
+                <font color="#008080">|<A HREF="latexhelp.html#quote-l">quote-l</A>|</font> or in a <font color="#008080">|<A HREF="latexhelp.html#\parbox">\parbox</A>|</font>. The text of a <font color="#008080">|<A HREF="latexhelp.html#figure">figure</A>|</font> or <font color="#008080">|table|</font>
+                can be centred on the page by putting a <font color="#008080">|<A HREF="latexhelp.html#\centering">\centering</A>|</font> command
+                at the beginning of the <font color="#008080">|<A HREF="latexhelp.html#figure">figure</A>|</font> or <font color="#008080">|table|</font> environment.
+                Unlike the <font color="#008080">|<A HREF="latexhelp.html#center">center</A>|</font> environment, the <font color="#008080">|<A HREF="latexhelp.html#\centering">\centering</A>|</font> command does
+                not start a new paragraph; it simply changes how <A HREF="latexhelp.html#LaTeX">LaTeX</A> formats
+                paragraph units. To affect a paragraph unit's format, the
+                scope of the declaration must contain the blank line or <font color="#008080">|<A HREF="latexhelp.html#\end">\end</A>|</font>
+                command (of an environment like <font color="#008080">|<A HREF="latexhelp.html#quote-l">quote-l</A>|</font>) that ends the
+                paragraph unit.
+
+<font color="#008080">==============================================================================</font>
+c. description                                  <font color="#804040">*<a name="description">description</a>*</font>
+<font color="#ffffff">&gt;</font>
+<font color="#008000">        \begin{description}</font>
+<font color="#008000">                <A HREF="latexhelp.html#\item">\item</A> [label] First item</font>
+<font color="#008000">                <A HREF="latexhelp.html#\item">\item</A> [label] Second item</font>
+<font color="#008000">                .</font>
+<font color="#008000">                .</font>
+<font color="#008000">                .</font>
+<font color="#008000">        \end{description}</font>
+
+The <font color="#008080">|<A HREF="latexhelp.html#description">description</A>|</font> environment is used to make labelled lists. The label is
+bold face and flushed right.
+
+<font color="#008080">==============================================================================</font>
+d. enumerate                                    <font color="#804040">*<a name="enumerate">enumerate</a>*</font>
+<font color="#ffffff">&gt;</font>
+<font color="#008000">        \begin{enumerate}</font>
+<font color="#008000">                <A HREF="latexhelp.html#\item">\item</A> First item</font>
+<font color="#008000">                <A HREF="latexhelp.html#\item">\item</A> Second item</font>
+<font color="#008000">                .</font>
+<font color="#008000">                .</font>
+<font color="#008000">                .</font>
+<font color="#008000">        \end{enumerate}</font>
+
+The <font color="#008080">|<A HREF="latexhelp.html#enumerate">enumerate</A>|</font> environment produces a numbered list.  Enumerations can be
+nested within one another, up to four levels deep.  They can also be nested
+within other paragraph-making environments.
+
+<A HREF="latexhelp.html#\item">\item</A>           Each item of an enumerated <A HREF="latexhelp.html#list">list</A> begins with an <font color="#008080">|<A HREF="latexhelp.html#\item">\item</A>|</font>
+                command. There must be at least one <font color="#008080">|<A HREF="latexhelp.html#\item">\item</A>|</font> command
+                within the environment.
+
+The <font color="#008080">|<A HREF="latexhelp.html#enumerate">enumerate</A>|</font> environment uses the <font color="#008080">|\enumi|</font> through <font color="#008080">|\enumiv|</font> counters (see
+section <font color="#008080">|<A HREF="latexhelp.html#latex-counters">latex-counters</A>|</font>). The type of numbering can be changed by redefining
+\theenumi etc.
+
+<font color="#008080">==============================================================================</font>
+e. eqnarray                                     <font color="#804040">*<a name="eqnarray">eqnarray</a>*</font>
+<font color="#ffffff">&gt;</font>
+<font color="#008000">        \begin{eqnarray}</font>
+<font color="#008000">                math formula 1 <A HREF="latexhelp.html#\\">\\</A></font>
+<font color="#008000">                math formula 2 <A HREF="latexhelp.html#\\">\\</A></font>
+<font color="#008000">                .</font>
+<font color="#008000">                .</font>
+<font color="#008000">                .</font>
+<font color="#008000">        \end{eqnarray}</font>
+
+The <font color="#008080">|<A HREF="latexhelp.html#eqnarray">eqnarray</A>|</font> environment is used to display a sequence of equations or
+inequalities. It is very much like a three-column <font color="#008080">|<A HREF="latexhelp.html#array">array</A>|</font> environment, with
+consecutive rows separated by <font color="#008080">|<A HREF="latexhelp.html#\\">\\</A>|</font> and consecutive items within a row separated
+by an <font color="#008080">|&amp;|</font>.
+
+\nonumber                                       <font color="#804040">*<a name="\nonumber">\nonumber</a>*</font>
+                An <A HREF="latexhelp.html#equation">equation</A> number is placed on every line unless that
+                line has a <font color="#008080">|<A HREF="latexhelp.html#\nonumber">\nonumber</A>|</font> command.
+
+\lefteqn                                        <font color="#804040">*<a name="\lefteqn">\lefteqn</a>*</font>
+                The command <font color="#008080">|<A HREF="latexhelp.html#\lefteqn">\lefteqn</A>|</font> is used for splitting long
+                formulas across lines.  It typesets its argument in
+                display style flush left in a box of zero width.
+
+<font color="#008080">==============================================================================</font>
+f. equation                                     <font color="#804040">*<a name="equation">equation</a>*</font>
+<font color="#ffffff">&gt;</font>
+<font color="#008000">        \begin{equation}</font>
+<font color="#008000">                math formula</font>
+<font color="#008000">        \end{equation}</font>
+
+The <font color="#008080">|<A HREF="latexhelp.html#equation">equation</A>|</font> environment centres your equation on the page and places the
+equation number in the right margin.
+
+<font color="#008080">==============================================================================</font>
+g. figure                                       <font color="#804040">*<a name="figure">figure</a>*</font>
+<font color="#ffffff">&gt;</font>
+<font color="#008000">        \begin{figure}[placement]</font>
+<font color="#008000">                body of the figure</font>
+<font color="#008000">                \caption{figure title}</font>
+<font color="#008000">        \end{figure}</font>
+
+Figures are objects that are not part of the normal text, and are usually
+&quot;floated&quot; to a convenient place, like the top of a page. Figures will not be
+split between two pages.
+
+The optional argument <font color="#6a5acd">[placement]</font> determines where <A HREF="latexhelp.html#LaTeX">LaTeX</A> will try to place
+your figure. There are four places where <A HREF="latexhelp.html#LaTeX">LaTeX</A> can possibly put a float:
+
+h (Here)                at the position in the text where the figure
+                        environment appears.
+t (Top)                 at the top of a text page.
+b (Bottom)              at the bottom of a text page.
+p (Page of floats)      on a separate float page, which is a page containing
+                        no text, only floats.
+
+The standard <font color="#008080">|<A HREF="latexhelp.html#report-class">report-class</A>|</font> and <font color="#008080">|<A HREF="latexhelp.html#article-class">article-class</A>|</font> use the default placement
+[tbp].
+
+The body of the <font color="#008080">|<A HREF="latexhelp.html#figure">figure</A>|</font> is made up of whatever text, <A HREF="latexhelp.html#LaTeX">LaTeX</A> commands, etc.  you
+wish.
+
+The \caption command allows you to title your figure.
+
+<font color="#008080">==============================================================================</font>
+h. flushleft                                    <font color="#804040">*<a name="flushleft">flushleft</a>*</font>
+<font color="#ffffff">&gt;</font>
+<font color="#008000">        \begin{flushleft}</font>
+<font color="#008000">                Text on line 1 <A HREF="latexhelp.html#\\">\\</A></font>
+<font color="#008000">                Text on line 2 <A HREF="latexhelp.html#\\">\\</A></font>
+<font color="#008000">                .</font>
+<font color="#008000">                .</font>
+<font color="#008000">                .</font>
+<font color="#008000">        \end{flushleft}</font>
+
+The <font color="#008080">|<A HREF="latexhelp.html#flushleft">flushleft</A>|</font> environment allows you to create a paragraph consisting of
+lines that are flushed left, to the left-hand margin. Each line must be
+terminated with the string <font color="#008080">|<A HREF="latexhelp.html#\\">\\</A>|</font>.
+
+\raggedright                                    <font color="#804040">*<a name="\raggedright">\raggedright</a>*</font>
+                This declaration corresponds to the <font color="#008080">|<A HREF="latexhelp.html#flushleft">flushleft</A>|</font> environment.
+                This declaration can be used inside an environment such as
+                <font color="#008080">|<A HREF="latexhelp.html#quote-l">quote-l</A>|</font> or in a <font color="#008080">|<A HREF="latexhelp.html#\parbox">\parbox</A>|</font>.  Unlike the <font color="#008080">|<A HREF="latexhelp.html#flushleft">flushleft</A>|</font>
+                environment, the <font color="#008080">|<A HREF="latexhelp.html#\raggedright">\raggedright</A>|</font> command does not start a new
+                paragraph; it simply changes how <A HREF="latexhelp.html#LaTeX">LaTeX</A> formats paragraph
+                units. To affect a paragraph unit's format, the scope of the
+                declaration must contain the blank line or <font color="#008080">|<A HREF="latexhelp.html#\end">\end</A>|</font> command (of
+                an environment like <font color="#008080">|<A HREF="latexhelp.html#quote-l">quote-l</A>|</font>) that ends the paragraph unit.
+
+<font color="#008080">==============================================================================</font>
+i. flushright                                   <font color="#804040">*<a name="flushright">flushright</a>*</font>
+<font color="#ffffff">&gt;</font>
+<font color="#008000">        \begin{flushright}</font>
+<font color="#008000">                Text on line 1 <A HREF="latexhelp.html#\\">\\</A></font>
+<font color="#008000">                Text on line 2 <A HREF="latexhelp.html#\\">\\</A></font>
+<font color="#008000">                .</font>
+<font color="#008000">                .</font>
+<font color="#008000">                .</font>
+<font color="#008000">        \end{flushright}</font>
+
+The <font color="#008080">|<A HREF="latexhelp.html#flushright">flushright</A>|</font> environment allows you to create a paragraph consisting of
+lines that are flushed right, to the right-hand margin. Each line must be
+terminated with the string <font color="#008080">|<A HREF="latexhelp.html#\\">\\</A>|</font>.
+
+\raggedleft                                     <font color="#804040">*<a name="\raggedleft">\raggedleft</a>*</font>
+                This declaration corresponds to the <font color="#008080">|<A HREF="latexhelp.html#flushright">flushright</A>|</font> environment.
+                This declaration can be used inside an environment such as
+                <font color="#008080">|<A HREF="latexhelp.html#quote-l">quote-l</A>|</font> or in a <font color="#008080">|<A HREF="latexhelp.html#\parbox">\parbox</A>|</font>.  Unlike the <font color="#008080">|<A HREF="latexhelp.html#flushright">flushright</A>|</font>
+                environment, the <font color="#008080">|<A HREF="latexhelp.html#\raggedleft">\raggedleft</A>|</font> command does not start a new
+                paragraph; it simply changes how <A HREF="latexhelp.html#LaTeX">LaTeX</A> formats paragraph
+                units. To affect a paragraph unit's format, the scope of the
+                declaration must contain the blank line or <font color="#008080">|<A HREF="latexhelp.html#\end">\end</A>|</font> command (of
+                an environment like <font color="#008080">|<A HREF="latexhelp.html#quote-l">quote-l</A>|</font>) that ends the paragraph unit.
+
+<font color="#008080">==============================================================================</font>
+j. itemize                                      <font color="#804040">*<a name="itemize">itemize</a>*</font>
+<font color="#ffffff">&gt;</font>
+<font color="#008000">        \begin{itemize}</font>
+<font color="#008000">                <A HREF="latexhelp.html#\item">\item</A> First item</font>
+<font color="#008000">                <A HREF="latexhelp.html#\item">\item</A> Second item</font>
+<font color="#008000">                .</font>
+<font color="#008000">                .</font>
+<font color="#008000">                .</font>
+<font color="#008000">        \end{itemize}</font>
+
+The <font color="#008080">|<A HREF="latexhelp.html#itemize">itemize</A>|</font> environment produces a &quot;bulleted&quot; list.  Itemizations can be
+nested within one another, up to four levels deep.  They can also be nested
+within other paragraph-making environments.
+
+\item                                           <font color="#804040">*<a name="\item">\item</a>*</font>
+                Each item of an itemized <A HREF="latexhelp.html#list">list</A> begins with an <font color="#008080">|<A HREF="latexhelp.html#\item">\item</A>|</font> command.
+                There must be at least one <font color="#008080">|<A HREF="latexhelp.html#\item">\item</A>|</font> command within the
+                environment.
+
+The <A HREF="latexhelp.html#itemize">itemize</A> environment uses the <font color="#008080">|\itemi|</font> through <font color="#008080">|\itemiv|</font> counters (see
+section <font color="#008080">|<A HREF="latexhelp.html#latex-counters">latex-counters</A>|</font>). The type of numbering can be changed by redefining
+\theitemi etc.
+
+<font color="#008080">==============================================================================</font>
+k. letter                                       <font color="#804040">*<a name="\letter">\letter</a>*</font>
+
+This environment is used for creating letters. See section <font color="#008080">|<A HREF="latexhelp.html#latex-letters">latex-letters</A>|</font>.
+
+<font color="#008080">==============================================================================</font>
+l. list                                         <font color="#804040">*<a name="list">list</a>*</font>
+
+The <font color="#008080">|<A HREF="latexhelp.html#list">list</A>|</font> environment is a generic environment which is used for defining many
+of the more specific environments. It is seldom used in documents, but often
+in macros.
+<font color="#ffffff">&gt;</font>
+<font color="#008000">        \begin{list}{label}{spacing}</font>
+<font color="#008000">                <A HREF="latexhelp.html#\item">\item</A> First item</font>
+<font color="#008000">                <A HREF="latexhelp.html#\item">\item</A> Second item</font>
+<font color="#008000">                .</font>
+<font color="#008000">                .</font>
+<font color="#008000">                .</font>
+<font color="#008000">        \end{list}</font>
+
+<font color="#008000"><b>'label'</b></font>         The <font color="#6a5acd">{label}</font> argument specifies how items should be labelled.
+                This argument is a piece of text that is inserted in a box to
+                form the <font color="#6a5acd">{label}</font>.  This argument can and usually does contain
+                other <A HREF="latexhelp.html#LaTeX">LaTeX</A> commands.
+
+<font color="#008000"><b>'spacing'</b></font>       The <font color="#6a5acd">{spacing}</font> argument contains commands to change the spacing
+                parameters for the <font color="#008080">|<A HREF="latexhelp.html#list">list</A>|</font>. This argument will most often be
+                null, i.e., {}. This will select all default spacing which
+                should suffice for most cases.
+
+<font color="#008080">==============================================================================</font>
+m. minipage                                     <font color="#804040">*<a name="minipage">minipage</a>*</font>
+<font color="#ffffff">&gt;</font>
+<font color="#008000">        \begin{minipage}[position]{width}</font>
+<font color="#008000">                text</font>
+<font color="#008000">        \end{minipage}</font>
+
+The <font color="#008080">|<A HREF="latexhelp.html#minipage">minipage</A>|</font> environment is similar to a <font color="#008080">|<A HREF="latexhelp.html#\parbox">\parbox</A>|</font> command. It takes the
+same optional <font color="#6a5acd">[position]</font> argument and mandatory <font color="#6a5acd">{width}</font> argument. You may use
+other paragraph-making environments inside a <font color="#008080">|<A HREF="latexhelp.html#minipage">minipage</A>|</font>.  Footnotes in a
+minipage environment are handled in a way that is particularly useful for
+putting footnotes in figures or tables. A <font color="#008080">|<A HREF="latexhelp.html#\footnote">\footnote</A>|</font> or <font color="#008080">|<A HREF="latexhelp.html#\footnotetext">\footnotetext</A>|</font>
+command puts the footnote at the bottom of the minipage instead of at the
+bottom of the page, and it uses the <font color="#008080">|\mpfootnote|</font> counter instead of the
+ordinary footnote counter. See sections <font color="#008080">|<A HREF="latexhelp.html#latex-counters">latex-counters</A>|</font> and
+<font color="#008080">|<A HREF="latexhelp.html#latex-footnotes">latex-footnotes</A>|</font>.
+
+<span style="background-color: #ffff00"><font color="#0000ff">NOTE</font></span>: Don't put one <font color="#008080">|<A HREF="latexhelp.html#minipage">minipage</A>|</font> inside another if you are using footnotes; they
+may wind up at the bottom of the wrong minipage.
+
+<font color="#008080">==============================================================================</font>
+n. picture                                      <font color="#804040">*<a name="picture">picture</a>*</font>
+<font color="#ffffff">&gt;</font>
+<font color="#008000">                           size           position</font>
+<font color="#008000">        \begin{picture}(width,height)(x offset,y offset)</font>
+<font color="#008000">                .</font>
+<font color="#008000">                .</font>
+<font color="#008000">                picture commands</font>
+<font color="#008000">                .</font>
+<font color="#008000">                .</font>
+<font color="#008000">        \end{picture}</font>
+
+The <font color="#008080">|<A HREF="latexhelp.html#picture">picture</A>|</font> environment allows you to create just about any kind of picture
+you want containing text, lines, arrows and circles. You tell <A HREF="latexhelp.html#LaTeX">LaTeX</A> where to
+put things in the picture by specifying their coordinates. A coordinate is a
+number that may have a decimal point and a minus sign -- a number like 5, 2.3
+or -3.1416. A coordinate specifies a length in multiples of the unit length
+<font color="#008080">|\unitlength|</font>, so if <font color="#008080">|\unitlength|</font> has been set to 1cm, then the coordinate
+2.54 specifies a length of 2.54 centimetres. You can change the value of
+<font color="#008080">|\unitlength|</font> anywhere you want, using the <font color="#008080">|<A HREF="latexhelp.html#\setlength">\setlength</A>|</font> command, but strange
+things will happen if you try changing it inside the <font color="#008080">|<A HREF="latexhelp.html#picture">picture</A>|</font> environment.
+
+A position is a pair of coordinates, such as (2.4,-5), specifying the point
+with x-coordinate 2.4 and y-coordinate -5. Coordinates are specified in the
+usual way with respect to an origin, which is normally at the lower-left
+corner of the <font color="#008080">|<A HREF="latexhelp.html#picture">picture</A>|</font>.
+<span style="background-color: #ffff00"><font color="#0000ff">Note</font></span> that when a position appears as an argument, it is not enclosed in
+braces; the parentheses serve to delimit the argument.
+
+The <font color="#008080">|<A HREF="latexhelp.html#picture">picture</A>|</font> environment has one mandatory argument, which is a position.  It
+specifies the size of the picture. The environment produces a rectangular box
+with width and height determined by this argument's x- and y-coordinates.
+
+The <font color="#008080">|<A HREF="latexhelp.html#picture">picture</A>|</font> environment also has an optional position argument, following
+the size argument, that can change the origin. (Unlike ordinary optional
+arguments, this argument is not contained in square brackets.) The optional
+argument gives the coordinates of the point at the lower-left corner of the
+picture (thereby determining the origin).  For example, if <font color="#008080">|\unitlength|</font> has
+been set to 1mm, the command:<font color="#ffffff"> &gt;</font>
+<font color="#008000">        \begin{picture}(100,200)(10,20)</font>
+<font color="#ffffff">&gt;</font>
+produces a picture of width 100 millimetres and height 200 millimetres, whose
+lower-left corner is the point (10,20) and whose upper-right corner is
+therefore the point (110,220). When you first draw a picture, you will omit
+the optional argument, leaving the origin at the lower-left corner. If you
+then want to modify your picture by shifting everything, you just add the
+appropriate optional argument.
+
+The environment's mandatory argument determines the nominal size of the
+picture. This need bear no relation to how large the picture really is; LaTeX
+will happily allow you to put things outside the picture, or even off the
+page. The picture's nominal size is used by <A HREF="latexhelp.html#LaTeX">LaTeX</A> in determining how much room
+to leave for it.
+
+Everything that appears in a picture is drawn by the <font color="#008080">|<A HREF="latexhelp.html#\put">\put</A>|</font> command. The
+command:<font color="#ffffff"> &gt;</font>
+<font color="#008000">        <A HREF="latexhelp.html#\put">\put</A> (11.3,-.3){...}</font>
+
+puts the object specified by ... in the picture, with its
+reference point at coordinates (11.3,-.3). The reference points for various
+objects will be described below.
+
+The <font color="#008080">|<A HREF="latexhelp.html#\put">\put</A>|</font> creates an LR box (<font color="#008080">|lrbox|</font>). You can put anything in the text
+argument of the <font color="#008080">|<A HREF="latexhelp.html#\put">\put</A>|</font> that you'd put into the argument of an <font color="#008080">|<A HREF="latexhelp.html#\mbox">\mbox</A>|</font> and
+related commands. When you do this, the reference point will be the lower left
+corner of the box.
+
+Picture commands:
+<font color="#008080">|<A HREF="latexhelp.html#\circle">\circle</A>|</font>               Draw a circle
+<font color="#008080">|<A HREF="latexhelp.html#\dashbox">\dashbox</A>|</font>              Draw a dashed box
+<font color="#008080">|<A HREF="latexhelp.html#\frame">\frame</A>|</font>                Draw a frame around an object
+<font color="#008080">|\framebox(picture)|</font>    Draw a box with a frame around it
+<font color="#008080">|<A HREF="latexhelp.html#\line">\line</A>|</font>                 Draw a straight line
+<font color="#008080">|<A HREF="latexhelp.html#\linethickness">\linethickness</A>|</font>        Set the line thickness
+<font color="#008080">|\makebox(picture)|</font>     Draw a box of the specified size
+<font color="#008080">|<A HREF="latexhelp.html#\multiput">\multiput</A>|</font>             Draw multiple instances of an object
+<font color="#008080">|<A HREF="latexhelp.html#\oval">\oval</A>|</font>                 Draw an ellipse
+<font color="#008080">|<A HREF="latexhelp.html#\put">\put</A>|</font>                  Place an object at a specified place
+<font color="#008080">|<A HREF="latexhelp.html#\shortstack">\shortstack</A>|</font>           Make a pile of objects
+<font color="#008080">|<A HREF="latexhelp.html#\vector">\vector</A>|</font>               Draw a line with an arrow
+
+\circle[*]<font color="#6a5acd">{diameter}</font>                            <font color="#804040">*<a name="\circle">\circle</a>*</font>
+                Command produces a circle with a <font color="#6a5acd">{diameter}</font> as close to the
+                specified one as possible. If the *-form of the command is
+                used, <A HREF="latexhelp.html#LaTeX">LaTeX</A> draws a solid circle.
+                <span style="background-color: #ffff00"><font color="#0000ff">Note</font></span>: only circles up to 40 pt can be drawn.
+
+
+\dashbox<font color="#6a5acd">{dashlength}</font>(width,height)<font color="#6a5acd">{...}</font>         <font color="#804040">*<a name="\dashbox">\dashbox</a>*</font>
+                Draws a box with a dashed line.  The <font color="#008080">|<A HREF="latexhelp.html#\dashbox">\dashbox</A>|</font> has an extra
+                argument which specifies the width of each dash.  A dashed box
+                looks best when the width and height are multiples of the
+                <font color="#6a5acd">{dashlength}</font>.
+
+\frame<font color="#6a5acd">{...}</font>                                     <font color="#804040">*<a name="\frame">\frame</a>*</font>
+                Puts a rectangular frame around the object specified in the
+                argument. The reference point is the bottom left corner of the
+                frame. No extra space is put between the frame and the object.
+
+\framebox(width,height)[position]<font color="#6a5acd">{...}</font>          <font color="#804040">*<a name="\picture-framebox">\picture-framebox</a>*</font>
+                The <font color="#008080">|<A HREF="latexhelp.html#\framebox">\framebox</A>|</font> command is exactly the same as the
+                <font color="#008080">|<A HREF="latexhelp.html#picture-makebox">picture-makebox</A>|</font> command, except that it puts a frame around
+                the outside of the box that it creates.  The <font color="#008080">|<A HREF="latexhelp.html#\framebox">\framebox</A>|</font>
+                command produces a rule of thickness <font color="#008080">|\fboxrule|</font>, and leaves a
+                space <font color="#008080">|\fboxsep|</font> between the rule and the contents of the box.
+
+\line(x slope,y slope)<font color="#6a5acd">{length}</font>                  <font color="#804040">*<a name="\line">\line</a>*</font>
+                Draws a line of the specified length and slope.
+                <span style="background-color: #ffff00"><font color="#0000ff">Note</font></span>: <A HREF="latexhelp.html#LaTeX">LaTeX</A> can only draw lines with slope = x/y, where x and
+                y have integer values from -6 through 6.
+
+\linethickness<font color="#6a5acd">{dimension}</font>                       <font color="#804040">*<a name="\linethickness">\linethickness</a>*</font>
+                Declares the thickness of horizontal and vertical lines in a
+                <font color="#008080">|<A HREF="latexhelp.html#picture">picture</A>|</font> environment to be dimension, which must be a
+                positive length. It does not affect the thickness of slanted
+                lines (<font color="#008080">|<A HREF="latexhelp.html#\line">\line</A>|</font>) and circles (<font color="#008080">|circle|</font>), or the quarter circles
+                drawn by <font color="#008080">|<A HREF="latexhelp.html#\oval">\oval</A>|</font> to form the corners of an oval.
+
+\makebox(width,height)[position]<font color="#6a5acd">{...}</font>           <font color="#804040">*<a name="picture-makebox">picture-makebox</a>*</font>
+                The makebox command for the <font color="#008080">|<A HREF="latexhelp.html#picture">picture</A>|</font> environment is similar
+                to the normal <font color="#008080">|<A HREF="latexhelp.html#\makebox">\makebox</A>|</font> command except that you must specify
+                a width and height in multiples of <font color="#008080">|\unitlength|</font>.
+                The optional argument, <font color="#6a5acd">[position]</font>, specifies the quadrant that
+                your text appears in. You may select up to two of the
+                following:
+                        t - Moves the item to the top of the rectangle
+                        b - Moves the item to the bottom
+                        l - Moves the item to the left
+                        r - Moves the item to the right
+
+<font color="#804040"><b>                                                </b></font><font color="#804040">*<a name="\multiput">\multiput</a>*</font>
+\multiput(x coord,y coord)(delta x,delta y){no of copies}<font color="#6a5acd">{object}</font>
+                This command can be used when you are putting the same
+                object in a regular pattern across a picture.
+
+\oval(width,height)[portion]                    <font color="#804040">*<a name="\oval">\oval</a>*</font>
+                Produces a rectangle with rounded corners. The optional
+                argument, <font color="#6a5acd">[portion]</font>, allows you to select part of the oval.
+                        t - top portion
+                        b - bottom portion
+                        r - right portion
+                        l - left portion
+                <span style="background-color: #ffff00"><font color="#0000ff">Note</font></span>: the &quot;corners&quot; of the oval are made with quarter circles
+                with a maximum radius of 20 pt, so large &quot;ovals&quot; will look
+                more like boxes with rounded corners.
+
+\put(x coord,y coord){ ... }                    <font color="#804040">*<a name="\put">\put</a>*</font>
+                Places the item specified by the mandatory argument at the
+                given coordinates.
+
+\shortstack[position]{... <A HREF="latexhelp.html#\\">\\</A> ... <A HREF="latexhelp.html#\\">\\</A> ...}        <font color="#804040">*<a name="\shortstack">\shortstack</a>*</font>
+                The <font color="#008080">|<A HREF="latexhelp.html#\shortstack">\shortstack</A>|</font> command produces a stack of objects.
+                The valid positions are:
+                        r - right of the stack
+                        l - left of the stack
+                        c - centre of the stack (default)
+
+\vector(x slope,y slope)<font color="#6a5acd">{length}</font>                <font color="#804040">*<a name="\vector">\vector</a>*</font>
+                Draws a line with an arrow of the specified length and slope.
+                The x and y values must lie between -4 and +4, inclusive.
+
+<font color="#008080">==============================================================================</font>
+o. quotation                                    <font color="#804040">*<a name="quotation">quotation</a>*</font>
+<font color="#ffffff"> &gt;</font>
+<font color="#008000">        \begin{quotation}</font>
+<font color="#008000">                text</font>
+<font color="#008000">        \end{quotation}</font>
+
+The margins of the <font color="#008080">|<A HREF="latexhelp.html#quotation">quotation</A>|</font> environment are indented on the left and the
+right. The text is justified at both margins and there is paragraph
+indentation. Leaving a blank line between text produces a new paragraph.
+
+<font color="#008080">==============================================================================</font>
+p. quote                                        <font color="#804040">*<a name="quote-l">quote-l</a>*</font>
+<font color="#ffffff">&gt;</font>
+<font color="#008000">        \begin{quote}</font>
+<font color="#008000">                text</font>
+<font color="#008000">        \end{quote}</font>
+
+The margins of the <font color="#008080">|<A HREF="latexhelp.html#quote-l">quote-l</A>|</font> environment are indented on the left and the right.
+The text is justified at both margins.  Leaving a blank line between text
+produces a new paragraph.
+
+<font color="#008080">==============================================================================</font>
+q. tabbing                                      <font color="#804040">*<a name="tabbing">tabbing</a>*</font>
+<font color="#ffffff">&gt;</font>
+<font color="#008000">        \begin{tabbing}</font>
+<font color="#008000">        text \= more text \= still more text \= last text <A HREF="latexhelp.html#\\">\\</A></font>
+<font color="#008000">        second row \&gt;  \&gt; more <A HREF="latexhelp.html#\\">\\</A></font>
+<font color="#008000">        .</font>
+<font color="#008000">        .</font>
+<font color="#008000">        .</font>
+<font color="#008000">        \end{tabbing}</font>
+
+The <font color="#008080">|<A HREF="latexhelp.html#tabbing">tabbing</A>|</font> environment provides a way to align text in columns. It works by
+setting tab stops and tabbing to them much the way you do with an ordinary
+typewriter.
+
+It is best suited for cases where the width of each column is constant and
+known in advance.
+
+This environment can be broken across pages, unlike the <font color="#008080">|<A HREF="latexhelp.html#tabular">tabular</A>|</font> environment.
+The following commands can be used inside a tabbing enviroment:
+
+<font color="#804040"><b>                                </b></font><font color="#804040">*<a name="tab=">tab=</a>*</font>
+\=              Sets a tab stop at the current position.
+
+<font color="#804040"><b>                                                </b></font><font color="#804040">*<a name="tab&gt;">tab&gt;</a>*</font>
+\&gt;              Advances to the next tab stop.
+
+<font color="#804040"><b>                                                </b></font><font color="#804040">*<a name="tab&lt;">tab&lt;</a>*</font>
+\&lt;              This command allows you to put something to the left of the
+                local margin without changing the margin. Can only be used at
+                the start of the line.
+
+<font color="#804040"><b>                                                </b></font><font color="#804040">*<a name="tab+">tab+</a>*</font>
+\+              Moves the left margin of the next and all the following
+                commands one tab stop to the right.
+
+<font color="#804040"><b>                                                </b></font><font color="#804040">*<a name="tab-">tab-</a>*</font>
+\-              Moves the left margin of the next and all the following
+                commands one tab stop to the left.
+
+<font color="#804040"><b>                                                </b></font><font color="#804040">*<a name="tab'">tab'</a>*</font>
+\'              Moves everything that you have typed so far in the current
+                column, i.e.  everything from the most recent \&gt; (<font color="#008080">|<A HREF="latexhelp.html#tab&gt;">tab&gt;</A>|</font>), \&lt;
+                (<font color="#008080">|<A HREF="latexhelp.html#tab&lt;">tab&lt;</A>|</font>), \' (<font color="#008080">|<A HREF="latexhelp.html#tab'">tab'</A>|</font>), <font color="#008080">|<A HREF="latexhelp.html#\\">\\</A>|</font>, or <font color="#008080">|<A HREF="latexhelp.html#\kill">\kill</A>|</font> command, to the right
+                of the previous column, flush against the current column's tab
+                stop.
+
+<font color="#804040"><b>                                                </b></font><font color="#804040">*<a name="tab`">tab`</a>*</font>
+\`              Allows you to put text flush right against any tab stop,
+                including tab stop 0. However, it can't move text to the right
+                of the last column because there's no tab stop there. The \`
+                (<font color="#008080">|<A HREF="latexhelp.html#tab`">tab`</A>|</font>) command moves all the text that follows it, up to the
+                <font color="#008080">|<A HREF="latexhelp.html#\\">\\</A>|</font> or <A HREF="latexhelp.html#\end">\end</A><font color="#6a5acd">{tabbing}</font> command that ends the line, to the right
+                margin of the <A HREF="latexhelp.html#tabbing">tabbing</A> environment. There must be no \&gt;
+                (<font color="#008080">|<A HREF="latexhelp.html#tab&gt;">tab&gt;</A>|</font>) or \' (<font color="#008080">|<A HREF="latexhelp.html#tab'">tab'</A>|</font>) command between the \` (<font color="#008080">|<A HREF="latexhelp.html#tab`">tab`</A>|</font>) and
+                the command that ends the line.
+
+<font color="#804040"><b>                                                </b></font><font color="#804040">*<a name="\kill">\kill</a>*</font>
+\kill           Sets tab stops without producing text. Works just like <font color="#008080">|<A HREF="latexhelp.html#\\">\\</A>|</font>
+                except that it throws away the current line instead of
+                producing output for it. The effect of any \= (<font color="#008080">|<A HREF="latexhelp.html#tab=">tab=</A>|</font>), \+
+                (<font color="#008080">|<A HREF="latexhelp.html#tab+">tab+</A>|</font>) or \- (<font color="#008080">|<A HREF="latexhelp.html#tab-">tab-</A>|</font>) commands in that line remain in
+                effect.
+
+<font color="#804040"><b>                                                </b></font><font color="#804040">*<a name="\pushtabs">\pushtabs</a>*</font>
+\pushtabs       Saves all current tab stop positions. Useful for temporarily
+                changing tab stop positions in the middle of a tabbing
+                environment. Also restores the tab stop positions saved by the
+                last <font color="#008080">|<A HREF="latexhelp.html#\pushtabs">\pushtabs</A>|</font>.
+
+<font color="#804040"><b>                                                </b></font><font color="#804040">*<a name="taba">taba</a>*</font>
+\a              In a <A HREF="latexhelp.html#tabbing">tabbing</A> environment, the commands \= (<font color="#008080">|<A HREF="latexhelp.html#tab=">tab=</A>|</font>), \'
+                (<font color="#008080">|<A HREF="latexhelp.html#tab'">tab'</A>|</font>) and \` (<font color="#008080">|<A HREF="latexhelp.html#tab`">tab`</A>|</font>) do not produce accents as normal.
+                Instead, the commands \a=, \a' and \a` are used.
+
+This example typesets a Pascal function in a traditional format:
+<font color="#ffffff">&gt;</font>
+<font color="#008000">        \begin{tabbing}</font>
+<font color="#008000">        function \= fact(n : integer) : integer;\\</font>
+<font color="#008000">                 \&gt; begin \= \+ <A HREF="latexhelp.html#\\">\\</A></font>
+<font color="#008000">                       \&gt; if \= n $&gt;$ 1 then \+ <A HREF="latexhelp.html#\\">\\</A></font>
+<font color="#008000">                                fact := n * fact(n-1) \- <A HREF="latexhelp.html#\\">\\</A></font>
+<font color="#008000">                          else \+ <A HREF="latexhelp.html#\\">\\</A></font>
+<font color="#008000">                                fact := 1; \-\- <A HREF="latexhelp.html#\\">\\</A></font>
+<font color="#008000">                    end;\\</font>
+<font color="#008000">        \end{tabbing}</font>
+
+<font color="#008080">==============================================================================</font>
+r. table                                        <font color="#804040">*<a name="\table">\table</a>*</font>
+<font color="#ffffff">&gt;</font>
+<font color="#008000">        \begin{table}[placement]</font>
+<font color="#008000">                body of the table</font>
+<font color="#008000">                \caption{table title}</font>
+<font color="#008000">        \end{table}</font>
+
+Tables are objects that are not part of the normal text, and are usually
+&quot;floated&quot; to a convenient place, like the top of a page. Tables will not be
+split between two pages.
+
+The optional argument <font color="#6a5acd">[placement]</font> determines where <A HREF="latexhelp.html#LaTeX">LaTeX</A> will try to place
+your table. There are four places where <A HREF="latexhelp.html#LaTeX">LaTeX</A> can possibly put a float:
+
+        h (Here)                at the position in the text where the table
+                                environment appears.
+        t (Top)                 at the top of a text page.
+        b (Bottom)              at the bottom of a text page.
+        p (Page of floats)      on a separate float page, which is a page
+                                containing no text, only floats.
+
+The standard <font color="#008080">|<A HREF="latexhelp.html#report-class">report-class</A>|</font> and <font color="#008080">|<A HREF="latexhelp.html#article-class">article-class</A>|</font> use the default placement <font color="#6a5acd">[tbp]</font>.
+
+The body of the table is made up of whatever text, <A HREF="latexhelp.html#LaTeX">LaTeX</A> commands, etc., you
+wish.
+
+The \caption command allows you to title your table.
+
+<font color="#008080">==============================================================================</font>
+s. tabular                                      <font color="#804040">*<a name="tabular">tabular</a>*</font>
+<font color="#ffffff">&gt;</font>
+<font color="#008000">        \begin{tabular}[pos]{cols}</font>
+<font color="#008000">                column 1 entry &amp; column 2 entry ... &amp; column n entry <A HREF="latexhelp.html#\\">\\</A></font>
+<font color="#008000">                .</font>
+<font color="#008000">                .</font>
+<font color="#008000">                .</font>
+<font color="#008000">        \end{tabular}</font>
+
+or
+<font color="#ffffff">&gt;</font>
+<font color="#008000">        \begin{tabular*}{width}[pos]{cols}</font>
+<font color="#008000">                column 1 entry &amp; column 2 entry ... &amp; column n entry <A HREF="latexhelp.html#\\">\\</A></font>
+<font color="#008000">                .</font>
+<font color="#008000">                .</font>
+<font color="#008000">                .</font>
+<font color="#008000">        \end{tabular*}</font>
+
+These environments produce a box consisting of a sequence of rows of items,
+aligned vertically in columns. The mandatory and optional arguments consist
+of:
+
+<font color="#6a5acd">{width}</font> Specifies the width of the tabular* environment. There must be
+        rubber space between columns that can stretch to fill out the
+        specified width.
+
+[pos]   Specifies the vertical position; default is alignment on the
+        centre of the environment.
+                t - align on top row
+                b - align on bottom row
+
+<font color="#6a5acd">{cols}</font>  Specifies the column formatting. It consists of a sequence of
+        the following specifiers, corresponding to the sequence of
+        columns and intercolumn material.
+                l - A column of left-aligned items.
+
+                r - A column of right-aligned items.
+
+                c - A column of centred items.
+
+                | - A vertical line the full height and depth of the
+                environment.
+
+                @<font color="#6a5acd">{text}</font> - This inserts text in every row. An @-expression
+                suppresses the intercolumn space normally inserted
+                between columns; any desired space between the
+                inserted text and the adjacent items must be included
+                in text. An \extracolsep<font color="#6a5acd">{wd}</font> command in an
+                @-expression causes an extra space of width <font color="#6a5acd">{wd}</font> to
+                appear to the left of all subsequent columns, until
+                countermanded by another <font color="#008080">|\extracolsep|</font> command. Unlike
+                ordinary intercolumn space, this extra space is not
+                suppressed by an @-expression. An <font color="#008080">|\extracolsep|</font>
+                command can be used only in an @-expression in the
+                cols argument.
+
+                p<font color="#6a5acd">{wd}</font> - Produces a column with each item typeset in a <font color="#008080">|<A HREF="latexhelp.html#\parbox">\parbox</A>|</font>
+                of width <font color="#6a5acd">{wd}</font>, as if it were the argument of a
+                \parbox[t]<font color="#6a5acd">{wd}</font> command. However, a <font color="#008080">|<A HREF="latexhelp.html#\\">\\</A>|</font> may not appear
+                in the item, except in the following situations:
+                1. inside an environment like <font color="#008080">|<A HREF="latexhelp.html#minipage">minipage</A>|</font>, <font color="#008080">|<A HREF="latexhelp.html#array">array</A>|</font>, or
+                <font color="#008080">|<A HREF="latexhelp.html#tabular">tabular</A>|</font>.
+                2. inside an explicit <font color="#008080">|<A HREF="latexhelp.html#\parbox">\parbox</A>|</font>.
+                3. in the scope of a <font color="#008080">|<A HREF="latexhelp.html#\centering">\centering</A>|</font>, <font color="#008080">|<A HREF="latexhelp.html#\raggedright">\raggedright</A>|</font>, or
+                <font color="#008080">|<A HREF="latexhelp.html#\raggedleft">\raggedleft</A>|</font> declaration. The latter declarations must
+                appear inside braces or an environment when used in a
+                p-column element.
+
+                <font color="#6a5acd">{num}{cols}</font> - Equivalent to num copies of cols, where num is any positive
+                integer and cols is any <A HREF="latexhelp.html#list">list</A> of column-specifiers,
+                which may contain another -expression.
+
+These commands can be used inside a tabular environment:
+
+<font color="#008080">|<A HREF="latexhelp.html#\cline">\cline</A>|</font>                Draw a horizontal line spanning some columns.
+<font color="#008080">|<A HREF="latexhelp.html#\hline">\hline</A>|</font>                Draw a * horizontal line spanning all columns.
+<font color="#008080">|<A HREF="latexhelp.html#\multicolumn">\multicolumn</A>|</font>          Make an item spanning * several columns.
+<font color="#008080">|<A HREF="latexhelp.html#\vline">\vline</A>|</font>                Draw a vertical line.
+
+
+\cline<font color="#6a5acd">{i-j}</font>                                     <font color="#804040">*<a name="\cline">\cline</a>*</font>
+                The <font color="#008080">|<A HREF="latexhelp.html#\cline">\cline</A>|</font> command draws horizontal lines across the columns
+                specified, beginning in column i and ending in column j,
+                which are identified in the mandatory argument.
+
+\hline                                          <font color="#804040">*<a name="\hline">\hline</a>*</font>
+                The <font color="#008080">|<A HREF="latexhelp.html#\hline">\hline</A>|</font> command will draw a horizontal line the width of
+                the table.  It's most commonly used to draw a line at the top,
+                bottom, and between the rows of the table.
+
+\multicolumn<font color="#6a5acd">{cols}{pos}{text}</font>                   <font color="#804040">*<a name="\multicolumn">\multicolumn</a>*</font>
+                The <font color="#008080">|<A HREF="latexhelp.html#\multicolumn">\multicolumn</A>|</font> is used to make an entry that spans several
+                columns.  The first mandatory argument, <font color="#6a5acd">{cols}</font>, specifies the
+                number of columns to span. The second mandatory argument,
+                <font color="#6a5acd">{pos}</font>, specifies the formatting of the entry:
+                        c - centered
+                        l - flushleft
+                        r - flushright.
+                The third mandatory argument, <font color="#6a5acd">{text}</font>, specifies what text is
+                to make up the entry.
+
+\vline                                          <font color="#804040">*<a name="\vline">\vline</a>*</font>
+                The <font color="#008080">|<A HREF="latexhelp.html#\vline">\vline</A>|</font> command will draw a vertical line extending the
+                full height and depth of its row. An <font color="#008080">|<A HREF="latexhelp.html#\hfill">\hfill</A>|</font> command can be
+                used to move the line to the edge of the column. It can also
+                be used in an @-expression.
+
+<font color="#008080">==============================================================================</font>
+t. thebibliography                              <font color="#804040">*<a name="\thebibliography">\thebibliography</a>*</font>
+<font color="#ffffff">&gt;</font>
+<font color="#008000">        \begin{thebibliography}{widestlabel}</font>
+<font color="#008000">                \bibitem[label]{cite_key}</font>
+<font color="#008000">                .</font>
+<font color="#008000">                .</font>
+<font color="#008000">                .</font>
+<font color="#008000">        \end{thebibliography}</font>
+
+The <font color="#008080">|<A HREF="latexhelp.html#\thebibliography">\thebibliography</A>|</font> environment produces a bibliography or reference list.
+
+In the <font color="#008080">|<A HREF="latexhelp.html#article-class">article-class</A>|</font>, this reference <A HREF="latexhelp.html#list">list</A> is labelled &quot;References&quot;; in the
+<font color="#008080">|<A HREF="latexhelp.html#report-class">report-class</A>|</font>, it is labelled &quot;Bibliography&quot;.
+
+<font color="#6a5acd">{widestlabel}</font>   Text that, when printed, is approximately as wide as the
+                widest item label produces by the <font color="#008080">|<A HREF="latexhelp.html#\bibitem">\bibitem</A>|</font> commands.
+
+<font color="#008080">|<A HREF="latexhelp.html#\bibitem">\bibitem</A>|</font>              Specify a bibliography item.
+<font color="#008080">|<A HREF="latexhelp.html#\cite">\cite</A>|</font>                 Refer to a bibliography item.
+<font color="#008080">|<A HREF="latexhelp.html#\nocite">\nocite</A>|</font>               Include an item in the bibliography.
+<font color="#008080">|<A HREF="latexhelp.html#BibTeX">BibTeX</A>|</font>                Automatic generation of bibliographies.
+
+\bibitem                                        <font color="#804040">*<a name="\bibitem">\bibitem</a>*</font>
+\bibitem[label]<font color="#6a5acd">{citekey}</font>
+                The <font color="#008080">|<A HREF="latexhelp.html#\bibitem">\bibitem</A>|</font> command generates an entry labelled by <font color="#6a5acd">[label]</font>.
+                If the <font color="#6a5acd">[label]</font> argument is missing, a number is generated as
+                the label, using the <font color="#008080">|\enumi|</font> counter.  The <font color="#6a5acd">{citekey}</font> is any
+                sequence of letters, numbers, and punctuation symbols not
+                containing a comma. This command writes an entry on the `.aux'
+                file containing <font color="#6a5acd">{citekey}</font> and the item's label. When this
+                `.aux' file is read by the <A HREF="latexhelp.html#\begin">\begin</A><font color="#6a5acd">{document}</font> command, the
+                item's label is associated with <font color="#6a5acd">{citekey}</font>, causing the
+                reference to <font color="#6a5acd">{citekey}</font> by a <font color="#008080">|<A HREF="latexhelp.html#\cite">\cite</A>|</font> command to produce the
+                associated label.
+
+\cite                                           <font color="#804040">*<a name="\cite">\cite</a>*</font>
+\cite[text]<font color="#6a5acd">{keylist}</font>
+                The <font color="#6a5acd">{keylist}</font> argument is a <A HREF="latexhelp.html#list">list</A> of citation keys.  This
+                command generates an in-text citation to the references
+                associated with the keys in <font color="#6a5acd">{keylist}</font> by entries on the `.aux'
+                file read by the <A HREF="latexhelp.html#\begin">\begin</A><font color="#6a5acd">{document}</font> command.
+                The optional text argument will appear after the
+                citation, i.e.:<font color="#ffffff"> &gt;</font>
+<font color="#008000">                        \cite[p.2]{knuth}</font>
+<font color="#ffffff">&lt;</font>               might produce `[Knuth, p. 2]'.
+
+\nocite                                         <font color="#804040">*<a name="\nocite">\nocite</a>*</font>
+\nocite<font color="#6a5acd">{keylist}</font>
+                The <font color="#008080">|<A HREF="latexhelp.html#\nocite">\nocite</A>|</font> command produces no text, but writes
+                <font color="#6a5acd">{keylist}</font>, which is a <A HREF="latexhelp.html#list">list</A> of one or more citation
+                keys, on the `.aux' file.
+
+BibTeX                                          <font color="#804040">*<a name="BibTeX">BibTeX</a>*</font> <font color="#804040">*<a name="bibtex">bibtex</a>*</font>
+<font color="#804040"><b>                                                </b></font><font color="#804040">*<a name="\bibliographystyle">\bibliographystyle</a>*</font>
+If you use the BibTeX program by Oren Patashnik (highly recommended if you
+need a bibliography of more than a couple of titles) to maintain your
+bibliography, you don't use the <font color="#008080">|thebibliography|</font> environment.  Instead, you
+include the lines:
+<font color="#ffffff">&gt;</font>
+<font color="#008000">        \bibliographystyle{style}</font>
+<font color="#008000">        \bibliography{bibfile}</font>
+
+where <font color="#6a5acd">{style}</font> refers to a file style.bst, which defines how your citations
+will look. The standard styles distributed with BibTeX are:
+
+<font color="#6a5acd">{alpha}</font> Sorted alphabetically. Labels are formed from name of author and year
+        of publication.
+<font color="#6a5acd">{plain}</font> Sorted alphabetically. Labels are numeric.
+<font color="#6a5acd">{unsrt}</font> Like plain, but entries are in order of citation.
+<font color="#6a5acd">{abbrv}</font> Like plain, but more compact labels.
+
+In addition, numerous other BibTeX style files exist tailored to the demands
+of various publications.
+
+<font color="#804040"><b>                                                </b></font><font color="#804040">*<a name="\bibliography">\bibliography</a>*</font>
+The argument to <font color="#008080">|<A HREF="latexhelp.html#\bibliography">\bibliography</A>|</font> refers to the file bibfile.bib, which should
+contain your database in <A HREF="latexhelp.html#BibTeX">BibTeX</A> format. Only the entries referred to via
+<font color="#008080">|<A HREF="latexhelp.html#\cite">\cite</A>|</font> and <font color="#008080">|<A HREF="latexhelp.html#\nocite">\nocite</A>|</font> will be listed in the bibliography.
+
+<font color="#008080">==============================================================================</font>
+u. theorem                                      <font color="#804040">*<a name="theorem">theorem</a>*</font>
+<font color="#ffffff">&gt;</font>
+<font color="#008000">        \begin{theorem}</font>
+<font color="#008000">                theorem text</font>
+<font color="#008000">        \end{theorem}</font>
+
+The <font color="#008080">|<A HREF="latexhelp.html#theorem">theorem</A>|</font> environment produces &quot;Theorem x&quot; in boldface followed by your
+theorem text.
+
+<font color="#008080">==============================================================================</font>
+v. titlepage                                    <font color="#804040">*<a name="titlepage">titlepage</a>*</font>
+<font color="#ffffff">&gt;</font>
+<font color="#008000">        \begin{titlepage}</font>
+<font color="#008000">                text</font>
+<font color="#008000">        \end{titlepage}</font>
+
+The <font color="#008080">|<A HREF="latexhelp.html#titlepage">titlepage</A>|</font> environment creates a title page, i.e. a page with no printed
+page number or heading. It also causes the following page to be numbered page
+one. Formatting the title page is left to you. The <font color="#008080">|\today|</font> command comes in
+handy for title pages.
+
+<span style="background-color: #ffff00"><font color="#0000ff">Note</font></span> that you can use the <font color="#008080">|<A HREF="latexhelp.html#\maketitle">\maketitle</A>|</font> to produce a standard title page.
+
+<font color="#008080">==============================================================================</font>
+x. verbatim                                     <font color="#804040">*<a name="verbatim">verbatim</a>*</font>
+<font color="#ffffff">&gt;</font>
+<font color="#008000">        \begin{verbatim}</font>
+<font color="#008000">                text</font>
+<font color="#008000">        \end{verbatim}</font>
+
+The <font color="#008080">|<A HREF="latexhelp.html#verbatim">verbatim</A>|</font> environment is a paragraph-making environment that gets LaTeX
+to print exactly what you type in. It turns <A HREF="latexhelp.html#LaTeX">LaTeX</A> into a typewriter with
+carriage returns and blanks having the same effect that they would on a
+typewriter.
+
+\verb                                           <font color="#804040">*<a name="\verb">\verb</a>*</font>
+\verb char literal_text char
+\verb*char literal_text char
+                Typesets literal_text exactly as typed, including
+                special characters and spaces, using a typewriter <font color="#008080">|\tt|</font>
+                type style. There may be no space between <font color="#008080">|<A HREF="latexhelp.html#\verb">\verb</A>|</font> or
+                <font color="#008080">|<A HREF="latexhelp.html#\verb">\verb</A>|</font>* and char (space is shown here only for
+                clarity).  The *-form differs only in that spaces are
+                printed as `\verb*| |\'.
+
+<font color="#008080">==============================================================================</font>
+y. verse                                        <font color="#804040">*<a name="verse">verse</a>*</font>
+<font color="#ffffff">&gt;</font>
+<font color="#008000">        \begin{verse}</font>
+<font color="#008000">                text</font>
+<font color="#008000">        \end{verse}</font>
+
+The <font color="#008080">|<A HREF="latexhelp.html#verse">verse</A>|</font> environment is designed for poetry, though you may find other uses
+for it.
+
+The margins are indented on the left and the right. Separate the lines of each
+stanza with <font color="#008080">|<A HREF="latexhelp.html#\\">\\</A>|</font>, and use one or more blank lines to separate the stanzas.
+
+<font color="#008080">==============================================================================</font>
+8. Footnotes                                    <font color="#804040">*<a name="latex-footnotes">latex-footnotes</a>*</font>
+
+Footnotes can be produced in one of two ways. They can be produced with one
+command, the <font color="#008080">|<A HREF="latexhelp.html#\footnote">\footnote</A>|</font> command. They can also be produced with two commands,
+the <font color="#008080">|<A HREF="latexhelp.html#\footnotemark">\footnotemark</A>|</font> and the <font color="#008080">|<A HREF="latexhelp.html#\footnotetext">\footnotetext</A>|</font> commands. See the specific command for
+information on why you would use one over the other.
+
+<font color="#008080">|<A HREF="latexhelp.html#\footnote">\footnote</A>|</font>     Insert a footnote
+<font color="#008080">|<A HREF="latexhelp.html#\footnotemark">\footnotemark</A>|</font> Insert footnote mark only
+<font color="#008080">|<A HREF="latexhelp.html#\footnotetext">\footnotetext</A>|</font> Insert footnote text only
+
+\footnote[number]<font color="#6a5acd">{text}</font>                         <font color="#804040">*<a name="\footnote">\footnote</a>*</font>
+                Command places the numbered footnote text at the bottom of the
+                current page. The optional argument, number, is used to change
+                the default footnote number.  This command can only be used in
+                outer paragraph mode; i.e., you cannot use it in sectioning
+                commands like <font color="#008080">|<A HREF="latexhelp.html#\chapter">\chapter</A>|</font>, in <font color="#008080">|\figure|</font>, <font color="#008080">|<A HREF="latexhelp.html#\table">\table</A>|</font> or in a
+                <font color="#008080">|\tabular|</font> environment.
+
+\footnotemark                                   <font color="#804040">*<a name="\footnotemark">\footnotemark</a>*</font>
+                Command puts the footnote number in the text. This command can
+                be used in inner paragraph mode. The text of the footnote is
+                supplied by the <font color="#008080">|<A HREF="latexhelp.html#\footnotetext">\footnotetext</A>|</font> command.
+                This command can be used to produce several consecutive
+                footnote markers referring to the same footnote by using
+<font color="#ffffff">&gt;</font>
+<font color="#008000">                        \footnotemark[\value{footnote}]</font>
+<font color="#ffffff">&lt;</font>
+                after the first <font color="#008080">|<A HREF="latexhelp.html#\footnote">\footnote</A>|</font> command.
+
+\footnotetext[number]<font color="#6a5acd">{text}</font>                     <font color="#804040">*<a name="\footnotetext">\footnotetext</a>*</font>
+                Command produces the text to be placed at the bottom of the
+                page. This command can come anywhere after the <font color="#008080">|<A HREF="latexhelp.html#\footnotemark">\footnotemark</A>|</font>
+                command. The <font color="#008080">|<A HREF="latexhelp.html#\footnotetext">\footnotetext</A>|</font> command must appear in outer
+                paragraph mode.  The optional argument, number, is used to
+                change the default footnote number.
+
+<font color="#008080">==============================================================================</font>
+9. Lengths                                      <font color="#804040">*<a name="latex-lenghts">latex-lenghts</a>*</font>
+
+A length is a measure of distance. Many <A HREF="latexhelp.html#LaTeX">LaTeX</A> commands take a length as an
+argument.
+
+<font color="#008080">|<A HREF="latexhelp.html#\newlength">\newlength</A>|</font>    Define a new length.
+<font color="#008080">|<A HREF="latexhelp.html#\setlength">\setlength</A>|</font>    Set the value of a length.
+<font color="#008080">|<A HREF="latexhelp.html#\addtolength">\addtolength</A>|</font>  Add a quantity to a length.
+<font color="#008080">|<A HREF="latexhelp.html#\settodepth">\settodepth</A>|</font>   Set a length to  the depth of something.
+<font color="#008080">|<A HREF="latexhelp.html#\settoheight">\settoheight</A>|</font>  Set a length to the height of  something.
+<font color="#008080">|<A HREF="latexhelp.html#\settowidth">\settowidth</A>|</font>   Set a length to the width of something.
+<font color="#008080">|<A HREF="latexhelp.html#pre-lengths">pre-lengths</A>|</font>   Lengths that are, like, predefined.
+
+\newlength{\gnat}                               <font color="#804040">*<a name="\newlength">\newlength</a>*</font>
+                The <font color="#008080">|<A HREF="latexhelp.html#\newlength">\newlength</A>|</font> command defines the mandatory argument, \gnat,
+                as a length command with a value of 0in. An error occurs if a
+                \gnat command already exists.
+
+\setlength{\gnat}<font color="#6a5acd">{length}</font>                       <font color="#804040">*<a name="\setlength">\setlength</a>*</font>
+                The <font color="#008080">|<A HREF="latexhelp.html#\setlength">\setlength</A>|</font> command is used to set the value of a \gnat
+                command. The <font color="#6a5acd">{length}</font> argument can be expressed in any terms
+                of length <A HREF="latexhelp.html#LaTeX">LaTeX</A> understands, i.e., inches (in), millimetres
+                (mm), points (pt), etc.
+
+\addtolength{\gnat}<font color="#6a5acd">{length}</font>                     <font color="#804040">*<a name="\addtolength">\addtolength</a>*</font>
+                The <font color="#008080">|<A HREF="latexhelp.html#\addtolength">\addtolength</A>|</font> command increments a \gnat by the amount
+                specified in the <font color="#6a5acd">{length}</font> argument. It can be a negative
+                amount.
+
+\settodepth{\gnat}<font color="#6a5acd">{text}</font>                        <font color="#804040">*<a name="\settodepth">\settodepth</a>*</font>
+                The <font color="#008080">|<A HREF="latexhelp.html#\settodepth">\settodepth</A>|</font> command sets the value of a \gnat command
+                equal to the depth of the <font color="#6a5acd">{text}</font> argument.
+
+\settoheight{\gnat}<font color="#6a5acd">{text}</font>                       <font color="#804040">*<a name="\settoheight">\settoheight</a>*</font>
+                The <font color="#008080">|<A HREF="latexhelp.html#\settoheight">\settoheight</A>|</font> command sets the value of a \gnat command
+                equal to the height of the <font color="#6a5acd">{text}</font> argument.
+
+\settowidth{\gnat}<font color="#6a5acd">{text}</font>                        <font color="#804040">*<a name="\settowidth">\settowidth</a>*</font>
+                The <font color="#008080">|<A HREF="latexhelp.html#\settowidth">\settowidth</A>|</font> command sets the value of a \gnat command
+                equal to the width of the <font color="#6a5acd">{text}</font> argument.
+
+Predefined lengths                              <font color="#804040">*<a name="pre-lengths">pre-lengths</a>*</font>
+
+\width                                          <font color="#804040">*<a name="\width">\width</a>*</font>
+\height                                         <font color="#804040">*<a name="\height">\height</a>*</font>
+\depth                                          <font color="#804040">*<a name="\depth">\depth</a>*</font>
+\totalheight                                    <font color="#804040">*<a name="\totalheight">\totalheight</a>*</font>
+                These length parameters can be used in the arguments of the
+                box-making commands See section Spaces &amp; Boxes. They specify
+                the natural width etc.  of the text in the box.
+                \totalheight equals \height + \depth.
+                To make a box with the text stretched to double the natural
+                size, e.g., say:<font color="#ffffff"> &gt;</font>
+<font color="#008000">                        \makebox[2\width]{Get a stretcher}</font>
+
+<font color="#008080">==============================================================================</font>
+10. Letters                                     <font color="#804040">*<a name="latex-letters">latex-letters</a>*</font>
+
+You can use <A HREF="latexhelp.html#LaTeX">LaTeX</A> to typeset letters, both personal and business. The letter
+document class is designed to make a number of letters at once, although you
+can make just one if you so desire.
+
+Your `.tex' source file has the same minimum commands as the other document
+classes, i.e., you must have the following commands as a minimum:<font color="#ffffff"> &gt;</font>
+<font color="#008000">        \documentclass{letter}</font>
+<font color="#008000">        \begin{document}</font>
+<font color="#008000">                ...</font>
+<font color="#008000">                letters</font>
+<font color="#008000">                ...</font>
+<font color="#008000">        \end{document}</font>
+
+Each letter is a letter environment, whose argument is the name and address of
+the recipient. For example, you might have:<font color="#ffffff"> &gt;</font>
+<font color="#008000">        \begin{letter}</font>
+<font color="#008000">                {Mr. Joe Smith\\</font>
+<font color="#008000">                2345 Princess St.  <A HREF="latexhelp.html#\\">\\</A></font>
+<font color="#008000">                Edinburgh, EH1 1AA}</font>
+<font color="#008000">                ...</font>
+<font color="#008000">        \end{letter}</font>
+
+The letter itself begins with the <font color="#008080">|<A HREF="latexhelp.html#\opening">\opening</A>|</font> command.  The text of the letter
+follows. It is typed as ordinary <A HREF="latexhelp.html#LaTeX">LaTeX</A> input.  Commands that make no sense in
+a letter, like <font color="#008080">|<A HREF="latexhelp.html#\chapter">\chapter</A>|</font>, do not work. The letter closes with a <font color="#008080">|<A HREF="latexhelp.html#\closing">\closing</A>|</font>
+command.
+
+After the closing, you can have additional material. The <font color="#008080">|<A HREF="latexhelp.html#\cc">\cc</A>|</font> command produces
+the usual &quot;cc: ...&quot;. There's also a similar <font color="#008080">|\encl|</font> command for a <A HREF="latexhelp.html#list">list</A> of
+enclosures. With both these commands, use<font color="#008080">|<A HREF="latexhelp.html#\\">\\</A>|</font> to separate the items.
+
+These commands are used with the letter class:
+<font color="#008080">|<A HREF="latexhelp.html#\address">\address</A>|</font>      Your return address.
+<font color="#008080">|<A HREF="latexhelp.html#\cc">\cc</A>|</font>           Cc list.  closing Saying goodbye.
+<font color="#008080">|\encl|</font>         List of enclosed material.
+<font color="#008080">|<A HREF="latexhelp.html#\location">\location</A>|</font>     Your organisation's address.
+<font color="#008080">|<A HREF="latexhelp.html#\makelabels">\makelabels</A>|</font>   Making address labels.
+<font color="#008080">|<A HREF="latexhelp.html#\name">\name</A>|</font>         Your name, for the return address.
+<font color="#008080">|<A HREF="latexhelp.html#\opening">\opening</A>|</font>      Saying hello.
+<font color="#008080">|<A HREF="latexhelp.html#\ps">\ps</A>|</font>           Adding a postscript.
+<font color="#008080">|<A HREF="latexhelp.html#\signature">\signature</A>|</font>    Your signature.
+<font color="#008080">|<A HREF="latexhelp.html#\startbreaks">\startbreaks</A>|</font>  Allow page breaks.
+<font color="#008080">|<A HREF="latexhelp.html#\stopbreaks">\stopbreaks</A>|</font>   Disallow page breaks.
+<font color="#008080">|<A HREF="latexhelp.html#\telephone">\telephone</A>|</font>    Your phone number.
+
+\address{Return address}                        <font color="#804040">*<a name="\address">\address</a>*</font>
+                The return address, as it should appear on the letter and the
+                envelope.  Separate lines of the address should be separated
+                by <font color="#008080">|<A HREF="latexhelp.html#\\">\\</A>|</font> commands. If you do not make an <font color="#008080">|<A HREF="latexhelp.html#\address">\address</A>|</font> declaration,
+                then the letter will be formatted for copying onto your
+                organisation's standard letterhead. (See section Overview of
+                <A HREF="latexhelp.html#LaTeX">LaTeX</A> and Local Guide, for details on your local
+                implementation). If you give an <font color="#008080">|<A HREF="latexhelp.html#\address">\address</A>|</font> declaration, then
+                the letter will be formatted as a personal letter.
+
+\cc{Kate Schechter\\Rob McKenna}                <font color="#804040">*<a name="\cc">\cc</a>*</font>
+                Generate a <A HREF="latexhelp.html#list">list</A> of other persons the letter was sent to. Each
+                name is printed on a separate line.
+
+\closing<font color="#6a5acd">{text}</font>                                  <font color="#804040">*<a name="\closing">\closing</a>*</font>
+                The letter closes with a <font color="#008080">|<A HREF="latexhelp.html#\closing">\closing</A>|</font> command, i.e.,<font color="#ffffff"> &gt;</font>
+<font color="#008000">                        \closing{Best Regards,} \encl{CV\\Certificates}</font>
+<font color="#ffffff">&lt;</font>               Generate a <A HREF="latexhelp.html#list">list</A> of enclosed material.
+
+\location<font color="#6a5acd">{address}</font>                              <font color="#804040">*<a name="\location">\location</a>*</font>
+                This modifies your organisation's standard address. This only
+                appears if the firstpage pagestyle is selected.
+
+\makelabels<font color="#6a5acd">{number}</font>                             <font color="#804040">*<a name="\makelabels">\makelabels</a>*</font>
+                If you issue this command in the preamble, <A HREF="latexhelp.html#LaTeX">LaTeX</A> will create a
+                sheet of address labels. This sheet will be output before the
+                letters.
+
+\name{June Davenport}                           <font color="#804040">*<a name="\name">\name</a>*</font>
+                Your name, used for printing on the envelope together with the
+                return address.
+
+\opening<font color="#6a5acd">{text}</font>                                  <font color="#804040">*<a name="\opening">\opening</a>*</font>
+                The letter begins with the <font color="#008080">|<A HREF="latexhelp.html#\opening">\opening</A>|</font> command. The mandatory
+                argument, text, is whatever text you wish to start your
+                letter, i.e.,<font color="#ffffff"> &gt;</font>
+<font color="#008000">                        \opening{Dear Joe,}</font>
+
+\ps                                             <font color="#804040">*<a name="\ps">\ps</a>*</font>
+                Use this command before a postscript.
+
+\signature{Harvey Swick}                        <font color="#804040">*<a name="\signature">\signature</a>*</font>
+                Your name, as it should appear at the end of the letter
+                underneath the space for your signature. Items that should go
+                on separate lines should be separated by <font color="#008080">|<A HREF="latexhelp.html#\\">\\</A>|</font> commands.
+
+\startbreaks                                    <font color="#804040">*<a name="\startbreaks">\startbreaks</a>*</font>
+                Used after a <font color="#008080">|<A HREF="latexhelp.html#\stopbreaks">\stopbreaks</A>|</font> command to allow page breaks again.
+
+\stopbreaks                                     <font color="#804040">*<a name="\stopbreaks">\stopbreaks</a>*</font>
+                Inhibit page breaks until a <font color="#008080">|<A HREF="latexhelp.html#\startbreaks">\startbreaks</A>|</font> command occurs.
+
+\telephone<font color="#6a5acd">{number}</font>                              <font color="#804040">*<a name="\telephone">\telephone</a>*</font>
+                This is your telephone number. This only appears if the
+                firstpage pagestyle is selected.
+
+<font color="#008080">==============================================================================</font>
+11. Line &amp; Page Breaking                        <font color="#804040">*<a name="latex-breaking">latex-breaking</a>*</font>
+
+The first thing <A HREF="latexhelp.html#LaTeX">LaTeX</A> does when processing ordinary text is to translate your
+input file into a string of glyphs and spaces. To produce a printed document,
+this string must be broken into lines, and these lines must be broken into
+pages. In some environments, you do the line breaking yourself with the <font color="#008080">|<A HREF="latexhelp.html#\\">\\</A>|</font>
+command, but <A HREF="latexhelp.html#LaTeX">LaTeX</A> usually does it for you.
+
+<font color="#008080">|<A HREF="latexhelp.html#\\">\\</A>|</font>                    Start a new line
+<font color="#008080">|<A HREF="latexhelp.html#hyph-">hyph-</A>|</font>                 Insert explicit hyphenation
+<font color="#008080">|<A HREF="latexhelp.html#\cleardoublepage">\cleardoublepage</A>|</font>      Start a new right-hand page
+<font color="#008080">|<A HREF="latexhelp.html#\clearpage">\clearpage</A>|</font>            Start a new page
+<font color="#008080">|<A HREF="latexhelp.html#\enlargethispage">\enlargethispage</A>|</font>      Enlarge the current page a bit
+<font color="#008080">|<A HREF="latexhelp.html#\fussy">\fussy</A>|</font>                Be fussy about line breaking
+<font color="#008080">|<A HREF="latexhelp.html#\hyphenation">\hyphenation</A>|</font>          Tell <A HREF="latexhelp.html#LaTeX">LaTeX</A> how to hyphenate a word
+<font color="#008080">|<A HREF="latexhelp.html#\linebreak">\linebreak</A>|</font>            Break the line
+<font color="#008080">|<A HREF="latexhelp.html#\newline">\newline</A>|</font>              Break the line prematurely
+<font color="#008080">|<A HREF="latexhelp.html#\newpage">\newpage</A>|</font>              Start a new page
+<font color="#008080">|<A HREF="latexhelp.html#\nolinebreak">\nolinebreak</A>|</font>          Don't break the current line
+<font color="#008080">|<A HREF="latexhelp.html#\nopagebreak">\nopagebreak</A>|</font>          Don't make a page break here
+<font color="#008080">|<A HREF="latexhelp.html#\pagebreak">\pagebreak</A>|</font>            Please make a page break here
+<font color="#008080">|<A HREF="latexhelp.html#\sloppy">\sloppy</A>|</font>               Be sloppy about line breaking
+
+\\[*][extraspace]                               <font color="#804040">*<a name="\\">\\</a>*</font> <font color="#804040">*<a name="\\\\">\\\\</a>*</font>
+                The <font color="#008080">|<A HREF="latexhelp.html#\\">\\</A>|</font> command tells <A HREF="latexhelp.html#LaTeX">LaTeX</A> to start a new line. It has an
+                optional argument, <font color="#6a5acd">[extraspace]</font>, that specifies how much extra
+                vertical space is to be inserted before the next line. This
+                can be a negative amount.
+                The \\* command is the same as the ordinary <font color="#008080">|<A HREF="latexhelp.html#\\">\\</A>|</font> command
+                except that it tells <A HREF="latexhelp.html#LaTeX">LaTeX</A> not to start a new page after the
+                line.
+
+\-                                              <font color="#804040">*<a name="hyph-">hyph-</a>*</font>
+                The \- command tells <A HREF="latexhelp.html#LaTeX">LaTeX</A> that it may hyphenate the word at
+                that point.  <A HREF="latexhelp.html#LaTeX">LaTeX</A> is very good at hyphenating, and it will
+                usually find all correct hyphenation points. The \- command is
+                used for the exceptional cases.
+                <span style="background-color: #ffff00"><font color="#0000ff">Note</font></span>: when you insert \- commands in a word, the word will
+                only be hyphenated at those points and not at any of the
+                hyphenation points that <A HREF="latexhelp.html#LaTeX">LaTeX</A> might otherwise have chosen.
+
+\cleardoublepage                                <font color="#804040">*<a name="\cleardoublepage">\cleardoublepage</a>*</font>
+                The <font color="#008080">|<A HREF="latexhelp.html#\cleardoublepage">\cleardoublepage</A>|</font> command ends the current page and causes
+                all figures and tables that have so far appeared in the input
+                to be printed.  In a two-sided printing style (<font color="#008080">|<A HREF="latexhelp.html#twoside">twoside</A>|</font>), it
+                also makes the next page a right-hand (odd-numbered) page,
+                producing a blank page if necessary.
+
+\clearpage                                      <font color="#804040">*<a name="\clearpage">\clearpage</a>*</font>
+                The <font color="#008080">|<A HREF="latexhelp.html#\clearpage">\clearpage</A>|</font> command ends the current page and causes all
+                figures and tables that have so far appeared in the input to
+                be printed.
+
+\enlargethispage<font color="#6a5acd">{size}</font>                          <font color="#804040">*<a name="\enlargethispage">\enlargethispage</a>*</font>
+\enlargethispage*<font color="#6a5acd">{size}</font>
+                Enlarge the textheight for the current page by the
+                specified amount; e.g.:<font color="#ffffff"> &gt;</font>
+
+<font color="#008000">                        \enlargethispage{\baselineskip}</font>
+<font color="#ffffff">&lt;</font>
+                will allow one additional line.  The starred form
+                tries to squeeze the material together on the page as
+                much as possible. This is normally used together with
+                an explicit <font color="#008080">|<A HREF="latexhelp.html#\pagebreak">\pagebreak</A>|</font>.
+
+\fussy                                          <font color="#804040">*<a name="\fussy">\fussy</a>*</font>
+                This declaration (which is the default) makes TeX more fussy
+                about line breaking. This can avoids too much space between
+                words, but may produce overfull boxes.  This command cancels
+                the effect of a previous <font color="#008080">|<A HREF="latexhelp.html#\sloppy">\sloppy</A>|</font> command.
+
+\hyphenation<font color="#6a5acd">{words}</font>                             <font color="#804040">*<a name="\hyphenation">\hyphenation</a>*</font>
+                The <font color="#008080">|<A HREF="latexhelp.html#\hyphenation">\hyphenation</A>|</font> command declares allowed hyphenation points,
+                where words is a <A HREF="latexhelp.html#list">list</A> of words, separated by spaces, in which
+                each hyphenation point is indicated by a - character.
+
+\linebreak[number]                              <font color="#804040">*<a name="\linebreak">\linebreak</a>*</font>
+                The <font color="#008080">|<A HREF="latexhelp.html#\linebreak">\linebreak</A>|</font> command tells <A HREF="latexhelp.html#LaTeX">LaTeX</A> to break the current line
+                at the point of the command. With the optional argument,
+                number, you can convert the <font color="#008080">|<A HREF="latexhelp.html#\linebreak">\linebreak</A>|</font> command from a demand
+                to a request. The <font color="#6a5acd">[number]</font> must be a number from 0 to 4. The
+                higher the number, the more insistent the request is.  The
+                <font color="#008080">|<A HREF="latexhelp.html#\linebreak">\linebreak</A>|</font> command causes <A HREF="latexhelp.html#LaTeX">LaTeX</A> to stretch the line so it
+                extends to the right margin.
+
+\newline                                        <font color="#804040">*<a name="\newline">\newline</a>*</font>
+                The <font color="#008080">|<A HREF="latexhelp.html#\newline">\newline</A>|</font> command breaks the line right where it is. It
+                can only be used in paragraph mode.
+
+\newpage                                        <font color="#804040">*<a name="\newpage">\newpage</a>*</font>
+                The <font color="#008080">|<A HREF="latexhelp.html#\newpage">\newpage</A>|</font> command ends the current page.
+
+\nolinebreak[number]                            <font color="#804040">*<a name="\nolinebreak">\nolinebreak</a>*</font>
+                The <font color="#008080">|<A HREF="latexhelp.html#\nolinebreak">\nolinebreak</A>|</font> command prevents <A HREF="latexhelp.html#LaTeX">LaTeX</A> from breaking the
+                current line at the point of the command. With the optional
+                argument, <font color="#6a5acd">[number]</font>, you can convert the <font color="#008080">|<A HREF="latexhelp.html#\nolinebreak">\nolinebreak</A>|</font> command
+                from a demand to a request. The <font color="#6a5acd">[number]</font> must be a number from 0
+                to 4. The higher the number, the more insistent the request
+                is.
+
+\nopagebreak[number]                            <font color="#804040">*<a name="\nopagebreak">\nopagebreak</a>*</font>
+                The <font color="#008080">|<A HREF="latexhelp.html#\nopagebreak">\nopagebreak</A>|</font> command prevents <A HREF="latexhelp.html#LaTeX">LaTeX</A> from breaking the
+                current page at the point of the command. With the optional
+                argument, <font color="#6a5acd">[number]</font>, you can convert the <font color="#008080">|<A HREF="latexhelp.html#\nopagebreak">\nopagebreak</A>|</font> command
+                from a demand to a request. The <font color="#6a5acd">[number]</font> must be a number from
+                0 to 4. The higher the number, the more insistent the request
+                is.
+
+\pagebreak[number]                              <font color="#804040">*<a name="\pagebreak">\pagebreak</a>*</font>
+                The <font color="#008080">|<A HREF="latexhelp.html#\pagebreak">\pagebreak</A>|</font> command tells <A HREF="latexhelp.html#LaTeX">LaTeX</A> to break the current page
+                at the point of the command. With the optional argument,
+                <font color="#6a5acd">[number]</font>, you can convert the <font color="#008080">|<A HREF="latexhelp.html#\pagebreak">\pagebreak</A>|</font> command from a
+                demand to a request. The <font color="#6a5acd">[number]</font> must be a number from 0 to
+                4. The higher the number, the more insistent the request is.
+
+\sloppy                                         <font color="#804040">*<a name="\sloppy">\sloppy</a>*</font>
+                This declaration makes TeX less fussy about line breaking.
+                This can prevent overfull boxes, but may leave too much space
+                between words.
+                Lasts until a <font color="#008080">|<A HREF="latexhelp.html#\fussy">\fussy</A>|</font> command is issued.
+
+<font color="#008080">==============================================================================</font>
+12. Making Paragraphs                           <font color="#804040">*<a name="latex-paragraphs">latex-paragraphs</a>*</font>
+
+A paragraph is ended by one or more completely blank lines -- lines not
+containing even a <font color="#008080">|\%|</font>. A blank line should not appear where a new paragraph
+cannot be started, such as in math mode or in the argument of a sectioning
+command.
+
+<font color="#008080">|<A HREF="latexhelp.html#\indent">\indent</A>|</font>       Indent this paragraph.
+<font color="#008080">|<A HREF="latexhelp.html#\noindent">\noindent</A>|</font>     Do not indent this paragraph.
+<font color="#008080">|<A HREF="latexhelp.html#\par">\par</A>|</font>          Another way of writing a blank line.
+
+\indent                                         <font color="#804040">*<a name="\indent">\indent</a>*</font>
+                This produces a horizontal space whose width equals the width
+                of the paragraph indentation. It is used to add paragraph
+                indentation where it would otherwise be suppressed.
+
+\noindent                                       <font color="#804040">*<a name="\noindent">\noindent</a>*</font>
+                When used at the beginning of the paragraph, it suppresses the
+                paragraph indentation. It has no effect when used in the
+                middle of a paragraph.
+
+\par                                            <font color="#804040">*<a name="\par">\par</a>*</font>
+                Equivalent to a blank line; often used to make command or
+                environment definitions easier to read.
+
+<font color="#008080">==============================================================================</font>
+13. Margin Notes                                <font color="#804040">*<a name="latex-margin-notes">latex-margin-notes</a>*</font>
+
+\marginpar[left]<font color="#6a5acd">{right}</font>                         <font color="#804040">*<a name="\marginpar">\marginpar</a>*</font>
+                This command creates a <span style="background-color: #ffff00"><font color="#0000ff">note</font></span> in the margin. The first line will
+                be at the same height as the line in the text where the
+                <font color="#008080">|<A HREF="latexhelp.html#\marginpar">\marginpar</A>|</font> occurs.
+
+                When you only specify the mandatory argument <font color="#6a5acd">{right}</font>, the text
+                will be placed:
+<font color="#804040"><b>                </b></font>* in the right margin for one-sided layout
+<font color="#804040"><b>                </b></font>* in the outside margin for two-sided layout (<font color="#008080">|<A HREF="latexhelp.html#twoside">twoside</A>|</font>)
+<font color="#804040"><b>                </b></font>* in the nearest margin for two-column layout (<font color="#008080">|<A HREF="latexhelp.html#twocolumn">twocolumn</A>|</font>)
+
+\reversemarginpar                               <font color="#804040">*<a name="\reversemarginpar">\reversemarginpar</a>*</font>
+                By issuing the command <font color="#008080">|<A HREF="latexhelp.html#\reversemarginpar">\reversemarginpar</A>|</font>, you can force the
+                marginal notes to go into the opposite (inside) margin.
+
+When you specify both arguments, left is used for the left margin, and right
+is used for the right margin.
+
+The first word will normally not be hyphenated; you can enable hyphenation by
+prefixing the first word with a <A HREF="latexhelp.html#\hspace">\hspace</A><font color="#6a5acd">{0pt}</font> command (<font color="#008080">|hspace|</font>).
+
+<font color="#008080">==============================================================================</font>
+14. Math Formulae                               <font color="#804040">*<a name="latex-math">latex-math</a>*</font>
+<font color="#804040"><b>                                                </b></font><font color="#804040">*<a name="displaymath">displaymath</a>*</font>
+There are three environments (<font color="#008080">|<A HREF="latexhelp.html#latex-environments">latex-environments</A>|</font>) that put <A HREF="latexhelp.html#LaTeX">LaTeX</A> in math
+mode:
+<font color="#008080">|math|</font>          For Formulae that appear right in the text.
+<font color="#008080">|<A HREF="latexhelp.html#displaymath">displaymath</A>|</font>   For Formulae that appear on their own line.
+<font color="#008080">|<A HREF="latexhelp.html#equation">equation</A>|</font>      The same as the displaymath environment except that it adds an
+                <A HREF="latexhelp.html#equation">equation</A> number in the right margin.
+
+The <font color="#008080">|math|</font> environment can be used in both paragraph and LR mode, but the
+<font color="#008080">|<A HREF="latexhelp.html#displaymath">displaymath</A>|</font> and <font color="#008080">|<A HREF="latexhelp.html#equation">equation</A>|</font> environments can be used only in paragraph mode. The
+<font color="#008080">|math|</font> and <font color="#008080">|<A HREF="latexhelp.html#displaymath">displaymath</A>|</font> environments are used so often that they have the
+following short forms:
+        \(...\)    instead of    <A HREF="latexhelp.html#\begin">\begin</A><font color="#6a5acd">{math}</font>...\end<font color="#6a5acd">{math}</font>
+        \[...\]    instead of    <A HREF="latexhelp.html#\begin">\begin</A><font color="#6a5acd">{displaymath}</font>...\end<font color="#6a5acd">{displaymath}</font>
+
+In fact, the math environment is so common that it has an even shorter form:
+        $ ... $    instead of     \(...\)
+
+<font color="#008080">|<A HREF="latexhelp.html#sub-sup">sub-sup</A>|</font>       Also known as exponent or index.
+<font color="#008080">|<A HREF="latexhelp.html#math-symbols">math-symbols</A>|</font>  Various mathematical squiggles.
+<font color="#008080">|<A HREF="latexhelp.html#math-spacing">math-spacing</A>|</font>  Thick, medium, thin and negative spaces.
+<font color="#008080">|<A HREF="latexhelp.html#math-misc">math-misc</A>|</font>     Stuff that doesn't fit anywhere else.
+
+<font color="#008080">==========</font>
+Subscripts &amp; Superscripts                       <font color="#804040">*<a name="sub-sup">sub-sup</a>*</font>
+<font color="#804040"><b>                                                </b></font><font color="#804040">*<a name="subscripts">subscripts</a>*</font> <font color="#804040">*<a name="superscripts">superscripts</a>*</font>
+
+To get an expression exp to appear as a subscript, you just type _<font color="#6a5acd">{exp}</font>.  To
+get exp to appear as a superscript, you type ^<font color="#6a5acd">{exp}</font>. <A HREF="latexhelp.html#LaTeX">LaTeX</A> handles
+superscripted superscripts and all of that stuff in the natural way. It even
+does the right thing when something has both a subscript and a superscript.
+
+<font color="#008080">==========</font>
+Math Symbols                                    <font color="#804040">*<a name="math-symbols">math-symbols</a>*</font>
+
+<A HREF="latexhelp.html#LaTeX">LaTeX</A> provides almost any mathematical symbol you're likely to need. The
+commands for generating them can be used only in math mode. For example, if
+you include<font color="#ffffff"> &gt;</font>
+<font color="#008000">        $\pi$</font>
+in your source, you will get the symbol in your output.
+
+<font color="#008080">==========</font>
+Spacing in Math Mode                            <font color="#804040">*<a name="math-spacing">math-spacing</a>*</font>
+
+In a math environment, <A HREF="latexhelp.html#LaTeX">LaTeX</A> ignores the spaces you type and puts in the
+spacing that it thinks is best. <A HREF="latexhelp.html#LaTeX">LaTeX</A> formats mathematics the way it's done in
+mathematics texts. If you want different spacing, <A HREF="latexhelp.html#LaTeX">LaTeX</A> provides the following
+four commands for use in math mode:
+        \; - a thick space                      <font color="#804040">*<a name="math;">math;</a>*</font>
+        \: - a medium space                     <font color="#804040">*<a name="math:">math:</a>*</font>
+        \, - a thin space                       <font color="#804040">*<a name="math,">math,</a>*</font>
+        \! - a negative thin space              <font color="#804040">*<a name="matn!">matn!</a>*</font>
+
+<font color="#008080">==========</font>
+Math Miscellany                                 <font color="#804040">*<a name="math-misc">math-misc</a>*</font>
+
+\cdots                                          <font color="#804040">*<a name="\cdots">\cdots</a>*</font>
+                Produces a horizontal ellipsis where the dots are raised to
+                the centre of the line.
+\ddots                                          <font color="#804040">*<a name="\ddots">\ddots</a>*</font>
+                Produces a diagonal ellipsis.
+\frac<font color="#6a5acd">{num}{den}</font>                                 <font color="#804040">*<a name="\frac">\frac</a>*</font>
+                Produces the fraction num divided by den.
+\ldots                                          <font color="#804040">*<a name="\ldots">\ldots</a>*</font>
+                Produces an ellipsis. This command works in any mode, not just
+                math mode.
+\overbrace<font color="#6a5acd">{text}</font>                                <font color="#804040">*<a name="\overbrace">\overbrace</a>*</font>
+                Generates a brace over text.
+\overline<font color="#6a5acd">{text}</font>                                 <font color="#804040">*<a name="\overline">\overline</a>*</font>
+                Causes the argument text to be overlined.
+\sqrt[root]<font color="#6a5acd">{arg}</font>                                <font color="#804040">*<a name="\sqrt">\sqrt</a>*</font>
+                Produces the square root of its argument.  The optional
+                argument, <font color="#6a5acd">[root]</font>, determines what root to produce, i.e., the
+                cube root of x+y would be typed as:<font color="#ffffff"> &gt;</font>
+<font color="#008000">                        $\sqrt[3]{x+y}$.</font>
+\underbrace<font color="#6a5acd">{text}</font>                               <font color="#804040">*<a name="\underbrace">\underbrace</a>*</font>
+                Generates text with a brace underneath.
+\underline<font color="#6a5acd">{text}</font>                                <font color="#804040">*<a name="\underline">\underline</a>*</font>
+                Causes the argument text to be underlined. This command can
+                also be used in paragraph and LR mode.
+\vdots                                          <font color="#804040">*<a name="\vdots">\vdots</a>*</font>
+                Produces a vertical ellipsis.
+
+<font color="#008080">==============================================================================</font>
+15. Modes                                       <font color="#804040">*<a name="latex-modes">latex-modes</a>*</font>
+
+When <A HREF="latexhelp.html#LaTeX">LaTeX</A> is processing your input text, it is always in one of three modes:
+        Paragraph mode                                  <font color="#804040">*<a name="paragraph-mode">paragraph-mode</a>*</font>
+        Math mode                                       <font color="#804040">*<a name="math-mode">math-mode</a>*</font>
+        Left-to-right mode, called LR mode for short.   <font color="#804040">*<a name="lr-mode">lr-mode</a>*</font>
+
+<A HREF="latexhelp.html#LaTeX">LaTeX</A> changes mode only when it goes up or down a staircase to a different
+level, though not all level changes produce mode changes. Mode changes occur
+only when entering or leaving an environment, or when <A HREF="latexhelp.html#LaTeX">LaTeX</A> is processing the
+argument of certain text-producing commands.
+
+<font color="#008080">|<A HREF="latexhelp.html#paragraph-mode">paragraph-mode</A>|</font> is the most common; it's the one <A HREF="latexhelp.html#LaTeX">LaTeX</A> is in when processing
+ordinary text. In that mode, <A HREF="latexhelp.html#LaTeX">LaTeX</A> breaks your text into lines and breaks the
+lines into pages. <A HREF="latexhelp.html#LaTeX">LaTeX</A> is in <font color="#008080">|<A HREF="latexhelp.html#math-mode">math-mode</A>|</font> when it's generating a mathematical
+formula. In <font color="#008080">|<A HREF="latexhelp.html#lr-mode">lr-mode</A>|</font>, as in <font color="#008080">|<A HREF="latexhelp.html#paragraph-mode">paragraph-mode</A>|</font>, <A HREF="latexhelp.html#LaTeX">LaTeX</A> considers the output that
+it produces to be a string of words with spaces between them. However, unlike
+<font color="#008080">|<A HREF="latexhelp.html#paragraph-mode">paragraph-mode</A>|</font>, <A HREF="latexhelp.html#LaTeX">LaTeX</A> keeps going from left to right; it never starts a new
+line in <font color="#008080">|<A HREF="latexhelp.html#lr-mode">lr-mode</A>|</font>. Even if you put a hundred words into an <font color="#008080">|<A HREF="latexhelp.html#\mbox">\mbox</A>|</font>, <A HREF="latexhelp.html#LaTeX">LaTeX</A> would
+keep typesetting them from left to right inside a single box, and then
+complain because the resulting box was too wide to fit on the line.
+
+<A HREF="latexhelp.html#LaTeX">LaTeX</A> is in <font color="#008080">|<A HREF="latexhelp.html#lr-mode">lr-mode</A>|</font> when it starts making a box with an <font color="#008080">|<A HREF="latexhelp.html#\mbox">\mbox</A>|</font> command.  You
+can get it to enter a different mode inside the box - for example, you can
+make it enter <font color="#008080">|<A HREF="latexhelp.html#math-mode">math-mode</A>|</font> to put a formula in the box. There are also several
+text-producing commands and environments for making a box that put <A HREF="latexhelp.html#LaTeX">LaTeX</A> in
+<font color="#008080">|<A HREF="latexhelp.html#paragraph-mode">paragraph-mode</A>|</font>. The box make by one of these commands or environments will be
+called a <font color="#008080">|<A HREF="latexhelp.html#\parbox">\parbox</A>|</font>. When <A HREF="latexhelp.html#LaTeX">LaTeX</A> is in <font color="#008080">|<A HREF="latexhelp.html#paragraph-mode">paragraph-mode</A>|</font> while making a box, it is
+said to be in &quot;inner paragraph mode&quot;. Its normal <font color="#008080">|<A HREF="latexhelp.html#paragraph-mode">paragraph-mode</A>|</font>, which it
+starts out in, is called &quot;outer paragraph mode&quot;.
+
+<font color="#008080">==============================================================================</font>
+16. Page Styles                                 <font color="#804040">*<a name="latex-page-styles">latex-page-styles</a>*</font>
+
+The <font color="#008080">|<A HREF="latexhelp.html#\documentclass">\documentclass</A>|</font> command determines the size and position of the page's head
+and foot. The page style determines what goes in them.
+
+<font color="#008080">|<A HREF="latexhelp.html#\maketitle">\maketitle</A>|</font>    Generate a title page.
+<font color="#008080">|<A HREF="latexhelp.html#\pagenumbering">\pagenumbering</A>|</font> Set the style used for page numbers.
+<font color="#008080">|<A HREF="latexhelp.html#\pagestyle">\pagestyle</A>|</font>    Change the headings/footings style.
+<font color="#008080">|<A HREF="latexhelp.html#\thispagestyle">\thispagestyle</A>|</font> Change the headings/footings style for this page.
+
+\maketitle                                      <font color="#804040">*<a name="\maketitle">\maketitle</a>*</font>
+                The <font color="#008080">|<A HREF="latexhelp.html#\maketitle">\maketitle</A>|</font> command generates a title on a separate title
+                page - except in the <font color="#008080">|\article|</font> class, where the title normally
+                goes at the top of the first page.  Information used to
+                produce the title is obtained from the following declarations:
+
+                <font color="#008080">|<A HREF="latexhelp.html#\author">\author</A>|</font>       Who wrote this stuff?
+                <font color="#008080">|<A HREF="latexhelp.html#\date">\date</A>|</font>         The date the document was created.
+                <font color="#008080">|<A HREF="latexhelp.html#\thanks">\thanks</A>|</font>       A special form of footnote.
+                <font color="#008080">|<A HREF="latexhelp.html#\title">\title</A>|</font>                How to set the document title.
+
+                \author<font color="#6a5acd">{names}</font>                          <font color="#804040">*<a name="\author">\author</a>*</font> <font color="#804040">*<a name="\and">\and</a>*</font>
+                        The <font color="#008080">|<A HREF="latexhelp.html#\author">\author</A>|</font> command declares the author(s), where
+                        names is a <A HREF="latexhelp.html#list">list</A> of authors separated by \and commands.
+                        Use <font color="#008080">|<A HREF="latexhelp.html#\\">\\</A>|</font> to separate lines within a single author's
+                        entry -- for example, to give the author's institution
+                        or address.
+
+                \date<font color="#6a5acd">{text}</font>                             <font color="#804040">*<a name="\date">\date</a>*</font>
+                        The <font color="#008080">|<A HREF="latexhelp.html#\date">\date</A>|</font> command declares text to be the document's
+                        date.  With no <font color="#008080">|<A HREF="latexhelp.html#\date">\date</A>|</font> command, the current date is
+                        used.
+
+                \thanks<font color="#6a5acd">{text}</font>                           <font color="#804040">*<a name="\thanks">\thanks</a>*</font>
+                        The <font color="#008080">|<A HREF="latexhelp.html#\thanks">\thanks</A>|</font> command produces a <font color="#008080">|<A HREF="latexhelp.html#\footnote">\footnote</A>|</font> to the
+                        title.
+
+                \title<font color="#6a5acd">{text}</font>                            <font color="#804040">*<a name="\title">\title</a>*</font>
+                        The <font color="#008080">|<A HREF="latexhelp.html#\title">\title</A>|</font> command declares text to be the title. Use
+                        <font color="#008080">|<A HREF="latexhelp.html#\\">\\</A>|</font> to tell <A HREF="latexhelp.html#LaTeX">LaTeX</A> where to start a new line in a long
+                        title.
+
+\pagenumbering<font color="#6a5acd">{numstyle}</font>                        <font color="#804040">*<a name="\pagenumbering">\pagenumbering</a>*</font>
+                Specifies the style of page numbers. Possible values of
+                <font color="#008000"><b>'numstyle'</b></font> are:
+                        arabic - Arabic numerals                <font color="#804040">*<a name="arabic">arabic</a>*</font>
+                        roman  - Lowercase <A HREF="latexhelp.html#Roman">Roman</A> numerals       <font color="#804040">*<a name="roman">roman</a>*</font>
+                        Roman  - Uppercase Roman numerals       <font color="#804040">*<a name="Roman">Roman</a>*</font>
+                        alph   - Lowercase letters              <font color="#804040">*<a name="alph">alph</a>*</font>
+                        Alph   - Uppercase letters              <font color="#804040">*<a name="Alph">Alph</a>*</font>
+
+\pagestyle<font color="#6a5acd">{option}</font>                              <font color="#804040">*<a name="\pagestyle">\pagestyle</a>*</font>
+<font color="#804040"><b>                                                </b></font><font color="#804040">*<a name="plain">plain</a>*</font> <font color="#804040">*<a name="empty">empty</a>*</font> <font color="#804040">*<a name="headings">headings</a>*</font>
+                The <font color="#008080">|<A HREF="latexhelp.html#\pagestyle">\pagestyle</A>|</font> command changes the style from the current
+                page on throughout the remainder of your document.
+                The valid options are:
+                plain      - Just a plain page number.
+                empty      - Produces empty heads and feet no page numbers.
+                headings   - Puts running headings on each page. The document
+                             style specifies what goes in the headings.
+                myheadings - You specify what is to go in the heading with the
+                             <font color="#008080">|<A HREF="latexhelp.html#\markboth">\markboth</A>|</font> or the <font color="#008080">|<A HREF="latexhelp.html#\markright">\markright</A>|</font> commands.
+
+                <font color="#008080">|<A HREF="latexhelp.html#\markboth">\markboth</A>|</font>     Set left and right headings.
+                <font color="#008080">|<A HREF="latexhelp.html#\markright">\markright</A>|</font>    Set right heading only.
+
+                \markboth{left head}{right head}        <font color="#804040">*<a name="\markboth">\markboth</a>*</font>
+                        The <font color="#008080">|<A HREF="latexhelp.html#\markboth">\markboth</A>|</font> command is used in conjunction with the
+                        page style myheadings for setting both the left and
+                        the right heading.
+                        <span style="background-color: #ffff00"><font color="#0000ff">Note</font></span> that a &quot;left-hand heading&quot; is generated by the
+                        last <font color="#008080">|<A HREF="latexhelp.html#\markboth">\markboth</A>|</font> command before the end of the page,
+                        while a &quot;right-hand heading&quot; is generated by the first
+                        <font color="#008080">|<A HREF="latexhelp.html#\markboth">\markboth</A>|</font> or <font color="#008080">|<A HREF="latexhelp.html#\markright">\markright</A>|</font> that comes on the page if
+                        there is one, otherwise by the last one before the
+                        page.
+
+
+                \markright{right head}                  <font color="#804040">*<a name="\markright">\markright</a>*</font>
+                        The <font color="#008080">|<A HREF="latexhelp.html#\markright">\markright</A>|</font> command is used in conjunction with
+                        the page style <font color="#008080">|\myheadings|</font> for setting the right
+                        heading, leaving the left heading unchanged.
+                        <span style="background-color: #ffff00"><font color="#0000ff">Note</font></span> that a &quot;left-hand heading&quot; is generated by the
+                        last <font color="#008080">|<A HREF="latexhelp.html#\markboth">\markboth</A>|</font> command before the end of the page,
+                        while a &quot;right-hand heading&quot; is generated by the first
+                        <font color="#008080">|<A HREF="latexhelp.html#\markboth">\markboth</A>|</font> or <font color="#008080">|<A HREF="latexhelp.html#\markright">\markright</A>|</font> that comes on the page if
+                        there is one, otherwise by the last one before the
+                        page.
+
+\thispagestyle<font color="#6a5acd">{option}</font>                          <font color="#804040">*<a name="\thispagestyle">\thispagestyle</a>*</font>
+                The <font color="#008080">|<A HREF="latexhelp.html#\thispagestyle">\thispagestyle</A>|</font> command works in the same manner as the
+                <font color="#008080">|<A HREF="latexhelp.html#\pagestyle">\pagestyle</A>|</font> command except that it changes the style for the
+                current page only.
+
+<font color="#008080">==============================================================================</font>
+17. Sectioning                                  <font color="#804040">*<a name="latex-sectioning">latex-sectioning</a>*</font>
+
+Sectioning commands provide the means to structure your text into units.
+<font color="#008080">|<A HREF="latexhelp.html#\part">\part</A>|</font>
+<font color="#008080">|<A HREF="latexhelp.html#\chapter">\chapter</A>|</font> (report and book class only)
+<font color="#008080">|<A HREF="latexhelp.html#\section">\section</A>|</font>
+<font color="#008080">|<A HREF="latexhelp.html#\subsection">\subsection</A>|</font>
+<font color="#008080">|<A HREF="latexhelp.html#\subsubsection">\subsubsection</A>|</font>
+<font color="#008080">|<A HREF="latexhelp.html#\paragraph">\paragraph</A>|</font>
+<font color="#008080">|<A HREF="latexhelp.html#\subparagraph">\subparagraph</A>|</font>
+
+All sectioning commands take the same general form, i.e.,
+
+<font color="#804040"><b>                                        </b></font><font color="#804040">*<a name="\part">\part</a>*</font>
+<font color="#804040"><b>                                        </b></font><font color="#804040">*<a name="\chapter">\chapter</a>*</font> (report and book class only)
+<font color="#804040"><b>                                        </b></font><font color="#804040">*<a name="\section">\section</a>*</font> <font color="#804040">*<a name="\subsection">\subsection</a>*</font> <font color="#804040">*<a name="\subsubsection">\subsubsection</a>*</font>
+<font color="#804040"><b>                                        </b></font><font color="#804040">*<a name="\paragraph">\paragraph</a>*</font> <font color="#804040">*<a name="\subparagraph">\subparagraph</a>*</font>
+\chapter[optional]<font color="#6a5acd">{title}</font>
+                In addition to providing the heading in the text, the
+                mandatory argument of the sectioning command can appear in two
+                other places:
+                1. The table of contents
+                2. The running head at the top of the page. You may not want
+                   the same thing to appear in these other two places as
+                   appears in the text heading. To handle this situation, the
+                   sectioning commands have an optional argument that provides
+                   the text for these other two purposes.
+
+All sectioning commands have *\-forms that print a title, but do not include a
+number and do not make an entry in the table of contents.
+
+\appendix                                       <font color="#804040">*<a name="\appendix">\appendix</a>*</font>
+                The <font color="#008080">|<A HREF="latexhelp.html#\appendix">\appendix</A>|</font> command changes the way sectional units are
+                numbered. The <font color="#008080">|<A HREF="latexhelp.html#\appendix">\appendix</A>|</font> command generates no text and does
+                not affect the numbering of parts. The normal use of this
+                command is something like:<font color="#ffffff"> &gt;</font>
+<font color="#008000">                        \chapter{The First Chapter}</font>
+<font color="#008000">                        ...</font>
+<font color="#008000">                        \appendix \chapter{The First Appendix}</font>
+
+
+<font color="#008080">==============================================================================</font>
+18. Spaces &amp; Boxes                              <font color="#804040">*<a name="latex-spaces-boxes">latex-spaces-boxes</a>*</font>
+
+All the predefined length parameters See section Predefined lengths can be
+used in the arguments of the box-making commands.
+
+ Horizontal space:
+
+<font color="#008080">|<A HREF="latexhelp.html#\dotfill">\dotfill</A>|</font>      Stretchable horizontal dots.
+<font color="#008080">|<A HREF="latexhelp.html#\hfill">\hfill</A>|</font>        Stretchable horizontal space.
+<font color="#008080">|<A HREF="latexhelp.html#\hrulefill">\hrulefill</A>|</font>    Stretchable horizontal rule.
+<font color="#008080">|<A HREF="latexhelp.html#\hspace">\hspace</A>|</font>       Fixed horizontal space.
+
+ Vertical space:
+
+<font color="#008080">|<A HREF="latexhelp.html#\addvspace">\addvspace</A>|</font>    Fixed vertical space.
+<font color="#008080">|<A HREF="latexhelp.html#\bigskip">\bigskip</A>|</font>      Fixed vertical space.
+<font color="#008080">|<A HREF="latexhelp.html#\medskip">\medskip</A>|</font>      Fixed vertical space.
+<font color="#008080">|<A HREF="latexhelp.html#\smallskip">\smallskip</A>|</font>    Fixed vertical space.
+<font color="#008080">|<A HREF="latexhelp.html#\vfill">\vfill</A>|</font>        Stretchable vertical space.
+<font color="#008080">|<A HREF="latexhelp.html#\vspace">\vspace</A>|</font>       Fixed vertical space.
+
+ Boxes:
+
+<font color="#008080">|<A HREF="latexhelp.html#\fbox">\fbox</A>|</font>         Framebox.
+<font color="#008080">|<A HREF="latexhelp.html#\framebox">\framebox</A>|</font>     Framebox, adjustable position.
+<font color="#008080">|<A HREF="latexhelp.html#\lrbox">\lrbox</A>|</font>        An environment like <font color="#008080">|<A HREF="latexhelp.html#\sbox">\sbox</A>|</font>.
+<font color="#008080">|<A HREF="latexhelp.html#\makebox">\makebox</A>|</font>      Box, adjustable position.
+<font color="#008080">|<A HREF="latexhelp.html#\mbox">\mbox</A>|</font>         Box.
+<font color="#008080">|<A HREF="latexhelp.html#\newsavebox">\newsavebox</A>|</font>   Declare a name for saving a box.
+<font color="#008080">|<A HREF="latexhelp.html#\parbox">\parbox</A>|</font>       Box with text in paragraph mode.
+<font color="#008080">|<A HREF="latexhelp.html#\raisebox">\raisebox</A>|</font>     Raise or lower text.
+<font color="#008080">|<A HREF="latexhelp.html#\rule">\rule</A>|</font>         Lines and squares.
+<font color="#008080">|<A HREF="latexhelp.html#\savebox">\savebox</A>|</font>      Like <font color="#008080">|<A HREF="latexhelp.html#\makebox">\makebox</A>|</font>, but save the text for later use.
+<font color="#008080">|<A HREF="latexhelp.html#\sbox">\sbox</A>|</font>         Like <font color="#008080">|<A HREF="latexhelp.html#\mbox">\mbox</A>|</font>, but save the text for later use.
+<font color="#008080">|<A HREF="latexhelp.html#\usebox">\usebox</A>|</font>       Print saved text.
+
+Horizontal space:                               <font color="#804040">*<a name="latex-hor-space">latex-hor-space</a>*</font>
+
+<A HREF="latexhelp.html#LaTeX">LaTeX</A> removes horizontal space that comes at the end of a line. If you don't
+want <A HREF="latexhelp.html#LaTeX">LaTeX</A> to remove this space, include the optional * argument.  Then the
+space is never removed.
+
+\dotfill                                        <font color="#804040">*<a name="\dotfill">\dotfill</a>*</font>
+                The <font color="#008080">|<A HREF="latexhelp.html#\dotfill">\dotfill</A>|</font> command produces a &quot;rubber length&quot; that produces
+                dots instead of just spaces.
+
+\hfill                                          <font color="#804040">*<a name="\hfill">\hfill</a>*</font>
+                The <font color="#008080">|<A HREF="latexhelp.html#\hfill">\hfill</A>|</font> fill command produces a &quot;rubber length&quot; which can
+                stretch or shrink horizontally. It will be filled with spaces.
+
+\hrulefill                                      <font color="#804040">*<a name="\hrulefill">\hrulefill</a>*</font>
+                The <font color="#008080">|<A HREF="latexhelp.html#\hrulefill">\hrulefill</A>|</font> fill command produces a &quot;rubber length&quot; which
+                can stretch or shrink horizontally. It will be filled with a
+                horizontal rule.
+
+\hspace[*]<font color="#6a5acd">{length}</font>                              <font color="#804040">*<a name="\hspace">\hspace</a>*</font>
+                The <font color="#008080">|<A HREF="latexhelp.html#\hspace">\hspace</A>|</font> command adds horizontal space. The length of the
+                space can be expressed in any terms that <A HREF="latexhelp.html#LaTeX">LaTeX</A> understands,
+                i.e., points, inches, etc. You can add negative as well as
+                positive space with an <font color="#008080">|<A HREF="latexhelp.html#\hspace">\hspace</A>|</font> command. Adding negative space
+                is like backspacing.
+
+
+Vertical space:                                 <font color="#804040">*<a name="latex-ver-space">latex-ver-space</a>*</font>
+
+<A HREF="latexhelp.html#LaTeX">LaTeX</A> removes vertical space that comes at the end of a page. If you don't
+want <A HREF="latexhelp.html#LaTeX">LaTeX</A> to remove this space, include the optional * argument.  Then the
+space is never removed.
+
+\addvspace<font color="#6a5acd">{length}</font>                              <font color="#804040">*<a name="\addvspace">\addvspace</a>*</font>
+                The <font color="#008080">|<A HREF="latexhelp.html#\addvspace">\addvspace</A>|</font> command normally adds a vertical space of
+                height length.  However, if vertical space has already been
+                added to the same point in the output by a previous
+                <font color="#008080">|<A HREF="latexhelp.html#\addvspace">\addvspace</A>|</font> command, then this command will not add more space
+                than needed to make the natural length of the total vertical
+                space equal to length.
+
+\bigskip                                        <font color="#804040">*<a name="\bigskip">\bigskip</a>*</font>
+                The <font color="#008080">|<A HREF="latexhelp.html#\bigskip">\bigskip</A>|</font> command is equivalent to <A HREF="latexhelp.html#\vspace">\vspace</A><font color="#6a5acd">{bigskipamount}</font>
+                where bigskipamount is determined by the document class.
+
+\medskip                                        <font color="#804040">*<a name="\medskip">\medskip</a>*</font>
+                The <font color="#008080">|<A HREF="latexhelp.html#\medskip">\medskip</A>|</font> command is equivalent to <A HREF="latexhelp.html#\vspace">\vspace</A><font color="#6a5acd">{medskipamount}</font>
+                where medskipamount is determined by the document class.
+
+\smallskip                                      <font color="#804040">*<a name="\smallskip">\smallskip</a>*</font>
+                The <font color="#008080">|<A HREF="latexhelp.html#\smallskip">\smallskip</A>|</font> command is equivalent to
+                <A HREF="latexhelp.html#\vspace">\vspace</A><font color="#6a5acd">{smallskipamount}</font> where smallskipamount is determined
+                by the document class.
+
+\vfill                                          <font color="#804040">*<a name="\vfill">\vfill</a>*</font>
+                The <font color="#008080">|<A HREF="latexhelp.html#\vfill">\vfill</A>|</font> fill command produces a rubber length which can
+                stretch or shrink vertically.
+
+\vspace[*]<font color="#6a5acd">{length}</font>                              <font color="#804040">*<a name="\vspace">\vspace</a>*</font>
+                The <font color="#008080">|<A HREF="latexhelp.html#\vspace">\vspace</A>|</font> command adds vertical space. The length of the
+                space can be expressed in any terms that <A HREF="latexhelp.html#LaTeX">LaTeX</A> understands,
+                i.e., points, inches, etc. You can add negative as well as
+                positive space with an <font color="#008080">|<A HREF="latexhelp.html#\vspace">\vspace</A>|</font> command.
+
+
+Boxes:                                          <font color="#804040">*<a name="latex-boxes">latex-boxes</a>*</font>
+
+\fbox<font color="#6a5acd">{text}</font>                                     <font color="#804040">*<a name="\fbox">\fbox</a>*</font>
+                The <font color="#008080">|<A HREF="latexhelp.html#\fbox">\fbox</A>|</font> command is exactly the same as the <font color="#008080">|<A HREF="latexhelp.html#\mbox">\mbox</A>|</font> command,
+                except that it puts a frame around the outside of the box that
+                it creates.
+
+\framebox[width][position]<font color="#6a5acd">{text}</font>                <font color="#804040">*<a name="\framebox">\framebox</a>*</font>
+                The <font color="#008080">|<A HREF="latexhelp.html#\framebox">\framebox</A>|</font> command is exactly the same as the <font color="#008080">|<A HREF="latexhelp.html#\makebox">\makebox</A>|</font>
+                command, except that it puts a frame around the outside of the
+                box that it creates.
+                The <font color="#008080">|<A HREF="latexhelp.html#\framebox">\framebox</A>|</font> command produces a rule of thickness
+                <font color="#008080">|\fboxrule|</font>, and leaves a space <font color="#008080">|\fboxsep|</font> between the rule and
+                the contents of the box.
+
+lrbox                                           <font color="#804040">*<a name="\lrbox">\lrbox</a>*</font>
+<A HREF="latexhelp.html#\begin">\begin</A><font color="#6a5acd">{lrbox}{cmd}</font> text <A HREF="latexhelp.html#\end">\end</A><font color="#6a5acd">{lrbox}</font>
+                This is the environment form of <font color="#008080">|<A HREF="latexhelp.html#\sbox">\sbox</A>|</font>.
+                The text inside the environment is saved in the box cmd, which
+                must have been declared with <font color="#008080">|<A HREF="latexhelp.html#\newsavebox">\newsavebox</A>|</font>.
+
+\makebox[width][position]<font color="#6a5acd">{text}</font>                 <font color="#804040">*<a name="\makebox">\makebox</a>*</font>
+                The <font color="#008080">|<A HREF="latexhelp.html#\makebox">\makebox</A>|</font> command creates a box just wide enough to
+                contain the text specified. The width of the box is specified
+                by the optional <font color="#6a5acd">[width]</font> argument.  The position of the text
+                within the box is determined by the optional <font color="#6a5acd">[position]</font>
+                argument.
+                        c -- centred (default)
+                        l -- flushleft
+                        r -- flushright
+                        s -- stretch from left to right margin. The text must
+                             contain stretchable space for this to work.
+                See section <font color="#008080">|\picture-makebox|</font>.
+
+\mbox<font color="#6a5acd">{text}</font>                                     <font color="#804040">*<a name="\mbox">\mbox</a>*</font>
+                The <font color="#008080">|<A HREF="latexhelp.html#\mbox">\mbox</A>|</font> command creates a box just wide enough to hold the
+                text created by its argument.
+                Use this command to prevent text from being split across
+                lines.
+
+\newsavebox<font color="#6a5acd">{cmd}</font>                                <font color="#804040">*<a name="\newsavebox">\newsavebox</a>*</font>
+                Declares <font color="#6a5acd">{cmd}</font>, which must be a command name that is not
+                already defined, to be a bin for saving boxes.
+
+
+\parbox[position][height][innerpos]<font color="#6a5acd">{width}{text}</font>        <font color="#804040">*<a name="\parbox">\parbox</a>*</font>
+                A parbox is a box whose contents are created in
+                <font color="#008080">|\paragraph-mode|</font>. The <font color="#008080">|<A HREF="latexhelp.html#\parbox">\parbox</A>|</font> has two
+
+        Mandatory arguments:
+<font color="#008000"><b>'width'</b></font>         specifies the width of the parbox
+<font color="#008000"><b>'text'</b></font>          the text that goes inside the parbox.
+
+        Optional arguments:
+<font color="#008000"><b>'position'</b></font>      <A HREF="latexhelp.html#LaTeX">LaTeX</A> will position a parbox so its centre lines up with the
+                centre of the text line. The optional position argument allows
+                you to line up either the top or bottom line in the parbox
+                (default is top).
+
+<font color="#008000"><b>'height'</b></font>        If the height argument is not given, the box will have the
+                natural height of the text.
+
+<font color="#008000"><b>'innerpos'</b></font>      The inner-pos argument controls the placement of the text
+                inside the box. If it is not specified, position is used.
+                        t -- text is placed at the top of the box
+                        c -- text is centred in the box
+                        b -- text is placed at the bottom of the box
+                        s -- stretch vertically. The text must contain
+                             vertically stretchable space for this to work.
+
+                A <font color="#008080">|<A HREF="latexhelp.html#\parbox">\parbox</A>|</font> command is used for a parbox containing a small
+                piece of text, with nothing fancy inside. In particular, you
+                shouldn't use any of the paragraph-making environments inside
+                a <font color="#008080">|<A HREF="latexhelp.html#\parbox">\parbox</A>|</font> argument. For larger pieces of text, including ones
+                containing a paragraph-making environment, you should use a
+                <font color="#008080">|\minipage|</font> environment.
+
+\raisebox<font color="#6a5acd">{distance}</font>[extendabove][extendbelow]<font color="#6a5acd">{text}</font>   <font color="#804040">*<a name="\raisebox">\raisebox</a>*</font>
+                The <font color="#008080">|<A HREF="latexhelp.html#\raisebox">\raisebox</A>|</font> command is used to raise or lower text. The
+                first mandatory argument specifies how high the text is to be
+                raised (or lowered if it is a negative amount). The text
+                itself is processed in LR mode.
+                Sometimes it's useful to make <A HREF="latexhelp.html#LaTeX">LaTeX</A> think something has a
+                different size than it really does - or a different size than
+                <A HREF="latexhelp.html#LaTeX">LaTeX</A> would normally think it has.  The <font color="#008080">|<A HREF="latexhelp.html#\raisebox">\raisebox</A>|</font> command
+                lets you tell <A HREF="latexhelp.html#LaTeX">LaTeX</A> how tall it is.
+                The first optional argument, extend-above, makes <A HREF="latexhelp.html#LaTeX">LaTeX</A> think
+                that the text extends above the line by the amount specified.
+                The second optional argument, extend-below, makes <A HREF="latexhelp.html#LaTeX">LaTeX</A> think
+                that the text extends below the line by the amount specified.
+
+\rule[raiseheight]<font color="#6a5acd">{width}{thickness}</font>            <font color="#804040">*<a name="\rule">\rule</a>*</font>
+                The <font color="#008080">|<A HREF="latexhelp.html#\rule">\rule</A>|</font> command is used to produce horizontal lines. The
+                arguments are defined as follows:
+<font color="#008000"><b>'raiseheight'</b></font>   specifies how high to raise the rule (optional)
+<font color="#008000"><b>'width'</b></font>         specifies the length of the rule (mandatory)
+<font color="#008000"><b>'thickness'</b></font>     specifies the thickness of the rule (mandatory)
+
+\savebox<font color="#6a5acd">{cmd}</font>[width][pos]<font color="#6a5acd">{text}</font>                 <font color="#804040">*<a name="\savebox">\savebox</a>*</font>
+                This command typeset text in a box just as for <font color="#008080">|<A HREF="latexhelp.html#\makebox">\makebox</A>|</font>.
+                However, instead of printing the resulting box, it saves it in
+                bin cmd, which must have been declared with <font color="#008080">|<A HREF="latexhelp.html#\newsavebox">\newsavebox</A>|</font>.
+
+\sbox<font color="#6a5acd">{text}</font>                                     <font color="#804040">*<a name="\sbox">\sbox</a>*</font>
+                This commands typeset text in a box just as for <font color="#008080">|<A HREF="latexhelp.html#\mbox">\mbox</A>|</font>.
+                However, instead of printing the resulting box, it saves it in
+                bin cmd, which must have been declared with <font color="#008080">|<A HREF="latexhelp.html#\newsavebox">\newsavebox</A>|</font>.
+
+\usebox<font color="#6a5acd">{cmd}</font>                                    <font color="#804040">*<a name="\usebox">\usebox</a>*</font>
+                Prints the box most recently saved in bin cmd by a <font color="#008080">|<A HREF="latexhelp.html#\savebox">\savebox</A>|</font>
+                command.
+
+<font color="#008080">==============================================================================</font>
+19. Special Characters                          <font color="#804040">*<a name="latex-special">latex-special</a>*</font>
+
+The following characters play a special role in <A HREF="latexhelp.html#LaTeX">LaTeX</A> and are called &quot;special
+printing characters&quot;, or simply &quot;special characters&quot;.<font color="#ffffff"> &gt;</font>
+<font color="#008000">                         #  $  %  &amp;  ~  _  ^  \  {  }</font>
+Whenever you put one of these special characters into your file, you are doing
+something special. If you simply want the character to be printed just as any
+other letter, include a \ in front of the character. For example, \$ will
+produce $ in your output.
+
+One exception to this rule is the \ itself because <font color="#008080">|<A HREF="latexhelp.html#\\">\\</A>|</font> has its own special
+meaning. A \ is produced by typing $\backslash$ in your file.
+
+Also, \~ means `place a tilde accent over the following letter', so you will
+probably want to use <font color="#008080">|<A HREF="latexhelp.html#\verb">\verb</A>|</font> instead.
+<font color="#804040"><b>                                                </b></font><font color="#804040">*<a name="\symbol">\symbol</a>*</font>
+In addition, you can access any character of a font once you know its number
+by using the <font color="#008080">|<A HREF="latexhelp.html#\symbol">\symbol</A>|</font> command. For example, the character used for displaying
+spaces in the <font color="#008080">|<A HREF="latexhelp.html#\verb">\verb</A>|</font>* command has the code decimal 32, so it can be typed as
+\symbol<font color="#6a5acd">{32}</font>.
+
+You can also specify octal numbers with ' or hexadecimal numbers with &quot;, so
+the previous example could also be written as \symbol<font color="#6a5acd">{'40}</font> or \symbol<font color="#6a5acd">{&quot;20}</font>.
+
+<font color="#008080">==============================================================================</font>
+20. Splitting the Input                         <font color="#804040">*<a name="latex-inputing">latex-inputing</a>*</font>
+
+A large document requires a lot of input. Rather than putting the whole input
+in a single large file, it's more efficient to split it into several smaller
+ones. Regardless of how many separate files you use, there is one that is the
+root file; it is the one whose name you type when you run LaTeX.
+
+<font color="#008080">|<A HREF="latexhelp.html#\include">\include</A>|</font>              Conditionally include a file
+<font color="#008080">|<A HREF="latexhelp.html#\includeonly">\includeonly</A>|</font>          Determine which files are included
+<font color="#008080">|<A HREF="latexhelp.html#\input">\input</A>|</font>                Unconditionally include a file
+
+\include<font color="#6a5acd">{file}</font>                                  <font color="#804040">*<a name="\include">\include</a>*</font>
+                The \include command is used in conjunction with the
+                <font color="#008080">|<A HREF="latexhelp.html#\includeonly">\includeonly</A>|</font> command for selective inclusion of
+                files. The file argument is the first name of a file,
+                denoting `file.tex' . If file is one the file names in
+                the file <A HREF="latexhelp.html#list">list</A> of the <font color="#008080">|<A HREF="latexhelp.html#\includeonly">\includeonly</A>|</font> command or if there
+                is no <font color="#008080">|<A HREF="latexhelp.html#\includeonly">\includeonly</A>|</font> command, the \include command is
+                equivalent to:<font color="#ffffff"> &gt;</font>
+<font color="#008000">                        <A HREF="latexhelp.html#\clearpage">\clearpage</A> \input{file} <A HREF="latexhelp.html#\clearpage">\clearpage</A></font>
+<font color="#ffffff">&lt;</font>
+                except that if the file `file.tex' does not exist,
+                then a warning message rather than an error is
+                produced. If the file is not in the file list, the
+                \include command is equivalent to <font color="#008080">|<A HREF="latexhelp.html#\clearpage">\clearpage</A>|</font>.
+
+                The <font color="#008080">|<A HREF="latexhelp.html#\include">\include</A>|</font> command may not appear in the preamble or in a
+                file read by another <font color="#008080">|<A HREF="latexhelp.html#\include">\include</A>|</font> command.
+
+\includeonly<font color="#6a5acd">{filelist}</font>                          <font color="#804040">*<a name="\includeonly">\includeonly</a>*</font>
+                The <font color="#008080">|<A HREF="latexhelp.html#\includeonly">\includeonly</A>|</font> command controls which files will be read in
+                by an <font color="#008080">|<A HREF="latexhelp.html#\include">\include</A>|</font> command. <font color="#6a5acd">{filelist}</font> should be a
+                comma-separated <A HREF="latexhelp.html#list">list</A> of filenames. Each filename must match
+                exactly a filename specified in a <font color="#008080">|<A HREF="latexhelp.html#\include">\include</A>|</font> command. This
+                command can only appear in the preamble.
+
+\input<font color="#6a5acd">{file}</font>                                    <font color="#804040">*<a name="\input">\input</a>*</font>
+                The <font color="#008080">|<A HREF="latexhelp.html#\input">\input</A>|</font> command causes the indicated file to be read and
+                processed, exactly as if its contents had been inserted in the
+                current file at that point. The file name may be a complete
+                file name with extension or just a first name, in which case
+                the file `file.tex' is used.
+<font color="#008080">==============================================================================</font>
+21. Starting &amp; Ending                           <font color="#804040">*<a name="latex-start-end">latex-start-end</a>*</font>
+
+Your input file must contain the following commands as a minimum:
+<A HREF="latexhelp.html#\documentclass">\documentclass</A><font color="#6a5acd">{class}</font>           <font color="#008080">|<A HREF="latexhelp.html#\documentclass">\documentclass</A>|</font>
+<A HREF="latexhelp.html#\begin">\begin</A><font color="#6a5acd">{document}</font>                <font color="#008080">|<A HREF="latexhelp.html#\begin">\begin</A>|</font>
+... your text goes here ...
+<A HREF="latexhelp.html#\end">\end</A><font color="#6a5acd">{document}</font>                  <font color="#008080">|<A HREF="latexhelp.html#\end">\end</A>|</font>
+
+where the class selected is one of the valid classes for LaTeX.
+See <font color="#008080">|\classes|</font>for details of the various document classes.
+
+You may include other <A HREF="latexhelp.html#LaTeX">LaTeX</A> commands between the <font color="#008080">|<A HREF="latexhelp.html#\documentclass">\documentclass</A>|</font> and the
+<A HREF="latexhelp.html#\begin">\begin</A><font color="#6a5acd">{document}</font> commands (i.e., in the `preamble').
+<font color="#008080">==============================================================================</font>
+22. Table of Contents                           <font color="#804040">*<a name="latex-toc">latex-toc</a>*</font>
+
+<font color="#804040"><b>                                                </b></font><font color="#804040">*<a name="\tableofcontents">\tableofcontents</a>*</font>
+A table of contents is produced with the <font color="#008080">|<A HREF="latexhelp.html#\tableofcontents">\tableofcontents</A>|</font> command. You put
+the command right where you want the table of contents to go; <A HREF="latexhelp.html#LaTeX">LaTeX</A> does the
+rest for you. It produces a heading, but it does not automatically start a new
+page. If you want a new page after the table of contents, include a <font color="#008080">|<A HREF="latexhelp.html#\newpage">\newpage</A>|</font>
+command after the <font color="#008080">|<A HREF="latexhelp.html#\tableofcontents">\tableofcontents</A>|</font> command.
+
+<font color="#804040"><b>                                                </b></font><font color="#804040">*<a name="\listoffigures">\listoffigures</a>*</font> <font color="#804040">*<a name="\listoftables">\listoftables</a>*</font>
+There are similar commands <font color="#008080">|<A HREF="latexhelp.html#\listoffigures">\listoffigures</A>|</font> and <font color="#008080">|<A HREF="latexhelp.html#\listoftables">\listoftables</A>|</font> for producing a
+<A HREF="latexhelp.html#list">list</A> of figures and a <A HREF="latexhelp.html#list">list</A> of tables, respectively.  Everything works exactly
+the same as for the table of contents.
+
+<font color="#804040"><b>                                                </b></font><font color="#804040">*<a name="\nofiles">\nofiles</a>*</font>
+<span style="background-color: #ffff00"><font color="#0000ff">NOTE</font></span>: If you want any of these items to be generated, you cannot have the
+\nofiles command in your document.
+
+<font color="#008080">|<A HREF="latexhelp.html#\addcontentsline">\addcontentsline</A>|</font>      Add an entry to table of contents etc.
+<font color="#008080">|<A HREF="latexhelp.html#\addtocontents">\addtocontents</A>|</font>                Add text directly to table of contents file etc.
+
+\addcontentsline<font color="#6a5acd">{file}{secunit}{entry}</font>          <font color="#804040">*<a name="\addcontentsline">\addcontentsline</a>*</font>
+                The <font color="#008080">|<A HREF="latexhelp.html#\addcontentsline">\addcontentsline</A>|</font> command adds an entry to the specified
+                <A HREF="latexhelp.html#list">list</A> or table where:
+<font color="#6a5acd">{file}</font>          is the extension of the file on which information is to be
+                written:
+                        toc (table of contents),
+                        lof (list of figures),
+                        lot (list of tables).
+<font color="#6a5acd">{secunit}</font>       controls the formatting of the entry. It should be one of the
+                following, depending upon the value of the file argument:
+                        toc -- the name of the sectional unit, such as part or
+                                subsection.
+                        lof -- figure
+                        lot -- table
+<font color="#6a5acd">{entry}</font>         is the text of the entry.
+
+\addtocontents<font color="#6a5acd">{file}{text}</font>                              <font color="#804040">*<a name="\addtocontents">\addtocontents</a>*</font>
+                The <font color="#008080">|<A HREF="latexhelp.html#\addtocontents">\addtocontents</A>|</font> command adds text (or formatting commands)
+                directly to the file that generates the table of contents or
+                <A HREF="latexhelp.html#list">list</A> of figures or tables.
+<font color="#6a5acd">{file}</font>          is the extension of the file on which information is to be written:
+                        toc (table of contents),
+                        lof (list of figures),
+                        lot (list of tables).
+<font color="#6a5acd">{text}</font>          is the information to be written.
+
+<font color="#008080">==============================================================================</font>
+23. Terminal Input/Output                               <font color="#804040">*<a name="latex-terminal">latex-terminal</a>*</font>
+
+<font color="#008080">|<A HREF="latexhelp.html#\typein">\typein</A>|</font>               Read text from the terminal.
+<font color="#008080">|<A HREF="latexhelp.html#\typeout">\typeout</A>|</font>              Write text to the terminal.
+
+\typein<font color="#6a5acd">[cmd]{msg}</font>                                       <font color="#804040">*<a name="\typein">\typein</a>*</font>
+                Prints <font color="#6a5acd">{msg}</font> on the terminal and causes <A HREF="latexhelp.html#LaTeX">LaTeX</A> to stop and wait
+                for you to type a line of input, ending with return. If the
+                <font color="#6a5acd">[cmd]</font> argument is missing, the typed input is processed as if
+                it had been included in the input file in place of the
+                <font color="#008080">|<A HREF="latexhelp.html#\typein">\typein</A>|</font> command. If the <font color="#6a5acd">[cmd]</font> argument is present, it must be
+                a command name. This command name is then defined or redefined
+                to be the typed input.
+
+\typeout<font color="#6a5acd">{msg}</font>                                           <font color="#804040">*<a name="\typeout">\typeout</a>*</font>
+                Prints <font color="#6a5acd">{msg}</font> on the terminal and in the `.log' file. Commands
+                in <font color="#6a5acd">{msg}</font> that are defined with <font color="#008080">|<A HREF="latexhelp.html#\newcommand">\newcommand</A>|</font> or <font color="#008080">|<A HREF="latexhelp.html#\renewcommand">\renewcommand</A>|</font>
+                are replaced by their definitions before being printed.
+
+<font color="#804040"><b>                                                        </b></font><font color="#804040">*<a name="\space">\space</a>*</font>
+LaTeX's usual rules for treating multiple spaces as a single space and
+ignoring spaces after a command name apply to <font color="#6a5acd">{msg}</font>. A <font color="#008080">|<A HREF="latexhelp.html#\space">\space</A>|</font> command in <font color="#6a5acd">{msg}</font>
+causes a single space to be printed. A ^^J in <font color="#6a5acd">{msg}</font> prints a newline.
+
+<font color="#008080">==============================================================================</font>
+24. Typefaces                                   <font color="#804040">*<a name="latex-typefaces">latex-typefaces</a>*</font>
+
+The typeface is specified by giving the &quot;size&quot; and &quot;style&quot;. A typeface is also
+called a &quot;font&quot;.
+<font color="#008080">|<A HREF="latexhelp.html#font-styles">font-styles</A>|</font>           Select roman, italics etc.
+<font color="#008080">|<A HREF="latexhelp.html#font-size">font-size</A>|</font>             Select point size.
+<font color="#008080">|<A HREF="latexhelp.html#font-lowlevelcommands">font-lowlevelcommands</A>|</font> Commands for wizards.
+
+Styles                                          <font color="#804040">*<a name="font-styles">font-styles</a>*</font>
+
+The following type style commands are supported by LaTeX.
+
+These commands are used like:<font color="#ffffff"> &gt;</font>
+<font color="#008000">        \textit{italics text}.</font>
+The corresponding command in parenthesis is the &quot;declaration form&quot;, which
+takes no arguments. The scope of the declaration form lasts until the next
+type style command or the end of the current group.
+
+The declaration forms are cumulative; i.e., you can say:<font color="#ffffff"> &gt;</font>
+<font color="#008000">        \sffamily\bfseries</font>
+to get sans serif boldface.
+
+You can also use the environment form of the declaration forms; e.g.:<font color="#ffffff"> &gt;</font>
+<font color="#008000">        \begin{ttfamily}...\end{ttfamily}.</font>
+<font color="#ffffff">&lt;</font>
+\textrm (\rmfamily)             <font color="#804040">*<a name="\textrm">\textrm</a>*</font> <font color="#804040">*<a name="\rmfamily">\rmfamily</a>*</font>
+                Roman
+
+\textit (\itshape)              <font color="#804040">*<a name="\textit">\textit</a>*</font> <font color="#804040">*<a name="\itshape">\itshape</a>*</font> <font color="#804040">*<a name="\emph">\emph</a>*</font>
+                Emphasis (toggles between <font color="#008080">|<A HREF="latexhelp.html#\textit">\textit</A>|</font> and <font color="#008080">|<A HREF="latexhelp.html#\textrm">\textrm</A>|</font>).
+
+\textmd (\mdseries)             <font color="#804040">*<a name="\textmd">\textmd</a>*</font> <font color="#804040">*<a name="\mdseries">\mdseries</a>*</font>
+                Medium weight (default). The opposite of boldface.
+
+\textbf (\bfseries)             <font color="#804040">*<a name="\textbf">\textbf</a>*</font> <font color="#804040">*<a name="\bfseries">\bfseries</a>*</font>
+                Boldface.
+
+\textup (\upshape)              <font color="#804040">*<a name="\textup">\textup</a>*</font> <font color="#804040">*<a name="\upshape">\upshape</a>*</font>
+                Upright (default).  The opposite of slanted.
+
+\textsl (\slshape)              <font color="#804040">*<a name="\textsl">\textsl</a>*</font> <font color="#804040">*<a name="\slshape">\slshape</a>*</font>
+                Slanted.
+
+\textsf (\sffamily)             <font color="#804040">*<a name="\textsf">\textsf</a>*</font> <font color="#804040">*<a name="\sffamily">\sffamily</a>*</font>
+                Sans serif.
+
+\textsc (\scshape)              <font color="#804040">*<a name="\textsc">\textsc</a>*</font> <font color="#804040">*<a name="\scshape">\scshape</a>*</font>
+                Small caps.
+
+\texttt (\ttfamily)             <font color="#804040">*<a name="\texttt">\texttt</a>*</font> <font color="#804040">*<a name="\ttfamily">\ttfamily</a>*</font>
+                Typewriter.
+
+\textnormal (\normalfont)       <font color="#804040">*<a name="\textnormal">\textnormal</a>*</font> <font color="#804040">*<a name="\normalfont">\normalfont</a>*</font>
+                Main document font.
+
+\mathrm                         <font color="#804040">*<a name="\mathrm">\mathrm</a>*</font>
+                Roman, for use in math mode.
+
+\mathbf                         <font color="#804040">*<a name="\mathbf">\mathbf</a>*</font>
+                Boldface, for use in math mode.
+
+\mathsf                         <font color="#804040">*<a name="\mathsf">\mathsf</a>*</font>
+                Sans serif, for use in math mode.
+
+\mathtt                         <font color="#804040">*<a name="\mathtt">\mathtt</a>*</font>
+                Typewriter, for use in math mode.
+
+\mathit                         <font color="#804040">*<a name="\mathit">\mathit</a>*</font>
+                Italics, for use in math mode, e.g. variable names with
+                several letters.
+
+\mathnormal                     <font color="#804040">*<a name="\mathnormal">\mathnormal</a>*</font>
+                For use in math mode, e.g. inside another type style
+                declaration.
+
+\mathcal                        <font color="#804040">*<a name="\mathcal">\mathcal</a>*</font>
+ `Calligraphic' letters, for use in math mode.
+
+<font color="#804040"><b>                                </b></font><font color="#804040">*<a name="\mathversion">\mathversion</a>*</font>
+In addition, the command \mathversion<font color="#6a5acd">{bold}</font> can be used for switching to bold
+letters and symbols in formulas. \mathversion<font color="#6a5acd">{normal}</font> restores the default.
+
+<font color="#008080">==========</font>
+Sizes                                           <font color="#804040">*<a name="font-size">font-size</a>*</font>
+
+The following standard type size commands are supported by LaTeX.
+
+The commands as listed here are &quot;declaration forms&quot;. The scope of the
+declaration form lasts until the next type style command or the end of the
+current group.
+
+You can also use the environment form of these commands; e.g.<font color="#ffffff"> &gt;</font>
+<font color="#008000">        \begin{tiny}...\end{tiny}</font>
+
+\tiny                           <font color="#804040">*<a name="\tiny">\tiny</a>*</font>
+\scriptsize                     <font color="#804040">*<a name="\scriptsize">\scriptsize</a>*</font>
+\footnotesize                   <font color="#804040">*<a name="\footnotesize">\footnotesize</a>*</font>
+\small                          <font color="#804040">*<a name="\small">\small</a>*</font>
+\normalsize(default)            <font color="#804040">*<a name="\normalsize">\normalsize</a>*</font>
+\large                          <font color="#804040">*<a name="\large">\large</a>*</font>
+\Large                          <font color="#804040">*<a name="\Large">\Large</a>*</font>
+\LARGE                          <font color="#804040">*<a name="\LARGE">\LARGE</a>*</font>
+\huge                           <font color="#804040">*<a name="\huge">\huge</a>*</font>
+\Huge                           <font color="#804040">*<a name="\Huge">\Huge</a>*</font>
+
+<font color="#008080">==========</font>
+Low-level font commands                         <font color="#804040">*<a name="font-lowlevelcommands">font-lowlevelcommands</a>*</font>
+
+These commands are primarily intended for writers of macros and packages. The
+commands listed here are only a subset of the available ones. For full
+details, you should consult Chapter 7 of The <A HREF="latexhelp.html#LaTeX">LaTeX</A> Companion.
+
+\fontencoding<font color="#6a5acd">{enc}</font>                              <font color="#804040">*<a name="\fontencoding">\fontencoding</a>*</font>
+                Select font encoding. Valid encodings include OT1 and T1.
+
+\fontfamily<font color="#6a5acd">{family}</font>                             <font color="#804040">*<a name="\fontfamily">\fontfamily</a>*</font>
+                Select font family. Valid families include:
+                        cmr  for Computer Modern Roman
+                        cmss for Computer Modern Sans Serif
+                        cmtt for Computer Modern Typewriter
+                and numerous others.
+
+\fontseries<font color="#6a5acd">{series}</font>                             <font color="#804040">*<a name="\fontseries">\fontseries</a>*</font>
+                Select font series. Valid series include:
+                        m Medium (normal)
+                        b Bold
+                        c Condensed
+                        bc Bold condensed
+                        bx Bold extended
+                and various other combinations.
+
+\fontshape<font color="#6a5acd">{shape}</font>                               <font color="#804040">*<a name="\fontshape">\fontshape</a>*</font>
+                Select font shape. Valid shapes are:
+                        n Upright (normal)
+                        it Italic
+                        sl Slanted (oblique)
+                        sc Small caps
+                        ui Upright italics
+                        ol Outline
+                The two last shapes are not available for most font families.
+
+\fontsize<font color="#6a5acd">{size}{skip}</font>                           <font color="#804040">*<a name="\fontsize">\fontsize</a>*</font>
+                Set font size. The first parameter is the font size to switch
+                to; the second is the \baselineskip to use. The unit of both
+                parameters defaults to pt. A rule of thumb is that the
+                baselineskip should be 1.2 times the font size.
+
+\selectfont                                     <font color="#804040">*<a name="\selectfont">\selectfont</a>*</font>
+                The changes made by calling the four font commands described
+                above do not come into effect until <font color="#008080">|<A HREF="latexhelp.html#\selectfont">\selectfont</A>|</font> is called.
+
+\usefont<font color="#6a5acd">{enc}{family}{series}{shape}</font>            <font color="#804040">*<a name="\usefont">\usefont</a>*</font>
+                Equivalent to calling <font color="#008080">|<A HREF="latexhelp.html#\fontencoding">\fontencoding</A>|</font>, <font color="#008080">|<A HREF="latexhelp.html#\fontfamily">\fontfamily</A>|</font>,
+                <font color="#008080">|<A HREF="latexhelp.html#\fontseries">\fontseries</A>|</font> and <font color="#008080">|<A HREF="latexhelp.html#\fontshape">\fontshape</A>|</font> with the given parameters,
+                followed by <font color="#008080">|<A HREF="latexhelp.html#\selectfont">\selectfont</A>|</font>.
+
+<font color="#008080">==============================================================================</font>
+25. Parameters                                  <font color="#804040">*<a name="latex-parameters">latex-parameters</a>*</font>
+
+The input file specification indicates the file to be formatted; TeX uses
+`.tex' as a default file extension. If you omit the input file entirely, TeX
+accepts input from the terminal. You specify command options by supplying a
+string as a parameter to the command; e.g.<font color="#ffffff"> &gt;</font>
+
+<font color="#008000">        <A HREF="latexhelp.html#latex">latex</A> &quot;\scrollmode\input foo.tex&quot;</font>
+
+will process `foo.tex' without pausing after every error.
+
+Output files are always created in the current directory. When you fail to
+specify an input file name, TeX bases the output names on the file
+specification associated with the logical name TEX_OUTPUT, typically
+texput.log.
+
+
+</pre><hr><p><i>Generated by <tt>vim2html.pl 3.2</tt> on Tue Apr 30 01:13:50 2002</i></p>
+</body>
+</html>

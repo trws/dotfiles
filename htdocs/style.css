@@ -1,0 +1,36 @@
+DIV.header    { margin : 0.5cm ;
+				width : 800px ;
+				height : 100 }
+TABLE.head    { margin : 0.5cm ;
+				width : 800px }
+TD.menu       { text-align : center ;
+				font-family : verdana, helvetica, sans-serif }
+TD.footright  { text-align : right ;
+				font-size : 10pt ;
+				font-family : verdana, helvetica, sans-serif }
+TD.leftpanel  { font-size : 10pt ;
+				font-family : verdana, helvetica, sans-serif ;
+				vertical-align : top }
+TD.meritum    { font-size : 12pt ;
+				font-family : helvetica, arial, verdana, sans-serif ;
+				vertical-align : top }
+SPAN.menu     { text-align : center ;
+				font-size : 12pt ;
+				font-family : verdana, helvetica, sans-serif }
+DIV.merit     { margin : 0.5cm ;
+				width : 800px }
+TABLE.meritum { margin : 0.5cm ;
+				width : 800px ;
+				border : 0 }
+DIV.footer    { margin : 0.5cm ;
+				width : 800px }
+TABLE.foot    { margin : 0.5cm ;
+				width : 800px }
+H2.hline      { text-align : center ;
+				font-family : verdana, helvetica, sans-serif }
+A.extlinks    { font-size : 12pt ;
+				font-family : verdana, helvetica, sans-serif ;
+				font-weight : bold }
+TT            { font-family: courier,sans-serif; 
+	            font-size: small; 
+			    background-color:#CCCCCC}
