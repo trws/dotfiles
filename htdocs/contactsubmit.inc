@@ -19,6 +19,7 @@ if ($message == '') {
 else {
 	echo "<b>Message:</b>";
 }
+$message = stripslashes($message);
 echo "<br>$message";
 ?>
 </blockquote>
@@ -60,10 +61,7 @@ if ($epost != '' && $message != '')
 	$headers .= "X-Http-Referer-Info: $hrefer \n";
 	$headers .= "X-Agent-Info: $agent \n";
 
-
-
 	$msg = wraptext($message,72); 
-
 
 	mail($myemail, $subject, $msg, $headers);
 
