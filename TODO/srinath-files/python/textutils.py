@@ -11,7 +11,7 @@ def JustifyLine(line, width):
     The gaps are picked randomly one-after-another, before it starts
     over again.
 
-	Author: Christopher Arndt <chris.arndt@web.de
+    Author: Christopher Arndt <chris.arndt@web.de
     """
     i = []
     while 1:
@@ -38,7 +38,7 @@ def FillParagraphs(text, width=80, justify=0):
     Inter-word space is reduced to one space character and paragraphs are
     always separated by two newlines. Indention is currently also lost.
 
-	Author: Christopher Arndt <chris.arndt@web.de
+    Author: Christopher Arndt <chris.arndt@web.de
     """
     # split taxt into paragraphs at occurences of two or more newlines
     paragraphs = re.split(r'\n\n+', text)
@@ -70,96 +70,108 @@ def FillParagraphs(text, width=80, justify=0):
     return '\n\n'.join(paragraphs)
 
 def IndentParagraphs(text, width=80, indent=0, justify=0):
-	"""Indent a paragraph, i.e:
-		. left (and optionally right) justify text to given width
-		. add an extra indent if desired.
+    """Indent a paragraph, i.e:
+        . left (and optionally right) justify text to given width
+        . add an extra indent if desired.
 
-		This is nothing but a wrapper around FillParagraphs
-	"""
-	return re.sub("^|\n", "\n" + " "*indent, FillParagraphs(text, width, justify))
+        This is nothing but a wrapper around FillParagraphs
+    """
+    retText =  re.sub(r"^|\n", "\g<0>" + " "*indent, \
+                  FillParagraphs(text, width, justify))
+    retText = re.sub(r"\s+$", '', retText)
+    return retText
 
-def FormatTable(tableText, ROW_SPACE=2, COL_SPACE = 3, COL_WIDTH=30):
-	"""
-	FormatTable(tableText [, ROW_SPACE=2, COL_SPACE = 3, COL_WIDTH=30])
-		returns string
 
-	Given a 2 dimensional array of text as input, produces a plain text
-	formatted string which resembles the table output.
+def OffsetText(text, indent):
+    return re.sub("^|\n", "\g<0>" + " "*indent, text)
 
-	The optional arguments specify the inter row/column spacing and the
-	column width.
-	"""
 
-	maxlengths = None
-	# first find out the max width of the columns
-	for row in tableText:
-		lengths = map(len, row)
-		if maxlengths is None:
-			maxlengths = lengths
-		else:
-			for i in range(0,len(lengths)):
-				if i >= len(maxlengths):
-					maxlengths.append(lengths[i])
-				else:
-					maxlengths[i] = max(lengths[i], maxlengths[i])
-	
-	for i in range(0, len(maxlengths)):
-		maxlengths[i] = min(maxlengths[i], COL_WIDTH)
+def FormatTable(tableText, ROW_SPACE=2, COL_SPACE = 3, \
+                COL_WIDTH=30, TABLE_WIDTH=80, justify=0):
+    """
+    FormatTable(tableText [, ROW_SPACE=2, COL_SPACE = 3, COL_WIDTH=30])
+        returns string
 
-	formattedTable = []
-	for row in tableText:
-			formattedTable.append(map(FillParagraphs, row,
-							operator.repeat([COL_WIDTH], len(row))))
-	
-	retTableText = ""
-	for row in formattedTable:
-		rowtext = row[0]
-		width = maxlengths[0]
-		for i in range(1, len(row)):
-			rowtext = VertCatString(rowtext, width, " "*COL_SPACE)
-			rowtext = VertCatString(rowtext, width + COL_SPACE, row[i])
+    Given a 2 dimensional array of text as input, produces a plain text
+    formatted string which resembles the table output.
 
-			width = width + COL_SPACE + maxlengths[i]
+    The optional arguments specify the inter row/column spacing and the
+    column width.
+    """
 
-		retTableText += string.join(rowtext, "")
-		retTableText += "\n"*ROW_SPACE
+    # first find out the max width of the columns
+    # maxlengths is a dictionary, but can be accessed exactly like an
+    # array because the keys are integers.
+    maxlengths = {}      
+    for row in tableText:
+        lengths = map(len, row)
+        for i in range(len(lengths)):
+            # Using: dictionary.get(key, default)
+            maxlengths[i] = max(lengths[i], maxlengths.get(i, -1))
+    
+    # Truncate each of the maximum lengths to the maximum allowed.
+    for i in range(0, len(maxlengths)):
+        maxlengths[i] = min(maxlengths[i], COL_WIDTH)
 
-	return retTableText
+    if justify:
+        formattedTable = []
+
+        for row in tableText:
+            formattedTable.append(map(FillParagraphs, row, \
+                                          [COL_WIDTH]*len(row)))
+    else:
+        formattedTable = tableText
+    
+    retTableText = ""
+    for row in formattedTable:
+        rowtext = row[0]
+        width = maxlengths[0]
+        for i in range(1, len(row)):
+            rowtext = VertCatString(rowtext, width, " "*COL_SPACE)
+            rowtext = VertCatString(rowtext, width + COL_SPACE, row[i])
+
+            width = width + COL_SPACE + maxlengths[i]
+
+        retTableText += string.join(rowtext, "")
+        retTableText += "\n"*ROW_SPACE
+
+    return re.sub(r"\n+$", "", retTableText)
+
 
 def VertCatString(string1, width1, string2):
-	"""
-	VertCatString(string1, width1=None, string2)
-		returns string
+    """
+    VertCatString(string1, width1=None, string2)
+        returns string
 
-	Concatenates string1 and string2 vertically. The lines are assumed to
-	be "\n" seperated.
+    Concatenates string1 and string2 vertically. The lines are assumed to
+    be "\n" seperated.
 
-	width1 is the width of the string1 column (It is calculated if left out).
-	(Width refers to the maximum length of each line of a string)
+    width1 is the width of the string1 column (It is calculated if left out).
+    (Width refers to the maximum length of each line of a string)
 
-	NOTE: if width1 is specified < actual width, then bad things happen.
-	"""
-	lines1 = string1.split("\n")
-	lines2 = string2.split("\n")
+    NOTE: if width1 is specified < actual width, then bad things happen.
+    """
+    lines1 = string1.split("\n")
+    lines2 = string2.split("\n")
 
-	if width1 is None:
-		width1 = -1
-		for line in lines1:
-			width1 = max(width1, len(lines1[i]))
+    if width1 is None:
+        width1 = -1
+        for line in lines1:
+            width1 = max(width1, len(line))
 
-	retlines = []
-	for i in range(0, max(len(lines1),  len(lines2))):
-		if i >= len(lines1):
-			lines1.append(" "*width1)
-		
-		lines1[i] = lines1[i] + " "*(width1 - len(lines1[i]))
+    retlines = []
+    for i in range(0, max(len(lines1),  len(lines2))):
+        if i >= len(lines1):
+            lines1.append(" "*width1)
+        
+        lines1[i] = lines1[i] + " "*(width1 - len(lines1[i]))
 
-		if i >= len(lines2):
-			lines2.append("")
-		
-		retlines.append(lines1[i] + lines2[i])
+        if i >= len(lines2):
+            lines2.append("")
+        
+        retlines.append(lines1[i] + lines2[i])
 
-	return string.join(retlines, "\n")
+    return string.join(retlines, "\n")
 
 
 
@@ -201,3 +213,4 @@ if __name__ == '__main__':
     _test(55,0)
 
 
+# vim:et:sts=4

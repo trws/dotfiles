@@ -1,8 +1,19 @@
-from domutils import GetTextFromElementNode
 from textutils import FormatTable
-from xml.dom.minidom import parseString
+import xml.dom.minidom
 import string
 import operator
+
+def getElementsByTagName(self, name):
+	nodeList = []
+
+	child = self.firstChild
+	while not child.nextSibling is None:
+		if child.nodeType == child.ELEMENT_NODE and child.nodeName == name:
+			nodeList.append(child)
+
+		child = child.nextSibling
+
+	return nodeList
 
 def dom_HandleTable(root):
 	"""
@@ -17,15 +28,24 @@ def dom_HandleTable(root):
 	      Also, nested tables are not handled.
 	"""
 	text = []
-	rows = root.getElementsByTagName("row")
-	for row in rows:
-		colTexts = GetTextFromElementNode(row, "col")
-		text.append(colTexts)
 
-	print FormatTable(text, COL_SPACE = 5)
+	rows = root.getElementsByTagName('row')
+	print 'found %d rows' % len(rows)
+
+	child = root.firstChild
+	while not child.nextSibling is None:
+		if child.nodeType == child.ELEMENT_NODE and child.nodeName == "row":
+			print "2: getting row"
+
+		child = child.nextSibling
+
 
 if __name__ == '__main__':
+	xml.dom.minidom.Element.getElementsByTagName = getElementsByTagName
+
 	xmlFile = open('table.xml', 'r')
 	xmlString = string.join(xmlFile.readlines(), "")
-	root = parseString(xmlString).documentElement
-	dom_HandleTable(root)
+	root = xml.dom.minidom.parseString(xmlString).documentElement
+	table = root.getElementsByTagName('table')[0]
+
+	dom_HandleTable(table)
