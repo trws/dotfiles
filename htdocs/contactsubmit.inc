@@ -50,7 +50,7 @@ if ($epost != '' && $message != '')
 	$subject = "[Contact] " . $subject;
 
 	$headers .= "Content-type: text/plain; charset=iso-8859-1\n";
-	$headers .= "From: Contact form <vim-latex-devel-form@sourceforge.invalid>\n";
+	$headers .= "From: $name <vim-latex-devel-form@sourceforge.invalid>\n";
 	$headers .= "Reply-To: $name <$epost>, vim-latex-devel@lists.sourceforge.net\n";
 	$headers .= "X-Email-From-Web-System: \n";
 	$headers .= "X-Mailer: Email From the Web\n";
