@@ -1,14 +1,14 @@
 <div class="announce">
-<b>Latex-suite 1.5 Release Candidate 1</b>:
+<b>Latex-suite 1.5</b>:
 <ul>
-<li><a href="download/latexSuite-1.5-rc1.zip">zip</a>
-(<? echo round(filesize("download/latexSuite-1.5-rc1.zip")/1024,1)." Kb; ";
-	echo date("F j, Y", filemtime("download/latexSuite-1.5-rc1.zip")).")"; ?>
+<li><a href="download/latexSuite-1.5.zip">zip</a>
+(<? echo round(filesize("download/latexSuite-1.5.zip")/1024,1)." Kb; ";
+	echo date("F j, Y", filemtime("download/latexSuite-1.5.zip")).")"; ?>
 </li>
-<li><a href="download/latexSuite-1.5-rc1.tar.gz">tar.gz</a>
+<li><a href="download/latexSuite-1.5.tar.gz">tar.gz</a>
 (<?php
-	echo round(filesize("download/latexSuite-1.5-rc1.tar.gz")/1024,1)." Kb; ";
-	echo date("F j, Y", filemtime("download/latexSuite-1.5-rc1.tar.gz")).")"; ?>
+	echo round(filesize("download/latexSuite-1.5.tar.gz")/1024,1)." Kb; ";
+	echo date("F j, Y", filemtime("download/latexSuite-1.5.tar.gz")).")"; ?>
 </li>
 </ul>
 Latex-suite 1.5 is a major re-release of latex-suite containing many
@@ -18,25 +18,13 @@ href="download/RELEASE-1.5.txt">here</a>. Please use and report any bugs to
 href="mailto://vim-latex-devel@lists.sourceforge.net">vim-latex-devel</a>.
 </div>
 <p></p>
-Latest Release version of latexSuite:
-<ul>
-<li><a href="download/latexSuite.zip">zip</a>
-(<? echo round(filesize("download/latexSuite.zip")/1024,1)." Kb; ";
-	echo date("F j, Y", filemtime("download/latexSuite.zip")).")"; ?>
-</li>
-<li><a href="download/latexSuite.tar.gz">tar.gz</a>
-(<?php
-	echo round(filesize("download/latexSuite.tar.gz")/1024,1)." Kb; ";
-	echo date("F j, Y", filemtime("download/latexSuite.tar.gz")).")"; ?>
-</li>
-</ul>
 Latest Developement version of Latex-Suite:
 <?php
 include 'timestamp.inc';
 ?>
 <ul>
 <li><a
-href=<?echo "download/latexSuite".$lastDate.".zip"?>>latexSuite<?echo $lastDate?>zip</a>
+href=<?echo "download/latexSuite".$lastDate.".zip"?>>latexSuite<?echo $lastDate?>.zip</a>
 <? echo "(".round(filesize("download/latexSuite$lastDate.zip")/1024,1)." Kb; ";
    echo	date("F j, Y", filemtime("download/latexSuite$lastDate.zip")).")";
 ?>
