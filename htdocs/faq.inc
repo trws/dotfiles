@@ -44,12 +44,56 @@ nothing.
 </div>
 <blockquote>
 <div class=ans>
-There is a known bug when you have <tt>&amp;shell</tt> set to <tt>'bash'</tt>
-in win32. This causes gvim to apparently hang when <tt>\ll</tt> is pressed.
-As of now, an elegant solution has not presented itself. There are two
-work-arounds as of now for this problem:
+If you are using cywin with windows, see <a href=#known_issues>this</a>
+for a workaround. If you still face a problem using the compiler and wish
+to contact the <a
+	href="mailto://vim-latex-devel@lists.sourceforge.net">developers</a> for
+help, please first gather the following information:
 <ol>
-<li>Unset <tt>shell = bash</tt> from your .vimrc</li>
+<li>What does
+	<a name=compile_rule_dvi></a>
+	<pre>:echo Tex_CompileRule_dvi</pre> 
+	say? This should be a string such as
+	<pre>latex --src-specials \input{$*}</pre>
+	Make sure that you can execute this command on a terminal (with the
+	<tt>$*</tt> replaced with a filename). If you cannot, then you will
+	need to change the value of <tt>Tex_CompileRule_dvi</tt> in your
+	<tt>~/.vim/ftplugin/tex.vim</tt> file.
+	<p></p>
+</li>
+<li>
+	Make sure that
+	<pre>:set makeprg?</pre>
+	shows the same value as <tt>Tex_CompileRule_dvi</tt>. If it does not,
+	try doing
+	<pre>:verbose set makeprg?</pre>
+	to see which script sets this option. Is that part of latex-suite?
+	<p></p>
+</li>
+<li>What happens when you do
+	<pre>:call RunLaTeX()</pre>
+	from the command line? In normal operation conditions, this should
+	spawn a shell command which looks like <tt>Tex_CompileRule_dvi</tt>.
+	The shell should call the latex compiler, which should run without user
+	intervention.  If this gives any errors, <tt>g:Tex_CompileRule_dvi</tt>
+	has not been set properly.<p></p>
+</li>
+<li>What is your operating system?<p></p></li>
+<li>What version of latex are you using?<p></p></li>
+</ol>
+<p></p>
+<a name=known_issues></a>
+<b>Known Issues</b>
+There is a known problem with compiling if you are using a bash shell
+(cygwin or something similar) on a windows machine. Vim seems to apparently
+hang when <tt>\ll</tt> is pressed. This is because latex-suite does not (as
+yet) support cygwin+windows out of the box. As of now, an elegant solution
+has not presented itself. There are two work-arounds as of now for this
+problem:
+<ol>
+<li>Unset <tt>shell = bash</tt> from your .vimrc
+	<p><b>OR</b></p>
+</li>
 <li>Include
 <pre>
 let g:Tex_CompileRule_dvi = 'latex --src-special \\\\nonstopmode \\\\input\\{$*\\}'
@@ -57,39 +101,6 @@ let g:Tex_CompileRule_dvi = 'latex --src-special \\\\nonstopmode \\\\input\\{$*\
 in your <tt>.vimrc</tt> or <tt>ftplugin/tex.vim</tt>. NOTE: There are actually 4 backslashes there.
 </li>
 </ol>
-If you are not on win32 and are still having problems, then it is most
-probably because the flavor of LaTeX you are using is not supported out of
-the box by latex-suite. You will need to set the value for
-<tt>g:Tex_CompileRule_dvi</tt> in your <tt>.vimrc</tt> or
-<tt>ftplugin/tex.vim</tt>.<br>
-<p></p>
-<b>Diagonastics:</b><br>
-Try doing <tt>:call RunLatex()</tt> from vim's command prompt. You
-should then be able to see what command latex-suite is using to fire up the
-compiler. By default, on UNIX systems you should see something like:
-<pre>
-!latex \\nonstopmode \\input\{filename.tex\}
-</pre>
-Make sure that the shell is not generating some error. Try executing the
-string which you see from <br><tt>:call RunLatex()</tt><br> on the command line.
-Does that work fine? Debug that till you can get a string which is able to
-get the latex compiler to generate the standard compiler output without any
-user intervention. When you get a value, then set this as the value of 
-<tt>g:Tex_CompileRule_dvi</tt> in your <tt>ftplugin/tex.vim</tt>
-<p></p>
-<b>NOTE:</b> Please be careful about escaping backslashes or curly braces.
-Sometimes, even though <tt>g:Tex_CompileRule_dvi</tt> has the correct
-number of backslashes, vim might execute commands
-<pre>
-bash -c "somecommand"
-</pre>
-(Note the double quotes). This makes some of the backslashes go away...
-<p></p>
-Also, If you do face problems, please <a
-href="index.php?subject=weare">contact us</a> with your setup (i.e, your
-OS, latex flavor, gvim version and any other special configuration stuff
-you might think of), so we can take care of the problem in future
-revisions.
 </div>
 </blockquote>
 
