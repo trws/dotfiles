@@ -18,12 +18,11 @@
 # Note:  defining VIMFILES when you invoke make overrides the value below.
 # Warning:  install and stallin do not check modification times!
 
-FTPLUGINS=html.vim html.vim
 VIMFILES=${HOME}/.vim
 EXCLUDE="--exclude='*~' --exclude='*.swp' --exclude='makefile'"
 
 install:
-	rsync -CrtW ${EXCLUDE} ${FTPLUGINS} ${VIMFILES}/ftplugin/
+	rsync -CrtW ${EXCLUDE} ftplugin/ ${VIMFILES}/ftplugin/
 
 # stallin = reverse install
 # If you can think of a better name for this target, be my guest!
