@@ -30,73 +30,55 @@ href=<?echo "download/latexSuite".$lastDate.".zip"?>>latexSuite<?echo $lastDate?
 </ul>
 
 <a name=installation>
-<h3>Installation Instructions</h3>
-Extract one of the archives above into your ~/vimfiles directory (if you
-are using windows) or ~/.vim directory (if you are using *nix). Make sure you have the
-following setting in your .vimrc
+<h2>Installation Instructions</h2>
+
+<h4>Step 1: Download and extract the archives</h4>
+Extract one of the archives above into your <tt>~/vimfiles</tt> directory
+(if you are using windows) or <tt>~/.vim</tt> directory (if you are using
+*nix). 
+<p>If you are updating after a long time, it might be a good idea to remove
+the <tt>~/vimfiles/ftplugin/latex-suite</tt> directory from previous
+installations before reinstalling.</p>
+<p><b>NOTE:</b> If you already have some latex ftplugin files, read the
+<a href="#advanced">Advanced Installation Instructions</a> to make sure you
+do not over-write any of your files.</p>
+
+<h4>Step 2: Set a few things in .vimrc</h4>
+Make sure you have the following setting in your .vimrc
 <pre>
-    " Necessary. This setting tells vim to load latex-suite
-    " when a tex file opened.
-    filetype plugin on
-    " Optional. This enables automatic indentation as you
-    " type.
-    filetype indent on
-    " IMPORTANT: win32 users will need to have 'shellslash'
-    " set so that latex can be called correctly.
-    set shellslash
+" REQUIRED. This makes vim invoke latex-suite when you open a tex file.
+filetype plugin on
+
+" IMPORTANT: win32 users will need to have 'shellslash' set so that latex
+" can be called correctly.
+set shellslash
+
+" IMPORTANT: grep will sometimes skip displaying the file name if you
+" search in a singe file. This will confuse latex-suite. Set your grep
+" program to alway generate a file-name.
+set grepprg=grep\ -nH\ $*
+
+" OPTIONAL: This enables automatic indentation as you type.
+filetype indent on
 </pre>
-Next time you start vim and edit a latex file, latex-suite should
-automatically be activated.
-<p>
+
+<h4>Step 3: Install the help files</h4>
 To install the included latex-suit.txt and latexhelp.txt files as vim help
 files, start vim and do the following:
 <p>
 <tt>helptags ~/.vim/doc</tt> &nbsp; &nbsp; (for *nix users) <br>
 <tt>helptags ~/vimfiles/doc</tt>  &nbsp; &nbsp; (for windows users) <br>
 </p>
-After that, you can do
-<p><tt>help latex-suite</tt></p> from within vim to get help for
-latex-suite.
-<br>
-<p></p>
-<b>NOTE: </b>
-If you have already have a system of filetype specific files (ftplugin,
-indent etc) files set up for the 'tex' filetype, then you might want to
-read the <a href="#advanced">advanced installation instructions</a> for
-potential conflicts.
 
-<h3>Other Stuff</h3>
+<h4>Step 4: Done!</h4>
+Thats it! You are done! Now start editing a latex file in vim. Latex-Suite
+should start up automatically. You can do
+<pre>:help latex-suite.txt</pre>
+from within vim to get the online Latex-Suite reference.
+<hr>
 
-<ul>
-<li>
-User documentation:
-	<ul>
-		<li>
-		<a href="download/latex-suite.html" class="list">In html format</a>
-		For online viewing.
-		</li>
-		<li>
-		<a href="download/latex-suite.txt" class="list">In vim help .txt format</a>
-		This file ships with the distribution as doc/latex-suite.txt.
-		</li>
-	</ul>
-	<br>
-</li>
-<li>
-LaTeX TeX-info documentation:
-	<ul>
-		<li>
-		<a href="download/latexhelp.html" class="list">In html format</a>
-		For online viewing.
-		</li>
-		<li>
-		<a href="download/latexhelp.txt" class="list">In vim help .txt format</a>
-		This file ships with the distribution as doc/latexhelp.txt.
-		</li>
-	</ul>
-	<br>
-</li>
-<li>
+<h3>Other ways to keep up with changes</h3>
+
 <a href="http://cvs.sourceforge.net/cvstarballs/vim-latex-cvsroot.tar.gz"
 class="list">CVS snapshot</a> Sourceforge provides projects with a nightly
 updated archived version of the CVS repository. A better way to stay in
@@ -104,11 +86,15 @@ step with the project if you use CVS but do not want to be a developer is
 to follow the instructions for anonymous CVS access <a
 href="http://sourceforge.net/cvs/?group_id=52322">here</a>. Use vimfiles in
 place of <i>modulename</i>.
-</li>
-</ul>
 
 <a name="advanced">
 <h3>Advanced Installation Instructions</h3>
+<p>
+If you have already have a system of filetype specific files (ftplugin,
+indent etc) files set up for the 'tex' filetype, then please make sure that
+Latex-Suite does not over-write your files. 
+</p>
+
 The archive above will unzip in the following manner:<br>
 
 <pre>
