@@ -1,6 +1,6 @@
 #! /usr/bin/python
 
-import sys, re, os
+import sys, re, os, string
 
 try:
 	import pwd
@@ -13,7 +13,7 @@ commit = sys.stdin.read()
 print 'arguments = ', sys.argv
 
 islog = 0
-for line in commit.split('\n'):
+for line in string.split(commit, '\n'):
 	if re.match('Bug:|Feature:|New:', line):
 		islog = 1
 		print username
@@ -22,4 +22,4 @@ for line in commit.split('\n'):
 		islog = 0
 
 	if islog:
-		print line
+		print '\t\t',line
