@@ -1,7 +1,7 @@
 #! /usr/bin/python
 
 import sys, re, os, string, getopt, pwd, 
-from time import time, localtime
+from time import time, localtime, strftime
 from cStringIO import StringIO
 
 username = pwd.getpwuid(os.getuid())[0]
