@@ -37,8 +37,9 @@
     provide tools starting from macros to speed up editing LaTeX
     documents to functions for forward searching .dvi documents.
     Latex-suite has been possible because of the contributions of many
-    people. Please see |latex-suite-credits| for a list of people who
-    have helped.
+    people. Please see <link
+     linkend="latex-suite-credits">latex-suite-credits</link> for a list of
+    people who have helped.
    </para>
    <para>
     Latex-suite is released under the Vim charityware license. For
@@ -793,36 +794,39 @@ otherinfo = {&ph;}
   </para>
   <para>
    If a <link id="latex-master-file">master-file</link> has been specified,
-   then it will scan that file instead of the current file.
+   then it will scan that file instead of the current file. See the section
+   <link linkend="custom-packages">Custom Packages</link>
+   to see which files &ls; will scan in more detail.
   </para>
   <para>
    In addition, the <literal>TeX-Suite > Packages</literal> menu also
    contains the following submenus
-   <formalpara>
-    <title>Update</title>
-    This command is to be invoked with the cursor placed on the package
-    name. If the corresponding package is found, then a sub-menu with the
-    supported commands and options is created.
-   </formalpara>
-   <formalpara>
-    <title>Update All</title>
-    This function reads the preamble of the document for
-    <literal>\usepackage</literal> lines and if &ls; supports the detected
-    packages, then sub-menus containing the package options and commands
-    are created.
-   </formalpara>
   </para>
+  <formalpara>
+   <title>Update</title>
+   This command is to be invoked with the cursor placed on the package
+   name. If the corresponding package is found, then a sub-menu with the
+   supported commands and options is created.
+  </formalpara>
+  <formalpara>
+   <title>Update All</title>
+   This function reads the preamble of the document for
+   <literal>\usepackage</literal> lines and if &ls; supports the detected
+   packages, then sub-menus containing the package options and commands
+   are created.
+  </formalpara>
   <section id="custom-packages">
    <title>Custom Packages</title>
    <para>
-    Often times, the preamble can become too long, and some people prefer to
-    put most of their personalization in a custom package and include that
-    using a <literal>\usepackage</literal> line. &ls; tries to search such
-    customs package for other <literal>\usepackage</literal> lines, so that
-    supported packages included in this indirect manner can also be used to
-    create sub-menus. The most obvious place to place such custom packages
-    is in the same directory as the edited file. In addition, &latex; also
-    supports placing custom packages in places pointed to by the
+    Often times, the preamble can become too long, and some people prefer
+    to put most of their personalization in a custom package and include
+    that using a <literal>\usepackage</literal> line. &ls; tries to search
+    such customs package for other <literal>\usepackage</literal> lines, so
+    that supported packages included in this indirect manner can also be
+    used to create sub-menus, extend the <literal>'dict'</literal> setting
+    etc. The most obvious place to place such custom packages is in the
+    same directory as the edited file. In addition, &latex; also supports
+    placing custom packages in places pointed to by the
     <literal>$TEXINPUTS</literal> environment variable.
    </para>
    <para>
@@ -832,22 +836,26 @@ otherinfo = {&ph;}
     <literal>g:Tex_TEXINPUTS</literal> variable.
    </para>
    <para>
+    The <literal>g:Tex_TEXINPUTS</literal> variable needs to be set in the
+    same format which &vim; uses for the <literal>'path'</literal> setting.
+    This format is explained in detail if you do 
+    <programlisting>:help file-searching</programlisting>
+    from within &vim;.
+   </para>
+   <para>
+    Therefore the value of <literal>g:Tex_TEXINPUTS</literal> will most
+    probably be different from <literal>$TEXINPUTS</literal> which your
+    native &latex; distribution uses.
+   </para>
+   <para>
     Example:
-    <programlisting>let g:Tex_TEXINPUTS = '.:~/texmf//:'</programlisting>
-    This variable is a semi-colon seperated list of directories to scan for
-    custom packages. <literal>'.'</literal> means the current directory,
-    <literal>~/texmf//</literal> means the <literal>~/texmf</literal>
-    directory and all its subdirectories. The last semicolon means the
-    standard &latex; directories.  
+    <programlisting>let g:Tex_TEXINPUTS = '~/texmf/mypackages/**;./**'</programlisting>
+    Note that directories are delimited by <literal>';'</literal>.
    </para>
    <note>
     <para>
-     As of now, &vim; cannot scan all subdirectories of a given directory
-     more than 1 level deep. Therefore, &ls; will not be able to find all the
-     package files which &latex; might find. Thus although in the above
-     example, &ls; will detect <literal>~/texmf/mypack.sty</literal> and
-     <literal>~/texmfi/mypacks/somepack.sty</literal>, it will not be able
-     to detect <literal>~/texmfi/tex/sty/mypack.sty</literal>.
+     The present directory <literal>'.'</literal> is always searched. You
+     need not incude that in <literal>g:Tex_TEXINPUTS</literal>.
     </para>
    </note>
   </section>
@@ -1248,9 +1256,9 @@ nmap \pdf :call Tex_CompileToPDF()&lt;CR&gt;</programlisting>
   </para>
   <note>
    <para>
-    The viewing function also takes the <literal><link
-      linkend="latex-master-file">*.latexmain</link></literal> file into
-    account to decide which file to show.
+    The viewing function also takes the <link
+     linkend="latex-master-file"><literal>*.latexmain</literal></link> file
+    into account to decide which file to show.
    </para>
   </note>
   <para>
@@ -1530,6 +1538,296 @@ endskip = '^\s*\\end{\(enumerate\|itemize\|description\)}'</programlisting>
     </note>
  </section>
  </section>
+ <section id="latex-suite-commands-maps">
+  <title>&ls; Commands and Maps</title>
+  <para>
+   LatexSuite defines set of commands for non-GUI and power users. They are
+   taking care about Macros, Templates and Packages.
+  </para>
+  <section id="latex-suite-maps">
+   <title>&ls; Maps</title>
+   Normal usage of &ls; will typically involve using a fairly large number
+   of mappings. It should be noted that many of the mappings can be changed
+   to a different set of characters according to your particular needs.
+   <section id="Plug_IMAPJumpForward">
+    <title>&lt;Plug&gt;IMAP_JumpForward</title>
+    <para>
+     Default Key assigned : <literal>&lt;Ctrl-J&gt;</literal>
+    </para>
+    <para>
+     This map takes you to the location of the next <link
+      linkend="place-holders">place-holder</link>.
+    </para>
+   </section>
+   <section id="Plug_IMAPJumpBack">
+    <title>&lt;Plug&gt;IMAP_JumpBack</title>
+    <para>
+     Default Key assigned : NONE
+    </para>
+    <para>
+     This map takes you to the previous <link
+      linkend="place-holders">place-holder</link>.
+    </para>
+   </section>
+   <section id="Plug_IMAP_DeleteAndJumpForward">
+    <title>&lt;Plug&gt;IMAP_DeleteAndJumpForward</title>
+    <para>
+     Default Key assigned : NONE
+    </para>
+    <para>
+     This map deletes the presently selected place-holder irrespective of
+     whether the present placeholder is empty or not and ignoring the value
+     of place-holder settings like <link
+      linkend="Imap_DeleteEmptyPlaceHolders"><literal>g:Imap_DeleteEmptyPlaceHolders</literal></link>
+     and <link
+      linkend="Imap_StickyPlaceHolders"><literal>g:Imap_StickyPlaceHolders</literal></link>
+    </para>
+   </section>
+  </section>
+  <section id="latex-suite-commands">
+   <title>Latex Suite Commands</title>
+   <section id="TMacro">
+    <title>:TMacro [{macro}]</title>
+    <para>
+     When used without any arguments lists all available macros defined
+     in latex-suite/macros/ directory and prompts you to choose one of
+     them.  With one argument |:read| this macro under cursor position.
+     With more than one argument it will not work :)
+    </para>
+   </section>
+   <section id="TMacroEdit">
+    <title>TMacroEdit [{macro}]</title>
+    <para>
+     Splits window for editing {macro}.
+     When used without any arguments lists all available macros
+     defined in latex-suite/macros/ directory and prompt you to
+     choose one of them.
+    </para>
+   </section>
+   <section id="TMacroNew">
+    <title>:TMacroNew</title>
+    <para>
+     Splits window to write new macro. Directory in new buffer is
+     locally changed to latex-suite/macros/.
+    </para>
+   </section>
+   <section id="TMacroDelete">
+    <title>:TMacroDelete [{macro}]</title>
+    <para>
+     Delets {macro} from latex-suite/macros/ directory.
+     When used without any arguments lists all available macros
+     defined in latex-suite/macros/ directory and prompt you to
+     choose one of them.
+    </para>
+   </section>
+   <section id="TPackage">
+    <title>:TPackage [{package, ...}]</title>
+    <para>
+     When used without any arguments lists name of the packages for
+     which support is available. Report depends if you are using
+     GUI version and/or <link
+      linkend="Tex_Menus">g:Tex_Menus</link> is set to 1 or not. When you
+     are not using menus command lists files from
+     latex-suite/dictionaries/ (this is main support for non-menus
+     version of latexSuite) if menus are on |TPackage| lists
+     files from latex-suite/packages/ directory.
+
+     When {package} is given command turns on all possible support
+     for this {package} (|latex-menu-packages|,
+     |latex-packages-dictionary|). Number of arguments separated
+     with spaces is limited only with common sense.
+    </para>
+   </section>
+   <section id="TPackageUpdate">
+    <title>:TPackageUpdate</title>
+    <para>
+     This command `reads' name of package under cursor and turns on
+     possible support.
+    </para>
+   </section>
+   <section id="TPackageUpdateAll">
+    <title>:TPackageUpdateAll</title>
+    <para>
+     After issuing this command latexSuite scans the file in
+     looking for not declared packages, removing not needed entries
+     from Packages menu and turning off not necessary packages'
+     dictionaries.
+    </para>
+   </section>
+   <section id="TTemplate">
+    <title>:TTemplate [{template}]</title>
+    <para>
+     When used without any arguments lists all available templates
+     from latex-suite/templates/ directory and prompts to choose
+     one of them.
+     With one argument :0|read| {template} file.
+     With more than one argument it will not work :)
+    </para>
+   </section>
+   <section id="TSection">
+    <title>:TSection [{argument}]</title>
+    <para>
+     Used without any arguments inserts last section type
+     (|latex-sectioning|).
+     Accepts arguments:
+     n&gt;     inserts section name in &lt;n&gt; logical level.
+     Levels are:
+     <informaltable>
+      <tgroup cols="2">
+       <tbody>
+        <row><entry>0</entry><entry>part</entry></row>
+        <row><entry>1</entry><entry>chapter</entry></row>
+        <row><entry>2</entry><entry>section</entry></row>
+        <row><entry>3</entry><entry>subsection</entry></row>
+        <row><entry>4</entry><entry>subsubsection</entry></row>
+        <row><entry>5</entry><entry>paragraph</entry></row>
+        <row><entry>6</entry><entry>subparagraph</entry></row>
+       </tbody>
+      </tgroup>
+     </informaltable>
+
+     <informaltable>
+      <tgroup cols="2">
+       <tbody>
+        <row>
+         <entry>
+          +&lt;n&gt;    
+         </entry>
+         <entry>
+          inserts section name &lt;n&gt; logical levels above the last
+          used comand
+         </entry>
+         </row><row>
+         <entry>
+          -&lt;n&gt;    
+         </entry>
+         <entry>
+          inserts section name &lt;n&gt; logical levels below the last
+          used comand
+         </entry>
+         </row><row>
+         <entry>
+          +       
+         </entry>
+         <entry>
+          inserts section name one logical level below the last
+          used command (equal to +1).
+         </entry>
+         </row><row>
+         <entry>
+          ++      
+         </entry>
+         <entry>
+          inserts section name two logical levels below the last
+          used command (equal to +2).
+         </entry>
+         </row><row>
+         <entry>
+          -       
+         </entry>
+         <entry>
+          inserts section name one logical level over the last
+          used command (equal to -1).
+         </entry>
+         </row><row>
+         <entry>
+          --      
+         </entry>
+         <entry>
+          inserts section name two logical levels over the last
+          used command (equal to -2).
+         </entry>
+        </row>
+       </tbody>
+      </tgroup>
+     </informaltable>
+
+     Command accepts also latexSuite mappings (|latex-macros|)
+     without preceding S and in lowercase:
+     <programlisting>:TSection pa</programlisting>
+     will result in <literal>\part{}</literal>. It is possible to use full names of
+     sections: <literal>:TSection part</literal>
+    </para>
+   </section>
+   <section id="TSectionAdvanced">
+    <title>TSectionAdvanced</title>
+    <para>
+     Accepts the same arguments as |TSection| but leads to a couple
+     of questions (whether you want to include the section in the
+     table of contents, whether there is a shorter name for the
+     table of contents) and then creates a more intelligent
+     template.
+    </para>
+   </section>
+   <section id="TLook">
+    <title>TLook</title>
+    <para>
+     Accepts one argument. Will look through .tex files in
+     directory of edited file for argument. It can be regexp. You
+     don't have to enclose argument in "". &lt;cr&gt; takes you to
+     location. Other keys work as described in |latex-viewer|.
+     Note: TLook uses :grep command and is using 'grepprg'. Its
+     regular expressions can be different from those of Vim.
+    </para>
+   </section>
+   <section id="TLookBib">
+    <title>TLookBib</title>
+    <para>
+     Accepts one argument. Will look through .bib files in
+     directory of edited file for argument. It can be regexp. You
+     don't have to enclose argument in "". &lt;cr&gt; takes you to
+     location. Other keys work as described in |latex-viewer|.
+     Note: TLookBib uses :grep command and is using 'grepprg'.  Its
+     regular expressions can be different from those of Vim.
+    </para>
+   </section>
+   <section id="TLookAll">
+    <title>TLookAll</title>
+    <para>
+     Accepts one argument. Will look through all files in directory
+     of edited file for argument. It can be regexp. You don't have
+     to enclose argument in "". &lt;cr&gt; takes you to location. Other
+     keys work as described in |latex-viewer|.
+     Note: TLookuses :grep command and is using 'grepprg'.  Its
+     regular expressions can be different from those of Vim.
+    </para>
+   </section>
+   <section id="TPartComp">
+    <title>TPartComp</title>
+    <para>
+     No argument allowed but accepts range in all formats. Define
+     fragment of interest with :'a,'b, :/a/,/b/, :'&lt;,'&gt; or :20,30.
+     All other rules of compilation apply.
+    </para>
+   </section>
+   <section id="TPartView">
+    <title>TPartView</title>
+    <para>
+     Show last compiled fragment. All rules of viewing apply but
+     |latex-searching|.
+    </para>
+   </section>
+   <section id="Tshortcuts">
+    <title>Tshortcuts [{arg}]</title>
+    <para>
+     Show shortcuts in terminal (not using menu). Without {arg}
+     you will see simple menu prompting for one of them. Possible
+     arguments:
+     <informaltable frame="none">
+      <tgroup cols="2">
+       <tbody>
+        <row><entry>g</entry><entry>General shortcuts</entry></row>
+        <row><entry>e</entry><entry>Environment shortcuts</entry></row>
+        <row><entry>f</entry><entry>Font shortcuts</entry></row>
+        <row><entry>s</entry><entry>Section shortcuts</entry></row>
+        <row><entry>a</entry><entry>All shortcuts</entry></row>
+       </tbody>
+      </tgroup>
+     </informaltable>
+    </para>
+   </section>
+  </section>
+ </section>
  <section id="customizing-latex-suite">
   <title>Customizing &ls;</title>
   <para>
@@ -1698,7 +1996,7 @@ endskip = '^\s*\\end{\(enumerate\|itemize\|description\)}'</programlisting>
       <tbody>
        <row><entry>Type</entry><entry>Boolean</entry></row>
        <row><entry>Default Value</entry>
-        <entry><literal>1</literal></entry></row>
+        <entry><literal>0</literal></entry></row>
       </tbody>
      </tgroup>
     </informaltable>
@@ -2329,6 +2627,141 @@ endskip = '^\s*\\end{\(enumerate\|itemize\|description\)}'</programlisting>
     </para>
    </section>
   </section>
+ </section>
+ <section id="latex-suite-credits">
+  <title>Credits</title>
+  <para>
+   And finally, the credits:
+  </para>
+  <informaltable frame="none">
+   <tgroup cols="2">
+    <tbody>
+     <row>
+      <entry>
+       Lubomir Host      
+      </entry>
+      <entry>
+       provided the diacritics and also helped in development.
+       <para></para>
+      </entry>
+     </row>
+     <row>
+      <entry>
+       Alexander Wagner  
+      </entry>
+      <entry>
+       valuable suggestions during development.
+       <para></para>
+      </entry>
+     </row>
+     <row>
+      <entry>
+       Luc Hermitte      
+      </entry>
+      <entry>
+       his variation of Stephen Riehm's bracketing system is used
+       in latex-suite.
+       <para></para>
+      </entry>
+     </row>
+     <row>
+      <entry>
+       Gergely Kontra    
+      </entry>
+      <entry>
+       the clever little JumpFunc() in imaps.vim is due to him.
+       The implementation of the templates also borrows from
+       mu-template.vim by him.
+       <para></para>
+      </entry>
+     </row>
+     <row>
+      <entry>
+       Dimitri Antoniou  
+      </entry>
+      <entry>
+       author of ltags and also provided the nice tip about
+       forward / reverse search on DVI documents.
+       <para></para>
+      </entry>
+     </row>
+     <row>
+      <entry>
+       Stephen Riehm     
+      </entry>
+      <entry>
+       the extremely helpful bracketing system is from him.
+       <para></para>
+      </entry>
+     </row>
+     <row>
+      <entry>
+       Alan Schmitt      
+      </entry>
+      <entry>
+       provided some macros/folding elements.
+       <para></para>
+      </entry>
+     </row>
+     <row>
+      <entry>
+       Hari Krishna Dara 
+      </entry>
+      <entry>
+       for ExecMap(), the clever little function which makes
+       typing visual mode mappings so much easier and error-free.
+       <para></para>
+      </entry>
+     </row>
+     <row>
+      <entry>
+       Alan G Isac       
+      </entry>
+      <entry>
+       for the comprehensive BibT() function for entering bibtex
+       entries.
+       <para></para>
+      </entry>
+     </row>
+     <row>
+      <entry>
+       Gontran Baerts    
+      </entry>
+      <entry>
+       for libList.vim
+       <para></para>
+      </entry>
+     </row>
+     <row>
+      <entry>
+       Peter Heslin      
+      </entry>
+      <entry>
+       useful discussion and also a lot of bug fixes.
+       the %%fakesection in folding.vim.
+       <para></para>
+      </entry>
+     </row>
+    </tbody>
+   </tgroup>
+  </informaltable>
+
+  <para>
+   A large number of functions in latex-suite come from various other people.
+   Some of those people might have been missed here. Each function should however
+   have the author's name/e-mail above it. Thats the more authoritative place to
+   check out who has done what.
+  </para>
+
+  <anchor id="latex-suite-maintainer"></anchor>
+  <para>
+   The current maintainer(s) of latex-suite is(are)
+  </para>
+  <simplelist>
+   <member>Srinath Avadhanula &lt;srinath@fastmail.fm&gt;</member>
+   <member>Mikolaj Machowski &lt;mikmach@wp.pl&gt;</member>
+   <member>Benji Fisher &lt;benji@member.AMS.org&gt;</member>
+  </simplelist>
  </section>
 </article>
 
