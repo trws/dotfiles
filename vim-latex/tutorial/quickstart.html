@@ -114,8 +114,9 @@
         an easy way to do this. Somewhere in the body of the document, type
         in the following sentence
         <pre>This is a reference to (\ref{}).</pre>
-        With the cursor between the <tt>{}</tt> press <tt>&lt;F9&gt;</tt>.
-        You will notice a selection box opens up as follows
+		With the cursor between the <tt>{}</tt> press <tt>&lt;F9&gt;</tt>
+		in insert mode.  You will notice a selection box opens up as
+		follows
         <br/>
         <img></img>
         <br/>
@@ -134,8 +135,110 @@
 
         <p>The <tt>&lt;F9&gt;</tt> key also works for inserting
         <tt>\cite</tt> commands to reference bibliographich entries,
-        inserting file names for the <tt>\input</tt> command and just plain
-        searching for words. See <a href="">here</a> for more information.
+		inserting file names for the <tt>\inputgraphics</tt> command and
+		just plain searching for words. Click <a href="">here</a> for more
+		information.
+
+		<h2>Compiling a document</h2>
+		Great! We have just created a small latex file. The next step is to
+		make the latex compiler create a .dvi file from it. Compiling via
+		latex-suite is simple. Goto normal mode and press <tt>\ll</tt>
+		(replace <tt>\</tt> with whatever <tt>mapleader</tt> setting you
+		have). This will call the latex compiler. If all goes well, then
+		the focus should return to the vim window. 
+		
+		<h3>Debugging LaTeX source files</h3>
+		To illustrate the debugging procedure, let's create a few mistakes
+		in the file:
+		<pre>This is a $\mistake$.
+And this is $\another$</pre>
+		Now press <tt>\ll</tt> again. This time you will notice that after
+		compilation finishes, the cursor automatically lands on
+		<tt>$\mistake$</tt>. In addition, 2 new windows will appear as
+		shown here:
+		<br/>
+		<img></img>
+		<br/>
+		The middle window is an <em>Error List</em> window showing you the
+		errors which the latex compiler found. Th bottom window is a
+		<em>Log Preview</em> window, which shows you the context of the
+		error made by displaying the relevant portion of the <tt>.log</tt>
+		file created during the latex compilation procedure. Jump to the
+		<em>Error List</em> window and try scrolling around in it using
+		either the <tt>j, k</tt> keys or the arrow keys. You will notice
+		that the <em>Log Preview</em> window scrolls automatically to
+		retain the context of the error you are currently located on. If
+		you press <tt>&lt;enter&gt;</tt> on any line, you will see the
+		cursor jump to the location of the error. Latex-Suite tries to
+		guess the column location as best as it can so you can continue
+		typing straight away.
+		<p>
+		Having got a taste for compiling, proceed by deleting the erroneous
+		lines and re-compiling.
+		</p>
+		<p>
+		The Latex-Suite compiler is capable of much more including
+		selectively filtering out common errors which you might want to
+		ignore for the moment, compiling parts of a document, setting
+		levels of verbosity in the compiler output etc. See <a
+			href="">here</a> for more.
+		</p>
+
+		<h2>Viewing DVI files</h2>
+		Now that you have compiled your first latex source, its time to
+		view it. Again, this should be pretty simple. Press
+		<tt>\lv</tt> in normal mode. Depending on your platform, a DVI
+		viewer program should open up and display the dvi file generated in
+		compilation step previously.
+		<h3>Performing forward searches</h3>
+		<p>
+		If you are using a modern DVI viewer, then it is possible to do
+		what is called forward and inverse searching. However, you will
+		need to customize the standard Latex-Suite distribution in order to
+		utilize this functionality. Type in the following on the command
+		line:
+		<pre>:let g:Tex_CompileRule_dvi = 'latex -src-specials -interaction=nonstopmode $*'
+:TCTarget dvi</pre>
+		Now recompile the latex file by pressing <tt>\ll</tt>. This time,
+		instead of pressing <tt>\lv</tt> to view the file, press
+		<tt>\ls</tt> from within the tex file. If the DVI viewer supports
+		forward searching (most of them do), then the viewer will actually
+		display the portion of the DVI file corresponding to the location
+		where you were editing the tex file.
+		</p>
+		<p>
+		(The reason Latex-Suite does not have this setting by default is
+		that on some systems this causes unpredictable results in the DVI
+		output. If you find the DVI output satisfactory, then you can
+		insert the first of the 2 lines above into your
+		<tt>$VIM/ftplugin/tex.vim</tt> file. <tt>$VIM</tt> is
+		<tt>~/vimfiles</tt> for windows and <tt>~/.vim</tt> for *nix
+		machines).
+		</p>
+		<h3>Performing inverse searches</h3>
+		Most DVI viewers also support inverse searching, whereby you can
+		make the DVI viewer ask vim to display the tex source corresponding
+		to the DVI file being shown. This is extremeley helpful while
+		proofreading large documents.
+		<p>
+		Simply double-click anywhere in the viewer window. If the viewer
+		supports it, then it will attempt to open an editor window at the
+		location corresponding to where you double-clicked. On *nix
+		platforms, Latex-Suite attempts to start the viewer program in such
+		a way that it already knows to use vim to open the tex source. Thus
+		you should see a vim window open up showing the tex file. However,
+		if there is an error, or some other program is used, you will need
+		to tell the viewer program to use gvim as the editor.  On windows
+		platforms, if you use the commonly available
+		<tt>yap</tt> viewer (available as part of the miktex distribution),
+		then this option can be set from <tt>View &gt; Options &gt;
+			Inverse Search</tt>. In the <tt>Command line:</tt> window,
+		write
+		<pre>"C:\Program Files\vim\vim61\gvim" -c ":RemoteOpen +%l %f"</pre>
+		(Customize the path according to where you have installed gvim).
+		If you double click in the view pane now, you will see gvim start
+		up and take you to the relevant portion of the tex file.
+		</p>
     </body>
 </html>
 
