@@ -9,9 +9,12 @@ try:
 except ImportError:
 	username = os.getenv('USERNAME')
 
-clfp = open(os.environ['CVSROOT'] + '/CVSROOT/ChangeLog')
-changeLogPrev = string.join(clfp.readlines(), '')
-clfp.close();
+try:
+	clfp = open(os.environ.get('CVSROOT', '') + '/CVSROOT/ChangeLog')
+	changeLogPrev = string.join(clfp.readlines(), '')
+	clfp.close();
+except IOError:
+	changeLogPrev = ''
 
 commit = sys.stdin.read()
 
@@ -39,5 +42,5 @@ for line in string.split(commit, '\n'):
 		s = s + '\t' + line + '\n'
 
 s = re.sub('\s*$', '\n\n', s)
-s = s + changeLogPrev
+# s = s + changeLogPrev
 print s
