@@ -94,6 +94,16 @@ def OffsetText(text, indent):
 
 
 # }}}
+# RightJustify(lines, width): {{{
+def RightJustify(lines, width):
+    text = ""
+    for line in lines.split("\n"):
+        text += " "*(width - len(line)) + line + "\n"
+
+    text = re.sub('\n$', '', text)
+    return text
+
+# }}}
 # TextWidth(text): {{{
 def TextWidth(text):
     """

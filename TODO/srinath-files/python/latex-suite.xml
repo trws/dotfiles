@@ -59,8 +59,7 @@ set sw=2
 set iskeyword+=:
 " IMPORTANT: If you are a win32 user, then the following setting is
 " necessary in order to have latex called correctly from within vim.
-set shellslash 
-		</programlisting>
+set shellslash</programlisting>
 		</para>
 		<option>
 			<name>b:Tex_Leader</name>
@@ -164,10 +163,12 @@ augroup END</programlisting>
 			Latex-Suite ships with a very comprehensive set of insert mode and visual mode
 			mappings and menu items to typeset most of the LaTeX elements. 
 		</para>
-		<link>placeholders</link> 
-		<link>placeholder</link>
-		<link>place-holder</link>
-		<link>place-holders</link>
+		<links>
+			<link>placeholders</link> 
+			<link>placeholder</link>
+			<link>place-holder</link>
+			<link>place-holders</link>
+		</links>
 		<para>
 			All these macros implement Stephen Riem's bracketing system and Gergely
 			Kontra's JumpFunc() for handling place-holders. This consists of using

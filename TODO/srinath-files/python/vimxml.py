@@ -253,6 +253,16 @@ def handleTag(tag, width):
     return '|' + text + '|'
 
 # }}}
+# handleLinks(links, width): {{{
+def handleLinks(links, width): 
+    text = ''
+    for link in getChildrenByTagName(links, 'link'):
+        text += '*' + GetText(link.childNodes) + '*' + ' '
+
+    text = IndentParagraphs(text, width/2)
+    return RightJustify(text, width) + "\n"
+
+# }}}
 # handleLink(link, width): {{{
 def handleLink(link, width):
     text = '*' + GetText(link.childNodes) + '*'
@@ -300,6 +310,7 @@ handlerMaps = {
     'br': handleLineBreak,
     'note': handleNote,
     'tag': handleTag,
+    'links': handleLinks,
     'link': handleLink,
     'section': handleSection,
     'blockquote': handleBlockQuote,
