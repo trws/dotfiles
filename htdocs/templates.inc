@@ -8,8 +8,8 @@
 $dir = getcwd()."/templates";
 $tempdir = dir($dir);
 while($file = $tempdir->read()){
-	if($file!="." && $file!=".."){
-	$filetable[] = $file;
+	if($file!="." && $file!=".." && strncmp($file,"CVS",3)){
+		$filetable[] = $file;
 	}
 }
 $tempdir->close();

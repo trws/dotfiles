@@ -8,8 +8,8 @@
 $dir = getcwd()."/packages";
 $packdir = dir($dir);
 while($file = $packdir->read()){
-	if($file!="." && $file!=".."){
-	$filetable[] = $file;
+	if($file!="." && $file!=".."  && strncmp($file,"CVS",3)){
+		$filetable[] = $file;
 	}
 }
 $packdir->close();
