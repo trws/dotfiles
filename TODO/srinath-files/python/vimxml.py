@@ -230,8 +230,6 @@ def handleParBreak(parbrk, width):
 # handleParagraph(paragraph, width): {{{
 def handleParagraph(paragraph, width):
     partext = handleElement(paragraph, width, strict=0)
-    partext = IndentParagraphs(partext, width)
-    # print 'paragraph getting [%s]' % (partext)
 
     partext = re.sub(r'\n+$', '', partext)
     partext = re.sub(r'^\n+', '', partext)
@@ -259,7 +257,7 @@ def handleTag(tag, width):
 def handleLink(link, width):
     text = '*' + GetText(link.childNodes) + '*'
 
-    return text.rjust(vimformat.TEXT_WIDTH)
+    return text.rjust(vimformat.TEXT_WIDTH) + "\n"
 
 # }}}
 # handleSection(section, width): {{{
