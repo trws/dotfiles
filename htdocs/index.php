@@ -26,6 +26,12 @@ if (isset($_GET['subject']))
 		case 'download':
 			$pagetitle="Download";
 			break;
+		case 'faq':
+			$pagetitle="FAQ";
+			break;
+		case 'comingsoon':
+			$pagetitle="Coming Soon ...";
+			break;
 	}
 	$leftpanel="left_".$subject.".inc";
 	$mainpanel=$subject.".inc";

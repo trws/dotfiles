@@ -1,3 +1,6 @@
+These screenshots use the <a
+href="http://vim.sourceforge.net/script.php?script_id=271">navajo-night</a>
+colorscheme by Matthew Hawkins.
 <ul>
 <li><a href="screenshots/template-menu.png">A new .tex file has been opened</a> 
 This screenshot shows the menus which get loaded up automatically when a

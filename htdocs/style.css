@@ -1,3 +1,9 @@
+/* 
+ * Authors: Srinath Avadhanula and Mikolaj Machowski
+ * This style file borrows some elements from main.css, the style file used
+ * in cream.sf.net
+ *
+ * */
 DIV.header { 
 	margin : 0.5cm ;
 	width : 800px ;
@@ -34,6 +40,21 @@ TD.footpanel {
 	text-align: right;
 	padding: 5px;
 	background-color: #88aaaa;
+}
+.navigation {
+	vertical-align: top;
+	width: 150px;
+	padding: 15px;
+	background-color: #445555;
+	color: #fffcfc;
+} 
+.navheader {
+	margin-top: -0.5em;
+	margin-bottom: 0.5em;
+	text-align: right;
+	color: #446644;
+	font-size: 14px;
+    font-weight: bold;
 }
 
 SPAN.menu {
@@ -78,6 +99,15 @@ DIV.footer {
 	margin : 0.5cm ;
 	width : 800px 
 }
+.qa {
+	margin : 0.5cm ;
+	font-size : 16px;
+	font-weight : bold;
+}
+.ans {
+	margin : 0.5cm ;
+	font-weight : normal;
+}
 
 H2.hline {
 	text-align : center ;
@@ -105,3 +135,23 @@ SPAN.conflict {
 	font-family: courier,sans-serif; 
 	color : #DD4444;
 }
+HR.navig {
+	color: #446644;
+	height: 1px;
+	margin-top: 1em;
+	border-top: 0px;	/* Mozilla work-around to eliminate "groove" */
+}
+A.question {
+	color: #000000;
+	height: 1px;
+	margin-top: 1em;
+	border-top: 0px;	/* Mozilla work-around to eliminate "groove" */
+}
+A.question:hover {
+	color: #000000;
+	background-color: #eef0f3;
+	height: 1px;
+	margin-top: 1em;
+	border-top: 0px;	/* Mozilla work-around to eliminate "groove" */
+}
+
