@@ -1,4 +1,4 @@
-<file>
+<article>
 	<para>
 		Latex-Suite attempts to provide a comprehensive set of tools to
 		view, edit and compile LaTeX documents in Vim. Together, they
@@ -24,20 +24,15 @@
 		folded (see <tag>folding</tag>). Use <tag>za</tag> to toggle back and
 		forth between open and closed views.
 	</note>
-	<br/>
 	<note>
 		If the sections do not appear folded, press za in normal mode. This
 		will fold up everything and it will be much easier to navigate.
 	</note>
-
+	<para></para>
+	<anchor id="latex-suite-toc"></anchor>
+	<?vimhelp maketoc?>
 	<section>
-		<sectiontitle>
-			<name>OVERVIEW</name>
-			<tag>latex-suite-overview</tag>
-			<tag>latex-suite-alias1</tag>
-		</sectiontitle>
-		<link>latex-suite-optimal-settings</link>
-		<br/>
+		<title id="latex-suite-recommended">Recommended settings</title>
 		<para>
 			Latex-Suite works best if you have the following settings in your
 			~/.vimrc:<br/>
@@ -49,7 +44,8 @@ filetype indent on</programlisting>
 		</para>
 		<para>
 			In addition, the following settings could go in your ~/.vim/ftplugin/tex.vim
-			file:<br/>
+			file:
+		</para>
 		<programlisting>" this is mostly a matter of taste. but LaTeX looks good with just a bit
 " of indentation.
 set sw=2
@@ -60,115 +56,18 @@ set iskeyword+=:
 " IMPORTANT: If you are a win32 user, then the following setting is
 " necessary in order to have latex called correctly from within vim.
 set shellslash</programlisting>
-		</para>
-		<option>
-			<name>b:Tex_Leader</name>
-			<name>g:Tex_Leader</name>
-			<desc>
-				string (default empty) <br/>
-				global <br/>
-				{not in Vi} <br/>
-				{not available when compiled without the |+statusline| or |+something|
-				else feature} <par/>
-				The mappings in latex-suite are by default prefixed with the back-tick
-				character. For example, `/ inserts \frac{<++>}{<++>}<++> etc. You can change the
-				prefix with the following setting.
-				',', '/', '`' are preferred values. '' or '\' will lead to a _lot_ of
-				trouble.
-
-				g:Tex_Leader is also used for visual mode mappings for fonts.
-				<par/>
-				<blockquote>This is some text which is supposed to be offset widthwise
-					from the rest.</blockquote>
-				<par/>
-				This is a nested table:<par/>
-				<table>
-					<row>
-						<col>11</col>
-						<col>12</col>
-						<col>13</col>
-					</row>
-					<row>
-						<col>21</col>
-						<col>
-							<table>
-								<row>
-									<col>n.11</col><col>n.12</col>
-								</row>
-								<row>
-									<col>n.21</col><col>n.22</col>
-								</row>
-							</table>
-						</col>
-						<col>23</col>
-					</row>
-					<row>
-						<col>31</col>
-						<col>32</col>
-						<col>33</col>
-					</row>
-				</table>
-				<par/>
-				This is another table showing how column widths are calculated
-				intelligently.
-				<par/>
-				<table>
-					<row>
-						<col>field</col>
-						<col>meaning ~</col>
-					</row>
-					<row>
-						<col>-</col> 
-						<col>Left justify the item. The default is right justified
-							when minwid is larger than the length of the item.</col> 
-					</row>
-					<row>
-						<col>0</col>
-						<col>Leading zeroes in numeric items. Overridden by '-'.</col> 
-					</row>
-					<row>
-						<col>minwid</col>
-						<col>Minimum width of the item, padding as set by '-' &amp; '0'.</col> 
-					</row>
-				</table>
-				<br/>
-				<programlisting>" This is an example of a code block.
-augroup LatexSuite
-    au LatexSuiteInitPost :call MyFunc()
-augroup END</programlisting>
-				<br/>
-				<note>This is a note. <br/>And something else is here too. And something else is
-					here too. And something else is here too. And something else is here
-					too. And something else is here too. And something else is here too.
-					And something else is here too. And something else is here too. And
-					something else is here too. And something else is here too.
-				</note>
-				<par/>
-				<list>
-					<item>This is a list in an option. <br/>
-						This is a line after a &lt;br/&gt; in an item.
-					</item>
-					<item>Item 2</item>
-				</list>
-			</desc>
-		</option>
 	</section>
 	<section>
-		<sectiontitle>
-			<name>LATEX MACROS</name>
-			<tag>latex-macros</tag>
-			<tag>ls-macros</tag>
-		</sectiontitle>
+		<title id="latex-suite-macros">Editing text</title>
 		<para>
 			Latex-Suite ships with a very comprehensive set of insert mode and visual mode
 			mappings and menu items to typeset most of the LaTeX elements. 
 		</para>
-		<links>
-			<link>placeholders</link> 
-			<link>placeholder</link>
-			<link>place-holder</link>
-			<link>place-holders</link>
-		</links>
+		<?vimhelp groupanchors?>
+		<anchor id="placeholders"/>
+		<anchor id="placeholder"/>
+		<anchor id="place-holder"/>
+		<anchor id="place-holders"/>
 		<para>
 			All these macros implement Stephen Riem's bracketing system and Gergely
 			Kontra's JumpFunc() for handling place-holders. This consists of using
@@ -196,8 +95,16 @@ augroup END</programlisting>
 			as slowly as you wish. The characters are visible as you type them and you can
 			use the movement or backspace key to correct yourself unlike normal mappings.
 		</note>
+		<section>
+			<title id="latex-suite-macros-1">Editing text Part I</title>
+			This is an arbitrary section
+		</section>
+		<section>
+			<title id="latex-suite-macros-2">Editing text Part II</title>
+			This is an arbitrary section
+		</section>
 	</section>
-</file>
+</article>
 
 <!--
 vim: ts=2:sw=2

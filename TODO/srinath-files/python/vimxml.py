@@ -231,7 +231,7 @@ def handleNote(note, width):
     noteText = handleElement(note, width-len("NOTE: "))
     noteText = VertCatString("NOTE: ", None, noteText)
 
-    return noteText
+    return noteText + "\n"
 
 # }}}
 # handleLineBreak(lbr, width): {{{
@@ -358,6 +358,34 @@ def handleSection(section, width):
         "\n" + header + "\n\n" + text + "\n\n"
 
 # }}}
+# handleMakeTOC(tocpi, width): {{{
+
+tocHash = {}
+lastLabelUsed = 99
+
+def handleMakeTOC(tocpi, width, last):
+    parent = tocpi.parentNode
+    retText = ""
+    sectionsTable = []
+    lastLabelUsed = 99
+
+    for section in parent.getChildrenByTagName('section'):
+        title = section.getChildrenByTagName('title')[0]
+        titleText = IndentParagraphs(GetText(title.childNodes), width)
+        sectionid = title.getAttribute('id')
+
+        lastLabelUsed += 1
+        tocHash[sectionid] =  lastLabelUsed
+
+        retText += '|ls_' + str(lastLabelUsed) + '| ' +  titleText + "\n"
+
+        if section.getChildrenByTagName('section'):
+            firstch = section.getChildrenByTagName('section')[0]
+            childText = handleMakeTOC(firstch, width-5) 
+            retText += VertCatString("    ", 4, childText)
+
+    return retText
+# }}}
 
 ################################################################################
 # A dictionary for mapping xml tags to functions.
@@ -383,6 +411,7 @@ handlerMaps = {
     'link': handleLink,
     'anchor': handleAnchor,
     'groupanchors': handleGroupAnchors,
+    'maketoc': handleMakeTOC,
     'section': handleSection,
     'blockquote': handleBlockQuote,
 }
