@@ -43,4 +43,8 @@ for line in string.split(commit, '\n'):
 
 s = re.sub('\s*$', '\n\n', s)
 s = s + changeLogPrev
-print s
+try:
+	clfp = open(os.environ.get('CVSROOT', '') + '/CVSROOT/ChangeLog', 'w')
+	clfp.write(s)
+else:
+	print 'error writing to log file'
