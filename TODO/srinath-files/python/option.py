@@ -4,7 +4,7 @@ import re
 
 import vimxml
 
-xmlFile = open('latex-suite.xml', 'r')
+xmlFile = open('t2.xml', 'r')
 xmlString = string.join(xmlFile.readlines(), "")
 
 xmlString = re.sub("<\+", "&lt;+", xmlString)

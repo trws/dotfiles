@@ -13,10 +13,14 @@ from domutils import *
 # IsInlineTag(self): {{{
 def IsInlineTag(self):
     if self.nodeType == self.TEXT_NODE \
-        or (
-            self.nodeType == self.ELEMENT_NODE and
-            inlineTags.get(self.tagName, 0)
-           ):
+    or ( \
+        self.nodeType == self.ELEMENT_NODE and \
+        inlineTags.get(self.tagName, 0) \
+       ) \
+    or ( \
+        self.nodeType == self.ELEMENT_NODE \
+        and not handlerMaps.has_key(self.tagName) \
+       ):
         return 1
     else:
         return 0
@@ -48,32 +52,28 @@ def handleElement(rootElement, width=vimformat.TEXT_WIDTH, strict=0):
 
     Generalized function to handle an Element node in a DOM tree.
     """
-    
-    if rootElement.hasAttributes():
-        print "This element has attributes"
-        print rootElement.attributes
 
     retText = ""
     child = rootElement.firstChild
     while not child is None:
 
         # if the child is an Element and if a handler exists, then call it.
-        if not IsInlineTag(child) and child.nodeType == child.ELEMENT_NODE:
-            if handlerMaps.has_key(child.tagName):
-                # offset the child text by the current indentation value
-                retText += handlerMaps[child.tagName](child, width)
-
+        if not IsInlineTag(child) \
+        and child.nodeType == child.ELEMENT_NODE \
+        and handlerMaps.has_key(child.tagName):
+            # offset the child text by the current indentation value
+            retText += handlerMaps[child.tagName](child, width)
             child = child.nextSibling
 
         elif not IsInlineTag(child) \
-            and child.nodeType == child.PROCESSING_INSTRUCTION_NODE \
-            and child.target == 'vimhelp':
+        and child.nodeType == child.PROCESSING_INSTRUCTION_NODE \
+        and child.target == 'vimhelp':
 
             if handlerMaps.has_key(child.data):
                 retText += handlerMaps[child.data](child, width)
 
             child = child.nextSibling
-            
+
         # if its a text node or an inline element node, collect consecutive
         # text nodes into a single paragraph and indent it.
         elif IsInlineTag(child):
@@ -92,6 +92,7 @@ def handleElement(rootElement, width=vimformat.TEXT_WIDTH, strict=0):
             retText += IndentParagraphs(text, width)
 
         else:
+            retText += handleElement(child, width)
             child = child.nextSibling
 
     return retText
