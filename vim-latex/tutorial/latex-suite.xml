@@ -793,7 +793,7 @@ otherinfo = {&ph;}
    <literal>'dict'</literal> setting as described above.
   </para>
   <para>
-   If a <link id="latex-master-file">master-file</link> has been specified,
+   If a <link linkend="latex-master-file">master-file</link> has been specified,
    then it will scan that file instead of the current file. See the section
    <link linkend="custom-packages">Custom Packages</link>
    to see which files &ls; will scan in more detail.
@@ -833,7 +833,8 @@ otherinfo = {&ph;}
     If you use the <literal>$TEXINPUTS</literal> variable in &latex;, and
     you wish &ls; to search these custom packages for
     <literal>\usepackage</literal> lines, then you need to initialize the
-    <literal>g:Tex_TEXINPUTS</literal> variable.
+    <link linkend="Tex_TEXINPUTS"><literal>g:Tex_TEXINPUTS</literal></link>
+    variable.
    </para>
    <para>
     The <literal>g:Tex_TEXINPUTS</literal> variable needs to be set in the
@@ -986,9 +987,10 @@ Command can be also given without prefix:. The result is
    starting with "\label{eqn:" thus allowing you to skip table and figure labels.
   </para>
   <para>
-   The same mechanism also works with citations by pressing &lt;F9&gt; after typing
-   "\cite{". In the case of citations, Latex-suite automatically displays a list
-   of bibliographic entries found in .bib files in the present directory. 
+   The same mechanism also works with citations by pressing &lt;F9&gt;
+   after typing "\cite{". In the case of citations, Latex-suite
+   automatically displays a list of bibliographic entries found in various
+   files in the present directory. 
   </para>
   <para>
    This mechanism in fact works with all commands with "ref" or "cite" in them.
@@ -1046,6 +1048,89 @@ Command can be also given without prefix:. The result is
    You can regulate height of explorer window with g:Tex_ExplorerHeight variable
    (default 10).
   </para>
+  <section id="latex-completion-cite">
+   <title>&ls; <literal>\cite</literal> completion</title>
+   <para>
+    When you press <literal>&lt;F9&gt;</literal> in insert mode after a
+    <literal>\cite{</literal>, &ls; will try to complete it with
+    bibliographic entries.
+   </para>
+   <para>
+    The following logic is applied to find out which bibliographic entries
+    are included in the completion.
+   </para>
+   <orderedlist>
+    <listitem>
+     <para>
+      Firstly, if the present file has a <link
+       linkend="latex-master-file">master-file</link> defined for it, then &ls;
+      will perform the following steps on that file instead of on the
+      current file.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      First, the file is scanned for a <literal>\bibliography</literal>
+      command. To explain better, assume that a command
+      <programlisting>\bibliography{file1,file2}</programlisting> is found
+      in the present file. For each bibliography file, say
+      <literal>file1</literal>, &ls; first tries to see if a
+      <literal>.bib</literal> file, <literal>file1.bib</literal> can be
+      found. If so, it will scan it for bib-keys of the form
+      <literal>@BOOK{</literal> etc., and add these searches to the
+      completion list. If a <literal>.bib</literal> file cannot be found,
+      then it will try to see if <literal>file1.bbl</literal> can be found.
+      If so, &ls; will search it for bib-keys of the form
+      <literal>\bibitem</literal> and add these to the completion list.
+     </para>
+     <para>
+      You can set the location where &ls; will search for
+      <literal>.bib</literal> and <literal>.bbl</literal> files using the
+      <link
+       linkend="Tex_BIBINPUTS"><literal>|Tex_BIBINPUTS|</literal></link>
+      variable.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      If a <literal>\bibliography</literal> command is not found, then &ls;
+      tries to scan the present file for a
+      <literal>\begin{thebibliography}</literal> environment. If found,
+      &ls; searches the present file for bib-keys of the form
+      <literal>\bibitem</literal>.
+     </para>
+    </listitem>
+    <listitem>
+     <para>
+      Finally, it will try to see if this file includes other files
+      via the <literal>\input</literal> command. For each such file found,
+      &ls; will repeat the previous two steps stopping at the first file
+      which has either a <literal>\bibliography</literal> command or a
+      <literal>thebibliography</literal> environment.
+     </para>
+    </listitem>
+   </orderedlist>
+   <section id="cite-search-caching">
+    <title>Caching the <literal>\cite</literal> completion results</title>
+    <anchor id="TClearCiteHist"></anchor>
+    <para>
+     Often times, the editing cycle proceeds by first laying out a
+     comprehensive bibliography and then completing all the
+     <literal>\cite</literal> commands in one session. In such situations,
+     it is inefficient to scan the whole list of bibliography files for
+     bib-keys each time. &ls; provides a way to cache the results of the
+     cite completion search using the <link
+      linkend="Tex_RememberCiteSearch"><literal>Tex_RememberCiteSearch</literal></link>
+     variable. If set, &ls; will perform the search only the first time
+     <literal>&lt;F9&gt;</literal> is used. Next time on, it will reuse the
+     search results. If you wish to redo the search results, issue the
+     command
+     <programlisting>TClearCiteHist</programlisting>
+     This will redo the completion list next time you use
+     <literal>&lt;F9&gt;</literal>.
+    </para>
+   </section>
+  </section>
  </section>
  <section id="latex-compiling">
   <title>Compiling &latex; files via &ls;</title>
@@ -2202,51 +2287,124 @@ endskip = '^\s*\\end{\(enumerate\|itemize\|description\)}'</programlisting>
     </para>
    </section>
   </section>
-  <section id="customizing-latex-referencing">
-   <title>Latex Referencing Customization</title>
+  <section id="customizing-latex-completion">
+   <title>Latex Completion Customization</title>
    <para>
-    The following settings affect the <link linkend="latex-referencing">Latex
-     referencing</link> functionality in &ls;.
+    The following settings affect the <link linkend="latex-completion">
+     completion</link> functionality in &ls;.
    </para>
-   <anchor id="Tex_ViewerPreviewHeight" />
-   <anchor id="Tex_ExplorerHeight" />
-   <anchor id="Tex_ImageDir" />
-   <informaltable frame="all">
-    <tgroup cols="3">
-     <thead>
-      <row>
-       <entry>Setting</entry>
-       <entry>Explanation</entry>
-       <entry>Default Value</entry>
-      </row>
-     </thead>
-     <tbody>
-      <row>
-       <entry><literal>g:Tex_ViewerCwindowHeight</literal></entry>
-       <entry>The height of the <literal>cwindow</literal> which displays the
-        list of <literal>\label</literal>s etc.</entry>
-       <entry>5</entry>
-      </row>
-      <row>
-       <entry><literal>g:Tex_ViewerPreviewHeight</literal></entry>
-       <entry>The height of the preview window which shows the context of a
-        <literal>\label</literal> etc.</entry>
-       <entry>10 </entry>
-      </row>
-      <row>
-       <entry><literal>g:Tex_ExplorerHeight</literal></entry>
-       <entry>The height of the explorer window which lists the files from
-        which to choose an image file.</entry>
-       <entry>10</entry>
-      </row>
-      <row>
-       <entry><literal>g:Tex_ImageDir</literal></entry>
-       <entry>The directory to scan for images</entry>
-       <entry>''</entry>
-      </row>
-     </tbody>
-    </tgroup>
-   </informaltable>
+   <section id="completion-window-preferences">
+    <title>Window size settings</title>
+    <para>
+     These three settings affect the aesthetics of the completion
+     functionality.
+    </para>
+    <anchor id="Tex_ViewerCwindowHeight" />
+    <anchor id="Tex_ViewerPreviewHeight" />
+    <anchor id="Tex_ExplorerHeight" />
+    <anchor id="Tex_ImageDir" />
+    <informaltable frame="all">
+     <tgroup cols="3">
+      <thead>
+       <row>
+        <entry>Setting</entry>
+        <entry>Explanation</entry>
+        <entry>Default Value</entry>
+       </row>
+      </thead>
+      <tbody>
+       <row>
+        <entry><literal>g:Tex_ViewerCwindowHeight</literal></entry>
+        <entry>The height of the <literal>cwindow</literal> which displays the
+         list of <literal>\label</literal>s etc.</entry>
+        <entry>5</entry>
+       </row>
+       <row>
+        <entry><literal>g:Tex_ViewerPreviewHeight</literal></entry>
+        <entry>The height of the preview window which shows the context of a
+         <literal>\label</literal> etc.</entry>
+        <entry>10 </entry>
+       </row>
+       <row>
+        <entry><literal>g:Tex_ExplorerHeight</literal></entry>
+        <entry>The height of the explorer window which lists the files from
+         which to choose an image file.</entry>
+        <entry>10</entry>
+       </row>
+       <row>
+        <entry><literal>g:Tex_ImageDir</literal></entry>
+        <entry>The directory to scan for images</entry>
+        <entry>''</entry>
+       </row>
+      </tbody>
+     </tgroup>
+    </informaltable>
+   </section>
+   <section id="Tex_TEXINPUTS">
+    <title>g:Tex_TEXINPUTS</title>
+    <informaltable frame="all">
+     <tgroup cols="2">
+      <tbody>
+       <row><entry>Type</entry><entry>string</entry></row>
+       <row><entry>Default Value</entry>
+        <entry><literal>''</literal></entry></row>
+      </tbody>
+     </tgroup>
+    </informaltable>
+    <para>
+     This setting describes the directories scanned by &ls; while searching
+     for custom user packages as desribed in the <link
+      linkend="custom-packages">custom packages</link> section. Do not
+     include the present directory in this setting. The present directory
+     is always scanned for custom packages.
+    </para>
+    <para>
+     This string should be set in the syntax accepted by &vim;'s native
+     <literal>'path'</literal> setting.
+    </para>
+   </section>
+   <section id="Tex_BIBINPUTS">
+    <title>g:Tex_BIBINPUTS</title>
+    <informaltable frame="all">
+     <tgroup cols="2">
+      <tbody>
+       <row><entry>Type</entry><entry>string</entry></row>
+       <row><entry>Default Value</entry>
+        <entry><literal>''</literal></entry></row>
+      </tbody>
+     </tgroup>
+    </informaltable>
+    <para>
+     This string describes the directories which are scanned while trying
+     to search for <literal>.bib</literal> and <literal>.bbl</literal>
+     files.  See the <link linkend="latex-completion-cite">cite completion
+      section</link> for more details.
+    </para>
+    <para>
+     This string should be set in the syntax accepted by &vim;'s native
+     <literal>'path'</literal> setting. Do not include the present
+     directory <literal>'.'</literal>. While searching for
+     <literal>bibliography</literal> files, the present directory will be
+     prepended to this variable.
+    </para>
+   </section>
+   <section id="Tex_RememberCiteSearch">
+    <title>g:Tex_RememberCiteSearch</title>
+    <informaltable frame="all">
+     <tgroup cols="2">
+      <tbody>
+       <row><entry>Type</entry><entry>Boolean</entry></row>
+       <row><entry>Default Value</entry>
+        <entry><literal>0</literal></entry></row>
+      </tbody>
+     </tgroup>
+    </informaltable>
+    <para>
+     When this variable is non-zero, then &ls; will try to remember results
+     from the <literal>\cite</literal> completion as described in <link
+      linkend="cite-search-caching">this section</link>.
+    </para>
+   </section>
   </section>
   <section id="compiler-customization">
    <title>Compiler Customization</title>

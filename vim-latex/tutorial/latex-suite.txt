@@ -41,6 +41,7 @@ Homepage: http://vim-latex.sourceforge.net
     |ls_4_1| Custom Packages
     |ls_4_2| Supporting a package
 |ls_5| Latex Completion
+    |ls_5_1| Latex-Suite \cite completion
 |ls_6| Compiling LaTeX files via Latex-Suite
     |ls_6_1| Setting Compilation rules.
     |ls_6_2| Specifying which file to compile
@@ -59,7 +60,7 @@ Homepage: http://vim-latex.sourceforge.net
     |ls_10_1| Place-Holder Customization
     |ls_10_2| Macro Customization
     |ls_10_3| Smart Key Customization
-    |ls_10_4| Latex Referencing Customization
+    |ls_10_4| Latex Completion Customization
     |ls_10_5| Compiler Customization
     |ls_10_6| Viewer Customization
     |ls_10_7| Menu Customization
@@ -685,9 +686,9 @@ Whenever Latex-Suite begins editing a new LaTeX file, it scans it for
 \usepackage{name} lines, and if a supported package is found, then it will
 create sub-menus and add to the 'dict' setting as described above.
 
-If a master-file [||] has been specified, then it will scan that file instead of
-the current file. See the section Custom Packages [|custom-packages|] to see
-which files Latex-Suite will scan in more detail.
+If a master-file [|latex-master-file|] has been specified, then it will scan
+that file instead of the current file. See the section Custom Packages
+[|custom-packages|] to see which files Latex-Suite will scan in more detail.
 
 In addition, the TeX-Suite > Packages menu also contains the following submenus
 
@@ -719,7 +720,7 @@ pointed to by the $TEXINPUTS environment variable.
 
 If you use the $TEXINPUTS variable in LaTeX, and you wish Latex-Suite to search
 these custom packages for \usepackage lines, then you need to initialize the
-g:Tex_TEXINPUTS variable.
+g:Tex_TEXINPUTS [|Tex_TEXINPUTS|] variable.
 
 The g:Tex_TEXINPUTS variable needs to be set in the same format which Vim uses
 for the 'path' setting. This format is explained in detail if you do >
@@ -727,7 +728,7 @@ for the 'path' setting. This format is explained in detail if you do >
 from within Vim.
 
 Therefore the value of g:Tex_TEXINPUTS will most probably be different from
-$TEXINPUTS which your native LaTeX distribution needs.
+$TEXINPUTS which your native LaTeX distribution uses.
 
 Example: >
     let g:Tex_TEXINPUTS = '~/texmf/mypackages/**;./**'
@@ -814,6 +815,7 @@ g:Tex_package_<package>                                               *ls_4_2_2*
 Latex Completion                                              *ls_5*
                                                               *latex-completion*
 
+|ls_5_1| Latex-Suite \cite completion
 
 
 This module provides an easy way to insert references to labels and
@@ -868,7 +870,7 @@ similar, then you can restrict the matches to only equations by first typing
 
 The same mechanism also works with citations by pressing <F9> after typing
 "\cite{". In the case of citations, Latex-suite automatically displays a list of
-bibliographic entries found in .bib files in the present directory.
+bibliographic entries found in various files in the present directory.
 
 This mechanism in fact works with all commands with "ref" or "cite" in them.
 Thus you will get completion with \citen, \citenum or \pageref. If you want to
@@ -914,6 +916,69 @@ uninteresting in current context files.
 
 You can regulate height of explorer window with g:Tex_ExplorerHeight variable
 (default 10).
+
+
+--------------------------------------------------------------------------------
+Latex-Suite \cite completion                             *ls_5_1*
+                                                         *latex-completion-cite*
+|ls_5_1_1| Caching the \cite completion results
+
+When you press <F9> in insert mode after a \cite{, Latex-Suite will try to
+complete it with bibliographic entries.
+
+The following logic is applied to find out which bibliographic entries are
+included in the completion.
+
+
+1. Firstly, if the present file has a master-file [|latex-master-file|] defined
+   for it, then Latex-Suite will perform the following steps on that file
+   instead of on the current file.
+   
+   
+
+2. First, the file is scanned for a \bibliography command. To explain better,
+   assume that a command >
+       \bibliography{file1,file2}
+<  is found in the present file. For each bibliography file, say file1,
+   Latex-Suite first tries to see if a .bib file, file1.bib can be found. If so,
+   it will scan it for bib-keys of the form @BOOK{ etc., and add these searches
+   to the completion list. If a .bib file cannot be found, then it will try to
+   see if file1.bbl can be found. If so, Latex-Suite will search it for bib-keys
+   of the form \bibitem and add these to the completion list.
+   
+   You can set the location where Latex-Suite will search for .bib and .bbl
+   files using the |Tex_BIBINPUTS| [|Tex_BIBINPUTS|] variable.
+   
+   
+
+3. If a \bibliography command is not found, then Latex-Suite tries to scan the
+   present file for a \begin{thebibliography} environment. If found, Latex-Suite
+   searches the present file for bib-keys of the form \bibitem.
+   
+   
+
+4. Finally, it will try to see if this file includes other files via the \input
+   command. For each such file found, Latex-Suite will repeat the previous two
+   steps stopping at the first file which has either a \bibliography command or
+   a thebibliography environment.
+   
+   
+
+
+Caching the \cite completion results                       *ls_5_1_1*
+                                                           *cite-search-caching*
+
+                                                                *TClearCiteHist*
+Often times, the editing cycle proceeds by first laying out a comprehensive
+bibliography and then completing all the \cite commands in one session. In such
+situations, it is inefficient to scan the whole list of bibliography files for
+bib-keys each time. Latex-Suite provides a way to cache the results of the cite
+completion search using the Tex_RememberCiteSearch [|Tex_RememberCiteSearch|]
+variable. If set, Latex-Suite will perform the search only the first time <F9>
+is used. Next time on, it will reuse the search results. If you wish to redo the
+search results, issue the command >
+    TClearCiteHist
+This will redo the completion list next time you use <F9>.
 
 ================================================================================
 Compiling LaTeX files via Latex-Suite                          *ls_6*
@@ -1550,7 +1615,7 @@ Customizing Latex-Suite                                *ls_10*
 |ls_10_1| Place-Holder Customization
 |ls_10_2| Macro Customization
 |ls_10_3| Smart Key Customization
-|ls_10_4| Latex Referencing Customization
+|ls_10_4| Latex Completion Customization
 |ls_10_5| Compiler Customization
 |ls_10_6| Viewer Customization
 |ls_10_7| Menu Customization
@@ -1821,12 +1886,24 @@ same name), which may be set in the language specific package files, such as
 $VIM/ftplugin/latex-suite/packages/german.
 
 --------------------------------------------------------------------------------
-Latex Referencing Customization                  *ls_10_4*
-                                                 *customizing-latex-referencing*
+Latex Completion Customization                    *ls_10_4*
+                                                  *customizing-latex-completion*
+|ls_10_4_1| Window size settings
+|ls_10_4_2| g:Tex_TEXINPUTS
+|ls_10_4_3| g:Tex_BIBINPUTS
+|ls_10_4_4| g:Tex_RememberCiteSearch
 
-The following settings affect the Latex referencing [|latex-referencing|]
-functionality in Latex-Suite.
+The following settings affect the completion [|latex-completion|] functionality
+in Latex-Suite.
 
+
+
+Window size settings                             *ls_10_4_1*
+                                                 *completion-window-preferences*
+
+These three settings affect the aesthetics of the completion functionality.
+
+                                                       *Tex_ViewerCwindowHeight*
                                                        *Tex_ViewerPreviewHeight*
                                                             *Tex_ExplorerHeight*
                                                                   *Tex_ImageDir*
@@ -1842,6 +1919,48 @@ g:Tex_ExplorerHeight         The height of the explorer          10
                              from which to choose an image       
                              file.                               
 g:Tex_ImageDir               The directory to scan for images    ''
+
+
+g:Tex_TEXINPUTS                                                  *ls_10_4_2*
+                                                                 *Tex_TEXINPUTS*
+
+
+Type             string
+Default Value    ''
+
+This setting describes the directories scanned by Latex-Suite while searching
+for custom user packages as desribed in the custom packages [|custom-packages|]
+section. Do not include the present directory in this setting. The present
+directory is always scanned for custom packages.
+
+This string should be set in the syntax accepted by Vim's native 'path' setting.
+
+
+g:Tex_BIBINPUTS                                                  *ls_10_4_3*
+                                                                 *Tex_BIBINPUTS*
+
+
+Type             string
+Default Value    ''
+
+This string describes the directories which are scanned while trying to search
+for .bib and .bbl files. See the cite completion section
+[|latex-completion-cite|] for more details.
+
+This string should be set in the syntax accepted by Vim's native 'path' setting.
+Do not include the present directory '.'. While searching for bibliography
+files, the present directory will be prepended to this variable.
+
+
+g:Tex_RememberCiteSearch                                *ls_10_4_4*
+                                                        *Tex_RememberCiteSearch*
+
+
+Type             Boolean
+Default Value    0
+
+When this variable is non-zero, then Latex-Suite will try to remember results
+from the \cite completion as described in this section [|cite-search-caching|].
 
 --------------------------------------------------------------------------------
 Compiler Customization                                  *ls_10_5*
@@ -2097,7 +2216,7 @@ folds even when this variable is set to zero.
 --------------------------------------------------------------------------------
 Package Handling Customization                            *ls_10_9*
                                                           *customizing-packages*
-|ls_10_9_1| g:Tex_TEXINPUTS
+|ls_10_4_2| g:Tex_TEXINPUTS
 
 Latex-Suite is capable of handling simple projects in which all the source files
 live in a single directory using the *.latexmain [|latex-master-file|] method.
@@ -2106,7 +2225,7 @@ directories, define the g:Tex_TEXINPUTS variable.
 
 
 
-g:Tex_TEXINPUTS                                                  *ls_10_9_1*
+g:Tex_TEXINPUTS                                                  *ls_10_4_2*
                                                                  *Tex_TEXINPUTS*
 
 
