@@ -24,3 +24,5 @@
 *.png -k 'b'
 *.gz -k 'b'
 cscope.files -kb
+*.tgz -k 'b'
+*.zip -k 'b'
