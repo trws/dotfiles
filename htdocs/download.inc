@@ -21,12 +21,16 @@ function GetLatestDevVersion($pat) {
 $latestTgz = GetLatestDevVersion('tar.gz');
 $latestZip = GetLatestDevVersion('zip');
 
+// Find out the modification times and sizes of the latest developement
+// snapshots. The optional argument to round() is the number of decimal
+// places to retain.
 $latestTgzTime = date("F j, Y", filemtime("download/$latestTgz"));
 $latestZipTime = date("F j, Y", filemtime("download/$latestZip"));
-
 $latestTgzSize = round(filesize("download/$latestTgz")/1024,1)." Kb";
-$latestZipSize = round(filesize("download/$latestZip")/1024, 1)." Kb";
+$latestZipSize = round(filesize("download/$latestZip")/1024,1)." Kb";
 
+// This provides an easy way to go from one release to the next. All that
+// will be need to go from release 1.5 to 1.6 is to change the next line.
 $relName = "latexSuite-1.5";
 $relTgz = "$relName.tar.gz";
 $relZip = "$relName.zip";
@@ -41,8 +45,8 @@ $relZipSize = round(filesize("download/$relZip")/1024,1)." Kb";
 <?php
 echo <<<END
 <ul>
-	<li><a href="dowload/$relTgz">$relTgz</a> ($relTgzSize; $relTgzTime)</li>
-	<li><a href="dowload/$relZip">$relZip</a> ($relZipSize; $relZipTime)</li>
+	<li><a href="download/$relTgz">$relTgz</a> ($relTgzSize; $relTgzTime)</li>
+	<li><a href="download/$relZip">$relZip</a> ($relZipSize; $relZipTime)</li>
 </ul>
 END;
 ?>
