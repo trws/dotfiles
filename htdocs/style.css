@@ -162,3 +162,6 @@ DIV.announce {
 	padding: 5px;
 	background-color: #88aaaa;
 }
+LI {
+	padding-top: 5px;
+}
