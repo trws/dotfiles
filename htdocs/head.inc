@@ -16,8 +16,8 @@
 			<p></p>
 			<hr class=navig>
 			<div class=navheader>Documentation</div>
-			<a href="index.php?subject=manual#user-manual&title=Manual">User Manual</a><br>
-			<a href="index.php?subject=manual#latex-reference&title=LaTeX%20Reference">LaTeX Reference</a><br>
+			<a href="index.php?subject=manual&title=Manual#user-manual">User Manual</a><br>
+			<a href="index.php?subject=manual&title=LaTeX%20Reference#latex-reference">LaTeX Reference</a><br>
 			<a href="index.php?subject=faq&title=FAQ">FAQ</a><br>
 			<a href="index.php?subject=comingsoon&title=Tutorial">Tutorial</a><br>
 			<a href="index.php?subject=features&title=Features">Features</a><br>
