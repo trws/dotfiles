@@ -1,14 +1,34 @@
-Latest stable version of latexSuite:
+Latest Release version of latexSuite:
 <ul>
 <li><a href="download/latexSuite.zip">zip</a>
 (<? echo round(filesize("download/latexSuite.zip")/1024,1)." Kb; ";
 	echo date("F j, Y", filemtime("download/latexSuite.zip")).")"; ?>
 </li>
 <li><a href="download/latexSuite.tar.gz">tar.gz</a>
-(<? echo round(filesize("download/latexSuite.tar.gz")/1024,1)." Kb; ";
+(<?php
+	echo round(filesize("download/latexSuite.tar.gz")/1024,1)." Kb; ";
 	echo date("F j, Y", filemtime("download/latexSuite.tar.gz")).")"; ?>
 </li>
 </ul>
+Latest Developement version of Latex-Suite:
+<?php
+include 'timestamp.inc';
+?>
+<ul>
+<li><a
+href=<?echo "download/latexSuite".$lastDate.".zip"?>>latexSuite<?echo $lastDate?>zip</a>
+<? echo "(".round(filesize("download/latexSuite$lastDate.zip")/1024,1)." Kb; ";
+   echo	date("F j, Y", filemtime("download/latexSuite$lastDate.zip")).")";
+?>
+</li>
+<li><a href=<?echo "download/latexSuite".$lastDate.".tar.gz"?>>latexSuite<?echo $lastDate?>.tar.gz</a>
+<?php 
+	echo "(".round(filesize("download/latexSuite$lastDate.tar.gz")/1024,1)." Kb; ";
+	echo date("F j, Y", filemtime("download/latexSuite$lastDate.zip")).")";
+?>
+</li>
+</ul>
+
 <a name=installation>
 <h3>Installation Instructions</h3>
 Extract one of the archives above into your ~/vimfiles directory (if you
