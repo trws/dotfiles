@@ -26,3 +26,4 @@
 cscope.files -kb
 *.tgz -k 'b'
 *.zip -k 'b'
+*.tar -k 'b'
