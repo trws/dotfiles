@@ -434,6 +434,126 @@ SSP for subparagraph</programlisting>
      variable to enable diacritics.</para>
    </note>
   </section>
+  <section id="bibtex-bindings">
+   <title>BibTeX Shortcuts</title>
+   <para>
+    &ls; provides an easy way of entering bibliographic entries. Four
+    insert-mode mappings: <literal>BBB</literal>, <literal>BBL</literal>,
+    <literal>BBH</literal> and <literal>BBX</literal> are provided, all of
+    which essentially act in the same manner. When you type any of these in
+    insert-mode, you will get a prompt asking you to choose a entry type
+    for the bibliographic entry.
+   </para>
+   <para>
+    When you choose an entry type, a bibliographic entry template will be
+    inserted. For example, if you choose the option
+    <literal>'book'</literal> via the map <literal>BBB</literal>, then
+    the following template will be inserted:
+   </para>
+   <programlisting>@BOOK{&lt;+key+&gt;,
+author = {&ph;},
+editor = {&ph;},
+title = {&ph;},
+publisher = {&ph;},
+year = {&ph;},
+otherinfo = {&ph;}
+}&ph;</programlisting>
+    <para>
+     <literal>&lt;key&gt;</literal> will be highlighted in select-mode and
+     you can type in the bib-key. After that you can use
+     <literal>&lt;Ctrl-J&gt;</literal> to navigate to successive locations
+     in the template and enter new values.
+    </para>
+    <para>
+     <literal>BBB</literal> inserts a template with only the fields
+     mandatorily required for a given entry type. <literal>BBL</literal>
+     inserts a template with commony used extra options.
+     <literal>BBH</literal> inserts a template with more options which are
+     not as commonly used. <literal>BBX</literal> inserts a template with
+     all the fields which the entry type supports.
+    </para>
+    <note>
+     <title>Mnemonic</title>
+     <para>
+      <literal>B</literal> for Bibliographic entry, <literal>L</literal>
+      for Large entry, <literal>H</literal> for Huge entry, and
+      <literal>X</literal> stands for all eXtras.
+     </para>
+    </note>
+    <section id="adding-bib-options">
+     <title>Customizing Bib-TeX fields</title>
+     <para>
+      If you wish the <literal>BBB</literal> command to insert a few
+      additional fields in addition to the fields it creates, then you will
+      need to define global variables of the form
+      <programlisting>g:Bib_{type}_options</programlisting>
+      in you <literal>$VIM/ftplugin/bib.vim</literal> file, where
+      <literal>{option}</literal> is a string like
+      <literal>'article'</literal>, <literal>'book'</literal> etc. This
+      variable should contain one of the letters defined in the following
+      table
+     </para>
+     <informaltable frame="all">
+      <tgroup cols="2">
+       <thead>
+        <row>
+         <entry>Character</entry>
+         <entry>Field Type</entry>
+        </row>
+       </thead>
+       <tbody>
+         <row><entry>w</entry><entry>address</entry></row>
+         <row><entry>a</entry><entry>author</entry></row>
+         <row><entry>b</entry><entry>booktitle</entry></row>
+         <row><entry>c</entry><entry>chapter</entry></row>
+         <row><entry>d</entry><entry>edition</entry></row>
+         <row><entry>e</entry><entry>editor</entry></row>
+         <row><entry>h</entry><entry>howpublished</entry></row>
+         <row><entry>i</entry><entry>institution</entry></row>
+         <row><entry>k</entry><entry>isbn</entry></row>
+         <row><entry>j</entry><entry>journal</entry></row>
+         <row><entry>m</entry><entry>month</entry></row>
+         <row><entry>z</entry><entry>note</entry></row>
+         <row><entry>n</entry><entry>number</entry></row>
+         <row><entry>o</entry><entry>organization</entry></row>
+         <row><entry>p</entry><entry>pages</entry></row>
+         <row><entry>q</entry><entry>publisher</entry></row>
+         <row><entry>r</entry><entry>school</entry></row>
+         <row><entry>s</entry><entry>series</entry></row>
+         <row><entry>t</entry><entry>title</entry></row>
+         <row><entry>u</entry><entry>type</entry></row>
+         <row><entry>v</entry><entry>volume</entry></row>
+         <row><entry>y</entry><entry>year</entry></row>
+       </tbody>
+      </tgroup>
+     </informaltable>
+     <para>
+      For example, by default, choosing <literal>'article'</literal> via
+      <literal>BBB</literal> inserts the following template by default
+     </para>
+     <programlisting>
+@ARTICLE{&lt;+key+&gt;,
+author = {&ph;},
+title = {&ph;},
+journal = {&ph;},
+year = {&ph;},
+otherinfo = {&ph;}
+}&ph;</programlisting>
+     However, if <literal>g:Bib_article_options</literal> is defined as
+     <literal>'mnp'</literal>, then <literal>'article'</literal> will
+     insert the following template
+     <programlisting>@ARTICLE{&lt;+key+&gt;,
+author = {&ph;},
+title = {&ph;},
+journal = {&ph;},
+year = {&ph;},
+month = {&ph;},
+number = {&ph;},
+pages = {&ph;},
+otherinfo = {&ph;}
+}&ph;</programlisting>
+    </section>
+  </section>
   <section id="smart-keys">
    <title>Smart Key Mappings</title>
    <para>
@@ -2033,7 +2153,10 @@ endskip = '^\s*\\end{\(enumerate\|itemize\|description\)}'</programlisting>
   <section id="customizing-menus">
    <title>Menu Customization</title>
    <para>
-    The following settings affect how &ls; displays menus
+    In addition to using the variables defined in this section to affect
+    the menu-layout permanently (i.e, the layout &ls; will start with), you
+    can also use the <literal>TeX-Suite > Configure Menu</literal> menu to
+    dynamically configure the menu layout after &ls; has started.
    </para>
    <section id="Tex_Menus">
     <title>g:Tex_Menus</title>
