@@ -28,11 +28,12 @@ href=<?echo "download/latexSuite".$lastDate.".zip"?>>latexSuite<?echo $lastDate?
 ?>
 </li>
 </ul>
+<a href="vimfiles/ftplugin/latex-suite/ChangeLog">ChangeLog</a>
 
 <a name=installation>
 <h2>Installation Instructions</h2>
 
-<h4>Step 1: Download and extract the archives</h4>
+<h4>Step 1 of 4: Download and extract the archives</h4>
 Extract one of the archives above into your <tt>~/vimfiles</tt> directory
 (if you are using windows) or <tt>~/.vim</tt> directory (if you are using
 *nix). 
@@ -43,7 +44,7 @@ installations before reinstalling.</p>
 <a href="#advanced">Advanced Installation Instructions</a> to make sure you
 do not over-write any of your files.</p>
 
-<h4>Step 2: Set a few things in .vimrc</h4>
+<h4>Step 2 of 4: Set a few things in .vimrc</h4>
 Make sure you have the following setting in your .vimrc
 <pre>
 " REQUIRED. This makes vim invoke latex-suite when you open a tex file.
@@ -62,7 +63,7 @@ set grepprg=grep\ -nH\ $*
 filetype indent on
 </pre>
 
-<h4>Step 3: Install the help files</h4>
+<h4>Step 3 of 4: Install the help files</h4>
 To install the included latex-suit.txt and latexhelp.txt files as vim help
 files, start vim and do the following:
 <p>
@@ -70,7 +71,7 @@ files, start vim and do the following:
 <tt>helptags ~/vimfiles/doc</tt>  &nbsp; &nbsp; (for windows users) <br>
 </p>
 
-<h4>Step 4: Done!</h4>
+<h4>Step 4 of 4: Done!</h4>
 Thats it! You are done! Now start editing a latex file in vim. Latex-Suite
 should start up automatically. You can do
 <pre>:help latex-suite.txt</pre>
