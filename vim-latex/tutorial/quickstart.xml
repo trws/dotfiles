@@ -112,11 +112,9 @@
      number, or writing <literal>eqnarray</literal> on the prompt). You
      should get the following inserted into the file:
    </para>
-
    <programlisting>\begin{eqnarray}
     \label{}&ph;
-    \end{eqnarray}&ph;</programlisting>
-
+\end{eqnarray}&ph;</programlisting>
   <para>
     with the cursor between the <literal>{}</literal>. Enter a label. We
     will use <literal>eqn:euler</literal>. After typing in
@@ -163,7 +161,7 @@
 \end{eqnarray}</programlisting>
   </para>
  </section>
- <section>
+ <section id="inserting-reference">
    <title>Inserting a Reference</title>
    <para>
      A necessary part of LaTeX editing is referencing equations, figures,

@@ -616,6 +616,319 @@ SSP for subparagraph</programlisting>
    </informaltable>
   </section>
  </section>
+ <section id="latex-packages">
+  <title>Package Handling</title>
+  <para>
+   This functionality is avaiable via the Tex-Packages menu.
+  </para>
+  <para>
+   When you first invoke &ls;, it scans the
+   <literal>$VIM/ftplugin/latex-suite/packages</literal> directory for
+   package script files and creates a menu from all the files found there.
+   This menu is created under <literal>TeX-Suite > Packages >
+    Supported</literal>. This menu contains a list of packages "supported"
+   by &ls;. When you choose one of the packages from this menu (for example
+   the <literal>amsmath</literal> package), then a line of
+   the form
+   <programlisting>\usepackage[&ph;]{amsmath}&ph;</programlisting>
+   will be inserted into the current file.
+  </para>
+  <para>
+   The <literal>\usepackage</literal> line can also be inserted in an easy
+   manner in the current file by pressing <literal>&lt;F5&gt;</literal>
+   while in the preamble of the current document. This will set up a prompt
+   from the supported packages and ask you to choose from one of them. If
+   you do not find the package you want to insert in the list, you can type
+   in a package-name and it will use that. Pressing
+   <literal>&lt;F5&gt;</literal> in the preamble on a line containing a
+   single word will construct a <literal>\usepackage</literal> line from
+   that word.
+  </para>
+  <para>
+   Once a <literal>\usepackage</literal> line has been constructed in one
+   of the above methods, if possible, the following sub-menus will be
+   created
+   <simplelist>
+    <member><literal>TeX-Suite > Packages > &lt;package&gt; Options</literal></member>
+    <member><literal>TeX-Suite > Packages > &lt;package&gt; Commands</literal></member>
+   </simplelist>
+   where <literal>&lt;package&gt;</literal> is the package you just
+   inserted.
+  </para>
+  <para>
+   In addition to creating these sub-meuns, &ls; will also scan the
+   <literal>$VIM/ftplugin/latex-suite/dictionaries</literal> directory and
+   if a dictionary file corresponding to the package file is found, then
+   it will add the file to the <literal>'dict'</literal> setting in &vim;
+   so you can use the <literal>&lt;C-X&gt;&lt;C-K&gt;</literal> command to
+   complete words from that file.
+  </para>
+  <para>
+   For example, the <literal>SIUnits</literal> package has a custom
+   dictionary.
+  </para>
+  <anchor id="latex-package-scanning" />
+  <para>
+   Whenever &ls; begins editing a new &latex; file, it scans it for
+   <literal>\usepackage{name}</literal> lines, and if a supported package
+   is found, then it will create sub-menus and add to the
+   <literal>'dict'</literal> setting as described above.
+  </para>
+  <para>
+   If a <link id="latex-master-file">master-file</link> has been specified,
+   then it will scan that file instead of the current file.
+  </para>
+  <para>
+   In addition, the <literal>TeX-Suite > Packages</literal> menu also
+   contains the following submenus
+   <formalpara>
+    <title>Update</title>
+    This command is to be invoked with the cursor placed on the package
+    name. If the corresponding package is found, then a sub-menu with the
+    supported commands and options is created.
+   </formalpara>
+   <formalpara>
+    <title>Update All</title>
+    This function reads the preamble of the document for
+    <literal>\usepackage</literal> lines and if &ls; supports the detected
+    packages, then sub-menus containing the package options and commands
+    are created.
+   </formalpara>
+  </para>
+  <section id="custom-packages">
+   <title>Custom Packages</title>
+   <para>
+    Often times, the preamble can become too long, and some people prefer to
+    put most of their personalization in a custom package and include that
+    using a <literal>\usepackage</literal> line. &ls; tries to search such
+    customs package for other <literal>\usepackage</literal> lines, so that
+    supported packages included in this indirect manner can also be used to
+    create sub-menus. The most obvious place to place such custom packages
+    is in the same directory as the edited file. In addition, &latex; also
+    supports placing custom packages in places pointed to by the
+    <literal>$TEXINPUTS</literal> environment variable.
+   </para>
+   <para>
+    If you use the <literal>$TEXINPUTS</literal> variable in &latex;, and
+    you wish &ls; to search these custom packages for
+    <literal>\usepackage</literal> lines, then you need to initialize the
+    <literal>g:Tex_TEXINPUTS</literal> variable.
+   </para>
+   <para>
+    Example:
+    <programlisting>let g:Tex_TEXINPUTS = '.:~/texmf//:'</programlisting>
+    This variable is a semi-colon seperated list of directories to scan for
+    custom packages. <literal>'.'</literal> means the current directory,
+    <literal>~/texmf//</literal> means the <literal>~/texmf</literal>
+    directory and all its subdirectories. The last semicolon means the
+    standard &latex; directories.  
+   </para>
+   <note>
+    <para>
+     As of now, &vim; cannot scan all subdirectories of a given directory
+     more than 1 level deep. Therefore, &ls; will not be able to find all the
+     package files which &latex; might find. Thus although in the above
+     example, &ls; will detect <literal>~/texmf/mypack.sty</literal> and
+     <literal>~/texmfi/mypacks/somepack.sty</literal>, it will not be able
+     to detect <literal>~/texmfi/tex/sty/mypack.sty</literal>.
+    </para>
+   </note>
+  </section>
+  <section id="supporting-packages">
+   <title>Supporting a package</title>
+   <para>
+    Supporting a package is easy and consists of writing a vim script with
+    the same name as the package and placing it in the
+    <literal>$VIM/ftplugin/latex-suite/packages</literal> directory. A
+    package script should define two variables as described in the next two
+    sections.
+   </para>
+   <section>
+    <title><literal>g:Tex_package_option_&lt;package&gt;</literal></title>
+    <para>
+     This setting is a string containing a comma seperated list of options
+     supported by this package.
+    </para>
+    <para>
+     Example:
+     <programlisting>g:Tex_pacakge_option_mypack = 'opt1,opt2=,sbr:group1,opt3,opt4'</programlisting>
+     The <literal>=</literal> suffix means that the option takes a value.
+     Use <literal>sbr:group name</literal> to seperate options into
+     sub-menus. All successive options will be clubbed into the
+     <literal>group1</literal> sub-menu till the next
+     <literal>sbr:</literal> option is encountered.
+    </para>
+   </section>
+   <section>
+    <title><literal>g:Tex_package_&lt;package&gt;</literal></title>
+<programlisting>
+    g:TeX_package_&lt;package&gt; = "pre:Command,pre:Command1"
+More detailed example is in latex-suite/packages/exmpl file (slightly
+outdated).
+Here is short summary of prefixes which can be used in package files:
+(x - place with cursor, &ph; - |placeholder|)
+
+{env:command}  Environment: creates simple environment template
+            \begin{command}
+                x
+            \end{command}&ph;
+{eno:command}  Environment with option:
+            \begin[x]{command}
+                &ph;
+            \end{command}&ph;
+{ens:command[&lt;&lt;option&gt;&gt;]...}  Environment special:
+            \begin[&lt;&lt;option&gt;&gt;]...{command}
+                &ph;
+            \end{command}&ph;
+{bra:command} Brackets:
+            \command{x}&ph;
+{brd:command} Brackets double:
+            \command{x}{&ph;}&ph;
+{brs:command[&lt;&lt;option&gt;&gt;]...} Brackets special (as environment special:
+            \command[&lt;+x+&gt;]{&ph;}{&ph;}&ph;
+{nor:command} Normal:
+            \command&lt;Space
+{noo:command} Normal with option:
+            \command[x]&ph;
+{nob:command} Normal with option and brackets:
+            \command[x]{&ph;}&ph;
+{pla:command} Plain:
+            command&lt;Space
+{spe:command} Special:
+            command   &lt;-literal insertion of command
+{sep:command} creates separator. Good for aesthetics and usability :)
+{sbr:command} Breaks menu into submenus. &lt;command&gt; will be title of submenu.
+            Can be used also in package variable.
+
+Command can be also given without prefix:. The result is
+           \command
+          </programlisting>
+   </section>
+  </section>
+ </section>
+ <section id="latex-completion">
+  <title>Latex Completion</title>
+
+  <para>
+   This module provides an easy way to insert references to labels and
+   bibliographic entries. Suppose you want to refer to an equation which is
+   labelled as "eqn:eq-1" using the \label{eqn:eq-1} command. Somewhere in the
+   text, you write "\ref{" with the cursor after the {. Now if you press &lt;F9&gt;,
+   Latex-suite will try to search through all the .tex files in the present
+   directory for lines beginning with "\label{". It will provide you with a list
+   of all such matches in two small windows.
+  </para>
+
+  <programlisting>
++========================================================+
+| I want to insert a reference to equation 1. Therefore  |
+| I will write \ref{                                     |
+|                                                        |
+|                                                        |
+|                                                        |
+|                                                        |
+|                                                        |
++--------------------------------------------------------+
++file1.tex                                               +
++========================================================+
+|file1.tex|100| \label{eqn:eq-1}                         |
+|file1.tex|110| \label{eqn:eq-2}                         |
+|file2.tex|178| \label{tab:table1}                       |
++--------------------------------------------------------+
++[Error List]                                            +
++========================================================+
+|\begin{equation}                                        |
+|  e^{j*pi} + 1 = 0 \label{eqn:eq-1}                     |
+|\end{equation}                                          |
+|And there was some text after this. I dont remember     |
++--------------------------------------------------------+
++file1.tex [Preview]                                     +
++========================================================+
+  </programlisting>
+  <para>
+   The first window (shown as "[Error List]" above) is a |cwindow| containing a
+   list of matches and you will be left in it. The window beneath it is a
+   |preview-window| showing the context of the match. When you move up and down
+   in the "[Error List]" window, the preview window will be scrolled to keep in
+   sync with the label. Pressing the "J" and "K" keys in the "[Error List]"
+   window scrolls the preview window enabling you to see more context if you
+   desire. After positioning yourself on a label which you want to insert, press
+   CR&gt;. This will automatically close all the new windows, take you back to the
+   file being edited and insert the chosen label in place. Pressing "q" in the
+   "[Error List]" window closes all windows without inserting anything.
+  </para>
+
+  <para>
+   As can be seen above, the matches include everything which begins with \label.
+   If you have the habit of prefixing all equation labels with "eqn:" or
+   something similar, then you can restrict the matches to only equations by
+   first typing "\ref{eqn:" and then pressing &lt;F9&gt;. This only brings up matches
+   starting with "\label{eqn:" thus allowing you to skip table and figure labels.
+  </para>
+
+  <para>
+   The same mechanism also works with citations by pressing &lt;F9&gt; after typing
+   "\cite{". In the case of citations, Latex-suite automatically displays a list
+   of bibliographic entries found in .bib files in the present directory. 
+  </para>
+
+  <para>
+   This mechanism in fact works with all commands with "ref" or "cite" in them.
+   Thus you will get completion with \citen, \citenum or \pageref.  If you want
+   to create your own command which uses cite or ref mechanism make sure proper
+   word is inside it. Example:
+  <programlisting>\newcommand{\pref}[1]{~(p.~\pageref{#1})}</programlisting>
+  </para>
+  <para>
+   F9&gt; works also with normal words. You can use it as: "Its name is tetr&lt;F9&gt;".
+   Now Latex-suite will look in all .tex files in directory of edited file word
+   which is beginning with "tetr". Note: &lt;cr&gt; has here different behavior. It
+   does not try to complete word but moves you to location chosen in cwindow.
+  </para>
+  <para>
+   Under MS-Windows you may need to make additional configuration of 'grepgrg'
+   option. If you have grep program default value "grep -n" doesn't show file
+   names if there is only one matching file. Place
+   <programlisting>set grepprg=grep\ -Hn</programlisting>
+   in your _vimrc.
+  </para>
+  <para>
+   The functionality in this module is also available via three command-line
+   utilities: |TLook|, |TLookBib| and |TLookAll|.
+  </para>
+  <para>
+   You can use the <link
+    linkend="Tex_ViewerCwindowHeight">g:Tex_ViewerCwindowHeight</link> and
+   <link linkend="Tex_ViewerPreviewHeight">g:Tex_ViewerPreviewHeight</link>
+   options in texrc to configure the heights of the "[Error List]" and preview
+   window.
+  </para>
+  <para>
+   Latex-suite is distributed with slightly changed explorer.vim. This
+   modification allows to perform custom operations in explorer buffer.
+  </para>
+  <para>
+   After \includegraphics{&lt;F9&gt; Latex-suite will open explorer buffer with current
+   directory or directory defined with g:Tex_ImageDir variable. When you choose
+   graphic file with &lt;cr&gt; its name will be inserted into file as bib key or
+   label. If g:Tex_ImageDir is set Latex-suite assume you also defined
+   \graphicspath{} command and will insert just file name (without extension). If
+   g:Tex_ImageDir is empty (default) it will put relative path to graphic file.
+  </para>
+  <para>
+   After \bibliography{&lt;F9&gt; Latex-suite will open explorer buffer with current
+   directory. After &lt;cr&gt; name of relative path to chosen file (without extension)
+   will be inserted.
+  </para>
+  <para>
+   In both cases explorer window will open with basic filter. You should not see
+   uninteresting in current context files.
+  </para>
+  <para>
+   You can regulate height of explorer window with g:Tex_ExplorerHeight variable
+   (default 10).
+  </para>
+ </section>
  <section id="latex-compiling">
   <title>Compiling &latex; files via &ls;</title>
   <para>
@@ -737,78 +1050,57 @@ nmap \pdf :call Tex_CompileToPDF()&lt;CR&gt;</programlisting>
   <section id="compiler-output-customization">
    <title>Customizing the compiler output</title>
    <para>
-    Latex-suite ships with a enhanced version of the standard tex compiler
-    plugin maintained by Artem Chuprina. The modifications allow this version
-    to be customizable. i.e the user can set a verbosity level for the
-    compiler.
+    Most &latex; compilers produce a very large amount of output during
+    compilation, most of which is not relevant to debugging type-setting
+    errors. The compiler plugin provided with &ls; (which is an enhanced
+    version of the standard compiler plugin maintained by Artem Chuprina),
+    provides a way to filter the compiler output so that the actual
+    errors/warnings can be presented much more concisely.
    </para>
    <para>
-    By default it is set up in a "non-verbose", "ignore-common-warnings" mode,
-    which means that irrelevant lines from the compilers output will be
-    ignored and also some very common warnings are ignored.
+    The compiler plugin is set up by default to function in a "non-verbose",
+    "ignore-common-warnings" mode, which means that irrelevant lines from the
+    compiler output will be ignored and some very common warnings are also
+    ignored.
+    &ls; does this via the global variable <link
+     linkend="Tex_IgnoredWarnings"><literal>g:Tex_IgnoredWarnings</literal></link>.
+    This is a list of patterns, which can be used to filter out (or ignore)
+    some or the warnings and errors reported by the compiler. See the link
+    above for its default value.
    </para>
    <para>
-    Depending on the "ignore-level", (which can be set with the command TCLevel as
-    described below) the following kinds of messages are ignored.  An ignore level
-    of 3 for instance means that messages of type 1-3 will be ignored. By default,
-    the ignore level is set to 4. (You can change this by setting
-    g:Tex_IgnoreLevel in your .vimrc).
+    &ls; uses the <link
+     linkend="Tex_IgnoreLevel"><literal>g:Tex_IgnoreLevel</literal></link>
+    setting to set a default ignore level. For example, for the default
+    value of 4, &ls; ignores warnings and errors matching the first 4
+    patterns in <literal>g:Tex_IgnoredWarnings</literal>.
    </para>
-   <orderedlist numeration="arabic">
-    <listitem><literal>LaTeX Warning: Underfull box ...</literal></listitem>
-    <listitem><literal>LaTeX Warning: Overfull box ... </literal>
-     both these warnings (very common) are due to \hbox settings not being
-     satisfied nicely.</listitem>
-    <listitem><literal>LaTeX Warning: Specifier 'h' changed to 't'.</literal>
-     This errors occurs when TeX is not able to correctly place a floating
-     object at a specified location, because of which it defaulted to the
-     top of the page.</listitem>
-    <listitem><literal>LaTeX Warning: You have requested ...,</literal>
-     This warning occurs in slitex when using the xypic package.</listitem>
-    <listitem><literal>Missing number error:</literal>
-     Usually, when the name of an included eps file is spelled incorrectly,
-     then the \bb-error message is accompanied by a bunch of "missing
-     number, treated as zero" error messages. This level ignores these
-     warnings.
-    </listitem>
-   </orderedlist>
-   <note>
-    <para>
-     number 5 is actually a LaTeX error, not a warning!
-    </para>
-   </note>
    <para>
-    Use
-   </para>
-   <programlisting>TCLevel &lt;level&gt;</programlisting>
-   <para>
-    where level is a number to set the ignore level dynamically. This will re-do
-    the <literal>'errorformat'</literal> setting in &vim; so that the next
-    time you compile the document, you will not be shown the first
-    <literal>&lt;level&gt;</literal> kinds of warnings/errors. Use "TCLevel 0"
-    to ignore no warnings at all, but still remain in a "non-verbose", i.e
-    ignore unmatched lines mode.
+    In addition to setting a default value of the ignore level, &ls;
+    provides the ability to set the level dynamically, using the
+    <literal>TCLevel</literal> command. For example, if you issue the
+    command:
+    <programlisting>TCLevel 3</programlisting>
+    from within &vim;, then the next time you compile the document, &ls; will
+    ignore warnings and errors which match the first three patterns in
+    <literal>g:Tex_IgnoredWarnings</literal>.
    </para>
    <para>
     When TCLevel is called with the unquoted string strict as follows:
    </para>
    <programlisting>TClevel strict</programlisting>
    <para>
-    then the 'efm' switches to a "verbose", "no-lines-ignored" mode which is
-    useful when you want to make final checks of your document and want to be
-    careful not to let things slip by.
+    then &ls; switches to a "verbose", "no-lines-ignored" mode which is useful
+    when you want to make final checks of your document and want to be careful
+    not to let things slip by.
    </para>
    <para>
-    You can also choose to ignore other kinds of patterns by setting
-    g:IgnoreWarnings in your ~/.vimrc. This is a '¡' seperated list of commands.
-    Its default value is:
+    See the explanation of the settings <link
+     linkend="Tex_IgnoredWarnings">g:Tex_IgnoredWarnings</link> and <link
+     linkend="Tex_IgnoreLevel">g:Tex_IgnoreLevel</link> to find out how to
+    customize the filtering done by &ls;
    </para>
-   <programlisting>let g:Tex_IgnoredWarnings =
-    \'Underfull¡'.
-    \'Overfull¡'.
-    \'specifier changed to¡'.
-    \'You have requested¡'.
-    \'Missing number, treated as zero.'</programlisting>
+
   </section>
   <section id="part-compiling">
    <title>Compiling parts of a file</title>
@@ -835,6 +1127,297 @@ nmap \pdf :call Tex_CompileToPDF()&lt;CR&gt;</programlisting>
     this functionality via the command line.
    </para>
   </section>
+ </section>
+ <section id="latex-viewing">
+  <title>Latex Viewing and Searching</title>
+  <para>
+   If you are usingly commonly used &latex; tools to view output files,
+   then you should be able to view compiled files from within &vim; by
+   simply pressing <literal>\lv</literal>.
+  </para>
+  <note>
+   <para>
+    The viewing function also takes the <literal><link
+      linkend="latex-master-file">*.latexmain</link></literal> file into
+    account to decide which file to show.
+   </para>
+  </note>
+  <para>
+   If pressing <literal>\lv</literal> does not work, then it most probably
+   has to do with incorrect settings of the <literal><link
+     linkend="Tex_ViewRule_format">g:Tex_ViewRule_&lt;format&gt;</link></literal>
+   where <literal>&lt;format&gt;</literal> is the format you are attempting
+   to view. See the link above for how to set this according to your
+   system.
+  </para>
+  <para>
+   In addition to viewing the files, &ls; also supports forward and inverse
+   searching for certain common tools for viewiing DVI documents. At the
+   moment, there is built-in support for YAP on windows (which ships with
+   MikTeX), and the popular <literal>xdvi</literal> on *nix platforms. See
+   the next few sections for details on forward and inverse searching.
+  </para>
+  <section id="forward-searching">
+   <title>Forward Searching DVI documents</title>
+   <para>
+    Forward searching refers to making a DVI viewer display a given document
+    at a given location from within &vim;. At present, this functionality is
+    supported for <literal>YAP</literal> on windows and
+    <literal>xdvi</literal> on *nix machines. Pressing
+    <literal>\ls</literal> from within &vim; should make the DVI viewer
+    display the portion of the document where your cursor is placed.
+   </para>
+   <anchor id="enabling-searching" />
+   <note>
+    <title>Enabling Forward and Inverse Searching</title>
+    <para>
+     Most DVI viewers need "source-special" information in order to do
+     forward (and inverse) searching. This information is embedded in the
+     <literal>dvi</literal> file if the &latex; source is compiled with the
+     <literal>--src-specials</literal> option. By default, &ls; does not
+     supply this argument to the compiler. See the section on
+     <literal><link
+       linkend="Tex_CompileRule_format">g:Tex_CompileRule_dvi</link></literal>
+     to find out how this option can be set.
+    </para>
+   </note>
+  </section>
+  <section id="inverse-searching">
+   <title>Inverse Searching</title>
+   <para>
+    Inverse searching refers to the DVI viewer telling &vim; to display the
+    &latex; source file at a given location when you double-click in the DVI
+    viewer window.
+   </para>
+   <para>
+    You will need to <link linkend="enabling-searching">enable
+     searching</link> in order to use this functionality.
+   </para>
+   <para>
+    You will also need to specify certain settings to the DVI viewer
+    conveying the syntax which it needs to use to tell &vim; how to display
+    the source file. In <literal>YAP</literal>, you can set this option in
+    <literal>View > Options > Inverse Search</literal>. The
+    <literal>Command Line</literal> field needs to be set as follows:
+    <programlisting>"C:\Program Files\vim\vim61\gvim" -c ":RemoteOpen +%l %f"</programlisting>
+    The command <literal>:RemoteOpen</literal> is supplied when you install
+    &ls;.
+   </para>
+   <para>
+    On *nix machines, &ls; attempts to call the DVI viewer in such a way
+    that it already knows how to communicate with &vim;. If this does not
+    seem to be working, you can use the <literal>RemoteOpen</literal>
+    command described above.
+   </para>
+  </section>
+ </section>
+ <section id="latex-folding">
+  <title>Latex Folding</title>
+  <para>
+   Latex-suite ships with the plugin SyntaxFolds.vim which is a plugin for
+   creating "fake" syntax folds on the fly. The fold method is actually manual
+   but the folding is based on &latex; syntax. This offers a speed increase over
+   regular syntax folding. Ofcourse it has the disadvantage that the folds are
+   not dynamic, i.e newly created syntax items are not automatically folded up.
+   (This is a compromise between speed and convinience).
+  </para>
+  <para>
+   When you open up a LaTeX file, all the portions will be automatically folded
+   up. However, no new folds will be created until you press
+   <literal>&lt;F6&gt;</literal> or <literal>\rf</literal>. (rf
+   stands for "refresh folds").
+  </para>
+  <para>
+   The fold-text is set to the first line of the folded text unless the fold is a
+   table, figure etc. (an environment). In this case, if a \caption and/or a
+   label is found in the folded region, then those are used to make a more
+   meaningful fold-tex, otherwise the second line of the environment is displayed
+   along with the name of the environment. In other words, the following
+  </para>
+  <programlisting>\begin{figure}[h]
+    \centerline{\psfig{figure=slidercrank.eps,height=6cm}}
+    \caption{The Slider Crank Mechanism.}
+    \label{fig:slidercrank}
+\end{figure}
+% a LaTeX comment.
+\begin{eqnarray}
+    \sin(\pi) = 0
+\end{eqnarray}</programlisting>
+  <para>
+   will be shown as:
+  </para>
+  <programlisting>+---  5 lines: figure (fig:slidercrank) : The Slider Crank Mechanism. -----
+% a LaTeX comment.
++---  3 lines: eqnarray () : \sin(\pi) = 0 --------------------------------</programlisting>
+ <section id="default-folding">
+  <title>Default Folding Scheme in &ls;</title>
+  <para>
+   By default &ls; creates folds in the following manner:
+  </para>
+  <programlisting>\chapter
+\section
+%%fakesection
+    \subsection
+        \subsubsection
+            \item
+                \equation
+                \eqnarray
+                \figure
+                \table
+                \footnote</programlisting>
+ <para>
+  The indentation shows the "nestedness" of the folding scheme.
+  See the <link linkend="customizing-what-to-fold">next section</link> to
+  see how you can change this scheme.
+ </para>
+ </section>
+ <section id="customizing-what-to-fold">
+  <title>Customizing what to fold</title>
+  <para>
+   At this time, there is no setting available to tweak the folds which are
+   created by &ls;. However, the folds created by &ls; are listed in
+   <literal>$VIM/ftplugin/latex-suite/folding.vim</literal>. You will need
+   to modify the function <literal>MakeTexFolds()</literal> defined in
+   that file to modify the fold syntax. <literal>MakeTexFolds</literal>
+   makes a number of calls to <literal>AddSyntaxFoldItem</literal>. Each
+   such call defines a new "fold item". The order in which these calls are
+   made defines how the folds are nested. For example, if you desire an
+   <literal>figure</literal> environment to be nested within a
+   <literal>section</literal>, then you should define the fold for the
+   <literal>figure</literal> first. The syntax of
+   <literal>AddSyntaxFoldItem</literal> is as follows:
+   <programlisting>AddSyntaxFoldItem(startpat, endpat, startoff, endoff [, startskip, endskip])</programlisting>
+   If the last two arguments are omitted, then they are assumed to default
+   to the empty strings <literal>''</literal>.
+   The explanation for each argument is as follows:
+  </para>
+    <informaltable frame="all">
+     <tgroup cols="2">
+      <thead>
+       <row>
+        <entry>Argument</entry>
+        <entry>Explanation</entry>
+       </row>
+      </thead>
+      <tbody>
+       <row>
+        <entry><literal>startpat</literal></entry>
+        <entry>a line matching this pattern defines
+         the beginning of a fold.
+        </entry>
+       </row>
+       <row>
+        <entry>
+         <literal>endpat</literal>
+        </entry>
+        <entry>
+         a line matching this pattern defines the end of a fold.
+        </entry>
+       </row>
+       <row>
+        <entry><literal>startoff</literal></entry>
+        <entry>
+         this is the offset from the starting line at which folding will
+         actually start
+        </entry>
+       </row>
+       <row>
+        <entry><literal>endoff</literal></entry>
+        <entry>
+         like <literal>startoff</literal>, but gives the offset of the actual fold end from
+         the line satisfying <literal>endpat</literal>.
+         <literal>startoff</literal> and <literal>endoff</literal> are necessary when the folding region does
+         not have a specific end pattern corresponding to a start
+         pattern. for example in latex,
+         <literal>\begin{section}</literal>
+         defines the beginning of a section, but its not necessary to
+         have a corresponding
+         <literal>\end{section}</literal>
+         the section is assumed to end 1 line <emphasis>before</emphasis> another section
+         starts.
+        </entry>
+       </row>
+       <row>
+        <entry>
+         <literal>startskip</literal>  
+        </entry>
+        <entry>
+         A Pattern Which Defines The Beginning Of A "Skipped" Region.
+
+         For example, suppose we define a \itemize fold as follows:
+         <programlisting><literal>startpat</literal> =  '^\s*\\item',
+<literal>endpat</literal> = '^\s*\\item\|^\s*\\end{\(enumerate\|itemize\|description\)}',
+<literal>startoff</literal> = 0,
+<literal>endoff</literal> = -1</programlisting>
+
+         This defines a fold which starts with a line beginning with an
+         <literal>\item</literal> and ending one line before a line beginning with an
+         <literal>\item</literal> or <literal>\end{enumerate}</literal> etc.
+
+         Then, as long as <literal>\item</literal>'s are not nested things are fine.
+         However, once items begin to nest, the fold started by one
+         <literal>\item</literal> can end because of an
+         <literal>\item</literal> in an <literal>\itemize</literal>
+         environment within this <literal>\item</literal>. i.e, the following can happen:
+
+         <programlisting>\begin{itemize}
+\item Some text                         &lt;------- fold will start here
+This item will contain a nested item
+\begin{itemize}                         &lt;----- fold will end here because next line contains \item...
+\item Hello  
+\end{itemize}                           &lt;----- ... instead of here.
+\item Next item of the parent itemize  
+\end{itemize}</programlisting>
+
+         Therefore, in order to completely define a folding item which
+         allows nesting, we need to also define a "skip" pattern.
+         <literal>startskip</literal> and end skip do that.
+         Leave '' when there is no nesting.
+        </entry>
+       </row>
+       <row>
+        <entry>
+         <literal>endskip</literal>  
+        </entry>
+        <entry>
+         the pattern which defines the end of the "skip" pattern for
+         nested folds.
+        </entry>
+       </row>
+      </tbody>
+     </tgroup>
+    </informaltable>
+    <note>
+     <title>Example 1</title>
+     <para>
+      A syntax fold region for the latex section is defined with the
+      following arguments to <literal>AddSyntaxFoldItem</literal>:
+      <programlisting>startpat = "\\section{"
+endpat   = "\\section{"
+startoff = 0
+endoff   = -1
+startskip = ''
+endskip = ''</programlisting>
+      Note that the start and end patterns are thus the same and
+      <literal>endoff</literal> has a negative value to capture the effect
+      of a section ending one line before the next starts.
+     </para>
+    </note>
+    <note>
+     <title>Example 2</title>
+     <para>
+      A syntax fold region for the \itemize environment is:
+      <programlisting>startpat = '^\s*\\item',
+endpat = '^\s*\\item\|^\s*\\end{\(enumerate\|itemize\|description\)}',
+startoff = 0,
+endoff = -1,
+startskip = '^\s*\\begin{\(enumerate\|itemize\|description\)}',
+endskip = '^\s*\\end{\(enumerate\|itemize\|description\)}'</programlisting>
+      Note the use of <literal>startskip</literal> and
+      <literal>endskip</literal> to allow nesting.
+     </para>
+    </note>
+ </section>
  </section>
  <section id="customizing-latex-suite">
   <title>Customizing &ls;</title>

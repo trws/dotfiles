@@ -9,6 +9,16 @@ P {
 	font-family : helvetica, arial, verdana, sans-serif ;
 	vertical-align : top;
 }
+DT { 
+	font-size : 11pt ;
+	font-family : helvetica, arial, verdana, sans-serif ;
+	vertical-align : top;
+}
+LI { 
+	font-size : 12pt ;
+	font-family : helvetica, arial, verdana, sans-serif ;
+	vertical-align : top;
+}
 
 DIV.header { 
 	margin : 0.5cm ;
@@ -18,6 +28,11 @@ DIV.header {
 .note {
 }
 
+TD { 
+	font-size : 11pt ;
+	font-family : helvetica, arial, verdana, sans-serif ;
+	vertical-align : top;
+}
 TD.menu { 
 	text-align : center ;
 	font-family : verdana, helvetica, sans-serif 
@@ -130,11 +145,11 @@ A.extlinks {
 
 TT {
 	font-family: courier,sans-serif; 
-	font-size: small; 
+	font-size: 11pt; 
 }
 PRE.programlisting {
 	font-family: courier,sans-serif; 
-	font-size: small; 
+	font-size: 10pt; 
 	background-color:#eef0f3;
     border-color: #000000;
     border-width: 1px;
