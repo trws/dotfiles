@@ -218,7 +218,7 @@ def blast_mail(subject, people, filestodiff, contextlines, fromhost):
         time.sleep(2)
         # Create the smtp connection to the localhost
         conn = smtplib.SMTP()
-        conn.connect(MAILHOST, MAILPORT)
+        conn.connect()
         user = pwd.getpwuid(os.getuid())[0]
         domain = fromhost or getfqdn()
         author = '%s@%s' % (user, domain)
