@@ -1,0 +1,29 @@
+==============================================================================
+Nov 11 2002:
+
+change the sections around on the web-page. Something like this along the
+left pane:
+
+Documentation
+	User Manual
+	Translated Tex-Info
+	Features
+	FAQ
+
+Download
+	Installation instructions
+	Download individual files
+
+Support
+	Feature Requests
+	Bug Reports
+
+Developers
+	Contributing new stuff
+	Project Administration
+	
+==============================================================================
+Nov 11 2002
+
+Add the smart BS, space and ... functions in the feature list.
+
