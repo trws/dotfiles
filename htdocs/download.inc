@@ -1,16 +1,51 @@
+<?
+/// Returns the latest latexSuite2003.*.tar.gz or .zip file present in the
+// download area.
+function GetLatestDevVersion($pat) {
+	$dir = opendir('download');
+	if (!$dir)
+		return '';
+	
+	$curmodtime = -1;
+	$latestfile = '';
+	while (($file = readdir($dir)) != FALSE) {
+		if (ereg('^latexSuite200.*'.$pat, $file)) {
+			if (filemtime("download/$file") > $curmodtime) {
+				$curmodtime = filemtime("download/$file");
+				$latestfile = $file;
+			}
+		}
+	}
+	return "$latestfile";
+}
+$latestTgz = GetLatestDevVersion('tar.gz');
+$latestZip = GetLatestDevVersion('zip');
+
+$latestTgzTime = date("F j, Y", filemtime("download/$latestTarGz"));
+$latestZipTime = date("F j, Y", filemtime("download/$latestZip"));
+
+$latestTgzSize = round(filesize("download/$latestTarGz")/1024,1)." Kb";
+$latestZipSize = round(filesize("download/$latestZip")/1024, 1)." Kb";
+
+$relName = "latexSuite-1.5";
+$relTgz = "$relName.tar.gz";
+$relZip = "$relName.zip";
+$relTgzTime = date("F j, Y", filemtime("download/$relTgz"));
+$relZipTime = date("F j, Y", filemtime("download/$relZip"));
+$relTgzSize = round(filesize("download/$relTgz")/1024,1)." Kb";
+$relZipSize = round(filesize("download/$relZip")/1024,1)." Kb";
+?>
+
 <div class="announce">
 <b>Latex-suite 1.5</b>:
+<?php
+echo <<<END
 <ul>
-<li><a href="download/latexSuite-1.5.zip">zip</a>
-(<? echo round(filesize("download/latexSuite-1.5.zip")/1024,1)." Kb; ";
-	echo date("F j, Y", filemtime("download/latexSuite-1.5.zip")).")"; ?>
-</li>
-<li><a href="download/latexSuite-1.5.tar.gz">tar.gz</a>
-(<?php
-	echo round(filesize("download/latexSuite-1.5.tar.gz")/1024,1)." Kb; ";
-	echo date("F j, Y", filemtime("download/latexSuite-1.5.tar.gz")).")"; ?>
-</li>
+	<li><a href="dowload/$relTgz">$relTgz</a> ($relTgzSize; $relTgzTime)</li>
+	<li><a href="dowload/$relZip">$relZip</a> ($relZipSize; $relZipTime)</li>
 </ul>
+END;
+?>
 Latex-suite 1.5 is a major re-release of latex-suite containing many
 enhancements and bug-fixes. Read the full announcement <a
 href="download/RELEASE-1.5.txt">here</a>. Please use and report any bugs to
@@ -19,23 +54,14 @@ href="mailto://vim-latex-devel@lists.sourceforge.net">vim-latex-devel</a>.
 </div>
 <p></p>
 Latest Developement version of Latex-Suite:
-<?php
-include 'timestamp.inc';
-?>
+<?
+echo <<<END
 <ul>
-<li><a
-href=<?echo "download/latexSuite".$lastDate.".zip"?>>latexSuite<?echo $lastDate?>.zip</a>
-<? echo "(".round(filesize("download/latexSuite$lastDate.zip")/1024,1)." Kb; ";
-   echo	date("F j, Y", filemtime("download/latexSuite$lastDate.zip")).")";
-?>
-</li>
-<li><a href=<?echo "download/latexSuite".$lastDate.".tar.gz"?>>latexSuite<?echo $lastDate?>.tar.gz</a>
-<?php 
-	echo "(".round(filesize("download/latexSuite$lastDate.tar.gz")/1024,1)." Kb; ";
-	echo date("F j, Y", filemtime("download/latexSuite$lastDate.zip")).")";
-?>
-</li>
+  <li><a href="download/$latestZip">$latestZip</a> ($latestZipSize; $latestZipTime)</li>
+	<li><a href="download/$latestTgz">$latestTgz</a> ($latestTgzSize; $latestTgzTime)</li>
 </ul>
+END;
+?>
 <a href="vimfiles/ftplugin/latex-suite/ChangeLog">ChangeLog</a>
 
 <a name=installation>
