@@ -933,7 +933,6 @@ Command can be also given without prefix:. The result is
  </section>
  <section id="latex-completion">
   <title>Latex Completion</title>
-
   <para>
    This module provides an easy way to insert references to labels and
    bibliographic entries. Suppose you want to refer to an equation which is
@@ -943,7 +942,6 @@ Command can be also given without prefix:. The result is
    directory for lines beginning with "\label{". It will provide you with a list
    of all such matches in two small windows.
   </para>
-
   <programlisting>+========================================================+
 | I want to insert a reference to equation 1. Therefore  |
 | I will write \ref{                                     |
@@ -980,7 +978,6 @@ Command can be also given without prefix:. The result is
    file being edited and insert the chosen label in place. Pressing "q" in the
    "[Error List]" window closes all windows without inserting anything.
   </para>
-
   <para>
    As can be seen above, the matches include everything which begins with \label.
    If you have the habit of prefixing all equation labels with "eqn:" or
@@ -988,13 +985,11 @@ Command can be also given without prefix:. The result is
    first typing "\ref{eqn:" and then pressing &lt;F9&gt;. This only brings up matches
    starting with "\label{eqn:" thus allowing you to skip table and figure labels.
   </para>
-
   <para>
    The same mechanism also works with citations by pressing &lt;F9&gt; after typing
    "\cite{". In the case of citations, Latex-suite automatically displays a list
    of bibliographic entries found in .bib files in the present directory. 
   </para>
-
   <para>
    This mechanism in fact works with all commands with "ref" or "cite" in them.
    Thus you will get completion with \citen, \citenum or \pageref.  If you want
@@ -2745,14 +2740,12 @@ endskip = '^\s*\\end{\(enumerate\|itemize\|description\)}'</programlisting>
     </tbody>
    </tgroup>
   </informaltable>
-
   <para>
    A large number of functions in latex-suite come from various other people.
    Some of those people might have been missed here. Each function should however
    have the author's name/e-mail above it. Thats the more authoritative place to
    check out who has done what.
   </para>
-
   <anchor id="latex-suite-maintainer"></anchor>
   <para>
    The current maintainer(s) of latex-suite is(are)
