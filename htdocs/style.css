@@ -95,3 +95,13 @@ TT {
 	font-size: small; 
 	background-color:#eef0f3
 }
+PRE {
+	font-family: courier,sans-serif; 
+	font-size: small; 
+	background-color:#eef0f3
+}
+SPAN.conflict {
+	font-size : small ;
+	font-family: courier,sans-serif; 
+	color : #DD4444;
+}
