@@ -11,22 +11,21 @@
 
 let s:path = expand('<sfile>:p:h')
 
-if glob(s:path.'/xml.vim')
-	echomsg 'getting here'
+if glob(s:path.'/xml.vim') != ''
 	exec 'so '.s:path.'/xml.vim'
 endif
 
 " maps {{{
 let s:ml = exists('g:mapleader') ? g:mapleader : '\'
 " HTML commands {{{
-call IMAP ('tab'.s:ml, "<table border=2 cellspacing=2 cellpadding=5>\<cr><tr>\<cr>\<tab><td><++></td>\<cr>\<bs></tr>\<cr></table>", 'html')
-call IMAP ('ref'.s:ml, "<a href=\"<++>\"></a>", 'html')
-call IMAP ('ol'.s:ml, "<ol>\<cr><li><++></li>\<cr></ol>", 'html')
-call IMAP ('ul'.s:ml, "<ul>\<cr><li><++></li>\<cr></ul>", 'html')
-call IMAP ('tr'.s:ml, "<tr>\<cr>\<tab><td><++></td>\<cr>\<bs></tr>", 'html')
-call IMAP ('td'.s:ml, "<td><++></td>", 'html')
-call IMAP ('bb'.s:ml, "<b><++></b>", 'html')
-call IMAP ('it'.s:ml, "<i><++></i>", 'html')
+call IMAP ('tab'.s:ml, "<table border=2 cellspacing=2 cellpadding=5>\<cr><tr>\<cr>\<tab><td><++></td>\<cr>\<bs></tr><++>\<cr></table><++>", 'html')
+call IMAP ('ref'.s:ml, "<a href=\"<++>\"></a><++>", 'html')
+call IMAP ('ol'.s:ml, "<ol>\<cr><li><++></li>\<cr></ol><++>", 'html')
+call IMAP ('ul'.s:ml, "<ul>\<cr><li><++></li>\<cr></ul><++>", 'html')
+call IMAP ('tr'.s:ml, "<tr>\<cr>\<tab><td><++></td>\<cr>\<bs></tr><++>", 'html')
+call IMAP ('td'.s:ml, "<td><++></td><++>", 'html')
+call IMAP ('bb'.s:ml, "<b><++></b><++>", 'html')
+call IMAP ('it'.s:ml, "<i><++></i><++>", 'html')
 " }}}
 " HTML greek characters {{{
 call IMAP ('a'.s:ml, "\&alpha;", 'html')
