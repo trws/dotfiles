@@ -42,7 +42,7 @@ s = ''
 for line in string.split(commit, '\n'):
 	if re.match('Bug:|Problem:|Feature:|New:', line):
 		islog = 1
-		s = s + time.strftime('%b-%d-%Y:\n', localtime(time())) + ('* %s (%s):' % (file_header, username)) + '\n'
+		s = s + strftime('%b-%d-%Y:\n', localtime(time())) + ('* %s (%s):' % (file_header, username)) + '\n'
 
 	if re.match('^\s*$', line) is not None:
 		islog = 0
