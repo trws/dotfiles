@@ -180,12 +180,13 @@ augroup END</programlisting>
     \label{fig:<+label+>}
 \end{figure}<++>
 		</programlisting>
-			The text <+eps file+> will be selected and she will be left in |select-mode| so
-			that she can continue typing straight away. After having typed in the file
-			name, she can press Control-J (while still in insert-mode). This will take her
-			directly to the next "place-holder". i.e, the <+caption text+> will be visually
-			selected with vim in select mode again for typing in the caption. This saves
-			on a lot of key presses.
+		The text <+eps file+> will be selected and she will be left in
+		<tag>select-mode</tag> so that she can continue typing straight away.
+		After having typed in the file name, she can press Control-J (while
+		still in insert-mode). This will take her directly to the next
+		"place-holder". i.e, the <+caption text+> will be visually selected
+		with vim in select mode again for typing in the caption. This saves on
+		a lot of key presses.
 		</para>
 		<note>
 			These mappings are are not standard mappings in the sense that only the
