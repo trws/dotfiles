@@ -25,4 +25,4 @@
 # or
 #DEFAULT (echo ""; id; echo %{sVv}; date; cat) >> $CVSROOT/CVSROOT/commitlog
 ^vimfiles $CVSROOT/CVSROOT/syncmail %{sVv} vim-latex-cvs@lists.sourceforge.net
-^testing ($CVSROOT/CVSROOT/processbuginfo %{sVv}; cat $CVSROOT/CVSROOT/ChangeLog  )
+^testing (cat $CVSROOT/CVSROOT/ChangeLog  )
