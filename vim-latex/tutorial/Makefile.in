@@ -1,0 +1,14 @@
+quickstart.html: quickstart.xml
+	java com.icl.saxon.StyleSheet quickstart.xml latex-suite.xsl > quickstart.html
+
+quickstart-chunk.html:
+	cd quickstart && java com.icl.saxon.StyleSheet ../quickstart.xml ../latex-suite-chunk.xsl
+
+latex-suite.html: latex-suite.xml
+	java com.icl.saxon.StyleSheet latex-suite.xml latex-suite.xsl > latex-suite.html
+
+latex-suite-chunk.html: latex-suite.xml
+	@ ( \
+	cd latex-suite && \
+	java com.icl.saxon.StyleSheet ../latex-suite.xml ../latex-suite-chunk.xsl \
+	)
