@@ -133,7 +133,7 @@ which reside in directories containing spaces in their names even if the
 <tt>%PATH%</tt> variable contains the correct directories. In this case,
 you need to change the <tt>g:Tex_ViewRule_format</tt> variable to use the
 full path to the viewer. For example:
-<pre>let g:Tex_ViewRule_pdf = 'c:/Program\ Files/Adobe/Acrobat 5.0/Reader/AcroRd32</pre>
+<pre>let g:Tex_ViewRule_pdf = 'c:/Program\ Files/Adobe/Acrobat 5.0/Reader/AcroRd32'</pre>
 </div>
 </blockquote>
 <a name="faq-4">
