@@ -44,8 +44,22 @@ nothing.
 </div>
 <blockquote>
 <div class=ans>
-This is most probably because the flavor of LaTeX you are using is not
-supported out of the box by latex-suite. You will need to set the value for
+There is a known bug when you have <tt>'shell'</tt> set to <tt>'bash'</tt>
+in win32. This causes gvim to apparently hang when <tt>\ll</tt> is pressed.
+As of now, an elegant solution has not presented itself. There are two
+work-arounds as of now for this problem:
+<ol>
+<li>Unset <tt>shell = bash</tt> from your .vimrc</li>
+<li>Include
+<pre>
+let g:Tex_CompileRule_dvi = 'latex --src-special \\\\nonstopmode \\\\input\\{$*\\}'
+</pre>
+in your <tt>.vimrc</tt> or <tt>ftplugin/tex.vim</tt>. NOTE: There are actually 4 backslashes there.
+</li>
+</ol>
+If you are not on win32 and are still having problems, then it is most
+probably because the flavor of LaTeX you are using is not supported out of
+the box by latex-suite. You will need to set the value for
 <tt>g:Tex_CompileRule_dvi</tt> in your <tt>.vimrc</tt> or
 <tt>ftplugin/tex.vim</tt>. This is a string like the following:
 <pre>
