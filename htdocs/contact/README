@@ -1,0 +1,10 @@
+These files you may use/change/distribute freely.
+Requires PHP.
+
+INSTALL:
+
+Include the form.html file in one of your web pages. Then change the
+$myemail on line 59 in contact.php to the email address you want the
+contact form to be sent to.
+
+USE AT OWN RISK. NO WARRANTIES GIVEN.
