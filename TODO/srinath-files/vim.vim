@@ -1,7 +1,7 @@
 "        File: vim.vim
 "      Author: Srinath Avadhanula
 "     Created: Thu Mar 21 06:00 PM 2002 PST
-" Last Change: Thu Jan 02 11:00 PM 2003 PST
+" Last Change: Fri Jan 03 12:00 AM 2003 PST
 " Description: ftplugin for vim
 " 
 " Installation:
@@ -50,64 +50,5 @@ function! AskVimFunc()
 		\ "endfunction \" }}}"
 		\ )
 endfunction " }}}
-
-" ==============================================================================
-" folding stuff.
-" ============================================================================== 
-" Function: MakeVimFolds (force) {{{
-function! MakeVimFolds(force)
-	if &ft != 'vim'
-		return
-	end
-
-	let b:numFoldItems = 0
-
-	" first priority to markers. ignore every other kind of fold in a marked
-	" region.
-	call AddSyntaxFoldItem (
-		\ '{{{',
-		\ '}}}',
-		\ 0,
-		\ 0,
-		\ '{{{',
-		\ '}}}'
-		\ )
-
-	" havent really come across a good looking vim syntax highlighting scheme.
-	" just stick with markers. for example, this file, imho looks pretty good
-	" with fdm=marker, imo. for another example, look at tex.vim
-	
-	" call AddSyntaxFoldItem (
-	" 	\ '^" \w\+: ',
-	" 	\ '\s*endf\(u\|un\|unc\|unct\|uncti\|unctio\|unction\)',
-	" 	\ 0,
-	" 	\ 0,
-	" 	\ '', ''
-	" 	\ )
-
-	" " call FoldRegions('^" =\{70,}', '^[^"]*$', 1, 0)
-	" call AddSyntaxFoldItem (
-	" 	\ '^" \w\+: ',
-	" 	\ '\s*endf\(u\|un\|unc\|unct\|uncti\|unctio\|unction\)',
-	" 	\ 0,
-	" 	\ 0, '', ''
-	" 	\ )
-
-	" call AddSyntaxFoldItem (
-	" 	\ '^\s*f\(u\|un\|unc\|unct\|uncti\|unctio\|unction\)',
-	" 	\ '\s*endf\(u\|un\|unc\|unct\|uncti\|unctio\|unction\)',
-	" 	\ 0,
-	" 	\ 0, '', ''
-	" 	\ )
-
-	call MakeSyntaxFolds(a:force)
-endfunction
-" }}}
-" set up autocommands for folding {{{
-if mapcheck('<F6>') == ""
-	exe ':nnoremap <buffer> <F6> :call MakeVimFolds(1)<cr>'
-endif
-nnoremap <buffer> <leader>rf :call MakeVimFolds(1)<cr>
-" }}}
 
 " vim600:fdm=marker
