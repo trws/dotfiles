@@ -1,32 +1,28 @@
-<root>
-	<table>
-		<row>
-			<col>11</col>
-			<col>
-Latex-Suite attempts to provide a comprehensive set of tools to view, edit and
-compile LaTeX documents in Vim. Together, they provide tools starting from
-macros to speed up editing LaTeX documents to functions for forward searching
-.dvi documents. Latex-suite has been possible because of the contributions of
-many people. Please see |latex-suite-credits| for a list of people who have
-helped.
-			</col>
-			<col>
-Latex-suite is released under the Vim charityware license. For license and
-conditions of use look at |copyright|. Replace all occurences of ``Vim'' with
-			</col>
-		</row>
-		<row>
-			<col>21 (row 2)</col>
-			<col>
-Latex-suite is released under the Vim charityware license. For license and
-conditions of use look at |copyright|. Replace all occurences of ``Vim'' with
-``Latex-Suite''. The current copyright holders of Latex-Suite are Srinath
-Avadhanula and Mikolaj Machowski.
-			</col>
-			<col>
-Latex-suite is released under the Vim charityware license. For license and
-conditions of use look at |copyright|. Replace all occurences of ``Vim'' with
-			</col>
-		</row>
-	</table>
-</root>
+<file>
+<table>
+    <row><col>22.11</col><col>22.12</col></row>
+    <row>
+        <col>22.21</col><col>22.22</col>
+    </row>
+</table>
+<!--
+<table>
+  <row>
+    <col>11</col>
+    <col>12</col>
+  </row>
+  <row>
+    <col>21</col>
+    <col>
+      <table>
+        <row><col>22.11</col><col>22.12</col></row>
+        <row><col>22.21</col><col>22.22</col></row>
+      </table>
+    </col>    
+  </row>
+</table>
+-->
+</file>
+<!--
+vim:et:sts=2
+-->
