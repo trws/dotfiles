@@ -59,6 +59,7 @@ try:
 	clfp.write(s)
 	clfp.close()
 	print 'successfully wrote log file to [%s]' % CLfname
+	sys.exit(0)
 except:
 	print 'problem opening log file for writing, trying to change permissions...'
 	os.chown(CLfname, '664')
