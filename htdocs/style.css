@@ -155,3 +155,10 @@ A.question:hover {
 	border-top: 0px;	/* Mozilla work-around to eliminate "groove" */
 }
 
+DIV.announce { 
+	font-size: 14px ;
+	font-family: verdana, helvetica, sans-serif ;
+	vertical-align: top ;
+	padding: 5px;
+	background-color: #88aaaa;
+}
