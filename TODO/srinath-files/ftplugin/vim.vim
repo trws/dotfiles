@@ -1,7 +1,7 @@
 "        File: vim.vim
 "      Author: Srinath Avadhanula
 "     Created: Thu Mar 21 06:00 PM 2002 PST
-" Last Change: Fri Jan 03 12:00 AM 2003 PST
+" Last Change: Sun Apr 20 04:00 PM 2003 PDT
 " Description: ftplugin for vim
 " 
 " Installation:
@@ -24,10 +24,6 @@ call IMAP ('while'.s:ml,    "let <++> = <++>\<cr>while <++> <= <++>\<cr><++>\<cr
 call IMAP ('fdesc'.s:ml,    "\"Description: ", 'vim')
 call IMAP ('sec'.s:ml,      "\" \<esc>78a=\<esc>o\" \<cr> \<esc>78i=\<esc>", 'vim')
 call IMAP ('func'.s:ml,     "\<C-r>=AskVimFunc()\<cr>", 'vim')
-call IMAP ('()',     		"(<++>)<++>", 'vim')
-call IMAP ('""',     		"\"<++>\"<++>", 'vim')
-call IMAP ("''",     		"'<++>'<++>", 'vim')
-call IMAP ('<<',            '<+ä+><++>', 'vim')
 " end vim mappings }}}
 " AskVimFunc: asks for function name and sets up template {{{
 " Description: 

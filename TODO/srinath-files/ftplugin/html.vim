@@ -12,6 +12,7 @@
 let s:path = expand('<sfile>:p:h')
 
 if glob(s:path.'/xml.vim')
+	echomsg 'getting here'
 	exec 'so '.s:path.'/xml.vim'
 endif
 
