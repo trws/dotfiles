@@ -6,6 +6,8 @@
 	work for me. My gvim hangs/does nothing.</a></li>
 	<li><a class=question href="#faq-3">Viewing does not seem to work for
 	me.</a></li>
+	<li><a class="question" href="#faq-7">Completion does not work for me
+	on a Microsoft Windows machine.</a></li>
 	<li><a class=question href="#faq-4">After a recent upgrade, whenever I
 	launch gvim I get some python-ish errors</a></li>
 	<li><a class=question href="#faq-5">Typing some European characters
@@ -17,6 +19,7 @@
 	to <tt>``</tt> conversion permanently for certain files?</a></li>
 </ul>
 <h2>Answers</h2>
+
 <a name="faq-1">
 <div class=qa>Q: What are those annoying <tt>«»</tt> characters whenever I
 invoke a mapping?</div>
@@ -48,6 +51,7 @@ If you still do not feel like using placeholders, include
 in your <tt>.vimrc</tt>.
 </div>
 </blockquote>
+
 <a name="faq-2">
 <div class=qa>
 Q: Compiling does not seem to work for me. My gvim hangs/does
@@ -114,6 +118,7 @@ in your <tt>.vimrc</tt> or <tt>ftplugin/tex.vim</tt>. NOTE: There are actually 4
 </ol>
 </div>
 </blockquote>
+
 <a name="faq-3">
 <div class=qa>
 Q: Viewing does not seem to work for me.
@@ -140,6 +145,24 @@ full path to the viewer. For example:
 <pre>let g:Tex_ViewRule_pdf = 'c:/Program\ Files/Adobe/Acrobat 5.0/Reader/AcroRd32'</pre>
 </div>
 </blockquote>
+
+<a name="faq-7">
+<div class=qa>
+Q: Completion does not work for me on a Microsoft Windows machine.
+</div>
+<blockquote>
+<div class=ans>
+You will need to install a good <tt>grep</tt> program to make completion
+work on MS Windows. Latex-suite on windows has been tested with cygwin
+which comes with a port of GNU grep. That works fine. If you do not want to
+install cygwin, then you can install just <tt>grep</tt> from 
+<a href="http://gnuwin32.sourceforge.net/packages/grep.htm">here</a>.
+Make sure that your version of <tt>grep</tt> supports the <tt>-H</tt> flag
+which makes <tt>grep</tt> include the filename even when searching with a
+single filename.
+</div>
+
+</blockquote>
 <a name="faq-4">
 <div class=qa>
 Q: After a recent upgrade, whenever I launch gvim I get some python-ish
@@ -156,6 +179,7 @@ Latex-suite not to use python if your vim returns <tt>1</tt> for
 <tt>g:Tex_UsePython</tt> variable to zero.
 </div>
 </blockquote>
+
 <a name="faq-5">
 <div class=qa>
 Q: Typing some European characters becomes problematic in Latex-suite
@@ -183,6 +207,7 @@ like <tt>&lt;Plug&gt;foo1</tt> etc in the LHS of the mappings (do not use
 the same LHS for all three) to effectively disable any mappings.
 </div>
 </blockquote>
+
 <a name="faq-6">
 <div class=qa>
 Q: Sometimes I need to insert a literal doube quote. But whenever I press
