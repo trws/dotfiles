@@ -5,25 +5,25 @@ if (isset($_GET['subject']))
 	$subject = $_GET['subject'];
 	switch ($subject)
 	{
-		case packages:
+		case 'packages':
 			$pagetitle="Package files";
 		 	break;
-		case screenshots:
+		case 'screenshots':
 			$pagetitle="Screenshots";
 			break;
-		case features:
+		case 'features':
 			$pagetitle="Features";
 			break;
-		case templates:
+		case 'templates':
 			$pagetitle="Templates";
 			break;
-		case links:
+		case 'links':
 			$pagetitle="Links";
 			break;
-		case weare:
+		case 'weare':
 			$pagetitle="We are ...";
 			break;
-		case download:
+		case 'download':
 			$pagetitle="Download";
 			break;
 	}
