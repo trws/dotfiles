@@ -47,4 +47,5 @@ try:
 	clfp = open(os.environ.get('CVSROOT', '') + '/CVSROOT/ChangeLog', 'w')
 	clfp.write(s)
 except:
-	print 'error writing to log file'
+	print '---- Start ChangeLog ----'
+	print s
