@@ -9,7 +9,7 @@ try:
 except ImportError:
 	username = os.getenv('USERNAME')
 
-clfp = open(os.getenv('CVSROOT') + '/CVSROOT/ChangeLog')
+clfp = open(os.environ['CVSROOT'] + '/CVSROOT/ChangeLog')
 changeLogPrev = string.join(clfp.readlines(), '')
 clfp.close();
 
