@@ -1,14 +1,4 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html lang="en">
-<head>
-<meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<title>Contact me</title>
-</head>
-
-<body>
-
-<h3>You submitted</h3>
-
 <blockquote>
 <?
 echo "<b>Name:</b> $name<br>";
@@ -86,5 +76,3 @@ else
 	echo "Please press the back button and fill out the missing fields";
 }
 ?>
-</body>
-</html>

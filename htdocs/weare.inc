@@ -11,7 +11,7 @@ href="http://vim.sourceforge.net/script.php?script_id=39">matchit.vim</a>
 and maintainer of the standard tex ftplugin for vim.</p>
 </blockquote>
 To contact the maintainers for bug reports/feature requests/contributions,
-go <a href="contact/form.html">here</a>.
+go <a href="index.php?subject=contact&title=Contact">here</a>.
 <p>
 <h3>Contributors</h3>
 LaTeX-Suite has been possible because of the contributions of many people. Among
