@@ -88,12 +88,15 @@ help, please first gather the following information:
 	<p></p>
 </li>
 <li>What happens when you do
-	<pre>:call RunLaTeX()</pre>
+	<pre>:call Tex_RunLaTeX()</pre>
 	from the command line? In normal operation conditions, this should
 	spawn a shell command which looks like <tt>Tex_CompileRule_dvi</tt>.
 	The shell should call the latex compiler, which should run without user
 	intervention.  If this gives any errors, <tt>g:Tex_CompileRule_dvi</tt>
-	has not been set properly.<p></p>
+	has not been set properly. If the command above gives an error like
+	<pre>E117: Unknown function: Tex_RunLaTeX()</pre>
+	you are using an older Latex-suite. Upgrade!
+	<p></p>
 </li>
 <li>What is your operating system?<p></p></li>
 <li>What version of latex are you using?<p></p></li>
@@ -113,9 +116,9 @@ problem:
 </li>
 <li>Include
 <pre>
-let g:Tex_CompileRule_dvi = 'latex --src-special \\\\nonstopmode \\\\input\\{$*\\}'
+let g:Tex_CompileRule_dvi = 'latex --src-special --interaction=nonstopmode $*'
 </pre>
-in your <tt>.vimrc</tt> or <tt>ftplugin/tex.vim</tt>. NOTE: There are actually 4 backslashes there.
+in your <tt>.vimrc</tt> or <tt>ftplugin/tex.vim</tt>.
 </li>
 </ol>
 </div>
