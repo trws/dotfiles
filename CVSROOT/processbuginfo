@@ -17,6 +17,7 @@ except IOError:
 	changeLogPrev = ''
 
 commit = sys.stdin.read()
+print 'commit information = [%]' % commit
 
 files = []
 specs = sys.argv[1:][0]
