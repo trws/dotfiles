@@ -58,13 +58,13 @@ formats:
 <a name="latex-reference"></a>
 <h2>LaTeX Reference</h2>
 Latex-Suite comes ships with edition 1.6 of the LaTeX2e documentation
-translated into vim-help format. This file can be downloaded seperately from
+translated into vim-help format. This file can be downloaded separately from
 Latex-Suite <a href="documentation/latexhelp.txt">here</a>. After downloading
 this file to <tt>~/.vim/doc</tt>, you will need to run the <tt>:helptags</tt>
 command from within vim to view LaTeX help from within Vim. 
 <p>
 Click <a href="download/latexhelp.html">here</a> for a quick peek at how this
-might look from within vim. (The colorscheme is ofcourse specific to your
+might look from within vim. (The color-scheme is of course specific to your
 preferences).  
 </p>
 <p>Type <tt>:help helptags</tt> from within Vim for more information</p>.

@@ -14,7 +14,7 @@
 	becomes problematic in Latex-suite because those characters seem to be
 	mapped to something.</a></li>
 	<li><a class=question href="#faq-6">Sometimes I need to insert a
-	literal doube quote. But whenever I press <tt>"</tt>, I get
+	literal double quote. But whenever I press <tt>"</tt>, I get
 	<tt>``</tt>. How do I do get around this? Can I disable the <tt>"</tt>
 	to <tt>``</tt> conversion permanently for certain files?</a></li>
 </ul>
@@ -59,7 +59,7 @@ nothing.
 </div>
 <blockquote>
 <div class=ans>
-If you are using cywin with windows, see <a href=#known_issues>this</a>
+If you are using cygwin with windows, see <a href=#known_issues>this</a>
 for a workaround. If you still face a problem using the compiler and wish
 to contact the <a
 	href="index.php?subject=contact&title=Contact">developers</a> for
@@ -210,13 +210,13 @@ the same LHS for all three) to effectively disable any mappings.
 
 <a name="faq-6">
 <div class=qa>
-Q: Sometimes I need to insert a literal doube quote. But whenever I press
+Q: Sometimes I need to insert a literal double quote. But whenever I press
 <tt>"</tt>, I get <tt>``</tt>. How do I get around this? Can I disable the
 <tt>"</tt> to <tt>``</tt> conversion permanently for certain files?
 </div>
 <blockquote>
 <div class=ans>
-If you only need to insert a <tt>"</tt> occassionally but would like to
+If you only need to insert a <tt>"</tt> occasionally but would like to
 retain the <tt>"</tt> to <tt>``</tt> functionality, then use Vim's
 <tt>&lt;C-v&gt;</tt> functionality.
 <pre>:help i_CTRL-v</pre>

@@ -46,7 +46,7 @@ features:
 <li><a href="documentation/latexhelp.txt">LaTeX help file</a>
 	Latex-suite ships with the standard texinfo file translated into vim
 	help format so that you can get help for common latex commands from
-	within vim.  You can view the html version of this file <a
+	within vim.  You can view the HTML version of this file <a
 	href="download/latexhelp.html">here</a>.  <p></p>
 </li> 
 <li><a href="download/latex-suite.html#latex-dictionary">Dictionary</a> 

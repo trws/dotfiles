@@ -1,6 +1,6 @@
 <p><a href="http://vim.sf.net">Vim</a> is undoubtedly one of the best
 editors ever made. <a href="http://www.latex-project.org/">LaTeX</a> is an
-extremeley powerful, intelligent typesetter. Vim-LaTeX aims at bringing
+extremely powerful, intelligent typesetter. Vim-LaTeX aims at bringing
 together the best of both these worlds.</p> <p>We attempt to provide a
 comprehensive set of tools to view, edit and compile LaTeX documents
 without needing to ever quit Vim. Together, they provide tools starting
