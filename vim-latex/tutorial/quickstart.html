@@ -1,244 +1,230 @@
-<html>
-    <head>
-        <title>A (very) quick start to Latex-Suite</title>
-    </head>
-    <body>
-        <h1>A (very) quick start to Latex-Suite</h1>
-        <h2>First things first</h2>
-        Assuming you have Vim 6.0+ already up and running, follow the
-        instructions <a
-            href="http://vim-latex.sourceforge.net/index.php?subject=download">here</a>
-        to set up Latex-Suite.
-        <br/>
-        <b>Time taken</b>: 2 mins (not including download times)
 
-        <h2>Inserting a template</h2>
-        Start up gvim and begin editing a new file.
-        <pre>e newfile.tex</pre>
-        If the installation went well, you should see a new set of
-        menus appear. Goto <tt>Tex-Suite &gt; Templates</tt>. You will see
-        a number of templates to choose from. For now, choose to insert a
-        template for an article. You should get the following in the main
-        vim window (after possibly a hit-enter prompt)<br/>.
-        <img src=""></img><br/>
-        The cursor is left at a position from where you can start typing
-        straight away. Trying to lessen movement is a recurring theme in
-        Latex-Suite.
-        <h2>Inserting a package</h2>
-        Assume that we are writing a mathematical paper and we want to use
-        the popular amsmath package. We will use some functionality which
-        Latex-Suite provides specifically for including LaTeX packages,
-        providing options etc. Navigate to before the
-        <tt>\begin{document}</tt> line (The portion of the document
-        before the <tt>\begin{document}</tt> is called the
-        <em>preamble</em> in LaTeX). On an empty line in the preamble,
-        press <tt>&lt;F5&gt;</tt>. You should see a prompt asking you to
-        choose from a list of "supported" packages. Type in the number
-        corresponding to the amsmath package. You should see the following
-        line inserted into the vim window
-        <pre>\usepackage[]{amsmath}<++></pre>
-        with the cursor positioned conviniently between the
-        <tt>[]</tt>'s. For now, do not worry about the trailing <tt><++></tt>
-        at the end of this line. Assume we want to provide the
-        <tt>sumlimits</tt> options to amsmath. You can either type in this
-        option manually, or choose from a menu of package options which
-        Latex-Suite automatically creates when you insert a package using
-        <tt>&lt;F5&gt;</tt>.  With the cursor still placed between the
-        <tt>[]</tt>, goto <tt>TeX-Suite &gt; Packages &gt; amsmath
-            Options</tt>. Choose the <tt>sumlimits</tt> option. The package
-        line should get converted to:
-        <pre>\usepackage[sumlimits,]{amsmath}<++></pre>
-        with the cursor before <tt>]</tt>. Press <tt>&lt;C-j&gt;</tt> in
-        insert mode. You will see the cursor jump to the end of the package
-        line and the trailing <tt><++></tt> will dissapear. What just
-        happened?! You had your first taste of <em>Placeholders</em>. Read
-        more about them (later) <a href="">here</a>. In short, pressing
-        <tt>&lt;C-j&gt;</tt> in insert mode takes you to the next
-        <tt><++></tt> in the text.
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+   <title>A (very) quick introduction to Latex-Suite</title><link rel="stylesheet" href="latex-suite.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.61.2"></head><body><div class="article" lang="en"><div class="titlepage"><div><div><h1 class="title"><a id="d0e1"></a>A (very) quick introduction to Latex-Suite</h1></div><div><div class="author"><h3 class="author"><span class="firstname">Srinath</span> <span class="surname">Avadhanula</span></h3><div class="affiliation"><div class="address"><p><tt class="email">&lt;<a href="mailto:srinath AT fastmail DOT fm">srinath&nbsp;AT&nbsp;fastmail&nbsp;DOT&nbsp;fm</a>&gt;</tt></p></div></div></div></div></div><div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt>1 <a href="#installation">Installation</a></dt><dt>2 <a href="#inserting-template">Inserting a template</a></dt><dt>3 <a href="#inserting-package">Inserting a package</a></dt><dt>4 <a href="#insert-environment">Inserting an Environment</a></dt><dd><dl><dt>4.1 <a href="#keyboard-shortcuts">A few keyboard shortcuts</a></dt></dl></dd><dt>5 <a href="#d0e236">Inserting a Reference</a></dt><dt>6 <a href="#compiling">Compiling a document</a></dt><dd><dl><dt>6.1 <a href="#debugging">Debugging LaTeX source files</a></dt></dl></dd><dt>7 <a href="#viewing-dvi">Viewing DVI files</a></dt><dd><dl><dt>7.1 <a href="#forward-searching">Performing forward searches</a></dt><dt>7.2 <a href="#inverse-searching">Performing inverse searches</a></dt></dl></dd></dl></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="installation"></a>1 Installation</h2></div></div><div></div></div><p>
+   Assuming you have Vim 6.0+ already up and running, follow the
+   instructions <a href="http://vim-latex.sourceforge.net/index.php?subject=download" target="_top">here</a>
+   to set up Latex-Suite.
+  </p><p>
+    <span class="emphasis"><em>Time taken</em></span>: 2 mins (not including download times)
+  </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="inserting-template"></a>2 Inserting a template</h2></div></div><div></div></div><p>
+     Start up gvim and begin editing a new file.
+     </p><pre class="programlisting">e newfile.tex</pre><p>
+     If the installation went well, you should see a new set of
+     menus appear. Goto <tt class="literal">Tex-Suite &gt; Templates</tt>. You will see
+     a number of templates to choose from. For now, choose to insert a
+     template for an article. You should get the following in the main
+     vim window (after possibly a hit-enter prompt).
+   </p><img src=""><p>
+     The cursor is left at a position from where you can start typing
+     straight away. Trying to lessen movement is a recurring theme in
+     Latex-Suite.
+   </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="inserting-package"></a>3 Inserting a package</h2></div></div><div></div></div><p>
+     Assume that we are writing a mathematical paper and we want to use the
+     popular amsmath package. We will use some functionality which
+     Latex-Suite provides specifically for including LaTeX packages,
+     providing options etc. Navigate to before the
+     <tt class="literal">\begin{document}</tt> line (The portion of the document
+     before the <tt class="literal">\begin{document}</tt> is called the
+     <span class="emphasis"><em>preamble</em></span> in LaTeX). On an empty line in the
+     preamble, press <tt class="literal">&lt;F5&gt;</tt>. You should see a prompt
+     asking you to choose from a list of "supported" packages. Type in the
+     number corresponding to the amsmath package. You should see the
+     following line inserted into the vim window
+   </p><pre class="programlisting">\usepackage[]{amsmath}&lt;++&gt;</pre><p>
+     with the cursor positioned conviniently between the
+     <tt class="literal">[]</tt>'s. For now, do not worry about the trailing
+     <tt class="literal">&lt;++&gt;</tt> at the end of this line. Assume we want to
+     provide the <tt class="literal">sumlimits</tt> options to amsmath. You can
+     either type in this option manually, or choose from a menu of package
+     options which Latex-Suite automatically creates when you insert a
+     package using <tt class="literal">&lt;F5&gt;</tt>.  With the cursor still
+     placed between the <tt class="literal">[]</tt>, goto <tt class="literal">TeX-Suite &gt;
+       Packages &gt; amsmath Options</tt>. Choose the
+     <tt class="literal">sumlimits</tt> option. The package line should get
+     converted to:
+   </p><pre class="programlisting">\usepackage[sumlimits,]{amsmath}&lt;++&gt;</pre><p>
+     with the cursor before <tt class="literal">]</tt>. Press
+     <tt class="literal">&lt;C-j&gt;</tt> in insert mode. You will see the cursor
+     jump to the end of the package line and the trailing
+     <tt class="literal">&lt;++&gt;</tt> will dissapear. What just happened?! You had
+     your first taste of <span class="emphasis"><em>Placeholders</em></span>. Read more about
+     them (later) <a href="" target="_top">here</a>. In short, pressing
+     <tt class="literal">&lt;C-j&gt;</tt> in insert mode takes you to the next
+     <tt class="literal">&lt;++&gt;</tt> in the text.
+   </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="insert-environment"></a>4 Inserting an Environment</h2></div></div><div></div></div><p>
+     Now let us type in a simple formula in LaTeX. Move back to the body of
+     the document (The portion of the document between
+     <tt class="literal">\begin{document}</tt> and
+     <tt class="literal">\end{document}</tt> is called the body). Type in a few
+     simple sentences and then on an empty line press
+     <tt class="literal">&lt;F5&gt;</tt>. (Remember:
+     <tt class="literal">&lt;F5&gt;</tt> is very useful!) Once again, you will
+     get a prompt, but this time you will be asked to choose an
+     environment.  Several common latex environments are listed. For now,
+     choose the <tt class="literal">eqnarray</tt> option (either by entering the
+     number, or writing <tt class="literal">eqnarray</tt> on the prompt). You
+     should get the following inserted into the file:
+   </p><pre class="programlisting">\begin{eqnarray}
+    \label{}&lt;++&gt;
+    \end{eqnarray}&lt;++&gt;</pre><p>
+    with the cursor between the <tt class="literal">{}</tt>. Enter a label. We
+    will use <tt class="literal">eqn:euler</tt>. After typing in
+    <tt class="literal">eqn:euler</tt>, press <tt class="literal">&lt;C-j&gt;</tt>. This
+    will take you outside the curly-braces.  Another time you used a
+    Placeholder!
+  </p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="keyboard-shortcuts"></a>4.1 A few keyboard shortcuts</h3></div></div><div></div></div><p>
+      Now to type in the famous Euler formula. Our aim is to type
+      </p><pre class="programlisting">e^{j\pi} + 1 &amp;=&amp; 0</pre><p> Instead
+      of typing this blindly, let us use a few shortcuts to reduce
+      movement.  Start out by typing <tt class="literal">e^</tt>. Now instead of
+      typing <tt class="literal">{</tt>, type another <tt class="literal">^</tt>. You
+      will see the <tt class="literal">e^^</tt> change instantly to
+      <tt class="literal">e^{}&lt;++&gt;</tt> with the cursor between
+      <tt class="literal">{}</tt>'s. (The <tt class="literal">^^</tt> changed to
+      <tt class="literal">^{}&lt;++&gt;</tt>.) Continue with the following sequence of
+      letters: <tt class="literal">j`p</tt>. This will change instantly to
+      <tt class="literal">j\pi</tt>. (The <tt class="literal">`p</tt> changed to
+      <tt class="literal">\pi</tt>.) Having typed in all we need to type between
+      the <tt class="literal">{}</tt>'s, press <tt class="literal">&lt;C-j&gt;</tt>.
+      You will pop back out of the curly-braces. Continue typing the rest
+      of the formula. You can use <tt class="literal">==</tt> as a shortcut for
+      <tt class="literal">&amp;=&amp;</tt>. Latex-Suite provides a large number
+      of such shortcuts which should making typing much more fun and fast
+      if you get acquainted with them. A list is provided <a href="" target="_top">here</a>. Definitely spend some time getting a feel for
+      them. Most of them are pretty intuitive like <tt class="literal">`/</tt>
+      for <tt class="literal">\frac{}{}</tt>, <tt class="literal">`8</tt> for
+      <tt class="literal">\infty</tt> etc.
+    </p></div><p>
+    In order to understand the next section better, it will be helpful
+    to have one more <tt class="literal">\label</tt>. Lets use the handy
+    <tt class="literal">&lt;F5&gt;</tt>
+    key to insert another equation. This time something simple like the
+    following will do:
+    </p><pre class="programlisting">\begin{eqnarray}
+  \label{eqn:simple}
+  1 + 1 = 2
+\end{eqnarray}</pre><p>
+  </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="d0e236"></a>5 Inserting a Reference</h2></div></div><div></div></div><p>
+     A necessary part of LaTeX editing is referencing equations, figures,
+     bibliographic entries etc. This is done with the
+     <tt class="literal">\ref</tt> and the <tt class="literal">\cite</tt> commands.
+     Latex-Suite provides an easy way to do this. Somewhere in the body of
+     the document, type in the following sentence
+     </p><pre class="programlisting">This is a reference to (\ref{}).</pre><p>
+     With the cursor between the <tt class="literal">{}</tt> press
+     <tt class="literal">&lt;F9&gt;</tt> in insert mode.  You will notice a
+     selection box opens up as follows
+   </p><img src=""><p>
+     You can scroll up and down in the middle window till you reach the
+     reference you want to insert. Notice how when you scroll in the
+     middle window, the bottom "Preview" window scrolls automatically to
+     show you the location of the current selection. This helps you
+     identify the reference with greater ease because often times,
+     <tt class="literal">\labels</tt> are not descriptive enough or there might be too
+     many of them. To insert the reference, just position the cursor on
+     the relevant line in the middle window and press
+     <tt class="literal">&lt;enter&gt;</tt>. The line which you were editing will change
+     to:
+     </p><pre class="programlisting">This is a reference to (\ref{eqn:euler})</pre><p>
+     and the bottom windows close automatically.
+   </p><p>
+     The <tt class="literal">&lt;F9&gt;</tt> key also works for inserting
+     <tt class="literal">\cite</tt> commands to reference bibliographich entries,
+     inserting file names for the <tt class="literal">\inputgraphics</tt> command
+     and just plain searching for words. Click <a href="" target="_top">here</a>
+     for more information.
+   </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="compiling"></a>6 Compiling a document</h2></div></div><div></div></div><p>
+     Great! We have just created a small latex file. The next step is to
+     make the latex compiler create a .dvi file from it. Compiling via
+     latex-suite is simple. Goto normal mode and press <tt class="literal">\ll</tt>
+     (replace <tt class="literal">\</tt> with whatever <tt class="literal">mapleader</tt> setting you
+     have). This will call the latex compiler. If all goes well, then
+     the focus should return to the vim window. 
+   </p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="debugging"></a>6.1 Debugging LaTeX source files</h3></div></div><div></div></div><p>
+       To illustrate the debugging procedure, let's create a few mistakes
+       in the file:
+       </p><pre class="programlisting">This is a $\mistake$.
+And this is $\another$</pre><p>
+       Now press <tt class="literal">\ll</tt> again. This time you will notice that after
+       compilation finishes, the cursor automatically lands on
+       <tt class="literal">$\mistake$</tt>. In addition, 2 new windows will appear as
+       shown here:
+     </p><img src=""><p>
+       The middle window is an <span class="emphasis"><em>Error List</em></span> window
+       showing you the errors which the latex compiler found. Th bottom
+       window is a <span class="emphasis"><em>Log Preview</em></span> window, which shows you
+       the context of the error made by displaying the relevant portion of
+       the <tt class="literal">.log</tt> file created during the latex
+       compilation procedure. Jump to the <span class="emphasis"><em>Error List</em></span>
+       window and try scrolling around in it using either the <tt class="literal">j,
+         k</tt> keys or the arrow keys. You will notice that the
+       <span class="emphasis"><em>Log Preview</em></span> window scrolls automatically to
+       retain the context of the error you are currently located on. If you
+       press <tt class="literal">&lt;enter&gt;</tt> on any line, you will see the
+       cursor jump to the location of the error. Latex-Suite tries to guess
+       the column location as best as it can so you can continue typing
+       straight away.
+     </p></div><p>
+     Having got a taste for compiling, proceed by deleting the erroneous
+     lines and re-compiling.
+   </p><p>
+     The Latex-Suite compiler is capable of much more including
+     selectively filtering out common errors which you might want to
+     ignore for the moment, compiling parts of a document, setting
+     levels of verbosity in the compiler output etc. See <a href="" target="_top">here</a> for more.
+   </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="viewing-dvi"></a>7 Viewing DVI files</h2></div></div><div></div></div><p>
+     Now that you have compiled your first latex source, its time to
+     view it. Again, this should be pretty simple. Press
+     <tt class="literal">\lv</tt> in normal mode. Depending on your platform, a DVI
+     viewer program should open up and display the dvi file generated in
+     compilation step previously.
+   </p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="forward-searching"></a>7.1 Performing forward searches</h3></div></div><div></div></div><p>
+       If you are using a modern DVI viewer, then it is possible to do what
+       is called forward and inverse searching. However, you will need to
+       customize the standard Latex-Suite distribution in order to utilize
+       this functionality. Type in the following on the command line:
 
-        <h2>Inserting an Environment</h2>
-        Now let us type in a simple formula in LaTeX. Move back to the body
-        of the document (The portion of the document between
-        <tt>\begin{document}</tt> and <tt>\end{document}</tt> is called the
-        body). Type in a few simple sentences and then on an empty line
-        press <tt>&lt;F5&gt;</tt>. (Remember: <tt>&lt;F5&gt;</tt> is very
-        useful!) Once again, you will get a prompt, but this time you will
-        be asked to choose an environment.  Several common latex
-        environments are listed. For now, choose the <tt>eqnarray</tt>
-        option (either by entering the number, or writing <tt>eqnarray</tt>
-        on the prompt). You should get the following inserted into the
-        file:
-        <pre>\begin{eqnarray}
-    \label{}<++>
-\end{eqnarray}<++></pre>
-        with the cursor between the <tt>{}</tt>. Enter a label. We will use
-        <tt>eqn:euler</tt>. After typing in <tt>eqn:euler</tt>, press
-        <tt>&lt;C-j&gt;</tt>. This will take you outside the curly-braces.
-        Another time you used a Placeholder!
-        <h3>A few keyboard shortcuts</h3> 
-        Now to type in the famous Euler formula. Our aim is to type
-        <pre>e^{j\pi} + 1 &amp;=&amp; 0</pre>
-        Instead of typing this blindly, let us use a few shortcuts to
-        reduce movement. Start out by typing <tt>e^</tt>. Now instead of
-        typing <tt>{</tt>, type another <tt>^</tt>. You will see the
-        <tt>e^^</tt> change instantly to <tt>e^{}<++></tt> with the cursor
-        between <tt>{}</tt>'s. (The <tt>^^</tt> changed to
-        <tt>^{}<++></tt>.) Continue with the following sequence of letters:
-        <tt>j`p</tt>. This will change instantly to <tt>j\pi</tt>. (The
-        <tt>`p</tt> changed to <tt>\pi</tt>.) Having typed in all we need
-        to type between the <tt>{}</tt>'s, press <tt>&lt;C-j&gt;</tt>. You
-        will pop back out of the curly-braces. Continue typing the rest of
-        the formula. You can use <tt>==</tt> as a shortcut for
-        <tt>&amp;=&amp;</tt>. Latex-Suite provides a large number of such
-        shortcuts which should making typing much more fun and fast if you
-        get acquainted with them. A list is provided <a
-            href="">here</a>. Definitely spend some time getting a feel for
-        them. Most of them are pretty intuitive like <tt>`/</tt> for
-        <tt>\frac{}{}</tt>, <tt>`8</tt> for <tt>\infty</tt> etc.
-        <p>
-        In order to understand the next section better, it will be helpful
-        to have one more <tt>\label</tt>. Lets use the handy
-        <tt>&lt;F5&gt;</tt>
-        key to insert another equation. This time something simple like
-        <pre>\begin{eqnarray}
-    \label{eqn:simple}
-    1 + 1 = 2
-\end{eqnarray}</pre>
-        will do.
-        </p>
+     </p><pre class="programlisting">:let g:Tex_CompileRule_dvi = 'latex -src-specials -interaction=nonstopmode $*'
+:TCTarget dvi</pre><p>
 
-        <h2>Inserting a Reference</h2>
-        A necessary part of LaTeX editing is referencing equations,
-        figures, bibliographic entries etc. This is done with the
-        <tt>\ref</tt> and the <tt>\cite</tt> commands. Latex-Suite provides
-        an easy way to do this. Somewhere in the body of the document, type
-        in the following sentence
-        <pre>This is a reference to (\ref{}).</pre>
-		With the cursor between the <tt>{}</tt> press <tt>&lt;F9&gt;</tt>
-		in insert mode.  You will notice a selection box opens up as
-		follows
-        <br/>
-        <img></img>
-        <br/>
-        You can scroll up and down in the middle window till you reach the
-        reference you want to insert. Notice how when you scroll in the
-        middle window, the bottom "Preview" window scrolls automatically to
-        show you the location of the current selection. This helps you
-        identify the reference with greater ease because often times,
-        <tt>\labels</tt> are not descriptive enough or there might be too
-        many of them. To insert the reference, just position the cursor on
-        the relevant line in the middle window and press
-        <tt>&lt;enter&gt;</tt>. The line which you were editing will change
-        to
-        <pre>This is a reference to (\ref{eqn:euler})</pre>
-        and the bottom windows close automatically.
-
-        <p>The <tt>&lt;F9&gt;</tt> key also works for inserting
-        <tt>\cite</tt> commands to reference bibliographich entries,
-		inserting file names for the <tt>\inputgraphics</tt> command and
-		just plain searching for words. Click <a href="">here</a> for more
-		information.
-
-		<h2>Compiling a document</h2>
-		Great! We have just created a small latex file. The next step is to
-		make the latex compiler create a .dvi file from it. Compiling via
-		latex-suite is simple. Goto normal mode and press <tt>\ll</tt>
-		(replace <tt>\</tt> with whatever <tt>mapleader</tt> setting you
-		have). This will call the latex compiler. If all goes well, then
-		the focus should return to the vim window. 
-		
-		<h3>Debugging LaTeX source files</h3>
-		To illustrate the debugging procedure, let's create a few mistakes
-		in the file:
-		<pre>This is a $\mistake$.
-And this is $\another$</pre>
-		Now press <tt>\ll</tt> again. This time you will notice that after
-		compilation finishes, the cursor automatically lands on
-		<tt>$\mistake$</tt>. In addition, 2 new windows will appear as
-		shown here:
-		<br/>
-		<img></img>
-		<br/>
-		The middle window is an <em>Error List</em> window showing you the
-		errors which the latex compiler found. Th bottom window is a
-		<em>Log Preview</em> window, which shows you the context of the
-		error made by displaying the relevant portion of the <tt>.log</tt>
-		file created during the latex compilation procedure. Jump to the
-		<em>Error List</em> window and try scrolling around in it using
-		either the <tt>j, k</tt> keys or the arrow keys. You will notice
-		that the <em>Log Preview</em> window scrolls automatically to
-		retain the context of the error you are currently located on. If
-		you press <tt>&lt;enter&gt;</tt> on any line, you will see the
-		cursor jump to the location of the error. Latex-Suite tries to
-		guess the column location as best as it can so you can continue
-		typing straight away.
-		<p>
-		Having got a taste for compiling, proceed by deleting the erroneous
-		lines and re-compiling.
-		</p>
-		<p>
-		The Latex-Suite compiler is capable of much more including
-		selectively filtering out common errors which you might want to
-		ignore for the moment, compiling parts of a document, setting
-		levels of verbosity in the compiler output etc. See <a
-			href="">here</a> for more.
-		</p>
-
-		<h2>Viewing DVI files</h2>
-		Now that you have compiled your first latex source, its time to
-		view it. Again, this should be pretty simple. Press
-		<tt>\lv</tt> in normal mode. Depending on your platform, a DVI
-		viewer program should open up and display the dvi file generated in
-		compilation step previously.
-		<h3>Performing forward searches</h3>
-		<p>
-		If you are using a modern DVI viewer, then it is possible to do
-		what is called forward and inverse searching. However, you will
-		need to customize the standard Latex-Suite distribution in order to
-		utilize this functionality. Type in the following on the command
-		line:
-		<pre>:let g:Tex_CompileRule_dvi = 'latex -src-specials -interaction=nonstopmode $*'
-:TCTarget dvi</pre>
-		Now recompile the latex file by pressing <tt>\ll</tt>. This time,
-		instead of pressing <tt>\lv</tt> to view the file, press
-		<tt>\ls</tt> from within the tex file. If the DVI viewer supports
-		forward searching (most of them do), then the viewer will actually
-		display the portion of the DVI file corresponding to the location
-		where you were editing the tex file.
-		</p>
-		<p>
-		(The reason Latex-Suite does not have this setting by default is
-		that on some systems this causes unpredictable results in the DVI
-		output. If you find the DVI output satisfactory, then you can
-		insert the first of the 2 lines above into your
-		<tt>$VIM/ftplugin/tex.vim</tt> file. <tt>$VIM</tt> is
-		<tt>~/vimfiles</tt> for windows and <tt>~/.vim</tt> for *nix
-		machines).
-		</p>
-		<h3>Performing inverse searches</h3>
-		Most DVI viewers also support inverse searching, whereby you can
-		make the DVI viewer ask vim to display the tex source corresponding
-		to the DVI file being shown. This is extremeley helpful while
-		proofreading large documents.
-		<p>
-		Simply double-click anywhere in the viewer window. If the viewer
-		supports it, then it will attempt to open an editor window at the
-		location corresponding to where you double-clicked. On *nix
-		platforms, Latex-Suite attempts to start the viewer program in such
-		a way that it already knows to use vim to open the tex source. Thus
-		you should see a vim window open up showing the tex file. However,
-		if there is an error, or some other program is used, you will need
-		to tell the viewer program to use gvim as the editor.  On windows
-		platforms, if you use the commonly available
-		<tt>yap</tt> viewer (available as part of the miktex distribution),
-		then this option can be set from <tt>View &gt; Options &gt;
-			Inverse Search</tt>. In the <tt>Command line:</tt> window,
-		write
-		<pre>"C:\Program Files\vim\vim61\gvim" -c ":RemoteOpen +%l %f"</pre>
-		(Customize the path according to where you have installed gvim).
-		If you double click in the view pane now, you will see gvim start
-		up and take you to the relevant portion of the tex file.
-		</p>
-    </body>
-</html>
-
+       Now recompile the latex file by pressing <tt class="literal">\ll</tt>.
+       This time, instead of pressing <tt class="literal">\lv</tt> to view the
+       file, press <tt class="literal">\ls</tt> from within the tex file. If the
+       DVI viewer supports forward searching (most of them do), then the
+       viewer will actually display the portion of the DVI file
+       corresponding to the location where you were editing the tex file.
+     </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title">Note</h3><p>
+         The reason Latex-Suite does not have this setting by default is
+         that on some systems this causes unpredictable results in the DVI
+         output. If you find the DVI output satisfactory, then you can
+         insert the first of the 2 lines above into your
+         <tt class="literal">$VIM/ftplugin/tex.vim</tt> file.
+         <tt class="literal">$VIM</tt> is <tt class="literal">~/vimfiles</tt> for
+         windows and <tt class="literal">~/.vim</tt> for *nix machines.
+       </p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a id="inverse-searching"></a>7.2 Performing inverse searches</h3></div></div><div></div></div><p>
+       Most DVI viewers also support inverse searching, whereby you can
+       make the DVI viewer ask vim to display the tex source corresponding
+       to the DVI file being shown. This is extremeley helpful while
+       proofreading large documents.
+     </p><p>
+       Simply double-click anywhere in the viewer window. If the viewer
+       supports it, then it will attempt to open an editor window at the
+       location corresponding to where you double-clicked. On *nix
+       platforms, Latex-Suite attempts to start the viewer program in such
+       a way that it already knows to use vim to open the tex source. Thus
+       you should see a vim window open up showing the tex file. However,
+       if there is an error, or some other program is used, you will need
+       to tell the viewer program to use gvim as the editor.  On windows
+       platforms, if you use the commonly available <tt class="literal">yap</tt>
+       viewer (available as part of the miktex distribution), then this
+       option can be set from <tt class="literal">View &gt; Options &gt; Inverse
+         Search</tt>. In the <tt class="literal">Command line:</tt> window,
+       write
+     </p><pre class="programlisting">"C:\Program Files\vim\vim61\gvim" -c ":RemoteOpen +%l %f"</pre><p>
+       (Customize the path according to where you have installed gvim).
+       If you double click in the view pane now, you will see gvim start
+       up and take you to the relevant portion of the tex file.
+     </p></div></div></div></body></html>
