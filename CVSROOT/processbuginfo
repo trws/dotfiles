@@ -62,7 +62,7 @@ try:
 	sys.exit(0)
 except:
 	print 'problem opening log file for writing, trying to change permissions...'
-	os.chmod(CLfname, '664')
+	os.chmod(CLfname, 664)
 
 try:
 	clfp = open(CLfname, 'w')

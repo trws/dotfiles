@@ -25,7 +25,8 @@
 # or
 #DEFAULT (echo ""; id; echo %{sVv}; date; cat) >> $CVSROOT/CVSROOT/commitlog
 ^vimfiles $CVSROOT/CVSROOT/syncmail %{sVv} vim-latex-cvs@lists.sourceforge.net
-^testing $CVSROOT/CVSROOT/processbuginfo -c ChangeLog.testing %{sVv}
+# ^testing $CVSROOT/CVSROOT/processbuginfo -c ChangeLog.testing %{sVv}
+^testing (cat $CVSROOT/CVSROOT/ChangeLog.testing)
 
 # did I just find a way to get around the limitation of CVS of not being able
 # to rename files without having CVSROOT access?
