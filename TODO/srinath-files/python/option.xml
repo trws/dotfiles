@@ -19,15 +19,31 @@
     <blockquote>This is some text which is supposed to be offset widthwise
         from the rest.</blockquote>
     <par/>
-    This is a table:<par/>
+    This is a nested table:<par/>
     <table>
         <row>
             <col>11</col>
             <col>12</col>
+            <col>13</col>
         </row>
         <row>
             <col>21</col>
-            <col>22</col>
+            <col>
+                <table>
+                    <row>
+                        <col>n.11</col><col>n.12</col>
+                    </row>
+                    <row>
+                        <col>n.21</col><col>n.22</col>
+                    </row>
+                </table>
+            </col>
+            <col>23</col>
+        </row>
+        <row>
+            <col>31</col>
+            <col>32</col>
+            <col>33</col>
         </row>
     </table>
     <par/>
@@ -54,7 +70,8 @@
         </row>
     </table>
     <br/>
-    <code>augroup LatexSuite
+    <code>" This is an example of a code block.
+augroup LatexSuite
     au LatexSuiteInitPost :call MyFunc()
 augroup END</code>
     <br/>

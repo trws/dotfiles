@@ -1,10 +1,11 @@
 #!/usr/bin/env python
-"""Contains a function to do word-wrapping on text paragraphs."""
+"""Contains functions to do word-wrapping on text paragraphs."""
 
 import string
 import re, random
 import operator
 
+# JustifyLine(line, width): {{{
 def JustifyLine(line, width):
     """Stretch a line to width by filling in spaces at word gaps.
 
@@ -30,6 +31,8 @@ def JustifyLine(line, width):
             return ' '.join(line)
 
 
+# }}}
+# FillParagraphs(text, width=80, justify=0): {{{
 def FillParagraphs(text, width=80, justify=0):
     """Split a text into paragraphs and wrap them to width linelength.
 
@@ -69,6 +72,8 @@ def FillParagraphs(text, width=80, justify=0):
     # return paragraphs separated by two newlines
     return '\n\n'.join(paragraphs)
 
+# }}}
+# IndentParagraphs(text, width=80, indent=0, justify=0): {{{
 def IndentParagraphs(text, width=80, indent=0, justify=0):
     """Indent a paragraph, i.e:
         . left (and optionally right) justify text to given width
@@ -78,18 +83,35 @@ def IndentParagraphs(text, width=80, indent=0, justify=0):
     """
     retText =  re.sub(r"^|\n", "\g<0>" + " "*indent, \
                   FillParagraphs(text, width, justify))
-    retText = re.sub(r"\s+$", '', retText)
+    retText = re.sub(r"\n+$", '', retText)
     return retText
 
 
+# }}}
+# OffsetText(text, indent): {{{
 def OffsetText(text, indent):
     return re.sub("^|\n", "\g<0>" + " "*indent, text)
 
 
-def FormatTable(tableText, ROW_SPACE=2, COL_SPACE = 3, \
-                COL_WIDTH=30, TABLE_WIDTH=80, justify=0):
+# }}}
+# TextWidth(text): {{{
+def TextWidth(text):
     """
-    FormatTable(tableText [, ROW_SPACE=2, COL_SPACE = 3, COL_WIDTH=30])
+    TextWidth(text)
+
+    returns the 'width' of the text, i.e the length of the longest segment
+    in the text not containing new-lines.
+    """
+    return max(map(len, text.split('\n')))
+
+
+# }}}
+# FormatTable(tableText, ROW_SPACE=2, COL_SPACE = 3, \ {{{
+#             COL_WIDTH=30, TABLE_WIDTH=80, justify=0):
+def FormatTable(tableText, ROW_SPACE=2, COL_SPACE = 3, \
+                COL_WIDTH=30, justify=0):
+    """
+    FormatTable(tableText [, ROW_SPACE=2, COL_SPACE = 3, COL_WIDTH=30, justify=0])
         returns string
 
     Given a 2 dimensional array of text as input, produces a plain text
@@ -100,18 +122,18 @@ def FormatTable(tableText, ROW_SPACE=2, COL_SPACE = 3, \
     """
 
     # first find out the max width of the columns
-    # maxlengths is a dictionary, but can be accessed exactly like an
+    # maxwidths is a dictionary, but can be accessed exactly like an
     # array because the keys are integers.
-    maxlengths = {}      
+    maxwidths = {}      
     for row in tableText:
-        lengths = map(len, row)
-        for i in range(len(lengths)):
+        cellwidths = map(TextWidth, row)
+        for i in range(len(cellwidths)):
             # Using: dictionary.get(key, default)
-            maxlengths[i] = max(lengths[i], maxlengths.get(i, -1))
+            maxwidths[i] = max(cellwidths[i], maxwidths.get(i, -1))
     
     # Truncate each of the maximum lengths to the maximum allowed.
-    for i in range(0, len(maxlengths)):
-        maxlengths[i] = min(maxlengths[i], COL_WIDTH)
+    for i in range(0, len(maxwidths)):
+        maxwidths[i] = min(maxwidths[i], COL_WIDTH)
 
     if justify:
         formattedTable = []
@@ -125,12 +147,12 @@ def FormatTable(tableText, ROW_SPACE=2, COL_SPACE = 3, \
     retTableText = ""
     for row in formattedTable:
         rowtext = row[0]
-        width = maxlengths[0]
+        width = maxwidths[0]
         for i in range(1, len(row)):
             rowtext = VertCatString(rowtext, width, " "*COL_SPACE)
             rowtext = VertCatString(rowtext, width + COL_SPACE, row[i])
 
-            width = width + COL_SPACE + maxlengths[i]
+            width = width + COL_SPACE + maxwidths[i]
 
         retTableText += string.join(rowtext, "")
         retTableText += "\n"*ROW_SPACE
@@ -138,6 +160,8 @@ def FormatTable(tableText, ROW_SPACE=2, COL_SPACE = 3, \
     return re.sub(r"\n+$", "", retTableText)
 
 
+# }}}
+# VertCatString(string1, width1, string2): {{{
 def VertCatString(string1, width1, string2):
     """
     VertCatString(string1, width1=None, string2)
@@ -173,44 +197,6 @@ def VertCatString(string1, width1, string2):
 
     return string.join(retlines, "\n")
 
+# }}}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-def _test(width=78, justify=1):
-    """Module test case."""
-        
-    s ="""
-This is some text. This is some text. This is some text. This is some text. This is some text. This is some text. This is some text. This is some text. This is some text. This is some text. This is some text. 
-This is some text. This is some text. This is some text. 
-
-This is some text. This is some text. This is some text. 
-This is some text. This is some text. This is some text. This is some text. This is some text. This is some text. This is some text. This is some text. 
-This is some text. This is some text. 
-This is some text.
-
-This is some text. 
-This is some text. 
-This is some text. This is some text. 
-This is some text. This is some text. This is some text. 
-"""
-    print FillParagraphs(s, width, justify)
-
-if __name__ == '__main__':
-    _test(55,0)
-
-
-# vim:et:sts=4
+# vim:et:sts=4:fdm=marker

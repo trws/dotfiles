@@ -1,51 +1,20 @@
-from textutils import FormatTable
-import xml.dom.minidom
-import string
-import operator
+from textutils import *
+# import string
 
-def getElementsByTagName(self, name):
-	nodeList = []
+table1 = [['a.11', 'a.12'], ['a.21', 'a.22']]
 
-	child = self.firstChild
-	while not child.nextSibling is None:
-		if child.nodeType == child.ELEMENT_NODE and child.nodeName == name:
-			nodeList.append(child)
+fotable1 = FormatTable(table1, ROW_SPACE=1)
 
-		child = child.nextSibling
+table2 = [['11', '12', '13'], 
+          ['21', fotable1, '23'], 
+		  ['31', '32', '33']]
 
-	return nodeList
+fotable2 = FormatTable(table2, ROW_SPACE=1, COL_SPACE=1)
 
-def dom_HandleTable(root):
-	"""
-	dom_HandleTable(root)
+# text1 = '11 12\n21 a.11 a.12\n   a.21 a.22\n31 32'
+# text2 = ' 13\n 23\n\n 33'
+# 
+# print VertCatString(text1, None, text2)
 
-	Given a Document instance, handles the table inside of it.
-
-	NOTE: The document instance will be treated as a single table.
-		  Therefore, if a document contains multiple tables, then this
-		  function needs to be iterated over it.
-
-	      Also, nested tables are not handled.
-	"""
-	text = []
-
-	rows = root.getElementsByTagName('row')
-	print 'found %d rows' % len(rows)
-
-	child = root.firstChild
-	while not child.nextSibling is None:
-		if child.nodeType == child.ELEMENT_NODE and child.nodeName == "row":
-			print "2: getting row"
-
-		child = child.nextSibling
-
-
-if __name__ == '__main__':
-	xml.dom.minidom.Element.getElementsByTagName = getElementsByTagName
-
-	xmlFile = open('table.xml', 'r')
-	xmlString = string.join(xmlFile.readlines(), "")
-	root = xml.dom.minidom.parseString(xmlString).documentElement
-	table = root.getElementsByTagName('table')[0]
-
-	dom_HandleTable(table)
+# print fotable1
+print fotable2
