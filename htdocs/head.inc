@@ -26,8 +26,9 @@
 			<hr class=navig>
 			<div class=navheader>Support</div>
 			<a href="index.php?subject=weare&title=People">We are ...<br>
-			<a href="index.php?subject=comingsoon&title=Feature%20Requests">Feature Requests</a><br>
-			<a href="index.php?subject=comingsoon&title=Bug%20Reports">Bug Reports</a><br>
+			<a
+			href="index.php?subject=contact&title=Contact">Feature
+			Requests <br/>Bug Reports <br/>Mailing List <br/></a><br>
 			<p></p>
 			<a href="index.php?subject=packages&title=Package%20Files">Package files</a><br>
 			<a href="index.php?subject=templates&title=Templates">Templates</a><br>

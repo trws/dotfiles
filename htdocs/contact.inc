@@ -2,7 +2,7 @@
 
 <a
 href="mailto://vim-latex-devel[AT]lists.sourceforge.net">vim-latex-devel[AT]lists.sourceforge.net</a>
-is a list meant for discussing bugs/feature request and other things
+is a list meant for discussing bugs/feature requests and other things
 pertaining to latex-suite. It is <em>not</em> meant to be a developers only
 list as the name might imply. It is a <em>closed</em> list. This means that
 you can only e-mail vim-latex-devel directly if you are subscribed to it.
