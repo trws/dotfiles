@@ -27,3 +27,15 @@ Nov 11 2002
 
 Add the smart BS, space and ... functions in the feature list.
 
+==============================================================================
+Nov 16 2002
+in envmacros.vim:
+
+1. EFI in menu and EFI in maps insert different things.
+2. Introduce a new setting g:Tex_UseMenuWizard in texrc to see if user
+   wants wizard behavior or not.
+3. Change s:Tex_change_environments to also use the
+   s:PromptForEnvironment function.
+4. Put a "Choose Environment" in the environments main menu (which
+   should shortcut to Tex_FastEnvironmentInsert()).
+5. Documentation!!! All these features are presently hidden from user.
