@@ -55,16 +55,15 @@
   <title>Recommended Settings</title>
   <para>
    Latex-Suite works best if you have the following settings in your ~/.vimrc:
-  </para>
   <programlisting>" this line is responsible for loading latex-suite when a .tex file is
 " opened.
 filetype plugin on
 " for automatic indentation specific to LaTeX.
 filetype indent on</programlisting>
+  </para>
   <para>
    In addition, the following settings could go in your ~/.vim/ftplugin/tex.vim
    file:
-  </para>
   <programlisting>" this is mostly a matter of taste. but LaTeX looks good with just a bit
 " of indentation.
 set sw=2
@@ -75,6 +74,7 @@ set iskeyword+=:
 " IMPORTANT: If you are a win32 user, then the following setting is
 " necessary in order to have latex called correctly from within Vim.
 set shellslash</programlisting>
+  </para>
  </section>
  <section id="latex-suite-templates">
   <title>Inserting Templates</title>
@@ -145,13 +145,11 @@ set shellslash</programlisting>
     locations where the next relevant editing has to be done. As an example,
     when you type <literal>EFI</literal> in |insert-mode|, you will get the
     following:
-   </para>
    <programlisting>\begin{figure}[h]
     \centerline{\psfig{figure=&lt;+eps file+&gt;}}
     \caption{&lt;+caption text+&gt;}
     \label{fig:&lt;+label+&gt;}
 \end{figure}&lt;++&gt;</programlisting>
-   <para>
     The text <literal>&lt;+eps file+&gt;</literal> will be selected and
     you will be left in |select-mode| so that you can continue typing
     straight away. After having typed in the file name, you can press
@@ -167,11 +165,10 @@ set shellslash</programlisting>
   </para>
   <section id="insert-mode-environment-mappings">
    <title>Insert-mode Environment Mappings</title>
-   <para> These mappings insert LaTeX "environments" such as:</para>
+   <para> These mappings insert LaTeX "environments" such as:
    <programlisting>\begin{center}
     &ph;
 \end{center}&ph;</programlisting>
-   <para>
     with the cursor left at the first |placeholder|. There are
     various ways of inserting environments into the source file. If
     the environment is a standard latex environment, then latex suite
@@ -214,22 +211,24 @@ set shellslash</programlisting>
      describes this in detail. The sequence of 3 letters generally
      tries to follow the following rules:
     </para>
-    <para>
-     1. All environment mappings begin with <literal>E</literal>
-    </para>
-    <para>
-     2. If the environment can be broken up into 2 distinct words,
-     such as flushright (flush + right), then the next 2 letters
-     are the first letters of the 2 words.  Example:
-     <programlisting>flushleft  (_f_lush + _l_eft)  ---&gt; EFL
+     <orderedlist>
+      <listitem>
+       All environment mappings begin with <literal>E</literal>
+      </listitem>
+      <listitem>
+       If the environment can be broken up into 2 distinct words,
+       such as flushright (flush + right), then the next 2 letters
+       are the first letters of the 2 words.  Example:
+       <programlisting>flushleft  (_f_lush + _l_eft)  ---&gt; EFL
 flushright (_f_lush + _r_ight) ---&gt; EFR
 eqnarray   (_e_qn + _a_rray)   ---&gt; EEA</programlisting>
-     If on the other hand, the environment name cannot be broken
-     up into 2 distinct words, then the next 2 letters are the
-     first 2 letters of the name of the environment.
-     Example:
-     <programlisting>equation (_eq_uation)          ---&gt; EEQ</programlisting>
-    </para>
+       If on the other hand, the environment name cannot be broken
+       up into 2 distinct words, then the next 2 letters are the
+       first 2 letters of the name of the environment.
+       Example:
+       <programlisting>equation (_eq_uation)          ---&gt; EEQ</programlisting>
+      </listitem>
+     </orderedlist>
     <para>
      Unfortunately there are some environments that cannot be
      split in two words and first two letters in name are
@@ -400,8 +399,7 @@ SSP for subparagraph</programlisting>
     <para>
      In addition the visual mode macros are provided:
     </para>
-    <programlisting>
-`(  encloses selection in \left( and \right)
+    <programlisting>`(  encloses selection in \left( and \right)
 `[  encloses selection in \left[ and \right]
 `{  encloses selection in \left\{ and \right\}
 `$  encloses selection in $$ or \[ \] depending on characterwise or
@@ -412,10 +410,8 @@ SSP for subparagraph</programlisting>
    <para>
     These mappings speed up typing European languages which contain diacritic
     characters such as a-umlaut etc. 
-   </para>
    <programlisting>+&lt;l&gt;     expands to \v{&lt;l&gt;}
 =&lt;l&gt;     expands to \'{&lt;l&gt;}</programlisting>
-   <para>
     where <literal>&lt;l&gt;</literal> is an alphabet.
    </para>
    <programlisting>+}       expands to \"{a}
@@ -449,8 +445,7 @@ SSP for subparagraph</programlisting>
     inserted. For example, if you choose the option
     <literal>'book'</literal> via the map <literal>BBB</literal>, then
     the following template will be inserted:
-   </para>
-   <programlisting>@BOOK{&lt;+key+&gt;,
+    <programlisting>@BOOK{&lt;+key+&gt;,
 author = {&ph;},
 editor = {&ph;},
 title = {&ph;},
@@ -458,8 +453,9 @@ publisher = {&ph;},
 year = {&ph;},
 otherinfo = {&ph;}
 }&ph;</programlisting>
+    </para>
     <para>
-     <literal>&lt;key&gt;</literal> will be highlighted in select-mode and
+     <literal>&lt;+key+&gt;</literal> will be highlighted in select-mode and
      you can type in the bib-key. After that you can use
      <literal>&lt;Ctrl-J&gt;</literal> to navigate to successive locations
      in the template and enter new values.
@@ -530,9 +526,7 @@ otherinfo = {&ph;}
      <para>
       For example, by default, choosing <literal>'article'</literal> via
       <literal>BBB</literal> inserts the following template by default
-     </para>
-     <programlisting>
-@ARTICLE{&lt;+key+&gt;,
+      <programlisting>@ARTICLE{&lt;+key+&gt;,
 author = {&ph;},
 title = {&ph;},
 journal = {&ph;},
@@ -552,6 +546,7 @@ number = {&ph;},
 pages = {&ph;},
 otherinfo = {&ph;}
 }&ph;</programlisting>
+     </para>
     </section>
   </section>
   <section id="smart-keys">
@@ -768,13 +763,15 @@ otherinfo = {&ph;}
    Once a <literal>\usepackage</literal> line has been constructed in one
    of the above methods, if possible, the following sub-menus will be
    created
+  </para>
    <simplelist>
     <member><literal>TeX-Suite > Packages > &lt;package&gt; Options</literal></member>
     <member><literal>TeX-Suite > Packages > &lt;package&gt; Commands</literal></member>
    </simplelist>
-   where <literal>&lt;package&gt;</literal> is the package you just
-   inserted.
-  </para>
+   <para>
+    where <literal>&lt;package&gt;</literal> is the package you just
+    inserted.
+   </para>
   <para>
    In addition to creating these sub-meuns, &ls; will also scan the
    <literal>$VIM/ftplugin/latex-suite/dictionaries</literal> directory and
@@ -939,8 +936,7 @@ Command can be also given without prefix:. The result is
    of all such matches in two small windows.
   </para>
 
-  <programlisting>
-+========================================================+
+  <programlisting>+========================================================+
 | I want to insert a reference to equation 1. Therefore  |
 | I will write \ref{                                     |
 |                                                        |
@@ -963,8 +959,7 @@ Command can be also given without prefix:. The result is
 |And there was some text after this. I dont remember     |
 +--------------------------------------------------------+
 +file1.tex [Preview]                                     +
-+========================================================+
-  </programlisting>
++========================================================+</programlisting>
   <para>
    The first window (shown as "[Error List]" above) is a |cwindow| containing a
    list of matches and you will be left in it. The window beneath it is a
@@ -1088,9 +1083,7 @@ Command can be also given without prefix:. The result is
     This information is provided to &ls; via a number of "rules". For each
     format you want to compile to, you need to specify a rule. A rule is
     specified by defining a variable of the form:
-   </para>
-   <programlisting>g:Tex_CompileRule_&lt;format&gt;</programlisting>
-   <para>
+    <programlisting>g:Tex_CompileRule_&lt;format&gt;</programlisting>
     where <literal>&lt;format&gt;</literal> is a string like
     <literal>"pdf"</literal>, <literal>"dvi"</literal> etc.
    </para>
@@ -1207,9 +1200,7 @@ nmap \pdf :call Tex_CompileToPDF()&lt;CR&gt;</programlisting>
    </para>
    <para>
     When TCLevel is called with the unquoted string strict as follows:
-   </para>
    <programlisting>TClevel strict</programlisting>
-   <para>
     then &ls; switches to a "verbose", "no-lines-ignored" mode which is useful
     when you want to make final checks of your document and want to be careful
     not to let things slip by.
