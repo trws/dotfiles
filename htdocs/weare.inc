@@ -8,15 +8,15 @@ and few other scripts for VIM.</p>
 <p><b>Mikolaj Machowski</b> <tt><a
 href="mailto:mikmach@wp.pl">&lt;mikmach@wp.pl&gt;</a></tt> -- ``author'' of
 LaTeXhelp for VIM (which is bundled with vim-latexSuite).</p>
+<p><b>Benji Fisher</b> -- author of <a
+href="http://vim.sourceforge.net/script.php?script_id=39">matchit.vim</a>
+and maintainer of the standard tex ftplugin for vim.</p>
 </blockquote>
 <p>
 <h3>Contributors</h3>
 LaTeX-Suite has been possible because of the contributions of many people. Among
 them:</p>
 <blockquote>
-<b>Benji Fisher</b> -- a large number of functions, environments and valuable
-                    guidance. (You'll see the name often if you browse the
-                    files).<br>
 <b>Lubomir Host</b> -- provided the diacritics and also helped in development.<br>
 <b>Alexander Wagner</b> -- valuable suggestions during development.<br>
 <b>Luc Hermitte</b> -- his variation of Stephen Riehm's bracketing system is used
@@ -32,5 +32,8 @@ them:</p>
                     typing visual mode mappings so much easier and error-free.<br>
 <b>Alan G Isac</b> -- for the comprehensive BibT() function for entering bibtex
                     entries.<br>
-<b>Gontran Baerts</b> -- for libList.vim
+<b>Gontran Baerts</b> -- for libList.vim<br>
+<b>Peter Heslin</b> -- useful discussion and also quite a few bug fixes.
+	Also the %%fakesection in folding.vim.
+
 </blockquote>
