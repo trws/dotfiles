@@ -1,32 +1,34 @@
 <file>
-		<para>
-				Latex-Suite attempts to provide a comprehensive set of tools to view, edit and
-				compile LaTeX documents in Vim. Together, they provide tools starting from
-				macros to speed up editing LaTeX documents to functions for forward searching
-				.dvi documents. Latex-suite has been possible because of the contributions of
-				many people. Please see <tag>latex-suite-credits</tag> for a list of people who have
-				helped.
-		</para>
-		<para>
-				Latex-suite is released under the Vim charityware license. For license and
-				conditions of use look at <tag>copyright</tag>. Replace all occurences of ``Vim'' with
-				``Latex-Suite''. The current copyright holders of Latex-Suite are Srinath
-				Avadhanula and Mikolaj Machowski.
-		</para>
-		<para>
-				Homepage: http://vim-latex.sourceforge.net
-		</para>
-		{Vi of course does not have any of this}<br/>
-		<note>
-			If you are viewing this in vim 6.0+, then the sections should
-			appear folded (see <tag>folding</tag>). Use <tag>za</tag> to toggle back and
-			forth between open and closed views.
-		</note>
-		<br/>
-		<note>
-			If the sections do not appear folded, press za in normal mode. This will
-			fold up everything and it will be much easier to navigate.
-		</note>
+	<para>
+		Latex-Suite attempts to provide a comprehensive set of tools to
+		view, edit and compile LaTeX documents in Vim. Together, they
+		provide tools starting from macros to speed up editing LaTeX
+		documents to functions for forward searching .dvi documents.
+		Latex-suite has been possible because of the contributions of many
+		people. Please see <tag>latex-suite-credits</tag> for a list of
+		people who have helped.
+	</para>
+	<para>
+		Latex-suite is released under the Vim charityware license. For
+		license and conditions of use look at <tag>copyright</tag>. Replace
+		all occurences of ``Vim'' with ``Latex-Suite''. The current
+		copyright holders of Latex-Suite are Srinath Avadhanula and Mikolaj
+		Machowski.
+	</para>
+	<para>
+		Homepage: http://vim-latex.sourceforge.net
+	</para>
+	{Vi of course does not have any of this}<br/>
+	<note>
+		If you are viewing this in vim 6.0+, then the sections should appear
+		folded (see <tag>folding</tag>). Use <tag>za</tag> to toggle back and
+		forth between open and closed views.
+	</note>
+	<br/>
+	<note>
+		If the sections do not appear folded, press za in normal mode. This
+		will fold up everything and it will be much easier to navigate.
+	</note>
 
 	<section>
 		<sectiontitle>
@@ -61,6 +63,97 @@ set iskeyword+=:
 set shellslash 
 		</code>
 	</section>
+	<option>
+		<name>b:Tex_Leader</name>
+		<name>g:Tex_Leader</name>
+		<desc>
+			string (default empty) <br/>
+			global <br/>
+			{not in Vi} <br/>
+			{not available when compiled without the |+statusline| or |+something|
+			else feature} <par/>
+			The mappings in latex-suite are by default prefixed with the back-tick
+			character. For example, `/ inserts \frac{<++>}{<++>}<++> etc. You can change the
+			prefix with the following setting.
+			',', '/', '`' are preferred values. '' or '\' will lead to a _lot_ of
+			trouble.
+
+			g:Tex_Leader is also used for visual mode mappings for fonts.
+			<par/>
+			<blockquote>This is some text which is supposed to be offset widthwise
+				from the rest.</blockquote>
+			<par/>
+			This is a nested table:<par/>
+			<table>
+				<row>
+					<col>11</col>
+					<col>12</col>
+					<col>13</col>
+				</row>
+				<row>
+					<col>21</col>
+					<col>
+						<table>
+							<row>
+								<col>n.11</col><col>n.12</col>
+							</row>
+							<row>
+								<col>n.21</col><col>n.22</col>
+							</row>
+						</table>
+					</col>
+					<col>23</col>
+				</row>
+				<row>
+					<col>31</col>
+					<col>32</col>
+					<col>33</col>
+				</row>
+			</table>
+			<par/>
+			This is another table showing how column widths are calculated
+			intelligently.
+			<par/>
+			<table>
+				<row>
+					<col>field</col>
+					<col>meaning ~</col>
+				</row>
+				<row>
+					<col>-</col> 
+					<col>Left justify the item. The default is right justified
+						when minwid is larger than the length of the item.</col> 
+				</row>
+				<row>
+					<col>0</col>
+					<col>Leading zeroes in numeric items. Overridden by '-'.</col> 
+				</row>
+				<row>
+					<col>minwid</col>
+					<col>Minimum width of the item, padding as set by '-' &amp; '0'.</col> 
+				</row>
+			</table>
+			<br/>
+			<code>" This is an example of a code block.
+augroup LatexSuite
+    au LatexSuiteInitPost :call MyFunc()
+augroup END</code>
+			<br/>
+			<note>This is a note. <br/>And something else is here too. And something else is
+				here too. And something else is here too. And something else is here
+				too. And something else is here too. And something else is here too.
+				And something else is here too. And something else is here too. And
+				something else is here too. And something else is here too.
+			</note>
+			<par/>
+			<list>
+				<item>This is a list in an option. <br/>
+					This is a line after a &lt;br/&gt; in an item.
+				</item>
+				<item>Item 2</item>
+			</list>
+		</desc>
+	</option>
 </file>
 
 <!--
