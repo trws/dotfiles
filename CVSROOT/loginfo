@@ -26,4 +26,4 @@
 #DEFAULT (echo ""; id; echo %{sVv}; date; cat) >> $CVSROOT/CVSROOT/commitlog
 ^vimfiles $CVSROOT/CVSROOT/syncmail %{sVv} vim-latex-cvs@lists.sourceforge.net
 # ^testing ($CVSROOT/CVSROOT/processbuginfo %{sVv}  )
-^testing ( chmod ug+w $CVSROOT/CVSROOT/ChangeLog; ls -l $CVSROOT/CVSROOT/ )
+^testing ( cat $CVSROOT/CVSROOT/ChangeLog;  )
