@@ -39,19 +39,18 @@
 		<link>latex-suite-optimal-settings</link>
 		<br/>
 		<para>
-			Latex-Suite works best if you have the following settings in your ~/.vimrc:
-		</para>
-		<code>" this line is responsible for loading latex-suite when a .tex file is
+			Latex-Suite works best if you have the following settings in your
+			~/.vimrc:<br/>
+		<programlisting>" this line is responsible for loading latex-suite when a .tex file is
 " opened.
 filetype plugin on
 " for automatic indentation specific to LaTeX.
-filetype indent on
-		</code>
+filetype indent on</programlisting>
+		</para>
 		<para>
 			In addition, the following settings could go in your ~/.vim/ftplugin/tex.vim
-			file:
-		</para>
-		<code>" this is mostly a matter of taste. but LaTeX looks good with just a bit
+			file:<br/>
+		<programlisting>" this is mostly a matter of taste. but LaTeX looks good with just a bit
 " of indentation.
 set sw=2
 " TIP: if you write your \label's as \label{fig:something}, then if you
@@ -61,99 +60,141 @@ set iskeyword+=:
 " IMPORTANT: If you are a win32 user, then the following setting is
 " necessary in order to have latex called correctly from within vim.
 set shellslash 
-		</code>
-	</section>
-	<option>
-		<name>b:Tex_Leader</name>
-		<name>g:Tex_Leader</name>
-		<desc>
-			string (default empty) <br/>
-			global <br/>
-			{not in Vi} <br/>
-			{not available when compiled without the |+statusline| or |+something|
-			else feature} <par/>
-			The mappings in latex-suite are by default prefixed with the back-tick
-			character. For example, `/ inserts \frac{<++>}{<++>}<++> etc. You can change the
-			prefix with the following setting.
-			',', '/', '`' are preferred values. '' or '\' will lead to a _lot_ of
-			trouble.
+		</programlisting>
+		</para>
+		<option>
+			<name>b:Tex_Leader</name>
+			<name>g:Tex_Leader</name>
+			<desc>
+				string (default empty) <br/>
+				global <br/>
+				{not in Vi} <br/>
+				{not available when compiled without the |+statusline| or |+something|
+				else feature} <par/>
+				The mappings in latex-suite are by default prefixed with the back-tick
+				character. For example, `/ inserts \frac{<++>}{<++>}<++> etc. You can change the
+				prefix with the following setting.
+				',', '/', '`' are preferred values. '' or '\' will lead to a _lot_ of
+				trouble.
 
-			g:Tex_Leader is also used for visual mode mappings for fonts.
-			<par/>
-			<blockquote>This is some text which is supposed to be offset widthwise
-				from the rest.</blockquote>
-			<par/>
-			This is a nested table:<par/>
-			<table>
-				<row>
-					<col>11</col>
-					<col>12</col>
-					<col>13</col>
-				</row>
-				<row>
-					<col>21</col>
-					<col>
-						<table>
-							<row>
-								<col>n.11</col><col>n.12</col>
-							</row>
-							<row>
-								<col>n.21</col><col>n.22</col>
-							</row>
-						</table>
-					</col>
-					<col>23</col>
-				</row>
-				<row>
-					<col>31</col>
-					<col>32</col>
-					<col>33</col>
-				</row>
-			</table>
-			<par/>
-			This is another table showing how column widths are calculated
-			intelligently.
-			<par/>
-			<table>
-				<row>
-					<col>field</col>
-					<col>meaning ~</col>
-				</row>
-				<row>
-					<col>-</col> 
-					<col>Left justify the item. The default is right justified
-						when minwid is larger than the length of the item.</col> 
-				</row>
-				<row>
-					<col>0</col>
-					<col>Leading zeroes in numeric items. Overridden by '-'.</col> 
-				</row>
-				<row>
-					<col>minwid</col>
-					<col>Minimum width of the item, padding as set by '-' &amp; '0'.</col> 
-				</row>
-			</table>
-			<br/>
-			<code>" This is an example of a code block.
+				g:Tex_Leader is also used for visual mode mappings for fonts.
+				<par/>
+				<blockquote>This is some text which is supposed to be offset widthwise
+					from the rest.</blockquote>
+				<par/>
+				This is a nested table:<par/>
+				<table>
+					<row>
+						<col>11</col>
+						<col>12</col>
+						<col>13</col>
+					</row>
+					<row>
+						<col>21</col>
+						<col>
+							<table>
+								<row>
+									<col>n.11</col><col>n.12</col>
+								</row>
+								<row>
+									<col>n.21</col><col>n.22</col>
+								</row>
+							</table>
+						</col>
+						<col>23</col>
+					</row>
+					<row>
+						<col>31</col>
+						<col>32</col>
+						<col>33</col>
+					</row>
+				</table>
+				<par/>
+				This is another table showing how column widths are calculated
+				intelligently.
+				<par/>
+				<table>
+					<row>
+						<col>field</col>
+						<col>meaning ~</col>
+					</row>
+					<row>
+						<col>-</col> 
+						<col>Left justify the item. The default is right justified
+							when minwid is larger than the length of the item.</col> 
+					</row>
+					<row>
+						<col>0</col>
+						<col>Leading zeroes in numeric items. Overridden by '-'.</col> 
+					</row>
+					<row>
+						<col>minwid</col>
+						<col>Minimum width of the item, padding as set by '-' &amp; '0'.</col> 
+					</row>
+				</table>
+				<br/>
+				<programlisting>" This is an example of a code block.
 augroup LatexSuite
     au LatexSuiteInitPost :call MyFunc()
-augroup END</code>
-			<br/>
-			<note>This is a note. <br/>And something else is here too. And something else is
-				here too. And something else is here too. And something else is here
-				too. And something else is here too. And something else is here too.
-				And something else is here too. And something else is here too. And
-				something else is here too. And something else is here too.
-			</note>
-			<par/>
-			<list>
-				<item>This is a list in an option. <br/>
-					This is a line after a &lt;br/&gt; in an item.
-				</item>
-				<item>Item 2</item>
-			</list>
-		</desc>
-	</option>
+augroup END</programlisting>
+				<br/>
+				<note>This is a note. <br/>And something else is here too. And something else is
+					here too. And something else is here too. And something else is here
+					too. And something else is here too. And something else is here too.
+					And something else is here too. And something else is here too. And
+					something else is here too. And something else is here too.
+				</note>
+				<par/>
+				<list>
+					<item>This is a list in an option. <br/>
+						This is a line after a &lt;br/&gt; in an item.
+					</item>
+					<item>Item 2</item>
+				</list>
+			</desc>
+		</option>
+	</section>
+	<section>
+		<sectiontitle>
+			<name>LATEX MACROS</name>
+			<tag>latex-macros</tag>
+			<tag>ls-macros</tag>
+		</sectiontitle>
+		<para>
+			Latex-Suite ships with a very comprehensive set of insert mode and visual mode
+			mappings and menu items to typeset most of the LaTeX elements. 
+		</para>
+		<link>placeholders</link> 
+		<link>placeholder</link>
+		<link>place-holder</link>
+		<link>place-holders</link>
+		<para>
+			All these macros implement Stephen Riem's bracketing system and Gergely
+			Kontra's JumpFunc() for handling place-holders. This consists of using
+			"place-holders" to mark off locations where the next relevant editing has to
+			be done. As an example, when the user types in "EFI" in insert mode, she will
+			get the following:
+		<programlisting>\begin{figure}[h]
+    \centerline{\psfig{figure=<+eps file+>}}
+    \caption{<+caption text+>}
+    \label{fig:<+label+>}
+\end{figure}<++>
+		</programlisting>
+			The text <+eps file+> will be selected and she will be left in |select-mode| so
+			that she can continue typing straight away. After having typed in the file
+			name, she can press Control-J (while still in insert-mode). This will take her
+			directly to the next "place-holder". i.e, the <+caption text+> will be visually
+			selected with vim in select mode again for typing in the caption. This saves
+			on a lot of key presses.
+		</para>
+		<note>
+			These mappings are are not standard mappings in the sense that only the
+			last character is mapped. See plugin/imaps.vim for further documentation. For
+			example, in the example above, you can press the characters 'E', 'F' and 'I'
+			as slowly as you wish. The characters are visible as you type them and you can
+			use the movement or backspace key to correct yourself unlike normal mappings.
+		</note>
+	</section>
 </file>
 
 <!--
