@@ -14,9 +14,17 @@ Latest stable version of latexSuite:
 Extract one of the archives above into your ~/vimfiles directory (if you
 are using windows) or ~/.vim directory (if you are using *nix). Make sure you have the
 following setting in your .vimrc
-<p>
-	<tt>filetype plugin on</tt>
-</p>
+<pre>
+    " Necessary. This setting tells vim to load latex-suite
+    " when a tex file opened.
+    filetype plugin on
+    " Optional. This enables automatic indentation as you
+    " type.
+    filetype indent on
+    " IMPORTANT: win32 users will need to have 'shellslash'
+    " set so that latex can be called correctly.
+    set shellslash
+</pre>
 Next time you start vim and edit a latex file, latex-suite should
 automatically be activated.
 <p>
@@ -74,7 +82,8 @@ class="list">CVS snapshot</a> Sourceforge provides projects with a nightly
 updated archived version of the CVS repository. A better way to stay in
 step with the project if you use CVS but do not want to be a developer is
 to follow the instructions for anonymous CVS access <a
-href="http://sourceforge.net/cvs/?group_id=52322">here</a>.
+href="http://sourceforge.net/cvs/?group_id=52322">here</a>. Use vimfiles in
+place of <i>modulename</i>.
 </li>
 </ul>
 
