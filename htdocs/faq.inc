@@ -1,32 +1,32 @@
 <h2>Questions</h2>
 <ul>
-	<li><a class=question href="#faq-1">What are those annoying <tt>«»</tt> characters whenever I invoke a
+	<li><a class=question href="#faq-placeholders">What are those annoying <tt>«»</tt> characters whenever I invoke a
 	mapping?</a></li>
-	<li><a class=question href="#faq-2">Compiling does not seem to
+	<li><a class=question href="#faq-compiling">Compiling does not seem to
 	work for me. My gvim hangs/does nothing.</a></li>
-	<li><a class=question href="#faq-3">Viewing does not seem to work for
+	<li><a class=question href="#faq-viewing">Viewing does not seem to work for
 	me.</a></li>
-	<li><a class="question" href="#faq-7">Completion does not work for me
+	<li><a class="question" href="#faq-viewing">Completion does not work for me
 	on a Microsoft Windows machine.</a></li>
-	<li><a class=question href="#faq-4">After a recent upgrade, whenever I
+	<li><a class=question href="#faq-python-errors">After a recent upgrade, whenever I
 	launch gvim I get some python-ish errors</a></li>
-	<li><a class=question href="#faq-5">Typing some European characters
+	<li><a class=question href="#faq-euro-symbols">Typing some European characters
 	becomes problematic in Latex-suite because those characters seem to be
 	mapped to something.</a></li>
-	<li><a class="question" href="#faq-8">I cannot type the e-acute
+	<li><a class="question" href="#faq-e-acute">I cannot type the e-acute
 	character! HELP!</a></li>
-	<li><a class=question href="#faq-6">Sometimes I need to insert a
+	<li><a class=question href="#faq-double-quote">Sometimes I need to insert a
 	literal double quote. But whenever I press <tt>"</tt>, I get
 	<tt>``</tt>. How do I do get around this? Can I disable the <tt>"</tt>
 	to <tt>``</tt> conversion permanently for certain files?</a></li>
-	<li><a class="question" href="#faq-8">I need to type SSS in my document
+	<li><a class="question" href="#faq-disabling-imap">I need to type SSS in my document
 	a lot. But latex-suite always converts it into a
 	<tt>\subsection{}&lt;++&gt;</tt>. How do I get around this? (OR How do
 	I disable a mapping created by Latex-suite?)</a></li>
 </ul>
 <h2>Answers</h2>
 
-<a name="faq-1">
+<a name="faq-placeholders">
 <div class=qa>Q: What are those annoying <tt>«»</tt> characters whenever I
 invoke a mapping?</div>
 <blockquote>
@@ -58,29 +58,56 @@ in your <tt>.vimrc</tt>.
 </div>
 </blockquote>
 
-<a name="faq-2">
+<a name="faq-compiling">
 <div class=qa>
 Q: Compiling does not seem to work for me. My gvim hangs/does
 nothing.
 </div>
 <blockquote>
 <div class=ans>
-If you are using cygwin with windows, see <a href=#known_issues>this</a>
-for a workaround. If you still face a problem using the compiler and wish
-to contact the <a
-	href="index.php?subject=contact&title=Contact">developers</a> for
-help, please first gather the following information:
+In order to pin down the problem, please follow these instructions. If
+things still do not work, contact the developers and let them know what
+happened when you tried each of the steps below:
 <ol>
 <li>What does
 	<a name=compile_rule_dvi></a>
 	<pre>:echo Tex_CompileRule_dvi</pre> 
 	say? This should be a string such as
-	<pre>latex --src-specials \input{$*}</pre>
-	Make sure that you can execute this command on a terminal (with the
-	<tt>$*</tt> replaced with a filename). If you cannot, then you will
-	need to change the value of <tt>Tex_CompileRule_dvi</tt> in your
-	<tt>~/.vim/ftplugin/tex.vim</tt> file.
+	<pre>latex -interaction=nonstopmode $*</pre>
+	Make sure that you can get this command to execute on your operating
+	system via Vim. In other words, try the following. Open a very minimal
+	<tt>.tex</tt> file, for example:
+	<pre>\documentclass{article}
+\begin{document}
+This is an article.
+\end{document}</pre>
+	in Vim and type the following sequence of characters inside Vim while
+	in normal mode:
+	<pre>:!latex -interaction=nonstopmode %</pre>
+	You should see a command window pop up and the latex executable should
+	begin processing the file. You should get a prompt to hit any key to
+	close the window and when you do, the command window should dissapear.
+	A number of files should be produced in the directory. You should for
+	example, see a <tt>.dvi</tt> file and a <tt>.log</tt> file.
 	<p></p>
+	If this command does not work, then it might be due to one of the
+	following reasons:
+	<ol>
+	<li>You do not have any <tt>LaTeX</tt> distribution installed on your
+	system. Remember, Latex-Suite is simply a set of utilities meant to
+	work with Vim. Installing Latex-Suite does not mean that LaTeX is
+	installed. You will need to install LaTeX seperately.</li>
+	<li>Your <tt>$PATH</tt> variable does not contain the directory in
+	which the <tt>latex</tt> executable resides. See your system
+	documentation on how to set the <tt>$PATH</tt> variable. On Windows
+	2000/XP, you can change it from
+	<pre>Control Panel &gt; System &gt; Advanced &gt; Environment Variables</pre>
+	</li>
+	</ol>
+	If you <em>do</em> have <tt>LaTeX</tt> installed and the <tt>latex</tt>
+	executable resides in some directory in your <tt>$PATH</tt> and the
+	above command still gives an error, then find out what error is being
+	generated on the command prompt.
 </li>
 <li>
 	Make sure that
@@ -106,29 +133,12 @@ help, please first gather the following information:
 <li>What version of latex are you using?<p></p></li>
 </ol>
 <p></p>
-<a name=known_issues></a>
-<b>Known Issues</b>
-There is a known problem with compiling if you are using a bash shell
-(cygwin or something similar) on a windows machine. Vim seems to apparently
-hang when <tt>\ll</tt> is pressed. This is because latex-suite does not (as
-yet) support cygwin+windows out of the box. As of now, an elegant solution
-has not presented itself. There are two work-arounds as of now for this
-problem:
-<ol>
-<li>Unset <tt>shell = bash</tt> from your .vimrc
-	<p><b>OR</b></p>
-</li>
-<li>Include
-<pre>
-let g:Tex_CompileRule_dvi = 'latex --src-special --interaction=nonstopmode $*'
-</pre>
-in your <tt>.vimrc</tt> or <tt>ftplugin/tex.vim</tt>.
 </li>
 </ol>
 </div>
 </blockquote>
 
-<a name="faq-3">
+<a name="faq-viewing">
 <div class=qa>
 Q: Viewing does not seem to work for me.
 </div>
@@ -155,7 +165,7 @@ full path to the viewer. For example:
 </div>
 </blockquote>
 
-<a name="faq-7">
+<a name="faq-viewing">
 <div class=qa>
 Q: Completion does not work for me on a Microsoft Windows machine.
 </div>
@@ -165,14 +175,14 @@ You will need to install a good <tt>grep</tt> program to make completion
 work on MS Windows. Latex-suite on windows has been tested with cygwin
 which comes with a port of GNU grep. That works fine. If you do not want to
 install cygwin, then you can install just <tt>grep</tt> from 
-<a href="http://gnuwin32.sourceforge.net/packages/grep.htm">here</a>.
+<a href="http://unxutils.sourceforge.net">here</a>.
 Make sure that your version of <tt>grep</tt> supports the <tt>-H</tt> flag
 which makes <tt>grep</tt> include the filename even when searching with a
 single filename.
 </div>
 
 </blockquote>
-<a name="faq-4">
+<a name="faq-python-errors">
 <div class=qa>
 Q: After a recent upgrade, whenever I launch gvim I get some python-ish
 errors.
@@ -189,7 +199,7 @@ Latex-suite not to use python if your vim returns <tt>1</tt> for
 </div>
 </blockquote>
 
-<a name="faq-5">
+<a name="faq-euro-symbols">
 <div class=qa>
 Q: Typing some European characters becomes problematic in Latex-suite
 because those characters seem to be mapped to something.
@@ -216,13 +226,13 @@ like <tt>&lt;Plug&gt;foo1</tt> etc in the LHS of the mappings (do not use
 the same LHS for all three) to effectively disable any mappings.
 </div>
 </blockquote>
-<a name="faq-8">
+<a name="faq-e-acute">
 <div class=qa>
 Q: I cannot insert the <tt>e-acute (é)</tt> character! HELP!
 </div>
 <blockquote>
 <div class=ans>
-Insert the following line in your <tt>~/.vim/ftplugin/tex.viim</tt> file:
+Insert the following line in your <tt>~/.vim/ftplugin/tex.vim</tt> file:
 <pre>
 imap &lt;buffer&gt; &lt;leader&gt;it &lt;Plug&gt;Tex_InsertItemOnThisLine
 </pre>
@@ -234,7 +244,7 @@ mode. The <tt>&lt;M-i&gt;</tt> key which is used for inserting the
 </div>
 </blockquote>
 
-<a name="faq-6">
+<a name="faq-double-quote">
 <div class=qa>
 Q: Sometimes I need to insert a literal double quote. But whenever I press
 <tt>"</tt>, I get <tt>``</tt>. How do I get around this? Can I disable the
@@ -257,7 +267,7 @@ particular buffer, setting <tt>g:Tex_SmartKeyQuote</tt> will disable it for
 all buffers.
 </div>
 </blockquote>
-<a name="faq-8">
+<a name="faq-disabling-imap">
 <div class=qa>
 Q: I need to type SSS in my document a lot. But latex-suite always converts
 it into a <tt>\subsection{}&lt;++&gt;</tt>. How do I get around this?
