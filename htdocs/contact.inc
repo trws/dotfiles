@@ -34,3 +34,8 @@ e-mail sent on your behalf to the list.
 <p>
 <font size="-4" color="red">[*]</font> Required fields.
 </form>
+<p></p>
+<small>
+This contact page was originally made by Preben Randhol and is available
+for download <a href="http://www.pvv.org/~randhol/Contact/">here</a>
+</small>
