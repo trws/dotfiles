@@ -363,7 +363,7 @@ def handleSection(section, width):
 tocHash = {}
 lastLabelUsed = 99
 
-def handleMakeTOC(tocpi, width, last):
+def handleMakeTOC(tocpi, width):
     parent = tocpi.parentNode
     retText = ""
     sectionsTable = []
