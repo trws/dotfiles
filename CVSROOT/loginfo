@@ -25,4 +25,5 @@
 # or
 #DEFAULT (echo ""; id; echo %{sVv}; date; cat) >> $CVSROOT/CVSROOT/commitlog
 CVSROOT $CVSROOT/CVSROOT/syncmail %{sVv} srinathava@users.sourceforge.net
-DEFAULT $CVSROOT/CVSROOT/syncmail %{sVv} vim-latex-cvs@lists.sourceforge.net
+^vimfiles $CVSROOT/CVSROOT/syncmail %{sVv} vim-latex-cvs@lists.sourceforge.net
+^testing set
