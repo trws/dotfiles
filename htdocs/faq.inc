@@ -8,6 +8,9 @@
 	me.</a></li>
 	<li><a class=question href="#faq-4">After a recent upgrade, whenever I
 	launch gvim I get some python-ish errors</a></li>
+	<li><a class=question href="#faq-5">Typing some European characters
+	becomes problematic in Latex-suite because those characters seem to be
+	mapped to something.</a></li>
 </ul>
 <h2>Answers</h2>
 <a name="faq-1">
@@ -113,8 +116,7 @@ Q: Viewing does not seem to work for me.
 </div>
 <blockquote>
 <div class=ans>
-<ol>
-<li>First check to make sure that you can call the programs specified by
+First check to make sure that you can call the programs specified by
 the <a
 href="documentation/latex-suite/viewer-customization.html#Tex_ViewRule_format">viewing
 rules</a> from within vim. For example, if you specified
@@ -132,7 +134,6 @@ which reside in directories containing spaces in their names even if the
 you need to change the <tt>g:Tex_ViewRule_format</tt> variable to use the
 full path to the viewer. For example:
 <pre>let g:Tex_ViewRule_pdf = 'c:/Program\ Files/Adobe/Acrobat 5.0/Reader/AcroRd32</pre>
-</ol>
 </div>
 </blockquote>
 <a name="faq-4">
@@ -149,6 +150,33 @@ very old or your python via vim is not working, then you need to tell
 Latex-suite not to use python if your vim returns <tt>1</tt> for
 <tt>has('python')</tt>. This is done by setting the
 <tt>g:Tex_UsePython</tt> variable to zero.
+</div>
+</blockquote>
+<a name="faq-5">
+<div class=qa>
+Q: Typing some European characters becomes problematic in Latex-suite
+because those characters seem to be mapped to something.
+</div>
+<blockquote>
+<div class=ans>
+Latex-suite maps certain <tt>Alt</tt> key sequences to some functions as
+described <a
+href="documentation/latex-suite/bracketing-macros.html">here</a>. If you
+need to use these keys for regular editing, you will need to remap the Alt
+keys to something else as described in <a
+href="documentation/latex-suite/latex-suite-maps.html">here</a>. In
+particular, put the following commands in your
+<tt>~/.vim/ftplugin/tex.vim</tt> file:
+<pre>
+imap &lt;C-b&gt; &lt;Plug&gt;Tex_MathBF
+imap &lt;C-c&gt; &lt;Plug&gt;Tex_MathCal
+imap &lt;C-l&gt; &lt;Plug&gt;Tex_LeftRight
+</pre>
+This will make <tt>&lt;C-b&gt;</tt> etc. assume the functionality of
+<tt>&lt;Alt-b&gt;</tt> and so forth without mapping the
+<tt>&lt;Alt&gt;</tt> keys to anything. If you wish you can use something
+like <tt>&lt;Plug&gt;foo1</tt> etc in the LHS of the mappings (do not use
+the same LHS for all three) to effectively disable any mappings.
 </div>
 </blockquote>
 
