@@ -53,8 +53,7 @@ END;
 Latex-suite 1.5 is a major re-release of latex-suite containing many
 enhancements and bug-fixes. Read the full announcement <a
 href="download/RELEASE-1.5.txt">here</a>. Please use and report any bugs to
-<a
-href="mailto://vim-latex-devel@lists.sourceforge.net">vim-latex-devel</a>.
+<a href="contact/form.html">us</a>.
 </div>
 <p></p>
 Latest Developement version of Latex-Suite:

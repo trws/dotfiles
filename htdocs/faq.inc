@@ -58,7 +58,7 @@ nothing.
 If you are using cywin with windows, see <a href=#known_issues>this</a>
 for a workaround. If you still face a problem using the compiler and wish
 to contact the <a
-	href="mailto://vim-latex-devel@lists.sourceforge.net">developers</a> for
+	href="contact/form.html">developers</a> for
 help, please first gather the following information:
 <ol>
 <li>What does
