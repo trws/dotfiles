@@ -12,3 +12,6 @@ latex-suite-chunk.html: latex-suite.xml
 	cd latex-suite && \
 	java com.icl.saxon.StyleSheet ../latex-suite.xml ../latex-suite-chunk.xsl \
 	)
+
+latex-suite.txt: latex-suite.xml
+	db2vim latex-suite.xml > latex-suite.txt
