@@ -17,7 +17,7 @@
 			<p></p>
 			<hr class=navig>
 			<div class=navheader>Documentation</div>
-			<a href="download/latex-suite.html">User Manual</a><br>
+			<a href="index.php?subject=manual">User Manual</a><br>
 			<a href="download/latexhelp.html">LaTeX Reference</a><br>
 			<a href="index.php?subject=faq">FAQ</a><br>
 			<a href="index.php?subject=comingsoon">Tutorial</a><br>
@@ -36,7 +36,7 @@
 			<hr class=navig>
 			<div class=navheader>Developers</div>
 			<a href="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/vim-latex/vimfiles">CVS</a><br>
-			<a href="index.php?subject=devel#links">Links</a><br>
+			<a href="index.php?subject=links">Links</a><br>
 			<img src="blank.gif" height="150" width="1"><br>
 			<p class="doublesmall">
 			Site hosted by:<br>
