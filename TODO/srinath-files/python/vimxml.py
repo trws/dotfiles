@@ -58,15 +58,24 @@ def handleElement(rootElement, width=vimformat.TEXT_WIDTH, strict=0):
     while not child is None:
 
         # if the child is an Element and if a handler exists, then call it.
-        if not IsInlineTag(child):
+        if not IsInlineTag(child) and child.nodeType == child.ELEMENT_NODE:
             if handlerMaps.has_key(child.tagName):
                 # offset the child text by the current indentation value
                 retText += handlerMaps[child.tagName](child, width)
 
             child = child.nextSibling
 
-        # if its a text node, collect consecutive text nodes into a single
-        # paragraph and indent it.
+        elif not IsInlineTag(child) \
+            and child.nodeType == child.PROCESSING_INSTRUCTION_NODE \
+            and child.target == 'vimhelp':
+
+            if handlerMaps.has_key(child.data):
+                retText += handlerMaps[child.data](child, width)
+
+            child = child.nextSibling
+            
+        # if its a text node or an inline element node, collect consecutive
+        # text nodes into a single paragraph and indent it.
         elif IsInlineTag(child):
 
             text = ""
@@ -82,7 +91,9 @@ def handleElement(rootElement, width=vimformat.TEXT_WIDTH, strict=0):
 
             retText += IndentParagraphs(text, width)
 
-    # return IndentParagraphs(retText, width)
+        else:
+            child = child.nextSibling
+
     return retText
 
 # }}}
@@ -133,7 +144,7 @@ def handleTable(root, width):
     text = []
     rows = root.getChildrenByTagName("row")
     for row in rows:
-        cols = row.getChildrenByTagName("col")
+        cols = row.getChildrenByTagName("entry")
 
         rowtext = []
         colwidths = []
@@ -171,7 +182,7 @@ def handleTable(root, width):
     text = []
     rows = root.getChildrenByTagName("row")
     for row in rows:
-        cols = row.getChildrenByTagName("col")
+        cols = row.getChildrenByTagName("entry")
         # print "finding %d columns" % len(cols)
 
         rowtext = []
@@ -186,7 +197,8 @@ def handleTable(root, width):
     # finally, generate the table.
     retText = FormatTable(text, ROW_SPACE = 1, 
                           COL_SPACE = vimformat.COL_SPACE, justify=0)
-    return retText
+    retText = re.sub(r"\s+$", "", retText)
+    return retText + "\n"
 
 # }}}
 # handleCode(code, width): {{{
@@ -198,11 +210,16 @@ def handleCode(code, width):
 # }}}
 # handleList(list, width, marker=0): {{{
 def handleList(list, width, marker=0):
+    if list.tagName == 'simplelist':
+        decoration = ''
+    else:
+        decoration = '- '
+
     retText = ""
-    items = list.getChildrenByTagName("item")
+    items = list.getChildrenByTagName("member")
     for item in items:
         itemText = handleElement(item, width - len("- "))
-        itemText = VertCatString("- ", None, itemText)
+        itemText = VertCatString(decoration, None, itemText)
 
         retText += itemText + "\n"
 
@@ -243,7 +260,7 @@ def handleBlockQuote(block, width):
     text = VertCatString(" "*vimformat.BLOCK_QUOTE,  \
                          vimformat.BLOCK_QUOTE, text)
 
-    return text
+    return text + "\n"
 
 # }}}
 # handleTag(tag, width): {{{
@@ -270,11 +287,61 @@ def handleLink(link, width):
     return text.rjust(vimformat.TEXT_WIDTH) + "\n"
 
 # }}}
+# handleAnchor(anchor, width):  {{{
+# Description: processes a bunch of adjacent anchor tags at once so they
+#       can be displayed nicer.
+def handleGroupAnchors(anchor, width):
+
+    next = anchor.nextSibling
+
+    while next is not None \
+        and next.nodeType != next.ELEMENT_NODE:
+        next = next.nextSibling
+
+    if next.tagName != 'anchor':
+        raise """
+handleGroupAnchors: the element node following the groupanchors PI should
+be an anchor node.
+"""
+    text = ''
+
+    while not next is None:
+
+        # skip over the text nodes next to an anchor tag. They provide no
+        # information.
+        while not next is None and \
+                next.nodeType == next.TEXT_NODE:
+            next = next.nextSibling
+
+        if next is None \
+                or next.nodeType != next.ELEMENT_NODE \
+                or next.tagName != 'anchor':
+            break
+
+        text += ' ' + '*' + next.getAttribute('id') + '*'
+
+        next.setAttribute('processed', '1')
+        next = next.nextSibling
+
+    text = IndentParagraphs(text, width/2)
+    return RightJustify(text, width) + "\n"
+
+# }}}
+# handleAnchor(anchor, width): {{{
+def handleAnchor(anchor, width):
+    if anchor.getAttribute('processed') == '1':
+        return ''
+
+    anchor.setAttribute('processed', '1')
+    return RightJustify('*'+anchor.getAttribute('id')+'*', width) \
+        + "\n"
+
+# }}}
 # handleSection(section, width): {{{
 def handleSection(section, width):
-    title = section.getChildrenByTagName('sectiontitle')[0]
-    name = GetTextFromElementNode(title, 'name')[0]
-    tags = GetTextFromElementNode(title, 'tag')
+    title = section.getChildrenByTagName('title')[0]
+    name = GetText(title.childNodes)
+    tags = [title.getAttribute('id')]
 
     tagsformatted = ''
     for tag in tags:
@@ -287,7 +354,8 @@ def handleSection(section, width):
 
     text = handleElement(section, width)
 
-    return "\n\n" + "="*vimformat.TEXT_WIDTH + "\n" + header + "\n\n" + text
+    return "\n\n" + "="*vimformat.TEXT_WIDTH + \
+        "\n" + header + "\n\n" + text + "\n\n"
 
 # }}}
 
@@ -304,6 +372,7 @@ handlerMaps = {
     'code': handleCode,
     'programlisting': handleCode,
     'list': handleList,
+    'simplelist': handleList,
     'linebreak': handleLineBreak,
     'par': handleParBreak,
     'para': handleParagraph,
@@ -312,6 +381,8 @@ handlerMaps = {
     'tag': handleTag,
     'links': handleLinks,
     'link': handleLink,
+    'anchor': handleAnchor,
+    'groupanchors': handleGroupAnchors,
     'section': handleSection,
     'blockquote': handleBlockQuote,
 }
