@@ -19,6 +19,10 @@
 	literal double quote. But whenever I press <tt>"</tt>, I get
 	<tt>``</tt>. How do I do get around this? Can I disable the <tt>"</tt>
 	to <tt>``</tt> conversion permanently for certain files?</a></li>
+	<li><a class="question" href="#faq-8">I need to type SSS in my document
+	a lot. But latex-suite always converts it into a
+	<tt>\subsection{}&lt;++&gt;</tt>. How do I get around this? (OR How do
+	I disable a mapping created by Latex-suite?)</a></li>
 </ul>
 <h2>Answers</h2>
 
@@ -251,6 +255,25 @@ need to set the <tt>Tex_SmartKeyQuote</tt> setting to zero as described
 Setting <tt>b:Tex_SmartKeyQuote</tt> to <tt>0</tt> will disable it for a
 particular buffer, setting <tt>g:Tex_SmartKeyQuote</tt> will disable it for
 all buffers.
+</div>
+</blockquote>
+<a name="faq-8">
+<div class=qa>
+Q: I need to type SSS in my document a lot. But latex-suite always converts
+it into a <tt>\subsection{}&lt;++&gt;</tt>. How do I get around this?
+</div>
+<blockquote>
+<div class=ans>
+To disable a mapping which Latex-suite creates by default, you will need to
+create a "fake" mapping and place it in a <tt>.vim</tt> file which gets
+sourced after Latex-suite. For example, to disable the mapping for
+<tt>SSS</tt>, put the line
+<pre>call IMAP('SSS', 'SSS', 'tex')</pre>
+in one of the following files (you might need to create these if they do
+not already exist)
+<pre>~/.vim/after/ftplugin/tex.vim
+~/.vim/after/ftplugin/tex_afterls.vim
+~/.vim/after/ftplugin/tex/afterls.vim</pre>
 </div>
 </blockquote>
 
