@@ -33,7 +33,7 @@ except:
 # args is of the form
 # path/to/module file1,r1,r2 file2,r1,r2
 # basically, just snip off the leading path to the module.
-file_header = string.join(string.split(args)[1:], ' ')
+file_header = string.join(string.split(args[0])[1:], ' ')
 
 # extract all the lines which need to go into the log file.
 islog = 0
