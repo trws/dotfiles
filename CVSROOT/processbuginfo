@@ -1,6 +1,7 @@
 #! /usr/bin/python
 
 import sys, re, os, string
+from cStringIO import StringIO
 
 try:
 	import pwd
@@ -8,18 +9,35 @@ try:
 except ImportError:
 	username = os.getenv('USERNAME')
 
+clfp = open('ChangeLog')
+changeLogPrev = string.join(clfp.readlines(), '')
+clfp.close();
+
 commit = sys.stdin.read()
 
-print 'arguments = ', sys.argv
+files = []
+specs = sys.argv[1:][0]
+specfiles = string.split(specs)
+del specfiles[0]
+for specfile in specfiles:
+	file = string.split(specfile, ',')[0]
+	files.append(file)
+
+file_header = string.join(files, ',')
 
 islog = 0
+s = ''
 for line in string.split(commit, '\n'):
-	if re.match('Bug:|Feature:|New:', line):
+	if re.match('Bug:|Problem:|Feature:|New:', line):
 		islog = 1
-		print username
+		s = s + ('* %s (%s)' % (file_header, username)) + '\n'
 
 	if re.match('^\s*$', line) is not None:
 		islog = 0
 
 	if islog:
-		print '\t\t',line
+		s = s + '\t' + line + '\n'
+
+s = re.sub('\s*$', '\n\n', s)
+s = s + changeLogPrev
+print s
