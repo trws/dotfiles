@@ -26,6 +26,35 @@ Documentation for Latex-Suite is available in the following formats:
 </li>
 </ul>
 
+<a name="tutorial"></a>
+<h2>Beginner's tutorial</h2>
+There is a beginner's tutorial for Latex-suite available in the following
+formats:
+<ul>
+<li>
+	<a href="documentation/latex-suite-quickstart.txt">Native vim-help
+	format</a>. This file should be installed in
+	<tt>~/.vim/doc/latex-suite.txt</tt> when you install latex-suite.
+	<p>
+	This file can be viewed by doing <tt>:help
+	latex-suite-quickstart.txt</tt> from within vim after downloading
+	latex-suite and following the installation instructions.
+	</p>
+	<p></p>
+</li>
+<li>
+	<a href="documentation/latex-suite-quickstart.html">A Flat HTML
+	file</a>. This is a single HTML file for printing.
+	<p></p>
+</li>
+<li>
+	<a href="documentation/latex-suite-quickstart/">A set of chunked HTML files</a>.
+	These are a series of HTML files each describing a single section of the
+	manual. This should be the best for online viewing.
+	<p></p>
+</li>
+</ul>
+
 <a name="latex-reference"></a>
 <h2>LaTeX Reference</h2>
 Latex-Suite comes ships with edition 1.6 of the LaTeX2e documentation

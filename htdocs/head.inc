@@ -19,7 +19,7 @@
 			<a href="index.php?subject=manual&title=Manual#user-manual">User Manual</a><br>
 			<a href="index.php?subject=manual&title=LaTeX%20Reference#latex-reference">LaTeX Reference</a><br>
 			<a href="index.php?subject=faq&title=FAQ">FAQ</a><br>
-			<a href="index.php?subject=comingsoon&title=Tutorial">Tutorial</a><br>
+			<a href="index.php?subject=manual&title=Tutorial#tutorial">Tutorial</a><br>
 			<a href="index.php?subject=features&title=Features">Features</a><br>
 			<a href="index.php?subject=screenshots&title=Screenshots">Screenshots</a><br>
 			<p></p>
