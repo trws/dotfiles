@@ -48,6 +48,11 @@ def handleElement(rootElement, width=vimformat.TEXT_WIDTH, strict=0):
 
     Generalized function to handle an Element node in a DOM tree.
     """
+    
+    if rootElement.hasAttributes():
+        print "This element has attributes"
+        print rootElement.attributes
+
     retText = ""
     child = rootElement.firstChild
     while not child is None:
@@ -289,6 +294,7 @@ handlerMaps = {
     'optionDefault': handleOptionDefault,
     'table': handleTable,
     'code': handleCode,
+    'programlisting': handleCode,
     'list': handleList,
     'linebreak': handleLineBreak,
     'par': handleParBreak,
