@@ -38,6 +38,17 @@ folds are manual so they dont interefere with typing as much as syntax
 folds do. Tex-suite folds footnotes, tables, figures, equations, sections
 (and subsections), chapters and slides. The folds are nested if necessary.
 It is quite trivial to add new items.</li>
+<li><a href="screenshots/starting-packages.png">Packages</a>One of the most
+powerful features of latex suite is its <a
+href="download/latex-suite.html#latex-packages">support for custom
+packages.</a>. This screenshot shows the user using the supported
+<tt>SIunits</tt> package. Doing this inserts a line such as
+<p><tt>\usepackage[«»]«»{SIunits}«»</tt></p>
+with the cursor left on the first placeholder.
+<li><a href="screenshots/after-packages.png">After adding a package</a>
+This screenshot shows the menu items created when tex-suite "supports" a
+package. The menu contains the various environments, commands, options etc
+specified in the package file</li>.
 </ol>
 <!--
 vim:ft=php
