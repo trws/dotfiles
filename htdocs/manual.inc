@@ -26,7 +26,7 @@ Documentation for Latex-Suite is available in the following formats:
 </li>
 </ul>
 
-<a name="latex-reference">LaTeX Reference</a>
+<a name="latex-reference"></a>
 <h2>LaTeX Reference</h2>
 Latex-Suite comes ships with edition 1.6 of the LaTeX2e documentation
 translated into vim-help format. This file can be downloaded seperately from
