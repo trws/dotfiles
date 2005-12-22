@@ -40,23 +40,7 @@ $relTgzSize = round(filesize("download/$relTgz")/1024,1)." Kb";
 $relZipSize = round(filesize("download/$relZip")/1024,1)." Kb";
 ?>
 
-<div class="announce">
-<b>Latex-suite 1.5</b>:
-<?php
-echo <<<END
-<ul>
-	<li><a href="download/$relTgz">$relTgz</a> ($relTgzSize; $relTgzTime)</li>
-	<li><a href="download/$relZip">$relZip</a> ($relZipSize; $relZipTime)</li>
-</ul>
-END;
-?>
-Latex-suite 1.5 is a major re-release of latex-suite containing many
-enhancements and bug-fixes. Read the full announcement <a
-href="download/RELEASE-1.5.txt">here</a>. Please use and report any bugs to
-<a href="index.php?subject=contact&title=Contact">us</a>.
-</div>
-<p></p>
-Latest Developement version of Latex-Suite:
+Latest version of Latex-Suite:
 <?
 echo <<<END
 <ul>
