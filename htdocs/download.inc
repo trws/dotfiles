@@ -100,14 +100,9 @@ from within vim to get the online Latex-Suite reference.
 <hr>
 
 <h3>Other ways to keep up with changes</h3>
-
-<a href="http://cvs.sourceforge.net/cvstarballs/vim-latex-cvsroot.tar.gz"
-class="list">CVS snapshot</a> Sourceforge provides projects with a nightly
-updated archived version of the CVS repository. A better way to stay in
-step with the project if you use CVS but do not want to be a developer is
-to follow the instructions for anonymous CVS access <a
-href="http://sourceforge.net/cvs/?group_id=52322">here</a>. Use vimfiles in
-place of <i>modulename</i>.
+<p>The sourcecode is managed using subversion (svn). To access the repository,
+follow the instructions that are linked in the navigation bar.
+</p>
 
 <a name="advanced">
 <h3>Advanced Installation Instructions</h3>
