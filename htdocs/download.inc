@@ -49,7 +49,7 @@ echo <<<END
 </ul>
 END;
 ?>
-<a href="vimfiles/ChangeLog">ChangeLog</a>
+<a href="vimfiles/Changelog">Changelog</a>
 
 <a name=installation>
 <h2>Installation Instructions</h2>
