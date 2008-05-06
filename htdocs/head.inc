@@ -35,7 +35,8 @@
 			<p></p>
 			<hr class=navig>
 			<div class=navheader>Developers</div>
-			<a href="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/vim-latex/vimfiles">CVS</a><br>
+			<a href="http://vim-latex.svn.sourceforge.net/viewvc/vim-latex/">SVN Webinterface</a><br>
+			<a href="http://sourceforge.net/svn/?group_id=52322">SVN instructions</a><br>
 			<a href="index.php?subject=links&title=Links">Links</a><br>
 			<img src="blank.gif" height="150" width="1"><br>
 			<p class="doublesmall">
