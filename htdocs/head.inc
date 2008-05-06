@@ -30,7 +30,7 @@
 			href="index.php?subject=contact&title=Contact">Feature
 			Requests <br/>Bug Reports <br/>Mailing List <br/></a><br>
 			<p></p>
-			<a href="index.php?subject=packages&title=Package%20Files">Package files</a><br>
+			<a href="http://vim-latex.svn.sourceforge.net/viewvc/vim-latex/trunk/vimfiles/ftplugin/latex-suite/packages/">Package files</a><br>
 			<a href="index.php?subject=templates&title=Templates">Templates</a><br>
 			<p></p>
 			<hr class=navig>
