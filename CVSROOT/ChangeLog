@@ -1,9 +1,0 @@
-* remoteOpen.vim:
-	Add a command :RemoteOpen which is to be used in applications such as
-	YAP to make vim use the same session to open files. (SA)
-
-* texviewer.vim:
-	Bug: <F9> did not work in standard vim + cygwin combination.
-	Solution: Use single quotes instead of double-quotes when issuing
-	          shell commands. (SA)
-
