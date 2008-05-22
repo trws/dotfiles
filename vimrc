@@ -1,64 +1,18 @@
+"paths and includes
 set runtimepath+=~/.vim/included/c-support
 set runtimepath+=~/.vim/included/latex-suite
 set runtimepath+=~/.vim/included/vimoutliner
-
-
-
-syn on
-set background=dark
-set backspace=2
-set nowrap
-set softtabstop=2
-set shiftwidth=2
-set expandtab
-set autoindent
-set smartindent
-set ruler
-set hlsearch
-colorscheme murphy
-set wrap
-set incsearch
-set mouse=a
-set ttym=xterm2
-filetype plugin on
-filetype indent on
-
-" Command Make will call make and then cwindow which
-" opens a 3 line error window if any errors are found.
-" if no errors, it closes any open cwindow.
-:command -nargs=* Make make <args> | cwindow 3
 runtime ftplugin/man.vim
 
+"tags
+set tags+=~/.vim-systags
 
-au FileType make inoremap <tab> <tab>
-au FileType make set softtabstop=0
-au FileType make set shiftwidth=8
-au FileType make set noexpandtab
-au FileType make set noautoindent
-au FileType make set nosmartindent
-au FileType tex set textwidth=80
-au FileType tex setlocal spell spelllang=en_us
-au FileType tex imap <C-b> <Plug>Tex_MathBF
-au FileType tex imap <C-l> <Plug>Tex_LeftRight
-au FileType tex imap <C-p> <Plug>Tex_InsertItemOnThisLine
-no <C-c> <ESC>
-vmap <C-y> y:call system("pbcopy", getreg("\""))<CR>
-
-"set t_Co=8
-"set t_AB=[4%dm
-"set t_AF=[3%dm
-if ! has("gui_macvim")
-nnoremap <A-}>  :tabNext<CR>
-vmap <A-}> :tabNext<CR>
-imap <A-}>  :tabNext<CR>
-cmap <A-}>  :tabNext<CR>
-omap <A-}>  :tabNext<CR>
-nnoremap <A-{>  :tabprevious<CR>
-vmap <A-{> :tabprevious<CR>
-imap <A-{>  :tabprevious<CR>
-cmap <A-{>  :tabprevious<CR>
-omap <A-{>  :tabprevious<CR>
-endif
+"syntax/visual options
+syn on
+colorscheme murphy
+set background=dark
+set ruler
+set wrap
 
 if has("gui_running")
   set guioptions-=T
@@ -72,14 +26,17 @@ if has("gui_running")
     " Also for GTK 1
     set guifont=-misc-fixed-medium-r-normal-*-10-*-*-*-c-*-iso8859-15 
   endif
-  let g:inkpot_black_background=1
-  colorscheme inkpot
 endif
-if &term =~ ".*256color.*"
+
+if &term =~ ".*256color.*" || has("gui_running")
   set t_Co=256
   let g:inkpot_black_background=1
   colorscheme inkpot
 endif
+
+"mouse options
+set mouse=a
+set ttym=xterm2
 
 if &term =~ "screen.*"
   set t_kb=
@@ -92,8 +49,25 @@ if &term =~ "screen.*"
   set t_kh=[1~
 endif
 
+"editing behavior
+set backspace=2
+set softtabstop=2
+set shiftwidth=2
+set expandtab
+set hlsearch
+set incsearch
+set ignorecase
 
+"indent
+set autoindent
+set smartindent
+filetype indent on
 
+filetype plugin on
+runtime ftplugin/man.vim
+
+"latex options
+let g:Tex_FormatDependency_pdf = 'pdf'
 if exists("$SYSTEM") 
   if $SYSTEM == "darwin"
     let g:Tex_ViewRule_pdf = 'open '
@@ -103,26 +77,62 @@ if exists("$SYSTEM")
     let g:Tex_ViewRuleComplete_pdf = 'evince $*.pdf' 
   endif
 endif
-
-set grepprg=grep\ -nH\ $*
 au FileType tex TTarget pdf
-imap <Esc>i <M-i>
-let g:Tex_FormatDependency_pdf = 'pdf'
-runtime ftplugin/man.vim
-set ignorecase
+au FileType tex set textwidth=80
+au FileType tex setlocal spell spelllang=en_us
+au FileType tex imap <C-b> <Plug>Tex_MathBF
+au FileType tex imap <C-l> <Plug>Tex_LeftRight
+au FileType tex imap <C-p> <Plug>Tex_InsertItemOnThisLine
 
+"make file and command options
+" Command Make will call make and then cwindow which
+" opens a 3 line error window if any errors are found.
+" if no errors, it closes any open cwindow.
+command! -nargs=* Make make <args> | cwindow 3
 
-let g:winManagerWindowLayout = "Project|TagList"
-map [MJ <MouseUp>
-set tags+=~/.vim-systags
-map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
-map <A-S-p> <Plug>ToggleProject
-map <A-S-o> :Project<CR>:redraw<CR>/
+au FileType make inoremap <tab> <tab>
+au FileType make set softtabstop=0
+au FileType make set shiftwidth=8
+au FileType make set noexpandtab
+au FileType make set noautoindent
+au FileType make set nosmartindent
+
+"general key remappings
 map <S-Z><S-S> :up<CR>
-nmap <silent> <F3> <Plug>ToggleProject
+map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
+vmap <C-y> y:call system("pbcopy", getreg("\""))<CR>
+
+nnoremap  <C-c>  <ESC>
+vmap      <C-c>  <ESC>
+imap      <C-c>  <ESC>
+cmap      <C-c>  <ESC>
+omap      <C-c>  <ESC>
+
+if ! has("gui_macvim")
+  nnoremap  <A-}>  :tabNext<CR>
+  vmap      <A-}>  :tabNext<CR>
+  imap      <A-}>  :tabNext<CR>
+  cmap      <A-}>  :tabNext<CR>
+  omap      <A-}>  :tabNext<CR>
+  nnoremap  <A-{>  :tabprevious<CR>
+  vmap      <A-{>  :tabprevious<CR>
+  imap      <A-{>  :tabprevious<CR>
+  cmap      <A-{>  :tabprevious<CR>
+  omap      <A-{>  :tabprevious<CR>
+endif
+
+"general options
+set grepprg=grep\ -nH\ $*
+
+"winmanager
+let g:winManagerWindowLayout = "Project|TagList"
+
+"project plugin options
+map           <A-S-o> :Project<CR>:redraw<CR>
+map           <A-S-p> <Plug>ToggleProject
+nmap <silent> <F3>    <Plug>ToggleProject
 let g:proj_window_width = 30
 let g:proj_window_increment = 50 
-
 
 " --------------------
 " TagList
