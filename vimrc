@@ -100,7 +100,21 @@ au FileType make set nosmartindent
 "general key remappings
 map <S-Z><S-S> :up<CR>
 map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
-vmap <C-y> y:call system("pbcopy", getreg("\""))<CR>
+
+if ! has("gui_macvim")
+  nnoremap <special> <A-v> "+gP
+  cnoremap <special> <A-v> <C-R>+
+  execute 'vnoremap <script> <special> <A-v>' paste#paste_cmd['v']
+  execute 'inoremap <script> <special> <A-v>' paste#paste_cmd['i']
+endif
+
+if ! has("gui_running")
+  if $SYSTEM == "darwin"
+    vmap <C-y> y:call system("pbcopy", getreg("\""))<CR>
+  elseif $SYSTEM == "linux"
+    vmap <C-y> y:call system("xclip", getreg("\""))<CR>
+  endif
+endif
 
 nnoremap  <C-c>  <ESC>
 vmap      <C-c>  <ESC>
