@@ -47,6 +47,16 @@ if &term =~ "screen.*"
   set t_kl=OD 
   set t_@7=[4~
   set t_kh=[1~
+  nnoremap  <Esc>[4~ <End>
+  vmap      <Esc>[4~ <End>
+  imap      <Esc>[4~ <End>
+  cmap      <Esc>[4~ <End>
+  omap      <Esc>[4~ <End>
+  nnoremap  <Esc>[1~  <Home>
+  vmap      <Esc>[1~  <Home>
+  imap      <Esc>[1~  <Home>
+  cmap      <Esc>[1~  <Home>
+  omap      <Esc>[1~  <Home>
 endif
 
 "editing behavior
@@ -65,6 +75,9 @@ filetype indent on
 
 filetype plugin on
 runtime ftplugin/man.vim
+
+"c/c++ options
+au FileType c set foldmethod=syntax
 
 "latex options
 let g:Tex_FormatDependency_pdf = 'pdf'
@@ -137,6 +150,8 @@ endif
 
 "general options
 set grepprg=grep\ -nH\ $*
+set wildmode=longest:full
+set wildmenu
 
 "winmanager
 let g:winManagerWindowLayout = "Project|TagList"
