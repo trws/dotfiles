@@ -32,6 +32,11 @@
 :CVSWatchOn	vcscommand.txt	/*:CVSWatchOn*
 :CVSWatchRemove	vcscommand.txt	/*:CVSWatchRemove*
 :CVSWatchers	vcscommand.txt	/*:CVSWatchers*
+:TComment	tComment.txt	/*:TComment*
+:TCommentAs	tComment.txt	/*:TCommentAs*
+:TCommentBlock	tComment.txt	/*:TCommentBlock*
+:TCommentInline	tComment.txt	/*:TCommentInline*
+:TCommentRight	tComment.txt	/*:TCommentRight*
 :TlistAddFiles	taglist.txt	/*:TlistAddFiles*
 :TlistAddFilesRecursive	taglist.txt	/*:TlistAddFilesRecursive*
 :TlistClose	taglist.txt	/*:TlistClose*
@@ -77,6 +82,7 @@ OmniCpp_SelectFirstItem	omnicppcomplete.txt	/*OmniCpp_SelectFirstItem*
 OmniCpp_ShowAccess	omnicppcomplete.txt	/*OmniCpp_ShowAccess*
 OmniCpp_ShowPrototypeInAbbr	omnicppcomplete.txt	/*OmniCpp_ShowPrototypeInAbbr*
 OmniCpp_ShowScopeInAbbr	omnicppcomplete.txt	/*OmniCpp_ShowScopeInAbbr*
+TCommentDefineType()	tComment.txt	/*TCommentDefineType()*
 Tlist_Get_Tag_Prototype_By_Line()	taglist.txt	/*Tlist_Get_Tag_Prototype_By_Line()*
 Tlist_Get_Tagname_By_Line()	taglist.txt	/*Tlist_Get_Tagname_By_Line()*
 Tlist_Set_App()	taglist.txt	/*Tlist_Set_App()*
@@ -107,6 +113,11 @@ b:VCSCommandOriginalBuffer	vcscommand.txt	/*b:VCSCommandOriginalBuffer*
 b:VCSCommandSourceFile	vcscommand.txt	/*b:VCSCommandSourceFile*
 b:VCSCommandVCSType	vcscommand.txt	/*b:VCSCommandVCSType*
 cvscommand-changes	vcscommand.txt	/*cvscommand-changes*
+g:tcommentMapLeader1	tComment.txt	/*g:tcommentMapLeader1*
+g:tcommentMapLeader2	tComment.txt	/*g:tcommentMapLeader2*
+g:tcommentMapLeaderOp1	tComment.txt	/*g:tcommentMapLeaderOp1*
+g:tcommentMapLeaderOp2	tComment.txt	/*g:tcommentMapLeaderOp2*
+g:tcommentOpModeExtra	tComment.txt	/*g:tcommentOpModeExtra*
 im_1	imaps.txt	/*im_1*
 imaps-usage	imaps.txt	/*imaps-usage*
 imaps.txt	imaps.txt	/*imaps.txt*
@@ -136,6 +147,11 @@ project-settings	project.txt	/*project-settings*
 project-syntax	project.txt	/*project-syntax*
 project-tips	project.txt	/*project-tips*
 project.txt	project.txt	/*project.txt*
+tComment-Installation	tComment.txt	/*tComment-Installation*
+tComment-Key-Bindings	tComment.txt	/*tComment-Key-Bindings*
+tComment-Usage	tComment.txt	/*tComment-Usage*
+tComment-commands	tComment.txt	/*tComment-commands*
+tComment.txt	tComment.txt	/*tComment.txt*
 taglist-commands	taglist.txt	/*taglist-commands*
 taglist-debug	taglist.txt	/*taglist-debug*
 taglist-extend	taglist.txt	/*taglist-extend*

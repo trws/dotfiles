@@ -1234,7 +1234,7 @@ function! s:Project(filename) " <<<
         nnoremap <script> <Plug>ProjectOnly :call <SID>DoProjectOnly()<CR>
         if match(g:proj_flags, '\Cm') != -1
             if !hasmapto('<Plug>ProjectOnly')
-                nmap <silent> <unique> <C-W>o <Plug>ProjectOnly
+"                nmap <silent> <unique> <C-W>o <Plug>ProjectOnly
                 nmap <silent> <unique> <C-W><C-O> <C-W>o
             endif
         endif " >>>
