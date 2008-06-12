@@ -2,10 +2,22 @@
 set runtimepath+=~/.vim/included/c-support
 set runtimepath+=~/.vim/included/latex-suite
 set runtimepath+=~/.vim/included/vimoutliner
+set runtimepath+=~/.vim/included/enhanced-commentify
 runtime ftplugin/man.vim
 
 "tags
 set tags+=~/.vim-systags
+
+if exists("$SYSTEM") 
+  if $SYSTEM == "darwin"
+    let include_paths = '/opt/local/include /usr/local/include /usr/include /Developer/Headers'
+  elseif $SYSTEM == "linux"
+    let include_paths = '/usr/local/include /usr/include /Developer/Headers'
+  endif
+endif
+
+map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q $PWD<CR>
+execute 'map <C-S-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q -f - ' . include_paths . ' > ~/.vim-systags'
 
 "syntax/visual options
 syn on
@@ -47,7 +59,28 @@ if &term =~ "screen.*"
   set t_kl=OD 
   set t_@7=[4~
   set t_kh=[1~
+  nnoremap  <Esc>[4~ <End>
+  vmap      <Esc>[4~ <End>
+  imap      <Esc>[4~ <End>
+  cmap      <Esc>[4~ <End>
+  omap      <Esc>[4~ <End>
+  nnoremap  <Esc>[1~  <Home>
+  vmap      <Esc>[1~  <Home>
+  imap      <Esc>[1~  <Home>
+  cmap      <Esc>[1~  <Home>
+  omap      <Esc>[1~  <Home>
 endif
+
+"enhanced commentify
+let g:EnhCommentifyUseAltKeys='No'
+let g:EnhCommentifyAltOpen='/\\*'
+let g:EnhCommentifyAltClose='*\\/'
+let g:EnhCommentifyTraditionalMode='No'
+let g:EnhCommentifyFirstLineMode='Yes'
+let g:EnhCommentifyUserMode='No'
+let g:EnhCommentifyRespectIndent='Yes'
+let g:EnhCommentifyPretty='Yes'
+let g:EnhCommentifyMultiPartBlocks='Yes'
 
 "editing behavior
 set backspace=2
@@ -61,10 +94,9 @@ set ignorecase
 "indent
 set autoindent
 set smartindent
-filetype indent on
 
-filetype plugin on
-runtime ftplugin/man.vim
+"c/c++ options
+au FileType c set foldmethod=syntax
 
 "latex options
 let g:Tex_FormatDependency_pdf = 'pdf'
@@ -84,11 +116,14 @@ au FileType tex imap <C-b> <Plug>Tex_MathBF
 au FileType tex imap <C-l> <Plug>Tex_LeftRight
 au FileType tex imap <C-p> <Plug>Tex_InsertItemOnThisLine
 
-"make file and command options
+"build system options
 " Command Make will call make and then cwindow which
 " opens a 3 line error window if any errors are found.
 " if no errors, it closes any open cwindow.
 command! -nargs=* Make make <args> | cwindow 3
+command! -nargs=* Scons scons <args> | cwindow 3
+
+au BufRead,BufNewFile SConstruct set filetype=python
 
 au FileType make inoremap <tab> <tab>
 au FileType make set softtabstop=0
@@ -98,8 +133,21 @@ au FileType make set noautoindent
 au FileType make set nosmartindent
 
 "general key remappings
-map <S-Z><S-S> :up<CR>
-map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
+function! Map_for_all(mapping, target, for_cmd)
+  for item in ['nnoremap', 'vmap', 'omap']
+    execute item . ' ' . a:mapping . ' ' . a:target 
+  endfor
+  
+  execute 'imap <Esc>' . a:mapping . ' ' . a:target 
+  
+  if a:for_cmd != 0
+    execute 'cmap '.a:mapping.' '.a:target
+  endif
+endfunction
+
+call Map_for_all("<C-c>","<Esc>", 1)
+
+map <S-Z><S-S> :up<CR> 
 
 if ! has("gui_macvim")
   nnoremap <special> <A-v> "+gP
@@ -111,39 +159,45 @@ endif
 if ! has("gui_running")
   if $SYSTEM == "darwin"
     vmap <C-y> y:call system("pbcopy", getreg("\""))<CR>
+    vmap <A-y> y:call system("pbcopy", getreg("\""))<CR>
   elseif $SYSTEM == "linux"
     vmap <C-y> y:call system("xclip", getreg("\""))<CR>
   endif
 endif
 
+""tag jump remappings, makes <C-]> list if more than 1, immediate if only 1,
+""alt does the same, but in a new vertical split so you can look at both
+""together, awesome for looking at function arguments and defs together
+function! Vertical_tag_jump()
+  execute "vert rightb stj " . expand("<cword>")
+endfunction
+map  <C-]>   g<C-]>
+imap  <C-]>  <Esc>g<C-]>
+cmap  <C-]>  g<C-]>
 
-nnoremap   <BS>
-vmap       <BS>
-imap       <BS>
-cmap       <BS>
-omap       <BS>
-
-nnoremap  <C-c>  <ESC>
-vmap      <C-c>  <ESC>
-imap      <C-c>  <ESC>
-cmap      <C-c>  <ESC>
-omap      <C-c>  <ESC>
+map <silent> <A-]>  :call Vertical_tag_jump()<CR>
+imap <silent> <A-]>  <Esc>:call Vertical_tag_jump()<CR>
 
 if ! has("gui_macvim")
   nnoremap  <A-}>  :tabNext<CR>
   vmap      <A-}>  :tabNext<CR>
-  imap      <A-}>  :tabNext<CR>
-  cmap      <A-}>  :tabNext<CR>
+  imap      <A-}>  <Esc>:tabNext<CR>
+  cmap      <A-}>  <Esc>:tabNext<CR>
   omap      <A-}>  :tabNext<CR>
   nnoremap  <A-{>  :tabprevious<CR>
   vmap      <A-{>  :tabprevious<CR>
-  imap      <A-{>  :tabprevious<CR>
-  cmap      <A-{>  :tabprevious<CR>
+  imap      <A-{>  <Esc>:tabprevious<CR>
+  cmap      <A-{>  <Esc>:tabprevious<CR>
   omap      <A-{>  :tabprevious<CR>
 endif
 
 "general options
 set grepprg=grep\ -nH\ $*
+set wildmenu
+set foldmethod=syntax
+filetype indent on
+filetype plugin on
+runtime ftplugin/man.vim
 
 "winmanager
 let g:winManagerWindowLayout = "Project|TagList"
@@ -154,6 +208,8 @@ map           <A-S-p> <Plug>ToggleProject
 nmap <silent> <F3>    <Plug>ToggleProject
 let g:proj_window_width = 30
 let g:proj_window_increment = 50 
+let g:proj_run_fold1 = ":!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q -f - %f > %d/tags"
+
 
 " --------------------
 " TagList
@@ -189,5 +245,4 @@ let Tlist_WinWidth = 30
 " very slow, so I disable this
 "let Tlist_Process_File_Always = 1 " To use the :TlistShowTag and the :TlistShowPrototype commands without the taglist window and the taglist menu, you should set this variable to 1.
 ":TlistShowPrototype [filename] [linenumber]
-
 
