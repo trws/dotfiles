@@ -116,6 +116,13 @@ if ! has("gui_running")
   endif
 endif
 
+
+nnoremap   <BS>
+vmap       <BS>
+imap       <BS>
+cmap       <BS>
+omap       <BS>
+
 nnoremap  <C-c>  <ESC>
 vmap      <C-c>  <ESC>
 imap      <C-c>  <ESC>
