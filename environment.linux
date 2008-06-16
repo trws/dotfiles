@@ -1,0 +1,2 @@
+export PS_PERSONALITY=linux
+export BLOCK_SIZE=human-readable

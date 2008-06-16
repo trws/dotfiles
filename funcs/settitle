@@ -1,0 +1,11 @@
+#!zsh
+if [[ $terminfo[hs] == yes ]] {
+	print -rn "$terminfo[tsl]${1//[[:cntrl:]]/}$terminfo[fsl]"
+} else {
+	case $TERM {
+		screen*)
+			print -rn $'\e'_${1//[[:cntrl:]]/}$'\e'\\ ;;
+		xterm*|rxvt*|putty*)
+			print -rn $'\e'"]0;"${1//[[:cntrl:]]/}$'\a' ;;
+	}
+}

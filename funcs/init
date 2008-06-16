@@ -1,0 +1,8 @@
+#!/usr/bin/zsh
+shift
+
+if (( $#1  == 1 )) {
+	sudo telinit $1
+} else {
+	sudo /etc/init.d/$@
+}

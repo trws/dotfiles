@@ -1,0 +1,13 @@
+#!zsh aliases
+#alias lsd='ls -ld *(-/DN)'
+alias ls='ls --color=auto -h'
+alias grep='grep --color=auto '
+alias ls.='ls -dF .*'
+alias rezsh='exec zsh'
+alias -g '^=|'
+alias nocbreak=icanon
+alias cal=ncal
+# Global aliases
+#alias -g M='|more'
+#alias -g H='|head'
+#alias -g T='|tail'

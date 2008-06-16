@@ -1,0 +1,62 @@
+#!zsh bindings
+bindkey -me >& /dev/null
+##bindkey -v
+##
+##bindkey  backward-delete-char
+##bindkey  backward-delete-char
+##bindkey  history-incremental-search-backward
+##bindkey '[4~' end-of-line
+##bindkey '[1~' beginning-of-line
+##bindkey '[3~' delete-char
+##
+##bindkey	'^X^Z'	universal-argument	\
+##	' '	magic-space		\
+##	'^X^A'	vi-find-prev-char-skip	;
+#bindkey -s \
+#	'^[/'	\\\\	\
+#	'^[='	\|	;
+
+#bindkey \
+#	$terminfo[kcuu1] up-line-or-history	\
+#	$terminfo[kcud1] down-line-or-history	\
+#	$terminfo[kcub1] backward-char		\
+#	$terminfo[kcuf1] forward-char		\
+#	$terminfo[kbs]	 backward-delete-char	\
+#	$terminfo[kich1] overwrite-mode		\
+#	$terminfo[kdch1] delete-char		\
+#	$terminfo[khome] beginning-of-line	\
+#	$terminfo[kend]	 end-of-line		\
+#	$terminfo[kpp]	 up-history		\
+#	$terminfo[knp]	 down-history		\
+#2> /dev/null;
+
+#my-accept-line () {
+#	for func in $preaccept; do
+#		$func;
+#	done
+#	zle accept-line;
+#}
+#zle -N my-accept-line
+#bindkey '^M' accept-line
+
+# vim: ts=8
+
+
+#bindkey -v
+
+#bindkey  backward-delete-char
+#bindkey  backward-delete-char
+#bindkey '[3~' delete-char
+#bindkey  history-incremental-search-backward
+
+  bindkey '[4~' end-of-line
+  bindkey '[1~' beginning-of-line
+  bindkey 'OH' beginning-of-line
+  bindkey 'OF' end-of-line
+  bindkey '[H' beginning-of-line
+  bindkey '[F' end-of-line
+
+#bindkey	'^X^Z'	universal-argument	\
+#' '	magic-space		\
+#'^X^A'	vi-find-prev-char-skip	;
+

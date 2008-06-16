@@ -1,0 +1,5 @@
+#!zsh
+for i {
+	unfunction $i
+	autoload -U $i
+}

@@ -1,0 +1,2 @@
+#!zsh
+[[ $host = (Blow|Gale|Wind|lazarus|tome) ]] && gotroot=1

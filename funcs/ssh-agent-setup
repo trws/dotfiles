@@ -1,0 +1,5 @@
+#!zsh
+if [[ ! -S "$SSH_AUTH_SOCK" ]] {
+	ssh_owned=yes
+	eval `command ssh-agent` 2>&1
+}

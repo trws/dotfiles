@@ -1,0 +1,2 @@
+#!zsh
+if [[ $host == Wind || $host == macbook ]] { gotroot=1; }

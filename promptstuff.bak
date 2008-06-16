@@ -1,0 +1,19 @@
+#!zsh
+# set up statusline stuff
+preexec=($preexec cmdtitle)
+precmd=($precmd tprompt)
+
+#if [[ -n "$current_title" ]]
+#then
+#current_title=$(xprop -id $WINDOWID | grep WM_NAME | cut -d= -f2 | sed -e 's/"//g')
+#fi
+# Set prompts
+WINNAME=${WINNAME:-$ZSH_NAME}
+TPROMPT='%m:%~'
+#export current_title
+PROMPT=\
+'%1(j.%2(j.%j.)j .)'\
+'%(?..%127(?..%126(?..%S%?%s )))'\
+'%B%#%b '
+RPROMPT='%1~'
+[[ $host = random ]] || PROMPT="%m $PROMPT"
