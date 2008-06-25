@@ -1,5 +1,8 @@
 #!zsh
 
+#tom's stuff
+zstyle :completion:*:default list-colors ${(s.:.)LS_COLORS}  #makes LS_COLORS actually work
+#end tom's stuff
 # list of completers to use
 zstyle ':completion:*::::' completer _expand _complete _ignored _approximate
 # allow one error for every three characters typed in approximate completer
@@ -28,11 +31,12 @@ zstyle '*scp*' hosts $ssh_hosts
 # Filename suffixes to ignore during completion (except after rm command)
 zstyle ':completion:*:*:(^rm):*:*files' ignored-patterns '*?.o' '*?.c~' \
     '*?.old' '*?.pro'
-# the same for old style completion
 
+# the same for old style completion
+unsetopt listambiguous
 # ignore completion functions (until the _ignored completer)
 zstyle ':completion:*:functions' ignored-patterns '_*'
-zstyle ':completion:*' menu yes select=1
+zstyle ':completion:*' menu select=1
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 export ZSH_COLORS="${LS_COLORS}"
 #:default
