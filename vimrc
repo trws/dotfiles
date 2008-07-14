@@ -16,7 +16,7 @@ if exists("$SYSTEM")
   endif
 endif
 
-map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q $PWD
+map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q $PWD<CR>
 execute 'map <C-S-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q -f - ' . include_paths . ' > ~/.vim-systags'
 
 "syntax/visual options
