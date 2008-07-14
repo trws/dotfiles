@@ -48,9 +48,9 @@ function! ParseEmacsModeLine()
                         let pat = FindParameter(line, 'c-basic-offset')
                         if strlen(pat)
                                 let pat = substitute(pat, '\s', '', 'g')
-                                exec 'setlocal tabstop=' . pat
-                                exec 'setlocal sw=' . pat
                                 exec 'setlocal sts=' . pat
+                                exec 'setlocal sw=' . pat
+                                exec 'setlocal expandtab'
                         endif
                 endif
         endfor
