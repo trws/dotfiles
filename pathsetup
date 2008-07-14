@@ -14,6 +14,6 @@ fi
 	/p/zsh/bin /p/openssh/ /p/cvs/ $JAVACC/bin $CS352/bin $J2SE15/bin /usr/xpg4/bin /usr/ccs/bin $path /usr/ucb
 )
 [[ $domain = cs.purdue.edu ]] && path=($path /p/vim/bin) && MJ=($CS352/MJ)
-path=( ~/programs/bin/.$bintype $path /usr/local/bin /bin /usr/bin 
+path=( ~/scripts ~/programs/bin/.$bintype $path /usr/local/bin /bin /usr/bin 
 /usr/[X]{,11{,R6}}/bin(N) )
 typeset -U path

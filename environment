@@ -11,3 +11,4 @@ DATE_FMT="%c"
 typeset -x LESS ENTOMB PAGER FIREFOX_OPEN_IN IRCNICK DATE_FMT
 export NNTPSERVER="snews://news.purdue.edu"
 export EDITOR=/usr/bin/vim
+export LC_ALL=C
