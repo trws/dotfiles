@@ -1,6 +1,9 @@
 #!zsh aliases
 #alias lsd='ls -ld *(-/DN)'
 alias ls='ls --color=auto -h'
+alias la='ls -a'
+alias lla='ls -la'
+alias ll='ls -l'
 alias grep='grep --color=auto '
 alias ls.='ls -dF .*'
 alias rezsh='exec zsh'
