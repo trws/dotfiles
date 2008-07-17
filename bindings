@@ -46,9 +46,9 @@ bindkey -me >& /dev/null
 
 #bindkey  backward-delete-char
 #bindkey  backward-delete-char
-#bindkey '[3~' delete-char
 #bindkey  history-incremental-search-backward
 
+bindkey '[3~' delete-char
   bindkey '[4~' end-of-line
   bindkey '[1~' beginning-of-line
   bindkey 'OH' beginning-of-line
