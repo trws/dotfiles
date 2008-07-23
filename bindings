@@ -55,6 +55,8 @@ bindkey '[3~' delete-char
   bindkey 'OF' end-of-line
   bindkey '[H' beginning-of-line
   bindkey '[F' end-of-line
+  bindkey '[1;3C' forward-word
+  bindkey '[1;3D' backward-word
 
 #bindkey	'^X^Z'	universal-argument	\
 #' '	magic-space		\
