@@ -1,5 +1,6 @@
 #!zsh bindings
-bindkey -me >& /dev/null
+#  bindkey -me
+bindkey -e
 ##bindkey -v
 ##
 ##bindkey  backward-delete-char
@@ -49,14 +50,16 @@ bindkey -me >& /dev/null
 #bindkey  history-incremental-search-backward
 
 bindkey '[3~' delete-char
-  bindkey '[4~' end-of-line
-  bindkey '[1~' beginning-of-line
-  bindkey 'OH' beginning-of-line
-  bindkey 'OF' end-of-line
-  bindkey '[H' beginning-of-line
-  bindkey '[F' end-of-line
-  bindkey '[1;3C' forward-word
-  bindkey '[1;3D' backward-word
+bindkey '[4~' end-of-line
+bindkey '[1~' beginning-of-line
+bindkey 'OH' beginning-of-line
+bindkey 'OF' end-of-line
+bindkey '[H' beginning-of-line
+bindkey '[F' end-of-line
+bindkey '[1;3D' beginning-of-line
+bindkey '[1;3C' end-of-line
+bindkey '[1;9C' forward-word
+bindkey '[1;9D' backward-word
 
 #bindkey	'^X^Z'	universal-argument	\
 #' '	magic-space		\
