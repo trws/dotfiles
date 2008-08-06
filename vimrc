@@ -50,6 +50,10 @@ endif
 set mouse=a
 set ttym=xterm2
 
+if &term =~ "screen.*-bce"
+    set term=screen-256color
+endif
+
 if &term =~ "screen.*"
   set t_kb=
   set ttymouse=xterm2
@@ -57,7 +61,7 @@ if &term =~ "screen.*"
   set t_kd=OB
   set t_kr=OC
   set t_kl=OD 
-  set t_@7=[4~
+  set t_@7=OF
   set t_kh=[1~
   nnoremap  <Esc>[4~ <End>
   vmap      <Esc>[4~ <End>
@@ -69,6 +73,27 @@ if &term =~ "screen.*"
   imap      <Esc>[1~  <Home>
   cmap      <Esc>[1~  <Home>
   omap      <Esc>[1~  <Home>
+
+  nnoremap  <Esc>0F <End>
+  vmap      <Esc>0F <End>
+  imap      <Esc>0F <End>
+  cmap      <Esc>0F <End>
+  omap      <Esc>0F <End>
+  nnoremap  <Esc>OH  <Home>
+  vmap      <Esc>OH  <Home>
+  imap      <Esc>OH  <Home>
+  cmap      <Esc>OH  <Home>
+  omap      <Esc>OH  <Home>
+  nnoremap  <Esc>[F <End>
+  vmap      <Esc>[F <End>
+  imap      <Esc>[F <End>
+  cmap      <Esc>[F <End>
+  omap      <Esc>[F <End>
+  nnoremap  <Esc>[H  <Home>
+  vmap      <Esc>[H  <Home>
+  imap      <Esc>[H  <Home>
+  cmap      <Esc>[H  <Home>
+  omap      <Esc>[H  <Home>
 endif
 
 "enhanced commentify
@@ -99,6 +124,7 @@ set smartindent
 au FileType c set foldmethod=syntax
 
 "latex options
+let g:tex_flavor='latex'
 let g:Tex_FormatDependency_pdf = 'pdf'
 if exists("$SYSTEM") 
   if $SYSTEM == "darwin"
@@ -109,12 +135,13 @@ if exists("$SYSTEM")
     let g:Tex_ViewRuleComplete_pdf = 'evince $*.pdf' 
   endif
 endif
-au FileType tex TTarget pdf
+au FileType tex let g:Tex_DefaultTargetFormat='pdf'
 au FileType tex set textwidth=80
 au FileType tex setlocal spell spelllang=en_us
 au FileType tex imap <C-b> <Plug>Tex_MathBF
 au FileType tex imap <C-l> <Plug>Tex_LeftRight
 au FileType tex imap <C-p> <Plug>Tex_InsertItemOnThisLine
+au FileType tex imap <A-i> <Plug>Tex_InsertItemOnThisLine
 
 "build system options
 " Command Make will call make and then cwindow which
@@ -154,6 +181,17 @@ if ! has("gui_macvim")
   cnoremap <special> <A-v> <C-R>+
   execute 'vnoremap <script> <special> <A-v>' paste#paste_cmd['v']
   execute 'inoremap <script> <special> <A-v>' paste#paste_cmd['i']
+  nnoremap  <Esc>[1;3C <End>
+  vmap      <Esc>[1;3C <End>
+  imap      <Esc>[1;3C <End>
+  cmap      <Esc>[1;3C <End>
+  omap      <Esc>[1;3C <End>
+  nnoremap  <Esc>[1;3D  <Home>
+  vmap      <Esc>[1;3D  <Home>
+  imap      <Esc>[1;3D  <Home>
+  cmap      <Esc>[1;3D  <Home>
+  omap      <Esc>[1;3D  <Home>
+
 endif
 
 if ! has("gui_running")

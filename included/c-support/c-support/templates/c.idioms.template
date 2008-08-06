@@ -1,9 +1,15 @@
 $%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 == idioms.function ==
-void<CURSOR>
-|?FUNCTION_NAME| (  )
+#undef FUNCNAME
+#define FUNCNAME |?FUNCTION_NAME|
+#undef FCNAME
+#define FCNAME HYDRA_QUOTE(FUNCNAME)
+CSSI_Status |FUNCTION_NAME| ( <+argument list+> )
 {
-<SPLIT>	return ;
+    HYDRA_FUNCTION_ENTER(FCNAME);
+<SPLIT>
+    HYDRA_FUNCTION_EXIT(FCNAME);
+	return <+return value+>;
 }		/* -----  end of function |FUNCTION_NAME|  ----- */
 $%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 == idioms.function-static ==
