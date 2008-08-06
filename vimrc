@@ -191,6 +191,16 @@ if ! has("gui_macvim")
   imap      <Esc>[1;3D  <Home>
   cmap      <Esc>[1;3D  <Home>
   omap      <Esc>[1;3D  <Home>
+  nnoremap  <Esc>[1;9D  <C-Left>
+  vmap      <Esc>[1;9D  <C-Left>
+  imap      <Esc>[1;9D  <C-Left>
+  cmap      <Esc>[1;9D  <C-Left>
+  omap      <Esc>[1;9D  <C-Left>
+  nnoremap  <Esc>[1;9C  <C-Right>
+  vmap      <Esc>[1;9C  <C-Right>
+  imap      <Esc>[1;9C  <C-Right>
+  cmap      <Esc>[1;9C  <C-Right>
+  omap      <Esc>[1;9C  <C-Right>
 
 endif
 
