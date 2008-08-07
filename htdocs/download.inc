@@ -66,23 +66,8 @@ installations before reinstalling.</p>
 do not over-write any of your files.</p>
 
 <h4>Step 2 of 4: Set a few things in .vimrc</h4>
-Make sure you have the following setting in your .vimrc
-<pre>
-" REQUIRED. This makes vim invoke latex-suite when you open a tex file.
-filetype plugin on
-
-" IMPORTANT: win32 users will need to have 'shellslash' set so that latex
-" can be called correctly.
-set shellslash
-
-" IMPORTANT: grep will sometimes skip displaying the file name if you
-" search in a singe file. This will confuse latex-suite. Set your grep
-" program to alway generate a file-name.
-set grepprg=grep\ -nH\ $*
-
-" OPTIONAL: This enables automatic indentation as you type.
-filetype indent on
-</pre>
+The recommended settings for vim-latex in your .vimrc file are now only described in
+the <a href="/documentation/latex-suite/recommended-settings.html/documentation/latex-suite/recommended-settings.html">vim-latex manual</a>.
 
 <h4>Step 3 of 4: Install the help files</h4>
 To install the included latex-suit.txt and latexhelp.txt files as vim help

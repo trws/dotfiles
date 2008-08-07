@@ -23,6 +23,9 @@
 	a lot. But latex-suite always converts it into a
 	<tt>\subsection{}&lt;++&gt;</tt>. How do I get around this? (OR How do
 	I disable a mapping created by Latex-suite?)</a></li>
+    <li><a class=question href="#faq-not-loaded-vim7">
+        Why is vim-latex is no longer loaded when I open an empty .tex file after I upgraded to Vim 7?
+       </a>
 </ul>
 <h2>Answers</h2>
 
@@ -287,6 +290,16 @@ not already exist)
 </div>
 </blockquote>
 
+<a name="faq-not-loaded-vim7">
+<div class=qa>
+Q: Why is vim-latex is no longer loaded when I open an empty .tex file after I upgraded to Vim 7?
+</div>
+<blockquote>
+<div class=ans>
+If you look at the filetype of your opened file (with <pre>:se ft</pre>, you will notice, that it is not set to 'tex', but probably to 'plaintex'.
+To change this, you need to add <pre>let g:tex_flavor='latex'</pre> to your .vimrc file.
+</div>
+</blockquote>
 <!-- A sample Q & A
 <a name="faq-#">
 <div class=qa>
