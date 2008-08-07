@@ -67,7 +67,7 @@ do not over-write any of your files.</p>
 
 <h4>Step 2 of 4: Set a few things in .vimrc</h4>
 The recommended settings for vim-latex in your .vimrc file are now only described in
-the <a href="/documentation/latex-suite/recommended-settings.html/documentation/latex-suite/recommended-settings.html">vim-latex manual</a>.
+the <a href="/documentation/latex-suite/recommended-settings.html">vim-latex manual</a>.
 
 <h4>Step 3 of 4: Install the help files</h4>
 To install the included latex-suit.txt and latexhelp.txt files as vim help
