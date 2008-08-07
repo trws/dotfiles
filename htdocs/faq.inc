@@ -296,8 +296,8 @@ Q: Why is vim-latex is no longer loaded when I open an empty .tex file after I u
 </div>
 <blockquote>
 <div class=ans>
-If you look at the filetype of your opened file (with <pre>:se ft</pre>, you will notice, that it is not set to 'tex', but probably to 'plaintex'.
-To change this, you need to add <pre>let g:tex_flavor='latex'</pre> to your .vimrc file.
+If you look at the filetype of your opened file (with <tt>:se ft</tt>), you will notice, that it is not set to 'tex', but probably to 'plaintex'.
+To change this, you need to add <tt>let g:tex_flavor='latex'</tt> to your .vimrc file.
 </div>
 </blockquote>
 <!-- A sample Q & A
