@@ -81,15 +81,18 @@ let g:EnhCommentifyUserMode='No'
 let g:EnhCommentifyRespectIndent='Yes'
 let g:EnhCommentifyPretty='Yes'
 let g:EnhCommentifyMultiPartBlocks='Yes'
+"csupport, but very commentify related...
+let g:C_TypeOfH="c"
 
 "editing behavior
 set backspace=2
-set softtabstop=4
-set shiftwidth=4
+set softtabstop=2
+set shiftwidth=2
 set expandtab
 set hlsearch
 set incsearch
 set ignorecase
+set modeline
 
 "indent
 set autoindent
