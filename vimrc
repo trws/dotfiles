@@ -5,6 +5,7 @@ set runtimepath+=~/.vim/included/vimoutliner
 set runtimepath+=~/.vim/included/enhanced-commentify
 runtime ftplugin/man.vim
 
+
 "tags
 set tags+=~/.vim-systags
 
@@ -63,6 +64,29 @@ if &term =~ "screen.*"
   set t_kl=OD 
   set t_@7=OF
   set t_kh=[1~
+
+  nnoremap <Esc>[C     <Right>
+  vmap     <Esc>[C     <Right>
+  imap     <Esc>[C     <Right>
+  cmap     <Esc>[C     <Right>
+  omap     <Esc>[C     <Right>
+  nnoremap <Esc>[D     <Left>
+  vmap     <Esc>[D     <Left>
+  imap     <Esc>[D     <Left>
+  cmap     <Esc>[D     <Left>
+  omap     <Esc>[D     <Left>
+  nnoremap <Esc>[A     <Up>
+  vmap     <Esc>[A     <Up>
+  imap     <Esc>[A     <Up>
+  cmap     <Esc>[A     <Up>
+  omap     <Esc>[A     <Up>
+  nnoremap <Esc>[B     <Down>
+  vmap     <Esc>[B     <Down>
+  imap     <Esc>[B     <Down>
+  cmap     <Esc>[B     <Down>
+  omap     <Esc>[B     <Down>
+
+
   nnoremap  <Esc>[4~ <End>
   vmap      <Esc>[4~ <End>
   imap      <Esc>[4~ <End>
@@ -294,3 +318,6 @@ let Tlist_WinWidth = 30
 "let Tlist_Process_File_Always = 1 " To use the :TlistShowTag and the :TlistShowPrototype commands without the taglist window and the taglist menu, you should set this variable to 1.
 ":TlistShowPrototype [filename] [linenumber]
 
+"unsorted, deal with later
+highlight WhitespaceEOL ctermbg=red guibg=red
+match WhitespaceEOL /\s\+$/
