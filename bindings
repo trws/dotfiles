@@ -60,6 +60,8 @@ bindkey '[1;3D' beginning-of-line
 bindkey '[1;3C' end-of-line
 bindkey '[1;9C' forward-word
 bindkey '[1;9D' backward-word
+bindkey 'OC' forward-word
+bindkey 'OD' backward-word
 
 #bindkey	'^X^Z'	universal-argument	\
 #' '	magic-space		\
