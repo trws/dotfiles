@@ -30,7 +30,7 @@ set wrap
 if has("gui_running")
   set guioptions-=T
   if has("gui_macvim")
-    set transparency=15
+    " set transparency=15
     set gfn=Courier:h11.00
     set fuopt=maxvert,maxhorz
   elseif has("gui_gtk2")
@@ -54,6 +54,12 @@ set ttym=xterm2
 if &term =~ "screen.*-bce"
     set term=screen-256color
 endif
+
+  nnoremap      <BS>
+  vmap          <BS>
+  imap          <BS>
+  cmap          <BS>
+  omap          <BS>
 
 if &term =~ "screen.*"
   set t_kb=
@@ -170,6 +176,7 @@ au FileType tex imap <C-l> <Plug>Tex_LeftRight
 au FileType tex imap <C-p> <Plug>Tex_InsertItemOnThisLine
 au FileType tex imap <A-i> <Plug>Tex_InsertItemOnThisLine
 
+au FileType txt set textwidth=80
 "build system options
 " Command Make will call make and then cwindow which
 " opens a 3 line error window if any errors are found.
@@ -213,21 +220,21 @@ if ! has("gui_macvim")
   imap      <Esc>[1;3C <End>
   cmap      <Esc>[1;3C <End>
   omap      <Esc>[1;3C <End>
-  nnoremap  <Esc>[1;3D  <Home>
-  vmap      <Esc>[1;3D  <Home>
-  imap      <Esc>[1;3D  <Home>
-  cmap      <Esc>[1;3D  <Home>
-  omap      <Esc>[1;3D  <Home>
-  nnoremap  <Esc>[1;9D  <C-Left>
-  vmap      <Esc>[1;9D  <C-Left>
-  imap      <Esc>[1;9D  <C-Left>
-  cmap      <Esc>[1;9D  <C-Left>
-  omap      <Esc>[1;9D  <C-Left>
-  nnoremap  <Esc>[1;9C  <C-Right>
-  vmap      <Esc>[1;9C  <C-Right>
-  imap      <Esc>[1;9C  <C-Right>
-  cmap      <Esc>[1;9C  <C-Right>
-  omap      <Esc>[1;9C  <C-Right>
+  nnoremap  <Esc>[1;3D <Home>
+  vmap      <Esc>[1;3D <Home>
+  imap      <Esc>[1;3D <Home>
+  cmap      <Esc>[1;3D <Home>
+  omap      <Esc>[1;3D <Home>
+  nnoremap  <Esc>[1;9D <C-Left>
+  vmap      <Esc>[1;9D <C-Left>
+  imap      <Esc>[1;9D <C-Left>
+  cmap      <Esc>[1;9D <C-Left>
+  omap      <Esc>[1;9D <C-Left>
+  nnoremap  <Esc>[1;9C <C-Right>
+  vmap      <Esc>[1;9C <C-Right>
+  imap      <Esc>[1;9C <C-Right>
+  cmap      <Esc>[1;9C <C-Right>
+  omap      <Esc>[1;9C <C-Right>
 
 endif
 
