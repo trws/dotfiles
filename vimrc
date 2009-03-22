@@ -9,7 +9,7 @@ runtime ftplugin/man.vim
 "tags
 set tags+=~/.vim-systags
 
-if exists("$SYSTEM") 
+if exists("$SYSTEM")
   if $SYSTEM == "darwin"
     let include_paths = '/opt/local/include /usr/local/include /usr/include /Developer/Headers'
   elseif $SYSTEM == "linux"
@@ -21,6 +21,8 @@ map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q $PWD<CR>
 execute 'map <C-S-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q -f - ' . include_paths . ' > ~/.vim-systags'
 
 "syntax/visual options
+set vb
+set t_vb=
 syn on
 colorscheme murphy
 set background=dark
