@@ -9,7 +9,7 @@ runtime ftplugin/man.vim
 "tags
 set tags+=~/.vim-systags
 
-if exists("$SYSTEM") 
+if exists("$SYSTEM")
   if $SYSTEM == "darwin"
     let include_paths = '/opt/local/include /usr/local/include /usr/include /Developer/Headers'
   elseif $SYSTEM == "linux"
@@ -23,6 +23,8 @@ map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q $PWD<CR>
 execute 'map <C-S-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q -f - ' . include_paths . ' > ~/.vim-systags'
 
 "syntax/visual options
+set vb
+set t_vb=
 syn on
 colorscheme murphy
 set background=dark
@@ -32,7 +34,7 @@ set wrap
 if has("gui_running")
   set guioptions-=T
   if has("gui_macvim")
-    set transparency=15
+    " set transparency=15
     set gfn=Courier:h11.00
     set fuopt=maxvert,maxhorz
   elseif has("gui_gtk2")
@@ -65,6 +67,12 @@ set ttym=xterm2
 if &term =~ "screen.*-bce"
     set term=screen-256color
 endif
+
+  nnoremap      <BS>
+  vmap          <BS>
+  imap          <BS>
+  cmap          <BS>
+  omap          <BS>
 
 if &term =~ "screen.*"
   set ttymouse=xterm2
@@ -225,21 +233,21 @@ if ! has("gui_macvim")
   imap      <Esc>[1;3C <End>
   cmap      <Esc>[1;3C <End>
   omap      <Esc>[1;3C <End>
-  nnoremap  <Esc>[1;3D  <Home>
-  vmap      <Esc>[1;3D  <Home>
-  imap      <Esc>[1;3D  <Home>
-  cmap      <Esc>[1;3D  <Home>
-  omap      <Esc>[1;3D  <Home>
-  nnoremap  <Esc>[1;9D  <C-Left>
-  vmap      <Esc>[1;9D  <C-Left>
-  imap      <Esc>[1;9D  <C-Left>
-  cmap      <Esc>[1;9D  <C-Left>
-  omap      <Esc>[1;9D  <C-Left>
-  nnoremap  <Esc>[1;9C  <C-Right>
-  vmap      <Esc>[1;9C  <C-Right>
-  imap      <Esc>[1;9C  <C-Right>
-  cmap      <Esc>[1;9C  <C-Right>
-  omap      <Esc>[1;9C  <C-Right>
+  nnoremap  <Esc>[1;3D <Home>
+  vmap      <Esc>[1;3D <Home>
+  imap      <Esc>[1;3D <Home>
+  cmap      <Esc>[1;3D <Home>
+  omap      <Esc>[1;3D <Home>
+  nnoremap  <Esc>[1;9D <C-Left>
+  vmap      <Esc>[1;9D <C-Left>
+  imap      <Esc>[1;9D <C-Left>
+  cmap      <Esc>[1;9D <C-Left>
+  omap      <Esc>[1;9D <C-Left>
+  nnoremap  <Esc>[1;9C <C-Right>
+  vmap      <Esc>[1;9C <C-Right>
+  imap      <Esc>[1;9C <C-Right>
+  cmap      <Esc>[1;9C <C-Right>
+  omap      <Esc>[1;9C <C-Right>
 
 endif
 
