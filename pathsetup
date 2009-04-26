@@ -15,5 +15,5 @@ fi
 )
 [[ $domain = cs.purdue.edu ]] && path=($path /p/vim/bin) && MJ=($CS352/MJ)
 path=( ~/scripts ~/programs/$bintype/bin ~/programs/bin $path /usr/local/bin /bin /usr/bin 
-/usr/[X]{,11{,R6}}/bin(N) )
+/usr/[X]{,11{,R6}}/bin(N) /usr/local/cuda/bin)
 typeset -U path
