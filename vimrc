@@ -15,6 +15,8 @@ if exists("$SYSTEM")
   elseif $SYSTEM == "linux"
     let include_paths = '/usr/local/include /usr/include /Developer/Headers'
   endif
+else
+  let include_paths = ''
 endif
 
 map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q $PWD<CR>
@@ -53,6 +55,15 @@ endif
 set mouse=a
 set ttym=xterm2
 
+"keyboard options
+"set t_kb=
+  nnoremap    <BS>
+  vmap        <BS>
+  imap        <BS>
+  cmap        <BS>
+  omap        <BS>
+
+"screen session key remapping to fix issues
 if &term =~ "screen.*-bce"
     set term=screen-256color
 endif
@@ -64,7 +75,6 @@ endif
   omap          <BS>
 
 if &term =~ "screen.*"
-  set t_kb=
   set ttymouse=xterm2
   set t_ku=OA
   set t_kd=OB
@@ -181,6 +191,7 @@ au FileType tex imap <C-p> <Plug>Tex_InsertItemOnThisLine
 au FileType tex imap <A-i> <Plug>Tex_InsertItemOnThisLine
 
 au FileType txt set textwidth=80
+au FileType txt setlocal spell spelllang=en_us
 "build system options
 " Command Make will call make and then cwindow which
 " opens a 3 line error window if any errors are found.
