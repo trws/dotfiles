@@ -12,4 +12,4 @@ typeset -x LESS ENTOMB PAGER FIREFOX_OPEN_IN IRCNICK DATE_FMT
 export NNTPSERVER="snews://news.purdue.edu"
 export EDITOR=vim
 export LC_ALL=C
-#[[ $TERM = "screen-256color-bce" ]] && infocmp screen-256colors >& /dev/null && export TERM=screen-256color || echo screen-256color unavailable, fix it!
+#[[ $TERM = "screen-256color-bce" ]] && infocmp screen-256color >& /dev/null && export TERM=screen-256color || echo screen-256color unavailable, fix it!
