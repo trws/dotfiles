@@ -24,7 +24,7 @@ execute 'map <C-S-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q -f - '
 set vb
 set t_vb=
 syn on
-colorscheme murphy
+colorscheme inkpot
 set background=dark
 set ruler
 set wrap
@@ -157,6 +157,8 @@ set smartindent
 
 "c/c++ options
 au FileType c set foldmethod=syntax
+"cuda file hilighting
+au BufNewFile,BufRead *.cu set ft=cuda
 
 "latex options
 let g:tex_flavor='latex'
@@ -288,7 +290,9 @@ let g:winManagerWindowLayout = "Project|TagList"
 
 "project plugin options
 map           <A-S-o> :Project<CR>:redraw<CR>
+map           <D-O> :Project<CR>:redraw<CR>
 map           <A-S-p> <Plug>ToggleProject
+map           <D-P> <Plug>ToggleProject
 nmap <silent> <F3>    <Plug>ToggleProject
 let g:proj_window_width = 30
 let g:proj_window_increment = 50 
@@ -301,6 +305,7 @@ let g:proj_run_fold1 = ":!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q -f - 
 " F4:  Switch on/off TagList
 nnoremap <silent> <F4> :TlistToggle<CR>
 nnoremap <silent> <A-S-t> :TlistToggle<CR>
+nnoremap <silent> <D-T> :TlistToggle<CR>
 
 " TagListTagName  - Used for tag names
 highlight MyTagListTagName gui=bold guifg=Black guibg=Green cterm=bold ctermfg=Black ctermbg=Green
