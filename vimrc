@@ -13,8 +13,10 @@ if exists("$SYSTEM")
   if $SYSTEM == "darwin"
     let include_paths = '/opt/local/include /usr/local/include /usr/include /Developer/Headers'
   elseif $SYSTEM == "linux"
-    let include_paths = '/usr/local/include /usr/include /Developer/Headers'
+    let include_paths = '/usr/local/include /usr/include'
   endif
+else
+  let include_paths = '/usr/local/include /usr/include'
 endif
 
 map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q $PWD<CR>
