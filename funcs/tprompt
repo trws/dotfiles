@@ -1,5 +1,6 @@
 #!zsh
-settitle `print -P $TPROMPT`
+#settitle `print -P $TPROMPT`
+settitle "$(print -P $TPROMPT)"
 if [[ $TERM == screen* ]] {
 	print -n "\ek$WINNAME\e\\"
 }

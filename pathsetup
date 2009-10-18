@@ -3,11 +3,11 @@
 (( $gotroot )) && path=($path /usr/local/sbin /sbin /usr/sbin)
 if [[ $system = darwin ]] 
 then
-  path=( /opt/local/bin /opt/local/sbin $path /usr/local/cuda/bin )
+  path=( /sw/bin /opt/local/bin /opt/local/sbin $path /usr/local/cuda/bin )
   manpath=( ~/programs/man ~/programs/share/man /opt/local/man $manpath )
   export PERL5LIB=~/programs/lib/perl5/5.8.8/darwin-2level:~/programs/lib/perl5/5.8.8:~/programs/lib/perl5/site_perl/5.8.8/darwin-2level:~/programs/lib/perl5/site_perl/5.8.8:~/programs/lib/perl5/site_perl:~/programs/lib/perl5/vendor_perl/5.8.8/darwin-2level:~/programs/lib/perl5/vendor_perl/5.8.8:~/programs/lib/perl5/vendor_perl
 
-#  test -r /sw/bin/init.sh && . /sw/bin/init.sh
+ test -r /sw/bin/init.sh && . /sw/bin/init.sh
 fi
 
 [[ $system = solaris ]] && path=(
