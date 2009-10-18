@@ -23,9 +23,9 @@ function precmd {
     ###
     # Get APM info.
 
-    if which ibam > /dev/null; then
+    if which ibam >& /dev/null; then
 	PR_APM_RESULT=`ibam --percentbattery`
-    elif which apm > /dev/null; then
+    elif which apm >& /dev/null; then
 	PR_APM_RESULT=`apm`
     fi
 }
