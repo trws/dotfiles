@@ -5,25 +5,32 @@ set runtimepath+=~/.vim/included/vimoutliner
 set runtimepath+=~/.vim/included/enhanced-commentify
 runtime ftplugin/man.vim
 
-map  <BS>
-cmap  <BS>
+
+"additional buffer types
+au BufNewFile,BufRead *.cu set ft=cuda
+
+>>>>>>> 3becbff7adfe460e1716d8d07f4e54ff23e4abdd:vimrc
 "tags
 set tags+=~/.vim-systags
 
-if exists("$SYSTEM") 
+if exists("$SYSTEM")
   if $SYSTEM == "darwin"
     let include_paths = '/opt/local/include /usr/local/include /usr/include /Developer/Headers'
   elseif $SYSTEM == "linux"
-    let include_paths = '/usr/local/include /usr/include /Developer/Headers'
+    let include_paths = '/usr/local/include /usr/include'
   endif
+else
+  let include_paths = '/usr/local/include /usr/include'
 endif
 
 map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q $PWD<CR>
 execute 'map <C-S-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q -f - ' . include_paths . ' > ~/.vim-systags'
 
 "syntax/visual options
+set vb
+set t_vb=
 syn on
-colorscheme murphy
+colorscheme inkpot
 set background=dark
 set ruler
 set wrap
@@ -31,7 +38,7 @@ set wrap
 if has("gui_running")
   set guioptions-=T
   if has("gui_macvim")
-    set transparency=15
+    " set transparency=15
     set gfn=Courier:h11.00
     set fuopt=maxvert,maxhorz
   elseif has("gui_gtk2")
@@ -52,12 +59,28 @@ endif
 set mouse=a
 set ttym=xterm2
 
+map  <BS>
+cmap  <BS>
+"keyboard options
+set t_kb=
+  nnoremap    <BS>
+  vmap        <BS>
+  imap        <BS>
+  cmap        <BS>
+  omap        <BS>
+
+"screen session key remapping to fix issues
 if &term =~ "screen.*-bce"
     set term=screen-256color
 endif
 
+  nnoremap      <BS>
+  vmap          <BS>
+  imap          <BS>
+  cmap          <BS>
+  omap          <BS>
+
 if &term =~ "screen.*"
-  set t_kb=
   set ttymouse=xterm2
   set t_ku=OA
   set t_kd=OB
@@ -150,6 +173,8 @@ set smartindent
 
 "c/c++ options
 au FileType c set foldmethod=syntax
+"cuda file hilighting
+au BufNewFile,BufRead *.cu set ft=cuda
 
 "latex options
 let g:tex_flavor='latex'
@@ -171,6 +196,8 @@ au FileType tex imap <C-l> <Plug>Tex_LeftRight
 au FileType tex imap <C-p> <Plug>Tex_InsertItemOnThisLine
 au FileType tex imap <A-i> <Plug>Tex_InsertItemOnThisLine
 
+au FileType txt set textwidth=80
+au FileType txt setlocal spell spelllang=en_us
 "build system options
 " Command Make will call make and then cwindow which
 " opens a 3 line error window if any errors are found.
@@ -214,21 +241,21 @@ if ! has("gui_macvim")
   imap      <Esc>[1;3C <End>
   cmap      <Esc>[1;3C <End>
   omap      <Esc>[1;3C <End>
-  nnoremap  <Esc>[1;3D  <Home>
-  vmap      <Esc>[1;3D  <Home>
-  imap      <Esc>[1;3D  <Home>
-  cmap      <Esc>[1;3D  <Home>
-  omap      <Esc>[1;3D  <Home>
-  nnoremap  <Esc>[1;9D  <C-Left>
-  vmap      <Esc>[1;9D  <C-Left>
-  imap      <Esc>[1;9D  <C-Left>
-  cmap      <Esc>[1;9D  <C-Left>
-  omap      <Esc>[1;9D  <C-Left>
-  nnoremap  <Esc>[1;9C  <C-Right>
-  vmap      <Esc>[1;9C  <C-Right>
-  imap      <Esc>[1;9C  <C-Right>
-  cmap      <Esc>[1;9C  <C-Right>
-  omap      <Esc>[1;9C  <C-Right>
+  nnoremap  <Esc>[1;3D <Home>
+  vmap      <Esc>[1;3D <Home>
+  imap      <Esc>[1;3D <Home>
+  cmap      <Esc>[1;3D <Home>
+  omap      <Esc>[1;3D <Home>
+  nnoremap  <Esc>[1;9D <C-Left>
+  vmap      <Esc>[1;9D <C-Left>
+  imap      <Esc>[1;9D <C-Left>
+  cmap      <Esc>[1;9D <C-Left>
+  omap      <Esc>[1;9D <C-Left>
+  nnoremap  <Esc>[1;9C <C-Right>
+  vmap      <Esc>[1;9C <C-Right>
+  imap      <Esc>[1;9C <C-Right>
+  cmap      <Esc>[1;9C <C-Right>
+  omap      <Esc>[1;9C <C-Right>
 
 endif
 
@@ -280,7 +307,9 @@ let g:winManagerWindowLayout = "Project|TagList"
 
 "project plugin options
 map           <A-S-o> :Project<CR>:redraw<CR>
+map           <D-O> :Project<CR>:redraw<CR>
 map           <A-S-p> <Plug>ToggleProject
+map           <D-P> <Plug>ToggleProject
 nmap <silent> <F3>    <Plug>ToggleProject
 let g:proj_window_width = 30
 let g:proj_window_increment = 50 
@@ -293,6 +322,7 @@ let g:proj_run_fold1 = ":!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q -f - 
 " F4:  Switch on/off TagList
 nnoremap <silent> <F4> :TlistToggle<CR>
 nnoremap <silent> <A-S-t> :TlistToggle<CR>
+nnoremap <silent> <D-T> :TlistToggle<CR>
 
 " TagListTagName  - Used for tag names
 highlight MyTagListTagName gui=bold guifg=Black guibg=Green cterm=bold ctermfg=Black ctermbg=Green
