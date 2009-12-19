@@ -9,7 +9,6 @@ runtime ftplugin/man.vim
 "additional buffer types
 au BufNewFile,BufRead *.cu set ft=cuda
 
->>>>>>> 3becbff7adfe460e1716d8d07f4e54ff23e4abdd:vimrc
 "tags
 set tags+=~/.vim-systags
 
