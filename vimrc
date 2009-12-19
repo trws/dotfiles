@@ -5,7 +5,8 @@ set runtimepath+=~/.vim/included/vimoutliner
 set runtimepath+=~/.vim/included/enhanced-commentify
 runtime ftplugin/man.vim
 
-
+map  <BS>
+cmap  <BS>
 "tags
 set tags+=~/.vim-systags
 
