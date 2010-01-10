@@ -26,10 +26,10 @@ execute 'map <C-S-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q -f - '
 set vb
 set t_vb=
 syn on
-colorscheme inkpot
+colorscheme slate
 set background=dark
 set ruler
-set wrap
+set nowrap
 
 if has("gui_running")
   set guioptions-=T
@@ -75,7 +75,7 @@ endif
   omap          <BS>
 
 if &term =~ "screen.*"
-  set ttymouse=xterm2
+  set ttymouse=xterm
   set t_ku=OA
   set t_kd=OB
   set t_kr=OC
