@@ -6,6 +6,9 @@ set runtimepath+=~/.vim/included/enhanced-commentify
 runtime ftplugin/man.vim
 
 
+"additional buffer types
+au BufNewFile,BufRead *.cu set ft=cuda
+
 "tags
 set tags+=~/.vim-systags
 
@@ -55,8 +58,10 @@ endif
 set mouse=a
 set ttym=xterm2
 
+map  <BS>
+cmap  <BS>
 "keyboard options
-"set t_kb=
+set t_kb=
   nnoremap    <BS>
   vmap        <BS>
   imap        <BS>
