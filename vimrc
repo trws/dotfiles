@@ -84,7 +84,7 @@ if &term =~ "screen.*"
   set t_ku=OA
   set t_kd=OB
   set t_kr=OC
-  set t_kl=OD 
+  set t_kl=OD
   set t_@7=OF
   set t_kh=[1~
 
