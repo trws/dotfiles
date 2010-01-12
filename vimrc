@@ -164,6 +164,7 @@ set expandtab
 set hlsearch
 set incsearch
 set ignorecase
+set smartcase
 set modeline
 
 "indent
