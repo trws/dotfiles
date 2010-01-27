@@ -1,54 +1,9 @@
-<?
-/// Returns the latest latexSuite2003.*.tar.gz or .zip file present in the
-// download area.
-function GetLatestDevVersion($pat) {
-	$dir = opendir('download');
-	if (!$dir)
-		return '';
-	
-	$curmodtime = -1;
-	$latestfile = '';
-	while (($file = readdir($dir)) != FALSE) {
-		if (ereg('^latexSuite200.*'.$pat, $file)) {
-			if (filemtime("download/$file") > $curmodtime) {
-				$curmodtime = filemtime("download/$file");
-				$latestfile = $file;
-			}
-		}
-	}
-	return "$latestfile";
-}
-$latestTgz = GetLatestDevVersion('tar.gz');
-$latestZip = GetLatestDevVersion('zip');
-
-// Find out the modification times and sizes of the latest developement
-// snapshots. The optional argument to round() is the number of decimal
-// places to retain.
-$latestTgzTime = date("F j, Y", filemtime("download/$latestTgz"));
-$latestZipTime = date("F j, Y", filemtime("download/$latestZip"));
-$latestTgzSize = round(filesize("download/$latestTgz")/1024,1)." Kb";
-$latestZipSize = round(filesize("download/$latestZip")/1024,1)." Kb";
-
-// This provides an easy way to go from one release to the next. All that
-// will be need to go from release 1.5 to 1.6 is to change the next line.
-$relName = "latexSuite-1.5";
-$relTgz = "$relName.tar.gz";
-$relZip = "$relName.zip";
-$relTgzTime = date("F j, Y", filemtime("download/$relTgz"));
-$relZipTime = date("F j, Y", filemtime("download/$relZip"));
-$relTgzSize = round(filesize("download/$relTgz")/1024,1)." Kb";
-$relZipSize = round(filesize("download/$relZip")/1024,1)." Kb";
-?>
-
-Latest version of Latex-Suite:
-<?
-echo <<<END
-<ul>
-  <li><a href="download/$latestZip">$latestZip</a> ($latestZipSize; $latestZipTime)</li>
-	<li><a href="download/$latestTgz">$latestTgz</a> ($latestTgzSize; $latestTgzTime)</li>
-</ul>
-END;
-?>
+<h2>Latest version</h2>
+<p> Currently only irregular svn snapshots are provided. These and older
+releases can be found at the <a
+href="http://sourceforge.net/projects/vim-latex/files/">SourceForge Files for
+vim-latex</a> page.
+</p>
 <a href="vimfiles/Changelog">Changelog</a>
 
 <a name=installation>
