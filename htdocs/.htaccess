@@ -14,3 +14,6 @@ Redirect permanent /download/latexSuite20060325.zip http://downloads.sourceforge
 
 Redirect permanent /latexSuite.tar.gz https://sourceforge.net/projects/vim-latex/files/very-old-releases/latexSuite.tar.gz/download
 Redirect permanent /latexSuite.zip https://sourceforge.net/projects/vim-latex/files/very-old-releases/latexSuite.zip/download
+
+Redirect seeother /latex-suite.txt  http://vim-latex.sourceforge.net/documentation/latex-suite.txt
+Redirect seeother /latex-suite.html http://vim-latex.sourceforge.net/documentation/latex-suite.html
