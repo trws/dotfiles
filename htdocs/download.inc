@@ -4,7 +4,6 @@ releases can be found at the <a
 href="http://sourceforge.net/projects/vim-latex/files/">SourceForge Files for
 vim-latex</a> page.
 </p>
-<a href="vimfiles/Changelog">Changelog</a>
 
 <a name=installation>
 <h2>Installation Instructions</h2>

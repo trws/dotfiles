@@ -60,7 +60,7 @@ formats:
 <h2>LaTeX Reference</h2>
 Latex-Suite comes ships with edition 1.6 of the LaTeX2e documentation
 translated into vim-help format. This file can be downloaded separately from
-Latex-Suite <a href="documentation/latexhelp.txt">here</a>. After downloading
+Latex-Suite <a href="download/latexhelp.txt">here</a>. After downloading
 this file to <tt>~/.vim/doc</tt>, you will need to run the <tt>:helptags</tt>
 command from within vim to view LaTeX help from within Vim. 
 <p>

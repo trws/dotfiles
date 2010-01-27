@@ -149,7 +149,7 @@ Q: Viewing does not seem to work for me.
 <div class=ans>
 First check to make sure that you can call the programs specified by
 the <a
-href="documentation/latex-suite/viewer-customization.html#Tex_ViewRule_format">viewing
+href="documentation/latex-suite/customizing-viewing.html#Tex_ViewRule_format">viewing
 rules</a> from within vim. For example, if you specified
 the PDF viewing program as <tt>AcroRd32</tt>, then you should be able to do
 <pre>!start AcroRd32</pre>
@@ -211,7 +211,7 @@ because those characters seem to be mapped to something.
 <div class=ans>
 Latex-suite maps certain <tt>Alt</tt> key sequences to some functions as
 described <a
-href="documentation/latex-suite/bracketing-macros.html">here</a>. If you
+href="documentation/latex-suite/altkey-mappings.html">here</a>. If you
 need to use these keys for regular editing, you will need to remap the Alt
 keys to something else as described in <a
 href="documentation/latex-suite/latex-suite-maps.html">here</a>. In
