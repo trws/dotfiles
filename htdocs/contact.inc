@@ -5,53 +5,7 @@
 href="mailto://vim-latex-devel[AT]lists.sourceforge.net">vim-latex-devel[AT]lists.sourceforge.net</a>
 is a list meant for discussing bugs/feature requests and other things
 pertaining to latex-suite. It is <em>not</em> meant to be a developers only
-list as the name might imply. It is a <em>closed</em> list. This means that
-you can only e-mail vim-latex-devel directly if you are subscribed to it.
-If you wish to subscribe, go to <a
-href="https://lists.sourceforge.net/lists/listinfo/vim-latex-devel">this
-page.</a> vim-latex-devel is moderately active list which gets about 3-4
-mails per day on average. Otherwise, just use the form below to have an
-e-mail sent on your behalf to the list.
+list as the name might imply. You can only e-mail vim-latex-devel directly if you are subscribed to it.
+If you wish to subscribe, go to the <a
+href="https://lists.sourceforge.net/lists/listinfo/vim-latex-devel">listinfo page</a>.
 </p>
-<p>
-<b>NOTE</b> 
-If you use this form to write to the list, you will most probably get a
-reply from one of the subscribers because this form puts your email in the
-"Reply-To" header, which most email clients respect.  However, you will not
-be able to continue the conversation by replying to that email until you
-subscribe. If you wish to continue the conversation without subscribing,
-use
-<blockquote>
-<pre>
-From: vim-latex-devel-form@sourceforge.invalid
-Reply-To: your@email.address, vim-latex-devel@lists.sourceforge.net
-</pre>
-</blockquote>
-in the email header when replying. 
-</p>
-
-<a name="form"></a>
-<form action="index.php?subject=contactsubmit&title=Submit%20Form" method="POST" target="_top">
-
-<b>Your Name:</b><br>
-<input type="text" name="name" size="66" maxlength="80"><p>
-<p>
-<b>Your E-mail Address:</b><font size="-4" color="red">[*]</font><br>
-<input type="text" name="epost" size="66" maxlength="80"><p>
-<p>
-<b>Subject:</b><br>
-<input type="text" name="subject" size="66" maxlength="80">
-<P>
-<b>Message:</b> <font size="-4" color="red">[*]</font><br>
-<textarea name="message" rows="7" cols="50"></textarea>
-<p>
-<input name="Submit" value="Submit" type="submit"> 
-<input name="Reset" value="Clear Form" type="reset">
-<p>
-<font size="-4" color="red">[*]</font> Required fields.
-</form>
-<p></p>
-<small>
-This contact page was originally made by Preben Randhol and is available
-for download <a href="http://www.pvv.org/~randhol/Contact/">here</a>
-</small>
