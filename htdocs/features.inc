@@ -43,7 +43,7 @@ features:
 	href="index.php?subject=packages">the list of currently supported
 	packages.</a><p></p>
 </li>
-<li><a href="documentation/latexhelp.txt">LaTeX help file</a>
+<li><a href="download/latexhelp.txt">LaTeX help file</a>
 	Latex-suite ships with the standard texinfo file translated into vim
 	help format so that you can get help for common latex commands from
 	within vim.  You can view the HTML version of this file <a

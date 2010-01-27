@@ -24,7 +24,7 @@ The recommended settings for vim-latex in your .vimrc file are now only describe
 the <a href="/documentation/latex-suite/recommended-settings.html">vim-latex manual</a>.
 
 <h4>Step 3 of 4: Install the help files</h4>
-To install the included latex-suit.txt and latexhelp.txt files as vim help
+To install the included latex-suite.txt and latexhelp.txt files as vim help
 files, start vim and do the following:
 <p>
 <tt>helptags ~/.vim/doc</tt> &nbsp; &nbsp; (for *nix users) <br>
