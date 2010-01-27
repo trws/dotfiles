@@ -18,3 +18,6 @@ Redirect permanent /latexSuite.zip https://sourceforge.net/projects/vim-latex/fi
 Redirect seeother /latex-suite.txt  http://vim-latex.sourceforge.net/documentation/latex-suite.txt
 Redirect seeother /latex-suite.html http://vim-latex.sourceforge.net/documentation/latex-suite.html
 Redirect seeother /tutorial http://vim-latex.sourceforge.net/documentation/latex-suite-quickstart/
+
+Redirect seeother /latexhelp.txt http://vim-latex.sourceforge.net/download/latexhelp.txt
+Redirect seeother /latexhelp.html http://vim-latex.sourceforge.net/download/latexhelp.html
