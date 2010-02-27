@@ -1,4 +1,5 @@
 source $ZDOTDIR/sysmagic
+
 fpath=(
        $fpath
        /home/njustn/.zen/zsh/scripts
