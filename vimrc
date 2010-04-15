@@ -7,12 +7,14 @@ runtime ftplugin/man.vim
 
 "outliner checkboxes
 au FileType otl source ~/.vim/plugin/vo_checkbox.vim
+au FileType otl setlocal spell spelllang=en_us
 
 "additional buffer types
 au BufNewFile,BufRead *.cu set ft=cuda
 au BufNewFile,BufRead *.cl set ft=opencl
 au BufNewFile,BufRead *.br set ft=brook
 au BufRead COMMIT_EDITMSG set backupcopy=no
+
 
 "tags
 set tags+=~/.vim-systags
@@ -88,12 +90,12 @@ endif
 
 if &term =~ "screen.*"
   set ttymouse=xterm
-  set t_ku=OA
-  set t_kd=OB
-  set t_kr=OC
-  set t_kl=OD
-  set t_@7=OF
-  set t_kh=[1~
+  set t_ku=<Esc>OA
+  set t_kd=<Esc>OB
+  set t_kr=<Esc>OC
+  set t_kl=<Esc>OD
+  set t_@7=<Esc>OF
+  set t_kh=<Esc>[1~
 
   nnoremap <Esc>[C     <Right>
   vmap     <Esc>[C     <Right>
@@ -290,6 +292,7 @@ map <silent> <A-]>  :call Vertical_tag_jump()<CR>
 imap <silent> <A-]>  <Esc>:call Vertical_tag_jump()<CR>
 
 if ! has("gui_macvim")
+  "alt
   nnoremap  <A-}>  :tabNext<CR>
   vmap      <A-}>  :tabNext<CR>
   imap      <A-}>  <Esc>:tabNext<CR>
