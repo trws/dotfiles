@@ -2,5 +2,5 @@
 #typeset -x LC_ALL=C LC_TIME=en_GB.ISO-8859-15
 export LC_ALL=en_US.latin1
 export LD_LIBRARY_PATH=/usr/local/cuda/lib:$LD_LIBRARY_PATH
-source /sw/bin/init.sh
+[[ -f /sw/bin/init.sh ]] && source /sw/bin/init.sh
 

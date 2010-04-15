@@ -1,4 +1,5 @@
 source $ZDOTDIR/sysmagic
+
 fpath=(
        $fpath
        /home/njustn/.zen/zsh/scripts
@@ -17,5 +18,5 @@ done
 
 umask 022
 [[ -f $ZDOTDIR/mine/umask ]] && umask $(<$ZDOTDIR/mine/umask);
-
+[[ -f ~/.ssh/id_dsa ]] && ssh-add ~/.ssh/id_dsa > /dev/null
 typeset -U path cdpath fpath manpath
