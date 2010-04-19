@@ -16,6 +16,14 @@ au BufNewFile,BufRead *.br set ft=brook
 au BufRead COMMIT_EDITMSG set backupcopy=no
 
 
+"automatic formatting options
+set textwidth=80
+" set formatoptions=croql
+set fo-=t
+au FileType tex set formatoptions+=a
+au FileType tex set formatoptions+=t
+"set formatoptions+=a
+
 "tags
 set tags+=~/.vim-systags
 
@@ -90,12 +98,12 @@ endif
 
 if &term =~ "screen.*"
   set ttymouse=xterm
-  set t_ku=<Esc>OA
-  set t_kd=<Esc>OB
-  set t_kr=<Esc>OC
-  set t_kl=<Esc>OD
-  set t_@7=<Esc>OF
-  set t_kh=<Esc>[1~
+  set t_ku=OA
+  set t_kd=OB
+  set t_kr=OC
+  set t_kl=OD
+  set t_@7=OF
+  set t_kh=[1~
 
   nnoremap <Esc>[C     <Right>
   vmap     <Esc>[C     <Right>
@@ -117,6 +125,10 @@ if &term =~ "screen.*"
   imap     <Esc>[B     <Down>
   cmap     <Esc>[B     <Down>
   omap     <Esc>[B     <Down>
+  " map OB <Down>
+  " map OA <Up>
+  " map OD <Left>
+  " map OC <Right>
 
 
   nnoremap  <Esc>[4~ <End>
@@ -199,7 +211,6 @@ if exists("$SYSTEM")
   endif
 endif
 au FileType tex let g:Tex_DefaultTargetFormat='pdf'
-au FileType tex set textwidth=80
 au FileType tex setlocal spell spelllang=en_us
 au FileType tex imap <C-b> <Plug>Tex_MathBF
 au FileType tex imap <C-l> <Plug>Tex_LeftRight
