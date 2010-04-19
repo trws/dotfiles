@@ -90,12 +90,12 @@ endif
 
 if &term =~ "screen.*"
   set ttymouse=xterm
-  set t_ku=<Esc>OA
-  set t_kd=<Esc>OB
-  set t_kr=<Esc>OC
-  set t_kl=<Esc>OD
-  set t_@7=<Esc>OF
-  set t_kh=<Esc>[1~
+  set t_ku=OA
+  set t_kd=OB
+  set t_kr=OC
+  set t_kl=OD
+  set t_@7=OF
+  set t_kh=[1~
 
   nnoremap <Esc>[C     <Right>
   vmap     <Esc>[C     <Right>
