@@ -5,6 +5,7 @@ set runtimepath+=~/.vim/included/vimoutliner
 set runtimepath+=~/.vim/included/enhanced-commentify
 runtime ftplugin/man.vim
 
+
 "outliner checkboxes
 au FileType otl source ~/.vim/plugin/vo_checkbox.vim
 au FileType otl setlocal spell spelllang=en_us
@@ -180,14 +181,15 @@ let g:C_TypeOfH="c"
 
 "editing behavior
 set backspace=2
-set softtabstop=4
-set shiftwidth=4
+set softtabstop=2
+set shiftwidth=2
 set expandtab
 set hlsearch
 set incsearch
 set ignorecase
 set smartcase
 set modeline
+set modelines=5
 
 "indent
 set autoindent
