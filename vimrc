@@ -180,8 +180,8 @@ let g:C_TypeOfH="c"
 
 "editing behavior
 set backspace=2
-set softtabstop=2
-set shiftwidth=2
+set softtabstop=4
+set shiftwidth=4
 set expandtab
 set hlsearch
 set incsearch
