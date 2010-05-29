@@ -22,7 +22,7 @@ set textwidth=80
 " set formatoptions=croql
 set fo-=t
 au FileType tex set formatoptions+=a
-au FileType tex set formatoptions+=t
+" au FileType tex set formatoptions+=t
 "set formatoptions+=a
 
 "tags
