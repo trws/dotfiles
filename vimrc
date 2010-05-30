@@ -6,10 +6,24 @@ set runtimepath+=~/.vim/included/enhanced-commentify
 runtime ftplugin/man.vim
 
 
+"outliner checkboxes
+au FileType otl source ~/.vim/plugin/vo_checkbox.vim
+au FileType otl setlocal spell spelllang=en_us
+
 "additional buffer types
 au BufNewFile,BufRead *.cu set ft=cuda
 au BufNewFile,BufRead *.cl set ft=opencl
 au BufNewFile,BufRead *.br set ft=brook
+au BufRead COMMIT_EDITMSG set backupcopy=no
+
+
+"automatic formatting options
+set textwidth=80
+" set formatoptions=croql
+set fo-=t
+au FileType tex set formatoptions+=a
+" au FileType tex set formatoptions+=t
+"set formatoptions+=a
 
 "tags
 set tags+=~/.vim-systags
@@ -37,10 +51,12 @@ set ruler
 set nowrap
 
 if has("gui_running")
-  set guioptions-=T
+  set guioptions=egmt
   if has("gui_macvim")
-    " set transparency=15
-    set gfn=Courier:h11.00
+    set transparency=15
+    "set gfn=Courier:h11.00
+    set gfn=Monaco:h9.00
+    set noantialias
     set fuopt=maxvert,maxhorz
   elseif has("gui_gtk2")
     set guifont=Terminus\ 8
@@ -110,6 +126,10 @@ if &term =~ "screen.*"
   imap     <Esc>[B     <Down>
   cmap     <Esc>[B     <Down>
   omap     <Esc>[B     <Down>
+  " map OB <Down>
+  " map OA <Up>
+  " map OD <Left>
+  " map OC <Right>
 
 
   nnoremap  <Esc>[4~ <End>
@@ -155,6 +175,7 @@ let g:EnhCommentifyUserMode='No'
 let g:EnhCommentifyRespectIndent='Yes'
 let g:EnhCommentifyPretty='Yes'
 let g:EnhCommentifyMultiPartBlocks='Yes'
+let g:EnhCommentifyBindInInsert='No'
 "csupport, but very commentify related...
 let g:C_TypeOfH="c"
 
@@ -168,6 +189,7 @@ set incsearch
 set ignorecase
 set smartcase
 set modeline
+set modelines=5
 
 "indent
 set autoindent
@@ -189,7 +211,6 @@ if exists("$SYSTEM")
   endif
 endif
 au FileType tex let g:Tex_DefaultTargetFormat='pdf'
-au FileType tex set textwidth=80
 au FileType tex setlocal spell spelllang=en_us
 au FileType tex imap <C-b> <Plug>Tex_MathBF
 au FileType tex imap <C-l> <Plug>Tex_LeftRight
@@ -282,6 +303,7 @@ map <silent> <A-]>  :call Vertical_tag_jump()<CR>
 imap <silent> <A-]>  <Esc>:call Vertical_tag_jump()<CR>
 
 if ! has("gui_macvim")
+  "alt
   nnoremap  <A-}>  :tabNext<CR>
   vmap      <A-}>  :tabNext<CR>
   imap      <A-}>  <Esc>:tabNext<CR>
