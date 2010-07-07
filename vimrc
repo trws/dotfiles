@@ -201,8 +201,6 @@ set smartindent
 
 "c/c++ options
 au FileType c set foldmethod=syntax
-"cuda file hilighting
-au BufNewFile,BufRead *.cu set ft=cuda
 
 "latex options
 let g:tex_flavor='latex'
