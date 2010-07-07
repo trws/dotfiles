@@ -14,15 +14,17 @@ au FileType otl setlocal spell spelllang=en_us
 au BufNewFile,BufRead *.cu set ft=cuda
 au BufNewFile,BufRead *.cl set ft=opencl
 au BufNewFile,BufRead *.br set ft=brook
+au BufNewFile,BufRead *.go set ft=go
+au FileType go set formatprg=gofmt
 au BufRead COMMIT_EDITMSG set backupcopy=no
 
 
 "automatic formatting options
 set textwidth=80
 " set formatoptions=croql
-set fo-=t
-au FileType tex set formatoptions+=a
-" au FileType tex set formatoptions+=t
+" set fo-=t
+" au FileType tex set formatoptions+=a
+au FileType tex set formatoptions+=t
 "set formatoptions+=a
 
 "tags
