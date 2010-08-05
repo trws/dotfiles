@@ -14,16 +14,21 @@ au FileType otl setlocal spell spelllang=en_us
 au BufNewFile,BufRead *.cu set ft=cuda
 au BufNewFile,BufRead *.cl set ft=opencl
 au BufNewFile,BufRead *.br set ft=brook
+au BufNewFile,BufRead *.go set ft=go
+au FileType go set formatprg=gofmt
 au BufRead COMMIT_EDITMSG set backupcopy=no
 
 
 "automatic formatting options
 set textwidth=80
-" set formatoptions=croql
-set fo-=t
-au FileType tex set formatoptions+=a
-" au FileType tex set formatoptions+=t
+set formatoptions=crq
+" set fo-=t
+" au FileType tex set formatoptions+=a
+au FileType tex setlocal formatoptions+=t
 "set formatoptions+=a
+
+au FileType cpp setlocal fp=astyle\ --pad-oper\ --unpad-paren\ --add-brackets\ --convert-tabs\ --align-pointer=name\ --indent-col1-comments\ --style=k/r
+au FileType c setlocal fp=astyle\ --pad-oper\ --unpad-paren\ --add-brackets\ --convert-tabs\ --align-pointer=name\ --indent-col1-comments\ --style=k/r
 
 "tags
 set tags+=~/.vim-systags
@@ -39,6 +44,7 @@ else
 endif
 
 map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q $PWD<CR>
+map <A-C-T> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q $PWD<CR>
 execute 'map <C-S-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q -f - ' . include_paths . ' > ~/.vim-systags'
 
 "syntax/visual options
@@ -54,8 +60,8 @@ if has("gui_running")
   set guioptions=egmt
   if has("gui_macvim")
     set transparency=15
-    "set gfn=Courier:h11.00
-    set gfn=Monaco:h9.00
+    set gfn=Courier\ New:h11.00
+    " set gfn=Monaco:h9.00
     set noantialias
     set fuopt=maxvert,maxhorz
   elseif has("gui_gtk2")
@@ -197,8 +203,6 @@ set smartindent
 
 "c/c++ options
 au FileType c set foldmethod=syntax
-"cuda file hilighting
-au BufNewFile,BufRead *.cu set ft=cuda
 
 "latex options
 let g:tex_flavor='latex'
@@ -303,9 +307,17 @@ cmap  <C-]>  g<C-]>
 
 map <silent> <A-]>  :call Vertical_tag_jump()<CR>
 imap <silent> <A-]>  <Esc>:call Vertical_tag_jump()<CR>
+map <silent> <M-]>  :call Vertical_tag_jump()<CR>
+imap <silent> <M-]>  <Esc>:call Vertical_tag_jump()<CR>
 
 if ! has("gui_macvim")
   "alt
+
+  nnoremap  <A-t>  :tabnew<CR>
+  vmap      <A-t>  :tabnew<CR>
+  imap      <A-t>  <Esc>:tabnew<CR>
+  cmap      <A-t>  <Esc>:tabnew<CR>
+  omap      <A-t>  :tabnew<CR>
   nnoremap  <A-}>  :tabNext<CR>
   vmap      <A-}>  :tabNext<CR>
   imap      <A-}>  <Esc>:tabNext<CR>
