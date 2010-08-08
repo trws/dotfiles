@@ -27,6 +27,9 @@ set formatoptions=crq
 au FileType tex setlocal formatoptions+=t
 "set formatoptions+=a
 
+"hilighting
+let python_highlight_all = 1
+
 au FileType cpp setlocal fp=astyle\ --pad-oper\ --unpad-paren\ --add-brackets\ --convert-tabs\ --align-pointer=name\ --indent-col1-comments\ --style=k/r
 au FileType c setlocal fp=astyle\ --pad-oper\ --unpad-paren\ --add-brackets\ --convert-tabs\ --align-pointer=name\ --indent-col1-comments\ --style=k/r
 
@@ -103,7 +106,11 @@ endif
   cmap          <BS>
   omap          <BS>
 
-if &term =~ "screen.*"
+if exists("$TMUX") "tmux specific settings, changed term to xterm-256
+  set ttymouse=xterm
+endif
+
+if &term =~ "screen.*" "screen configurations
   set ttymouse=xterm
   set t_ku=OA
   set t_kd=OB
@@ -347,6 +354,7 @@ map           <D-O> :Project<CR>:redraw<CR>
 map           <A-S-p> <Plug>ToggleProject
 map           <D-P> <Plug>ToggleProject
 nmap <silent> <F3>    <Plug>ToggleProject
+let g:proj_run1 = '!open %F'
 let g:proj_window_width = 30
 let g:proj_window_increment = 50 
 let g:proj_run_fold1 = ":!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q -f - %f > %d/tags"
