@@ -1,6 +1,6 @@
 #!zsh bindings
-#  bindkey -me
-bindkey -e
+bindkey -me
+#bindkey -e
 ##bindkey -v
 ##
 ##bindkey  backward-delete-char
