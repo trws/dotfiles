@@ -70,6 +70,10 @@ preferences).
 </p>
 <p>Type <tt>:help helptags</tt> from within Vim for more information</p>.
 
+<a name="vim-latex-ref-card"></a>
+<h2>Vim-Latex Reference Card</h2>
+Michael Goerz created a <a href="http://users.physik.fu-berlin.de/~mgoerz/blog/refcards/#latexsuite">a incomplete reference card for vim-latex key bindings</a>.
+
 <?php
 // vim:ft=php:noet:ts=4
 ?>
