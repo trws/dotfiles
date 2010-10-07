@@ -13,6 +13,7 @@
 	<li><a
 	href="index.php?subject=branching&title=Branching%20Cheat%20Sheet">CVS
 	Branching HOWTO</a></li>
+	<li><a href="http://users.physik.fu-berlin.de/~mgoerz/blog/2008/05/vim-latexsuite-refcard/">Vim-latex reference card</a></li>
     <!--
 	<li><a
 	href="index.php?subject=patch&title=Submitting%20a%20patch">Submitting
