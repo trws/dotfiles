@@ -2,7 +2,7 @@
 " Language:		Mail
 " Maintainer:	Lubomir Host <host8@kepler.fmph.uniba.sk>
 " License:		GNU GPL
-" Version:		$Id$
+" Version:		$Id: mail.vim 738 2003-09-04 21:21:05Z srinathava $
 
 
 " Only do this when not done yet for this buffer
