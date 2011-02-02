@@ -23,10 +23,10 @@ function precmd {
     ###
     # Get APM info.
 
-    if which ibam > /dev/null; then
+    if which ibam >& /dev/null; then
 	PR_APM_RESULT=`ibam --percentbattery`
-    elif which apm > /dev/null; then
-	PR_APM_RESULT=`apm`
+    elif which apm >& /dev/null; then
+	PR_APM_RESULT=`apm 2> /dev/null`
     fi
 }
 
@@ -140,4 +140,4 @@ $PR_LIGHT_GREEN%_$PR_BLUE)$PR_SHIFT_IN$PR_HBAR$PR_SHIFT_OUT\
 $PR_CYAN$PR_SHIFT_IN$PR_HBAR$PR_SHIFT_OUT$PR_NO_COLOUR '
 }
 
-setprompt
+[[ $TERM = vt100 ]] || setprompt
