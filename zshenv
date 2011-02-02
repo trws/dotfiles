@@ -1,4 +1,9 @@
 source $ZDOTDIR/sysmagic
+fpath=(
+       $fpath
+       /home/njustn/.zen/zsh/scripts
+       /home/njustn/.zen/zsh/zle )
+autoload -U zen
 
 setopt nonomatch
 
