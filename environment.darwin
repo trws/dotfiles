@@ -2,4 +2,5 @@
 #typeset -x LC_ALL=C LC_TIME=en_GB.ISO-8859-15
 export LD_LIBRARY_PATH=/usr/local/cuda/lib:$LD_LIBRARY_PATH
 [[ -f /sw/bin/init.sh ]] && source /sw/bin/init.sh
+export GOOS=darwin
 
