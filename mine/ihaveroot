@@ -1,2 +1,2 @@
 #!zsh
-[[ $host = (armor[12]|hurricane|typhoon|Typhoon|Blow|Gale|Wind|lazarus|tome|brook) ]] && gotroot=1
+[[ $host = (armor[12]|hurricane|typhoon|Typhoon|Blow|Gale|Wind|lazarus|tome|brook|wood[12]|ice[1-9]) ]] && gotroot=1
