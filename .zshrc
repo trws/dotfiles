@@ -79,7 +79,8 @@ for func in ${^fpath}/*(N-.x:t); autoload $func
 
     true
 
-    stty erase $terminfo[kbs]
+
+    [[ -n "$terminfo[kbs]" ]] && stty erase $terminfo[kbs]
 
 #echo $terminfo > ~/test2
     # vim:ts=4:
