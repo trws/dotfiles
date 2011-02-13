@@ -24,7 +24,7 @@ if type dircolors > /dev/null ; then
   fi
 fi
 
-echo $terminfo > ~/test1
+#echo $terminfo > ~/test1
 for task in aliases promptstuff; do
   for file in $ZDOTDIR/{,mine/}$task $ZDOTDIR/{,mine/}$task.${^zshuse}
   [[ -f $file ]] && source $file
@@ -81,5 +81,5 @@ for func in ${^fpath}/*(N-.x:t); autoload $func
 
     stty erase $terminfo[kbs]
 
-echo $terminfo > ~/test2
+#echo $terminfo > ~/test2
     # vim:ts=4:

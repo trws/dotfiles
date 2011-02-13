@@ -10,6 +10,8 @@ alias rezsh='exec zsh'
 alias -g '^=|'
 alias nocbreak=icanon
 alias cal=ncal
+alias tarmor2='tmux new-window -n armor2 "ssh -t green ssh -t armor2 tmux attach-session"'
+alias tarmor1='tmux new-window -n armor1 "ssh -t green ssh -t armor1 tmux attach-session"'
 # Global aliases
 #alias -g M='|more'
 #alias -g H='|head'
