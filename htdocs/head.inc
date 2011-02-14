@@ -30,13 +30,13 @@
 			href="index.php?subject=contact&title=Contact">Feature
 			Requests <br/>Bug Reports <br/>Mailing List <br/></a><br>
 			<p></p>
-			<a href="http://vim-latex.svn.sourceforge.net/viewvc/vim-latex/trunk/vimfiles/ftplugin/latex-suite/packages/">Package files</a><br>
-			<a href="http://vim-latex.svn.sourceforge.net/viewvc/vim-latex/trunk/vimfiles/ftplugin/latex-suite/templates/">Templates</a><br>
+			<a href="http://vim-latex.git.sourceforge.net/git/gitweb.cgi?p=vim-latex/vim-latex;a=tree;f=vimfiles/ftplugin/latex-suite/packages;hb=HEAD">Package files</a><br>
+			<a href="http://vim-latex.git.sourceforge.net/git/gitweb.cgi?p=vim-latex/vim-latex;a=tree;f=vimfiles/ftplugin/latex-suite/templates;hb=HEAD">Templates</a><br>
 			<p></p>
 			<hr class=navig>
 			<div class=navheader>Developers</div>
-			<a href="http://vim-latex.svn.sourceforge.net/viewvc/vim-latex/">SVN Webinterface</a><br>
-			<a href="http://sourceforge.net/svn/?group_id=52322">SVN instructions</a><br>
+			<a href="http://vim-latex.git.sourceforge.net/git/gitweb.cgi?p=vim-latex/vim-latex;a=summary">Git Webinterface</a><br>
+			<a href="https://sourceforge.net/scm/?type=git&group_id=52322">Git instructions</a><br>
 			<a href="index.php?subject=links&title=Links">Links</a><br>
 			<img src="blank.gif" height="150" width="1"><br>
 			<p class="doublesmall">

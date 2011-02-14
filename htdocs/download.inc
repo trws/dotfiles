@@ -1,5 +1,5 @@
 <h2>Latest version</h2>
-<p> Currently only irregular svn snapshots are provided. These and older
+<p> Currently only irregular git snapshots are provided. These and older
 releases can be found at the <a
 href="http://sourceforge.net/projects/vim-latex/files/">SourceForge Files for
 vim-latex</a> page.
@@ -39,7 +39,7 @@ from within vim to get the online Latex-Suite reference.
 <hr>
 
 <h3>Other ways to keep up with changes</h3>
-<p>The sourcecode is managed using subversion (svn). To access the repository,
+<p>The sourcecode is managed using git. To access the repository,
 follow the instructions that are linked in the navigation bar.
 </p>
 
