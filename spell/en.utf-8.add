@@ -16,3 +16,7 @@ GPUs
 multicore
 CUDA
 NVIDIA
+SyMMeR
+NUMA
+HPC
+AMD

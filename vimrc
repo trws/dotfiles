@@ -63,8 +63,8 @@ if has("gui_running")
   set guioptions=egmt
   if has("gui_macvim")
     set transparency=15
-    set gfn=Courier\ New:h11.00
-    " set gfn=Monaco:h9.00
+    " set gfn=Courier\ New:h11.00
+    set gfn=ProFont:h9.00
     set noantialias
     set fuopt=maxvert,maxhorz
   elseif has("gui_gtk2")
