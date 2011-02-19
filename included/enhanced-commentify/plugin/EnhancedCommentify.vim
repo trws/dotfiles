@@ -1539,7 +1539,8 @@ function s:SetKeybindings(where)
 	    let s:C = '<M-v>'
 	    let s:X = '<M-y>'
 	else
-	    let s:c = '<Leader>c'
+          "TODO: do this such that it will carry across updates
+            let s:c = '<Leader><C-c>'
 	    let s:x = '<Leader>x'
 	    let s:C = '<Leader>C'
 	    let s:X = '<Leader>X'
