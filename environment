@@ -15,6 +15,5 @@ export CVS_RSH=ssh
 export LC_ALL=C
 #[[ $TERM = "screen-256color-bce" ]] && infocmp screen-256color >& /dev/null && export TERM=screen-256color || echo screen-256color unavailable, fix it!
 export GOROOT=$HOME/go
-export GOOS=darwin
 export GOARCH=amd64
 export GOBIN=$HOME/programs/bin

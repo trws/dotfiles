@@ -67,7 +67,8 @@ for func in ${^fpath}/*(N-.x:t); autoload $func
   # TODO zcomprc should probably be conditional
   if [[ -f $ZDOTDIR/styles ]] { . $ZDOTDIR/styles }
   autoload -U compinit
-  compinit $(! (($UID)) && print -- "-i" "-d" $ZDOTDIR/.zcompdump.root)
+  compinit -d ~/.zcompdump
+  compinit $(! (($UID)) && print -- "-i" "-d" ~/.zcompdump.root)
 
   # Clean up arrays
   typeset -U path cdpath fpath manpath
@@ -79,7 +80,8 @@ for func in ${^fpath}/*(N-.x:t); autoload $func
 
     true
 
-    stty erase $terminfo[kbs]
+
+    [[ -n "$terminfo[kbs]" ]] && stty erase $terminfo[kbs]
 
 #echo $terminfo > ~/test2
     # vim:ts=4:

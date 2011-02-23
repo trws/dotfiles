@@ -29,7 +29,7 @@ unsetopt nomatch
   setopt rcquotes
   setopt recexact
 
-HISTFILE=$ZDOTDIR/.history
+HISTFILE=~/.zsh-history
 HISTSIZE=1000
 SAVEHIST=1000                # Default: 200
 setopt INC_APPEND_HISTORY
