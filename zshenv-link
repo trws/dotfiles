@@ -1,2 +1,2 @@
 ZDOTDIR=~/.zsh
-source $ZDOTDIR/zshenv
+[ "$TERM_PROGRAM" = "DTerm" ] || source $ZDOTDIR/zshenv
