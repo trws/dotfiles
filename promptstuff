@@ -112,6 +112,12 @@ setprompt () {
     else
 	PR_APM=''
     fi
+
+    if [ -f ~/Dropbox/simplenote/todo.txt ]; then
+        PR_TASK=":$PR_RED$(t ls | head --lines=-2 | wc -l)$PR_LIGHT_BLUE"
+    else
+        PR_TASK=""
+    fi
     
     
     ###
@@ -127,7 +133,7 @@ $PR_BLUE)$PR_SHIFT_IN$PR_HBAR$PR_CYAN$PR_URCORNER$PR_SHIFT_OUT\
 $PR_CYAN$PR_SHIFT_IN$PR_LLCORNER$PR_BLUE$PR_HBAR$PR_SHIFT_OUT(\
 %(?..$PR_LIGHT_RED%?$PR_BLUE:)\
 ${(e)PR_APM}$PR_YELLOW%D{%H:%M}\
-$PR_LIGHT_BLUE:%(!.$PR_RED.$PR_WHITE)%#$PR_BLUE)$PR_SHIFT_IN$PR_HBAR$PR_SHIFT_OUT\
+$PR_LIGHT_BLUE$PR_TASK:%(!.$PR_RED.$PR_WHITE)%#$PR_BLUE)$PR_SHIFT_IN$PR_HBAR$PR_SHIFT_OUT\
 $PR_CYAN$PR_SHIFT_IN$PR_HBAR$PR_SHIFT_OUT\
 $PR_NO_COLOUR '
 

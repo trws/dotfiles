@@ -1,2 +1,3 @@
 ZDOTDIR=~/.zsh
-[ "$TERM_PROGRAM" = "DTerm" ] || source $ZDOTDIR/zshenv
+[[ "$TERM_PROGRAM" == "DTerm" ]] || source $ZDOTDIR/zshenv
+[[ "$TERM_PROGRAM" == "DTerm" ]] && export PATH=/opt/local/bin:$PATH
