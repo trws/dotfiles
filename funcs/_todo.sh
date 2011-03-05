@@ -51,7 +51,7 @@ case $state in
 
   (arguments)
   case $words[NORMARG] in
-    (append|del|do|prepend|pri|replace)
+    (app|pre|append|del|do|prepend|pri|replace)
     if (( NORMARG == CURRENT - 1 )); then
       itemlist=(${${(M)${(f)"$(todo.sh -p list)"}##<-> *}/(#b)(<->) (*)/${match[1]}:${match[2]}})
       _describe -t todo-items 'todo item' itemlist
@@ -70,7 +70,7 @@ case $state in
     fi
     ;;
 
-    (add|list|listall)
+    (a|ls|lsa|add|list|listall)
     nextstate=proj
     ;;
 
