@@ -1,2 +1,2 @@
 #!zsh
-[[ $host = (armor[12]|hurricane|[Tt]yphoon|Blow|[Gg]ale|Wind|lazarus|tome|brook|bb[0-9][0-9]|wood[12]|ice[1-9]|synergy-mini|synergy-mini.local) ]] && gotroot=1
+[[ $host = (athena|armor[12]|hurricane|[Tt]yphoon|Blow|[Gg]ale|Wind|lazarus|tome|brook|bb[0-9][0-9]|wood[12]|ice[1-9]|synergy-mini|synergy-mini.local) ]] && gotroot=1
