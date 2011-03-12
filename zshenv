@@ -22,8 +22,11 @@ umask 022
 #  new key adding code below, automatically adds any keys that do not exist in
 #  the agent, could still end up with a long list this way, but all valid and no
 #  duplicates
-for X in `find ~/.ssh/ -name 'id_*' -not -name '*.pub'`
-do
-    grep $(cat $X.pub | cut -d ' ' -f 2) <(ssh-add -L) >& /dev/null || ssh-add $X ;
-done
+if [[ -n "$SSH_AUTH_SOCK" ]]
+then
+    for X in `find ~/.ssh/ -name 'id_*' -not -name '*.pub' -exec grep -L ENCRYPTED {} +`
+    do
+        grep $(cat $X.pub | cut -d ' ' -f 2) <(ssh-add -L) >& /dev/null || ssh-add $X ;
+    done
+fi
 typeset -U path cdpath fpath manpath
