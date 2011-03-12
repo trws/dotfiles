@@ -22,6 +22,17 @@ umask 022
 #  new key adding code below, automatically adds any keys that do not exist in
 #  the agent, could still end up with a long list this way, but all valid and no
 #  duplicates
+if [[ ! -r "$SSH_AUTH_SOCK" ]]
+then
+    for AGENT in `ls /tmp/ssh-*/agent*`
+    do
+        if [[ -r $AGENT ]]
+        then
+            export SSH_AUTH_SOCK=$AGENT
+            break
+        fi
+    done
+fi
 if [[ -n "$SSH_AUTH_SOCK" ]]
 then
     for X in `find ~/.ssh/ -name 'id_*' -not -name '*.pub' -exec grep -L ENCRYPTED {} +`
