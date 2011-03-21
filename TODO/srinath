@@ -1,0 +1,44 @@
+------------------------------------------------------------------------------
+latex-suite Bugs
+
+9 mapping for <F5> is not buffer local. Moreover, it only affects first
+  edited file.
+8 smartspace has a bug where if a <space> is entered at
+  $aaaaaaaaaa..................<space>$, then newlines are entered after
+  the current line.
+
+------------------------------------------------------------------------------
+latex-suite Changes
+
+8 collect all mappings from latex-suite into one central location.
+  Benji suggests texrc. Other option is a file latex-suite/texmaps.vim
+  which is sourced everytime. texrc might be more intuitive from a
+  customization standpoint, however, some mappings need to be buffer local
+  therefore need to set every time a .tex file is BufEnter'ed. texrc is
+  sourced only once...
+
+------------------------------------------------------------------------------
+web page
+
+8 change the sections around on the web-page. Something like this along the
+  left pane:
+  
+  Documentation
+      User Manual
+      Translated Tex-Info
+      Features
+      FAQ
+  
+  Download
+      Installation instructions
+      Download individual files
+  
+  Support
+      Feature Requests
+      Bug Reports
+  
+  Developers
+      Contributing new stuff
+      Project Administration
+
+vim:et:ts=4:sw=4

@@ -1,0 +1,1390 @@
+LaTeX Suite
+
+Vim is undoubtedly one of the best editors ever made. LaTeX is an
+extremley powerful, intelligent typesetter. LaTeX Suite aims at bringing
+together the best of both these worlds.
+
+Yeah, right. but, why Vim? what's so great about it? why not emacs? OK
+let's do a quick comparison of the two editors:
+
+(G)Vim: Vi is a text editor designed to use the "typewriter" keys
+only. It doesn't need the function keypad, the cursor keypad or the
+numeric keypad. works in 3 modes -visual, edit and command modes. some
+commands may also be run in visual mode. Vi has many features of ex and
+sed and a very small footprint compared to emacs. It is installed on all
+*nix systems. Vi keybindings are also used extensively in other tools like
+"man" pages and "less". It's an excellent tool for touch-typists. Vim
+is like a souped up Vi and is available on Macs and windows machines as
+well. Gvim is Vim with a GUI front end and has a menu bar, a tool bar
+-just like other GUI applications.
+
+emacs: A text editor (and a whole lot more -almost an operating
+system) designed to use the "full" keyboard. Doesn't have "modes" as in
+Vi. Very, very large footprint. Not necessarily available on all *nix
+computers. Preferred tool by programmers. emacs keybindings are used as
+default in bash, although vi keybindings are available as an option.
+
+LaTeX Suite attempts to provide a comprehensive set of tools to view, edit
+and compile LaTeX documents without needing to ever quit Vim. Together,
+they provide tools starting from macros to speed up editing LaTeX
+documents to compiling LaTeX files to forward searching .dvi documents.
+
+See the features page for a brief tour of the various features of
+LaTeX Suite. All these features can be tuned extensively. LaTeX Suite
+is made for Vim versions 6.0 and above.
+
+{Vi of course does not have any of this}
+
+Some assumptions this tutorial makes:
+
+1) you already have Vim and Gvim installed on your computer and they
+   are working correctly.
+
+2) You already know something about and are comfortable with using Vim
+   and Gvim.
+
+This tutorial is meant to be used along with hands On training. Merely
+reading this tutorial won't do you any good. So if you haven't already
+got (G)Vim and LaTeX Suite, download and install them now.
+
+Note: Since I'm a Debian user, this tutorial is naturally most suited
+to GNU/Linux or *nix users. I shall, of course attempt to provide any
+tips i can for Windows users, but please keep in mind that I'm not very
+well versed with Windows. beware, you've been warned.
+
+Download LaTeX Suite:
+
+You can download the appropriate LaTeX Suite archive for *nix, GNU/Linux
+or Winxx, from this site; Homepage: http://vim-latex.sourceforge.net
+
+
+Installation Instructions
+
+Extract the .zip archive, which you downloaded, into your ~/vimfiles
+directory (for Windows Users) or the tar.gz archive into $HOME/.vim
+directory (if you are using *nix or GNU/Linux). Make sure you have the
+following settings in your .vimrc
+
+    " Necessary: This setting tells (G)Vim to load LaTeX Suite
+    " when a .tex, .ltx or .latex file is opened.
+    
+    filetype plugin indent on
+    
+    " IMPORTANT: win32 users will need to have 'shellslash'
+    " set so that latex can be called correctly.
+
+    set shellslash
+
+Next time you start vim and edit a latex file, LaTeX Suite should
+automatically be activated.
+
+NOTE: If you already have a system with filetype specific files (ftplugin,
+indent etc) set up for the '.tex, .ltx or .latex' filetypes, then you
+might want to rename them to avoid potential conflicts -see the advanced
+installation instructions for potential conflicts.
+
+Advanced Installation Instructions :
+
+The archive above will unzip in the following manner:
+
+latexSuite.zip
+    |
+    |   ltags
+    |
+    +---plugin
+    |       imaps.vim
+    |       SyntaxFolds.vim
+    |       libList.vim
+    |
+    +---ftplugin
+    |   |   tex_latexSuite.vim
+    |   |
+    |   \---latex-suite
+    |       ... latex suite files ...
+    |          includes templates,
+    |             macros etc
+    +---doc
+    |       latex-suite.txt
+    |       latexhelp.txt
+    |                                __
+    +---indent                         |
+    |       tex.vim                    |
+    |                                  | <in red colour>
+    \---compiler                       |
+            tex.vim                  __|
+
+
+The files shown in red will potentially over-write files already in
+your system. In this case, you will want to unpack the archive into
+a temporary folder and then copy over the files which you need. Note
+however, that this is not supported. You will have to take care of the
+bugs which you encounter due to this, yourself.
+
+
+Setting up Help in (G)Vim for LaTeX Suite:
+
+After having installed LaTeX Suite, let us integrate the included
+latex-suite.txt and latexhelp.txt files into Vim's help system, start
+(G)Vim and do the following from within (G)Vim to setup the help files
+for LaTeX Suite.
+
+:helptags ~/.vim/doc       (for *nix users)
+:helptags ~/vimfiles/doc   (for windows users)
+
+After that, you can do
+
+:help latex-suite
+
+to browse the LaTeX Suite online manuals from within (G)Vim itself.
+
+as a bonus, you can also do
+
+:help latex
+
+to browse the LaTeX manuals that are provided by LaTeX Suite.
+
+Coding our first LaTeX source file with the help of LaTeX Suite:
+
+Now that we have installed LaTeX Suite on our PC, let's start with
+typesetting our first LaTeX document using LaTeX Suite. 
+
+Since we are doing this for the first time, let's use Gvim rather than
+Vim. With Gvim, we have the advantage of using menus. LaTeX Suite builds
+a comprehensive set of menus that will help us learn LaTeX as well as
+to help us learn to use LaTeX Suite features. As you get used to the
+keymaps and various features of LaTeX Suite, you can go back to using Vim.
+
+Initially, let's start gvim from a term window with the command;
+
+$ gvim myfile.tex <return>
+
+This should start Gvim and you will notice that as it starts, Gvim will
+four new menu-items in the menu bar:
+
+1) TeX-Suite
+2) TeX-Environments
+3) TeX-Elements
+4) TeX-Math
+
+The text area should be blank, unless you had a file called "myfile.tex",
+containing some text.
+
+You will notice that all the menu-items added by LaTeX Suite start with
+the tag "TeX-". Explore these menu-items.  We will use some of these
+features later as we learn to use LaTeX Suite -at the moment we are
+merely exploring.
+
+1) TeX-Suite: You will notice that the menu-item "TeX-Suite" offers
+a host of features which would be applicable to most LaTeX files
+in general. Among other things, you will notice something called
+templates. We will be using them very soon. It also contains an item
+to compile you latex source, view the latex source or search the source
+for something.
+
+2) TeX-Environments: In this menu-item we discover that a LaTeX file
+can have multiple environments like chapters, sections subsections,
+tables, etc. You will learn about these things as you learn to typeset
+your documents in LaTeX. We will of course see how we can exploit these
+features of LaTeX Suite.
+
+3) TeX-Elements: Things like paper dimensions, font sizes and types,
+counters to keep a count of the figures and tables that you use. Counters
+to keep a tag of the page numbers, etc. are available here.
+
+4) TeX-Math: This is where LaTeX really exells and this is the menu-item
+which helps speed up the typesetting of your math documents. You'll see
+Greek alphabets, arrows, binary operators, logical operators, a large
+collection of math symbols, log, trigonometry... it's a long list and
+I think you've got the idea by now as to what I'm talking about so I'll
+skip the detailed list of math related items.
+
+Your first LaTeX file:
+
+Let's start with the first LaTeX Exercise in the book.
+
+Click on TeX-Suite>Templates>article
+
+The following will appear in the text area on your screen:
+
+
+<<possible bug here>>
+
+
+------------ on screen ------------ 
+%        File: myfile.tex
+%     Created: Wed May 21 08:00 PM 2003 I
+% Last Change: Wed May 21 08:00 PM 2003 I
+%
+\documentclass[a4paper]{article}
+\begin{document}
+<++>
+\end{document}
+
+~
+~
+~
+~
+::call histdel("/", -1)|let @/=histget("/", -1)|let &selection = 'inclusive'
+Hit ENTER or type command to continue
+------------ on screen ------------ 
+
+Notice the lines;
+
+\begin{document}
+<++>
+\end{document}
+
+That <++> is a place holder for the text you will type in later as part
+of the exercise. Now, read the last line. it says "Hit ENTER", go ahead
+and do that. Now you see a slight change in the onscreen contents;
+
+------------ on screen ------------ 
+%        File: myfile.tex
+%     Created: Wed May 21 08:00 PM 2003 I
+% Last Change: Wed May 21 08:00 PM 2003 I
+%
+\documentclass[a4paper]{article}
+\begin{document}
+
+\end{document}
+
+~
+~
+~
+~
+-- XIM INSERT -- 
+------------ on screen ------------ 
+
+The <++> symbols have disappeared and your cursor is now positioned in
+their place, blinking away to glory. that's your queue to type in the text
+content of your article. As you enter the text, you'll notice something;
+
+you're typing in the line;
+
+This is my \emph{first} document prepared in \LaTeX.
+
+If you started typing that in as;
+
+This is my \emph{}
+
+With the intention of backspacing over the closing "}", you'll notice
+that LaTeX Suite has suddenly tried to guess your needs and inserted
+some more place holders for you. That line now looks like this;
+
+This is my \emph{<++>}
+
+...sure, go ahead and overwrite that <++> with the word "first". Finish
+typing that line and Hit the ESC key. Now, we're done with the first
+part of building your first LaTeX document with LaTeX Suite. Let's
+go to the next part compiling your first LaTeX Document.
+
+To compile "myfile.tex" click on TeX-Suite>Compile ...or, hit the keys
+\ll
+
+This is a small document and will compile in no time. Let's see what we
+got, click on TeX-Suite>View or hit the keys \lv -this should immediately
+open you newly compiled document using xdvi. Time to sit back and admire
+your handiwork. Now, your first exercise is complete -and it was entirely
+your handiwork, Congratulations.
+
+Let's go a little further. kill that Xdvi window and go back to editing
+myfile.tex in that Gvim window. Append some words to that so it looks
+like this;
+
+This is my \emph{first} document prepared in \LaTeX on \today.
+
+Recompile this file and view the results -you know how to do this now,
+right?
+
+OK, so we prepared and compiled our first LaTeX Document. Now, let's take
+stock of what happened here. We typed in exactly one line of content and
+all of two LaTeX commands. But, the file contains 9 lines and some more
+LaTeX commands that we did not type in manually. These were inserted
+automatically by Latex Suite for us. This is just a small example
+of what LaTeX Suite can do.
+
+Now, let's modify this source file. We'll add another line of content
+to it.
+
+Below the line we wrote earlier, insert the following;
+
+This is the first line. 
+
+Now, while we're still in insert mode, click on;
+
+TeX-Environments>EnvCommands>Tabbing>_\\
+
+That line now looks like;
+
+This is the first line. \\
+
+Now, continue adding more text to that line so it looks like;
+
+This is the first line. \\ This is the second line.
+
+Now, save your file, compile it and view the results.
+
+Tip: You can also select one of the available Templates using the keyboard
+alone. The procedure is as follows;
+
+Start Gvim with the command
+
+$ gvim myfile2.tex
+
+Now, give command :TTemplate<enter> (Please note: LaTeX Suite is case
+sensitive)
+
+This will present you with a list of all available templates:
+
+------------ on screen ------------ 
+~
+~
+~
+~
+Choose a template file:
+(1) IEEEtran.tex        (2) article.tex
+(3) book.ltx    (4) ieeetran.tex
+(5) letter.ltx  (6) report.tex
+(7) report_two_column.tex
+
+Enter number or name of file :
+------------ on screen ------------ 
+
+Follow the onscreen instructions, type the number '2' or the full name
+of the file "article.tex" and hit enter. That will insert the article
+template and your screen now looks like this;
+
+
+<<possible bug here>>
+
+
+------------ on screen ------------ 
+~
+~
+~
+~
+Choose a template file:
+(1) IEEEtran.tex        (2) article.tex
+(3) book.ltx    (4) ieeetran.tex
+(5) letter.ltx  (6) report.tex
+(7) report_two_column.tex
+
+
+Hit ENTER or type command to continue
+------------ on screen ------------ 
+
+go ahead, hit <enter> ...your screen will then look like this;
+
+------------ on screen ------------ 
+%        File: myfile.tex
+%     Created: Wed May 21 08:00 PM 2003 I
+% Last Change: Wed May 21 08:00 PM 2003 I
+%
+\documentclass[a4paper]{article}
+\begin{document}
+
+\end{document}
+
+~
+~
+~
+~
+-- XIM INSERT -- 
+------------ on screen ------------ 
+
+...and your cursor is now positioned in their place, blinking away to
+glory. that's your queue to type in the text content of your article. Does
+this appear to be familiar? -Yes, this is what you got when you used
+the menu-item to select the template.
+
+Congratulations are in order, by the way, You just used your first,
+advanced LaTeX Suite command. You're already on your way towards becoming
+a non-GUI, poweruser.
+
+With that, we've learnt how to use the Templates. The other templates
+can be used in the same way. Let's go on to the next section.
+
+
+Open 'myfile.tex' with Gvim and from the menu select
+TeX-Environments>Lists>Itemize now your screen should look like this;
+
+------------ on screen ------------ 
+%     Created: Fri May 23 12:00 PM 2003 I
+% Last Change: Fri May 23 12:00 PM 2003 I
+%
+\documentclass[a4paper]{article}
+\begin{document}
+This is my \emph{first} document prepared in \LaTeX  on \today.
+This is the first line. \\ This is the second line.\\
+
+This is my first list of items.
+
+\end{document}
+
+~
+~
+~
+-- XIM INSERT -- 
+------------ on screen ------------ 
+
+Now, from the menu, click TeX-Environments>Lists>itemize -four new lines
+just appeared on your screen like this;
+
+------------ on screen ------------ 
+...
+This is my first list of items.
+\begin{itemize}
+	\item 
+\end{itemize}<++>
+\end{document}
+------------ on screen ------------ 
+
+...and the cursor is located after the "\item". That's where you start
+add content so it looks like this;
+
+------------ on screen ------------ 
+...
+This is my first list of items.
+\begin{itemize}
+	\item rice
+\end{itemize}<++>
+\end{document}
+------------ on screen ------------ 
+
+
+Now, we'll move to the next line and add another item, click on
+TeX-Environmants>EnvCommands>Lists>item -a "\item" command appears where
+your cursor was, ad content to that and add another item and remove that
+place-holder <++> (we won't be using it) so it looks like this;
+
+------------ on screen ------------ 
+...
+This is my first list of items.
+\begin{itemize}
+	\item rice
+	\item wheat
+	\item corn
+\end{itemize}
+\end{document}
+------------ on screen ------------ 
+
+Done? ok. let's add another list of items, this time using the keyboard
+only. Insert a blank line after the \end{itemize} in our list and do add
+some content so it looks like;
+
+------------ on screen ------------ 
+...
+This is my first list of items.
+\begin{itemize}
+	\item rice
+	\item wheat
+	\item corn
+\end{itemize}
+
+This is my second list of items.
+apples
+oranges
+grapes
+plankton
+
+\end{document}
+------------ on screen ------------ 
+
+Now, hit the ESC key. Done? OK, now, move the cursor to the "a" of
+apples and hit CTRL+V and using the cursor (or j) key move the cursor
+down to plankton. Done? OK, now hit the End key (or $). Done? Good,
+you've just marked a block of text in visual mode. Now hit the keys
+",it". Now your screen looks like;
+
+------------ on screen ------------ 
+%     Created: Fri May 23 12:00 PM 2003 I
+% Last Change: Fri May 23 12:00 PM 2003 I
+%
+\documentclass[a4paper]{article}
+\begin{document}
+This is my \emph{first} document prepared in \LaTeX  on \today.
+This is the first line. \\ This is the second line.\\
+
+This is my first list of items.
+\begin{itemize}
+	\item rice
+	\item wheat
+	\item corn
+\end{itemize}
+
+This is my second list of items.
+\begin{itemize}
+		apples
+		oranges
+		grapes
+		plankton
+\end{itemize}
+
+\end{document}
+------------ on screen ------------ 
+
+Position your cursor under the "a" of apples and hit ALT+n followed
+immediately by "cli", this should insert the \item -you'll have to put
+a space after that \item. Do this for oranges, grapes and plankton too,
+so the whole thing now looks like this;
+
+------------ on screen ------------ 
+...
+...
+This is my second list of items.
+\begin{itemize}
+	\item apples
+	\item oranges
+	\item grapes
+	\item plankton
+\end{itemize}
+...
+...
+------------ on screen ------------ 
+
+Now save the file, compile and view the results.
+
+Now let's try something more advanced. We need to use this this for
+using packages.  Packages vastly improve capabilites of LaTeX -and
+LaTeX-Suite has great system of supporting packages. An example, amsmath
+(this extends math typesetting) in our document. Go to the \documentclass
+line and press 'o'. It opens new line. Now go to the packages menu:
+TeX-Suite>Packages>Supported and check if amsmath is supported. It
+is. Choose. Now you have:
+
+------------ on screen ------------ 
+%        File: myfile.tex
+%     Created: Wed May 21 08:00 PM 2003 I
+% Last Change: Wed May 21 08:00 PM 2003 I
+%
+\documentclass[a4paper]{article}
+\usepackage[|]{amsmath}<++>
+\begin{document}
+
+\end{document}
+------------ on screen ------------ 
+
+<< cursor at | >>
+
+Now you can add some options. Look again in TeX-Suite>Packages menu. At
+the end are two new items: amsmath Options and amsmath Commands. Look
+into Options and choose one: tbtags. It will be inserted with comma,
+delete comma and press <C-J>. Press <CR>, you want to add new package.
+Oops, it is not supported. But you won't have to write the whole command
+(\usepackage{asdf}) just asdf<F5>, LaTeX-Suite completes the rest for
+you.
+
+Of course, you won't have to repeatedly need to use the menu to insert
+declaration amsmath package.  After <F5> LaTeX-Suite will check if this
+package is supported, if yes, it will automagically add the relevant
+menus, highlighting for new environments, functions specific to that
+package and so on and so forth.
+
+Tips: (Something worth remembering and knowing)
+
+The function key <F5> is a shortcut -In texrc you can move Packages menu
+to menu bar.
+
+
+By now, you must got comfortable with using the LaTeX Suite Menus and
+you've understood that they help to either run some commands or to insert
+some LaTeX tags or commands. From this point onwards you really don't
+need much help with using the menu. You can learn to use the rest of
+the menu without my help -trust me.
+
+While doing the above exercises, you must have noticed that many of the
+LaTeX Suite menu items have some "jumble" of alphabets along side of them,
+like for example;
+
+figure      EFI(,fi)
+bfseries    FBF(`bf)
+
+The three capital letters are the insert mode mappings and the chracters
+enclosed in the braces are the visual mode mappings. In the next section
+we'll learn to use such keyboard's hotkeys that have been built into
+LaTeX Suite.
+
+LATEX MACROS
+
+Latex-Suite ships with a very comprehensive set of insert mode and visual mode
+mappings and menu items to typeset most of the LaTeX elements.
+
+The term "macro" refers to a collection of 3 objects, an insert mode
+keymap, a visual mode keymap and a menu item. For example, a figure
+macro refers to the insert mode mapping 'EFI', the visual mode mapping
+',fi' and the menu item Tex-Environments.
+
+For environments, sections and fonts, the insert mode mappings are a sequence
+of 3 capital letters. The visual mode mapping follows from the insert mode
+mapping by replacing the first character by a comma (',') (for environments
+and sections) or back-tick ('`') (for fonts) and converting the rest to lower
+case. 
+
+ -------------------------------------------
+              | Insert Mode   |  Visual Mode
+ -------------+---------------+-------------
+ environmnts  |    EFI        |    ,fi
+ fonts        |    FSF        |    `sf
+ section      |    SSE        |    ,se 
+ -------------------------------------------
+
+Most of the the menu items also specify the insert and visual mode
+macros. The menus behave differently from the insert mode macros in that
+they ask questions on the command line in a "wizard" sort of manner
+and then generate a template which includes the information gathered.
+By contrast, the insert mode macros do not ask any questions and generate
+a template with place-holders at each input location.
+
+NOTE: All these macros handle place-holders in a specific manner. The
+first place-holder is selected for replacement and then the next as
+you jump from one to the next in serial order. Placeholders mark off
+locations where the relevant editing has to be done. As an example,
+when the user types in "EFI" in insert mode, you will get the following:
+
+      \begin{figure}[<+htpb+>]
+         \begin{center}
+            \psfig{figure=<+eps file+>}
+         \end{center}
+         \caption{<+caption text+>}
+         \label{fig:<+label+>}
+      \end{figure}<++>
+
+The place-holder <+htpb+> will be selected and you will be left in
+select-mode so that you can continue typing straight away. After
+having typed in the file name, you can press Control-J (while still in
+insert-mode). This will take you directly to the next "place-holder". i.e,
+the <+eps file+> will be visually selected with vim in select mode again
+for typing in the caption. This saves on a lot of key presses.
+
+NOTE: These mappings are are not standard mappings in the sense that
+only the last character is mapped. For example, in the example above,
+you can press the characters 'E', 'F' and 'I' as slowly as you wish. The
+characters are visible as you type them and you can use the movement or
+backspace key to correct yourself unlike "normal" mappings.
+
+The macros can be divided into the following main categories:
+1) Environment Mappings
+2) Font Mappings
+3) Section Mappings
+4) AucTeX key bindings
+5) Diacritics
+6) Greek Letters
+7) Math Menu
+
+Environment mappings:
+These mappings insert LaTeX "environments" such as
+      \begin{center}
+          <++>
+      \end{center}<++>
+with the cursor left at the first place-holder.
+(The environment above is generated by typing ECE in insert mode)
+
+Rule for remembering shortcuts:
+-------------------------------
+a) All environment mappings begin with 'E'
+
+b) If the environment can be broken up into 2 distinct words, such as
+   flushright (flush + right), then the next 2 letters are the first
+   letters of the 2 words.
+
+   Example: 
+        flushleft  (_f_lush + _l_eft)  ---> EFL
+        flushright (_f_lush + _r_ight) ---> EFR
+        eqnarray   (_e_qn + _a_rray)   ---> EEA
+
+   If on the other hand, the environment name cannot be broken up into
+   2 distinct words, then the next 2 letters are the first 2 letters of
+   the name of the environment.
+
+   Example:
+        equation (_eq_uation)          ---> EEQ
+
+Note:
+1) Of course, not every last one of the environments can follow
+this rule because of ambiguities. In case of doubt, pull down the
+Tex-Environments menu. The menu item should give the hint for the map.
+
+2) The above rule of three letter mappings is used throughout LaTeX Suite.
+
+Along with the insert mode mappings, a set of visual mode mappings is
+provided which encloses the visually selected region in an environment.
+These maps are related to the corresponding insert mode mappings by the
+following rule:
+
+    ECE           --> ,ce
+
+...and so on. i.e, the leading E becomes ',' and the next 2 letters are
+small case. Some of the visual mode mappings are sensetive to whether
+you choose line-wise or character wise. For example, if you choose a
+word and press ",ce", then you get \centerline{word}, but if you press
+",ce" on a line-wise selection, you get:
+
+      \begin{center}
+          line
+      \end{center}
+
+for a complete list of these keybindings refer to the Cheat Sheet that
+comes with this book.
+
+Font Mappings:
+
+These mappings insert font descriptions such as:
+      \textsf{}<++>
+again with the cursor at the first place-holder (between the curly
+braces).
+
+Mnemonic:
+
+1. The first letter is always F (F for font)
+2. The next 2 letters are the 2 letters describing the font.
+
+Example: the above mapping is triggered by FSF.
+
+Just like environment mappings, you can visually select an area and press
+`sf to have it enclosed in: 
+      \textsf{word}
+or 
+      {\sffamily
+      line
+      }
+depending on character-wise or line-wise selection.
+
+for a complete list of these keybindings refer to the Cheat Sheet that
+comes with this book.
+
+Section Mappings:
+
+These insert LaTeX sections "\section" etc. Just as in the case of
+environments and fonts, can be enclosed with a visual selection. The
+enclosing is not sensetive to character or line-wise selection.
+
+Mnemonic: (make your own :-) 
+      SPA for part
+      SCH for chapter
+      SSE for section
+      SSS for subsection
+      SS2 for subsubsection
+      SPG for paragraph
+      SSP for subparagraph
+
+Example:
+    SSE in insert mode inserts
+        \section{}<++>
+   If you select a word or line and press `se, then you get
+        \section{section name}
+   example: you type in the word
+        apple select it in visual mode and hit "`se", you get
+        \section{apple}
+
+   The menu item in Tex-Environments>Sections have a sub-menu called
+    'Advanced'. Choosing an item from this sub-menu asks a couple of
+    questions (whether you want to include the section in the table of
+    contents, whether there is a shorter name for the table of contents)
+    and then creates a more intelligent template.
+
+   Try this; click on TeX-Environment>section>Advanced>Part LaTeX Suite
+   will ask you a question on the status line of gvim like this; "Title?"
+   type in "Some Title" and hit enter. Now it asks "Short Title?" and you
+   respond by typing in "sometitle" and hit enter. Now, you're asked the
+   question "Include in table of contents [y]/n ?" -go ahead, type "y"
+   (that's the default anyway) and hit enter. This is the output of all
+   the questions you answered:
+
+   \part[sometitle]{Some Title}
+
+   Your cursor will be placed at the end of the above line and vim will
+   be in insert mode so you can start typing in more material right away.
+
+AucTeX key bindings:
+
+These are simple 2 key expansions for some very commonly used LaTeX
+elements. As you read further down this chapter, you will notice that the
+AucTeX keybindings, Greek Letter keybindings and the Math keybindings
+are the 2 sets that follow this simple 2 key expansion system. The
+rest of LaTeX Suite keymaps are all on the 3 letter pattern discussed
+earlier. These are all used in insert mode.
+
+Examples:
+    `.   expands to   \cdot 
+    `*   expands to   \times
+    `~   expands to   \tilde{<++>}<++>
+
+As you noticed, those placeholders are present here as well.
+
+For a complete list of these keybindings refer to the Cheat Sheet that
+comes with this book.
+
+Diacritics: 
+Diacritics speed up typing European languages.
+
+    +<l>  expands to    \v{<l>}
+    =<l>  expands to    \'{<l>}
+   where <l> is a letter ('a' to 'z' and 'A' to 'Z')
+
+    +}    expands to    \"{a}
+    +:    expands to    \^{o}
+
+Note:
+1) Latex Suite also ships with a function SmartBS(), which offers
+another convinience, i.e diacritic characters are treated as a single
+character for backspacing.
+
+2) This is disabled by default.
+
+Greek Letters:
+
+These are, like the AucTeX keybindings, available through simple 2 key
+expansions for the Greek Letters supported by LaTeX.
+
+Examples:
+
+   `a    expands to   \alpha
+   `A    expands to   \Alpha  
+   `b    expands to   \beta
+   `B    expands to   \Beta  
+
+Note: LaTeX does not support all Upper case Greek Letters.
+
+for a complete list of these keybindings refer to the Cheat Sheet that
+comes with this book.
+
+Math Menu:
+
+This menu contains over 600 commands for inserting math signs into LaTeX
+document. They are grouped into submenus as: Arrows, MathFonts, Greek
+(letters), BinaryRel(ations) and many others. At the top are basic signs
+leading into math mode. Some of symbols have hints for mappings in AucTeX
+style. You will find many of these listed in the cheat sheets attached
+to this book.
+
+LaTeX Dictionary
+
+Latex-suite ships with a dictionary of over 600 commands from LaTeX
+and popular packages. When latex-suite starts up, it automatically
+adds this dictionary to vim's 'dictionary' option for use with vim's
+"i_CTRL-X_CTRL-K" command. Let's use this once.
+
+Open your myfile.tex with gvim and go to the line that says
+\end{itemize}. Palce tge cursor somewhere under the word "itemize",
+say under the "m". Now hit "dw", this will delete the rest of the word
+after the "m" and it now looks like this;
+
+   \end{item}
+
+Now, what we have is a part of the word enumerate and let's pretend that
+we've forgotten the exact spelling of that command or we've forgotten
+exactly what we're looking for but, we're sure that if we see the word
+again, we'll remember...
+
+so, let's try and get the LaTeX Suite Dictionary to jog our memory -and
+to complete the required command for us.
+
+Move the cursor immediately under the } immediately after the "item"
+and go into insert mode by hitting the "i" key. Now, hit the key sequence
+"CTRL+x" followed by "CTRL+k" repeatedly till we see the word "itemize"
+appear in place of "item". Voila, LaTeX Suite searched for and completed
+the "enumerate" command for you. Now we can move the cursor to some
+other location and continue working right away.
+
+In the above exercise, we had to hit "CTRL+k" thrice for completing
+"itemize". When we hit "CTRL+k" repeatedly, we actually cycled through
+a list of words before you got the exact word that you were searching for.
+
+LaTeX Folding
+
+Latex-suite ships with the plugin SyntaxFolds.vim which is a plugin for
+creating "fake" syntax folds on the fly. The fold method is actually manual
+but the folding is based on LaTeX syntax. This offers a speed increase over
+regular syntax folding. Ofcourse it has the disadvantage that the folds are
+not dynamic, i.e newly created syntax items are not automatically folded up.
+(This is a compromise between speed and convinience).
+
+When you open up a LaTeX file, all the portions will be automatically folded
+up. However, no new folds will be created until you press <F6> or \rf. (rf
+stands for "refresh folds").
+
+The fold-text is set to the first line of the folded text unless the fold is a
+table, figure etc. (an environment). In this case, if a \caption and/or a
+label is found in the folded region, then those are used to make a more
+meaningful fold-tex, otherwise the second line of the environment is displayed
+along with the name of the environment. In other words, the following 
+
+    \begin{figure}[h]
+      \centerline{\psfig{figure=slidercrank.eps,height=6cm}}
+      \caption{The Slider Crank Mechanism.}
+      \label{fig:slidercrank}
+    \end{figure}
+    % a LaTeX comment.
+    \begin{eqnarray}
+      \sin(\pi) = 0
+    \end{eqnarray}
+
+will be shown as: 
+
+  +---  5 lines: figure (fig:slidercrank) : The Slider Crank Mechanism. -----
+  % a LaTeX comment.
+  +---  3 lines: eqnarray () : \sin(\pi) = 0 --------------------------------
+
+
+LaTeX Smart Keys
+
+Latex suite ships with the following smart keys:
+
+Smart Backspace
+    Pressing <BS> in insert mode checks to see whether we are just after
+    something like \'{a} and if so, deletes all of it. i.e, diacritics are
+    treated as single characters for backspacing.
+
+Smart Quotes
+    Pressing " (english double quote) will insert `` or '' by making an
+    intelligent guess about whether we intended to open or close a quote.
+
+Smart Space
+    Latex-suite maps the <space> key in such a way that $ characters are not
+    broken across lines. It does this by first setting tw=0 so that Vim will
+    not automatically break lines and then maps the <space> key to insert
+    newlines keeping $$'s on the same line.
+
+Smart Dots
+    Pressing ... (3 dots) results in \ldots outside math mode and \cdots in
+    math mode.
+
+Usinging LaTeX Packages
+
+Now let's do something more advanced, We'll need this for using
+LaTeX packages.  Packages vastly improve functionalities of LaTeX -and
+LaTeX-Suite has a great system of supporting packages.
+
+Example: amsmath, this extends math editing in our document.
+
+Open myfile.tex with gvim. Go to the \documentclass line and press 'o'. It
+opens new line. Now go to the packages menu: TeX-Suite>Packages>Supported
+and check if amsmath is supported. It is. click on amsmath. Now you have:
+
+%        File: myfile.tex
+%     Created: Sun May 25 07:00 PM 2003 I
+% Last Change: Sun May 25 07:00 PM 2003 I
+%
+\documentclass[a4paper]{article}
+\usepackage[|]{amsmath}<++>
+\begin{document}
+
+\end{document}
+
+<< cursor at | >>
+
+Now you can add some options. Look again in TeX-Suite>Packages menu. At
+the end of the list, two new items have appeared;
+
+"amsmath Options"    and
+"amsmath Commands"
+
+Look in the "Options" tree and choose one: "tbtags". That will be inserted
+with a comma, delete the comma and press <C-J> followed by <CR>.
+
+You want to add new package, say "helvetic".  Oops, "helvetic"
+is not supported. No problem, you don't have write whole command
+
+\usepackage{helvetic}
+
+...just type in the word 
+
+helvetic
+
+and hit <F5>, LaTeX-Suite completes the rest for you. Of course you
+don't always need to use the menu to insert declaration amsmath package.
+After <F5> LaTeX-Suite will check if this package is supported, and
+if it is, it will do all the magic -add menus, highlighting for new
+environments, functions specific for package and so on...
+
+Things to remember/know:
+<F5> shortcut
+
+Tip: In texrc you can move Packages menu directly onto the menu bar.
+
+
+<++
+
+Ad. 3 F9
+
+<< write about this >>
+
+This is not only for \ref and \cite but general tool for completion of
+LaTeX commands. It looks for bibtex definitiots after \cite{, \label
+definitions after \ref{, opens explorer after \input{ and similar
+commands (in explorer just press <Cr> on file name and it will be
+inserted in document with relative path), and offers menu 
+after eg \bibliographystyle{.
+
+++>
+
+LaTeX Suite Commands
+
+LatexSuite defines set of commands for non-GUI and power users. They are
+taking care about Macros, Templates and Packages.
+
+:TMacro [{macro}]
+                When used without any arguments, this lists all available
+                custom macros defined in ftplugin/latex-suite/macros/
+                directory and prompts you to choose one of them.
+
+                With one argument |:read| this macro under cursor
+                position.  With more than one argument it will not work.
+
+:TMacroEdit [{macro}]
+                Splits window for editing {macro}.  When used without
+                any arguments lists all available custom macros defined
+                in ftplugin/latex-suite/macros/ directory and prompt
+                you to choose one of them.
+
+:TMacroNew
+                Splits window to write a new custom
+                macro. Directory in new buffer is locally changed to
+                ftplugin/latex-suite/macros/.
+
+:TMacroDelete [{macro}]
+                Deletes {macro} from ftplugin/latex-suite/macros/
+                directory.  When used without any arguments lists all
+                available macros defined in latex-suite/macros/ directory
+                and prompt you to choose one of them.
+
+:TPackage [{package} [{package} ...]]
+                When used without any arguments lists name of the packages
+                for which support is available. Report depends if you
+                are using GUI version and/or g:Tex_Menus is set to 1 or
+                not. When you are not using menus command lists files
+                from ftplugin/latex-suite/dictionaries/ (this is main
+                support for non-menus version of latexSuite) if menus
+                are on |TPackage| lists files from latex-suite/packages/
+                directory.
+
+                When {package} is given command turns on all possible support
+                for this {package} (|latex-menu-packages|,
+                |latex-packages-dictionary|). Number of arguments separated
+                with spaces is limited only with common sense.
+
+:TPackageUpdate
+                This command `reads' the name of package under the cursor
+                and turns on any possible support.
+
+:TPackageUpdateAll
+                After issuing this command LaTeX Suite scans the file in
+                looking for not declared packages, removing not needed entries
+                from Packages menu and turning off not necessary packages'
+                dictionaries.
+
+:TTemplate [{template}]
+                When used without any arguments lists all available templates
+                from latex-suite/templates/ directory and prompts to choose
+                one of them.
+                With one argument :0|read| {template} file.
+                With more than one argument it will not work :)
+
+:TSection [{argument}]
+                Used without any arguments inserts last section type
+                (|latex-sectioning|).
+                Accepts arguments:
+                <n>     inserts section name in <n> logical level.
+                        Levels are:
+                        0 part
+                        1 chapter
+                        2 section
+                        3 subsection
+                        4 subsubsection
+                        5 paragraph
+                        6 subparagraph
+
+                +<n>    inserts section name <n> logical levels above the last
+                        used comand
+
+                -<n>    inserts section name <n> logical levels below the last
+                        used comand
+
+                +       inserts section name one logical level below the last
+                        used command (equal to +1).
+
+                ++      inserts section name two logical levels below the last
+                        used command (equal to +2).
+
+                -       inserts section name one logical level over the last
+                        used command (equal to -1).
+
+                --      inserts section name two logical levels over the last
+                        used command (equal to -2).
+
+                Command accepts also latexSuite mappings (|latex-macros|)
+                without preceding S and in lowercase: 
+                        :TSection pa
+                will result in \part{}. It is possible to use full names of
+                sections:
+                        :TSection part
+
+:TSectionAdvanced
+                Accepts the same arguments as |TSection| but leads to a couple
+                of questions (whether you want to include the section in the
+                table of contents, whether there is a shorter name for the
+                table of contents) and then creates a more intelligent
+                template.
+
+:TLook
+                Accepts one argument. Will look through .tex files in
+                directory of edited file for argument. It can be regexp. You
+                don't have to enclose argument in "". <cr> takes you to
+                location. Other keys work as described in |latex-viewer|.
+                Note: TLook uses :grep command and is using 'grepprg'. Its
+                regular expressions can be different from those of Vim.
+
+:TLookBib
+                Accepts one argument. Will look through .bib files in
+                directory of edited file for argument. It can be regexp. You
+                don't have to enclose argument in "". <cr> takes you to
+                location. Other keys work as described in |latex-viewer|.
+                Note: TLookBib uses :grep command and is using 'grepprg'.  Its
+                regular expressions can be different from those of Vim.
+
+:TLookAll
+                Accepts one argument. Will look through all files in directory
+                of edited file for argument. It can be regexp. You don't have
+                to enclose argument in "". <cr> takes you to location. Other
+                keys work as described in |latex-viewer|.
+                Note: TLookuses :grep command and is using 'grepprg'.  Its
+                regular expressions can be different from those of Vim.
+
+:TPartComp
+                No argument allowed but accepts range in all formats. Define
+                fragment of interest with :'a,'b, :/a/,/b/, :'<,'> or :20,30.
+                All other rules of compilation apply.
+
+:TPartView
+                Show last compiled fragment. All rules of viewing apply but
+                |latex-searching|.
+
+
+
+
+
+<<more content to be added here>>
+
+
+
+<<all extras after this line -This stuff comes last>>
+
+<new page>
+
+Features
+
+LaTeX Suite provides a comprehensive set of tools so you can do all
+your LaTeX typesetting and programming from within (G)Vim. Here's a brief
+tour of the various features:
+
+Editing: LaTeX Suite ships with a very comprehensive set of insert
+mode and visual mode mappings and menu items to typeset most of the LaTeX
+elements. These range from 3 letter insert mode mappings which insert a
+skeleton of common typesetting elements to visual mode mappings which
+enclose the selected region in braces, parentheses, etc. The mappings
+can also be accessed via the menus in Gvim.
+
+Compiling: You can compile your .tex, .ltx or .latex file from within
+(G)Vim. The list of errors is shown in a quick fix window so you can directly
+go to the location of an error. The compiler plugin can be dynamically
+reconfigured to show you more or less warnings.
+
+Viewing: By pressing a key from within (G)Vim, the .dvi viewer is started
+up. You can also do forward and inverse searching on your .dvi file from
+within (G)vim.
+
+Folding: LaTeX Suite ships with the plugin SyntaxFolds.vim which is a
+plugin for creating "fake" syntax folds on the fly. The fold method is
+actually manual but, the folding is based on LaTeX syntax. This offers
+a speed increase over regular syntax folding. When you open up a LaTeX
+file, all the portions will be automatically folded up.
+
+Packages: This module provides ways of customizing the menus based
+on which packages are being used in the current LaTeX file. When
+latex-suite first starts up, it scans the LaTeX Suite master-file
+for \usepackage{name} lines and if the corresponding package is found
+in the ~/vim/ftplugin/latex-suite/packages/ directory, then creates a
+sub-menu based on the specification found in that file. See the list of
+currently supported packages.
+
+LaTeX help file: LaTeX Suite ships with the standard TeXinfo file
+translated into Vim help format so that you can get help for common
+LaTeX commands from within (G)Vim.
+
+Dictionary: LaTeX Suite ships with a dictionary with over 600 LaTeX
+commands, which speeds up typing using the CTRL-X_d command of (G)Vim.
+
+Customized Templates: LaTeX Suite ships with some commonly used LaTeX
+templates. It is trivial to add your own templates. The templates can
+contain dynamic data such as time of creation etc. See list of current
+templates.
+
+Customized Macros: LaTeX Suite makes it easy to add custom macros,
+again with the possibility of dynamic content and automatic cursor
+placement.
+
+<new page>
+<<preferably on a tear away sheet>>
+
+LaTeX Suite Cheat Sheets:
+
+Math Keymaps Cheat sheet: (2 key pattern)
+
+------------------------------------------------------------
+Lower case Greek letters	        Upper case Greek letters
+hotkey      Greek Letter           hotkey    Greek Letter
+------------------------------------------------------------
+`a             \alpha    	        `A             \Alpha  
+`b              \beta    	        `B              \Beta  
+`g             \gamma    	        `G             \Gamma  
+`d             \delta    	        `D             \Delta  
+`e        \varepsilon    	        `E           \Epsilon  
+`z              \zeta    	        `Z         \mathrm{Z}  
+`h               \eta    	        `H               \Eta  
+`q             \theta    	         -                 -
+`i              \iota    	         -                 -
+`k             \kappa    	         -                 -
+`l            \lambda    	        `L            \Lambda  
+`m                \mu    	        `M                \Mu  
+`n                \nu    	        `N                \Nu  
+`x                \xi    	        `X                \Xi  
+`p                \pi    	        `P                \Pi  
+`r               \rho    	        `R               \Rho  
+`s             \sigma    	        `S             \Sigma  
+`v          \varsigma    	         -                 -
+`t               \tau    	        `T               \Tau  
+`u           \upsilon    	        `U           \Upsilon  
+`f            \varphi               -                 -	
+`c               \chi    	        `C               \Chi  
+`y               \psi    	        `Y               \Psi  
+`w             \omega    	        `W             \Omega  
+------------------------------------------------------------
+	
+	
+---------------------------------------------------------
+Math Symbols:	
+hotkey      Greek Letter           hotkey    Greek Letter
+---------------------------------------------------------
+`(            \subset              `&             \wedge
+`)            \Subset              `,             \tilde
+`=             \equiv              `8             \infty
+=~            \approx              `_             \bar{}
+`-            \bigcap              `:            \ddot{}
+`+            \bigcup              `;             \dot{}
+`*             \times              `^             \hat{}
+`\          \setminus              `~           \tilde{}
+`@              \circ              `6           \partial
+---------------------------------------------------------
+
+<new page>
+
+AucTeX key bindings Cheat Sheet: (2 key pattern)
+
+----------------------------------------------------------------
+Hotkey                           Hotkey
+insert   expands to              insert   expands to
+Mode                             Mode
+----------------------------------------------------------------
+`^      \hat{<++>}<++>       	   `-      \bigcap
+`_      \bar{<++>}<++>       	   `+      \bigcup
+`6      \partial             	   `(      \subset
+`8      \infty               	   `)      \supset
+`/      \frac{<++>}{<++>}<++>	   `<      \le
+`%      \frac{<++>}{<++>}<++>	   `>      \ge
+`@      \circ                	   `,      \nonumber
+`0      ^\circ               	   `~      \tilde{<++>}<++>
+`=      \equiv               	   `;      \dot{<++>}<++>
+`\      \setminus            	   `:      \ddot{<++>}<++>
+`.      \cdot                	   `2      \sqrt{<++>}<++>
+`*      \times               	   `|      \Big|
+`&      \wedge               	   `I      \int_{<++>}^{<++>}<++>"
+----------------------------------------------------------------
+
+<new page>
+
+Macro Keymaps Cheat Sheet: (2 key pattern)
+
+Insert puts \textbf{x}<++> where x cursor position, <++> described in
+place-holders part of manual.
+
+Visual recognizes Character wise and Line wise submodes.
+
+examples:
+In Character wise encloses selected area in \texbf{...},
+in Line wise encloses selected area in;
+
+{\bfseries
+..
+}
+
+-------------------------------------------------
+    Hotkey
+Insert   Visual   'Insert and       'Visual line
+Mode     Mode       Visual             wise'
+                  Character wise'
+-------------------------------------------------
+FBF      `bf      \textbf{}         \bfseries
+FMD      `md      \textmd{}         \mdseries
+
+FTT      `tt      \texttt{}         \ttfamily
+FSF      `sf      \textsf{}         \sffamily
+FRM      `rm      \textrm{}         \rmfamily
+
+FUP      `up      \textup{}         \upshape
+FSL      `sl      \textsl{}         \slshape
+FSC      `sc      \textsc{}         \scshape
+FIT      `it      \textit{}         \itshape
+-------------------------------------------------
+
+
+<new page>
+
+Environment Keymaps Cheat Sheet:
+
+In Insert mode insert environment template
+In Visual mode enclose selected area in environment "borders"
+
+------------------------------   ---------------------------------
+   Hotkey                           Hotkey
+Insert   Visual   Environment    Insert   Visual   Environment
+------------------------------   ---------------------------------
+ELI      ,li      list        	EQN      ,qn      quotation   
+EDE      ,de      description 	ESB      ,sb      sloppybar
+EEN      ,en      enumerate   	ETI      ,ti      theindex
+EIT      ,it      itemize     	ETP      ,tp      titlepage
+ETI      ,ti      theindex    	EVM      ,vm      verbatim
+ETL      ,tl      trivlist    	EVE      ,ve      verse
+ETE      ,te      table       	ETB      ,tb      thebibliography
+ETG      ,tg      tabbing     	ENO      ,no      note
+ETR      ,tr      tabular     	EOV      ,ov      overlay
+EAR      ,ar      array       	ESL      ,sl      slide
+EDM      ,dm      displaymath 	SPA      ,pa      part
+EEA      ,ea      eqnarray    	SCH      ,ch      chapter
+EEQ      ,eq      equation    	SSE      ,se      section
+EMA      ,ma      math        	SSS      ,ss      subsection
+EAB      ,ab      abstract    	SS2      ,s2      subsubsection
+EAP      ,ap      appendix    	SPG      ,pg      paragraph
+ECE      ,ce      center      	SSP      ,sp      subparagraph
+EDO      ,do      document    	EPI      ,fi      figure
+EFC      ,fc      filecontents   ELR      ,lr      lrbox
+EFL      ,fl      flushleft      EMP      ,mp      minipage
+EFR      ,fr      flushright     EPI      ,pi      picture
+------------------------------   ---------------------------------
+
+
+General:
+Note: \ doesn't literally mean \ but, it means "g:Tex_Leader"
+
+by default g:Tex_Leader is one of;
+   "`"  (backtik)  -located immediately below the ESC key
+or;
+   ","  (comma)
+
+\ll compile whole document
+\lv view compiled document
+\lp view last compiled part of document
+\ls if possible open dvi viewer supporting forward searching
+\rf refresh folds
+
+
+
