@@ -1,0 +1,3 @@
+[submodule "included/vim-latex"]
+	path = included/vim-latex
+	url = git://vim-latex.git.sourceforge.net/gitroot/vim-latex/vim-latex
