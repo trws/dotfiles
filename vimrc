@@ -378,9 +378,9 @@ runtime ftplugin/man.vim
 let g:winManagerWindowLayout = "Project|TagList"
 
 "project plugin options
-map           <A-S-o> :Project<CR>:redraw<CR>
-map           <Esc><S-o> :Project<CR>:redraw<CR>
-map           <D-O> :Project<CR>:redraw<CR>
+" map           <A-S-o> :Project<CR>:redraw<CR>
+" map           <Esc><S-o> :Project<CR>:redraw<CR>
+" map           <D-O> :Project<CR>:redraw<CR>
 map           <A-S-p> <Plug>ToggleProject
 map           <Esc><S-p> <Plug>ToggleProject
 map           <D-P> <Plug>ToggleProject
