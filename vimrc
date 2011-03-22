@@ -1,6 +1,7 @@
 "paths and includes
 set runtimepath+=~/.vim/included/c-support
-set runtimepath+=~/.vim/included/latex-suite
+" set runtimepath+=~/.vim/included/latex-suite
+set runtimepath+=~/.vim/included/vim-latex/vimfiles/
 set runtimepath+=~/.vim/included/vimoutliner
 set runtimepath+=~/.vim/included/enhanced-commentify
 runtime ftplugin/man.vim
