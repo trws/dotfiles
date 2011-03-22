@@ -48,6 +48,7 @@ endif
 
 map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q $PWD<CR>
 map <A-C-T> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q $PWD<CR>
+map <Esc><C-T> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q $PWD<CR>
 execute 'map <C-S-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q -f - ' . include_paths . ' > ~/.vim-systags'
 
 "syntax/visual options
@@ -189,6 +190,8 @@ let g:EnhCommentifyRespectIndent='Yes'
 let g:EnhCommentifyPretty='Yes'
 let g:EnhCommentifyMultiPartBlocks='Yes'
 let g:EnhCommentifyBindInInsert='No'
+imap <A-x> <Esc><Plug>Traditionala
+imap <Esc>x <Esc><Plug>Traditionala
 "csupport, but very commentify related...
 let g:C_TypeOfH="c"
 
@@ -205,6 +208,9 @@ set ignorecase
 set smartcase
 set modeline
 set modelines=5
+
+"diff behavior
+set diffopt+=iwhite
 
 "indent
 set autoindent
@@ -231,6 +237,7 @@ au FileType tex imap <C-b> <Plug>Tex_MathBF
 au FileType tex imap <C-l> <Plug>Tex_LeftRight
 au FileType tex imap <C-p> <Plug>Tex_InsertItemOnThisLine
 au FileType tex imap <A-i> <Plug>Tex_InsertItemOnThisLine
+au FileType tex imap <Esc>i <Plug>Tex_InsertItemOnThisLine
 
 au FileType txt set textwidth=80
 au FileType txt setlocal spell spelllang=en_us
@@ -272,6 +279,10 @@ if ! has("gui_macvim")
   cnoremap <special> <A-v> <C-R>+
   execute 'vnoremap <script> <special> <A-v>' paste#paste_cmd['v']
   execute 'inoremap <script> <special> <A-v>' paste#paste_cmd['i']
+  nnoremap <special> <Esc>v "+gP
+  cnoremap <special> <Esc>v <C-R>+
+  execute 'vnoremap <script> <special> <Esc>v' paste#paste_cmd['v']
+  execute 'inoremap <script> <special> <Esc>v' paste#paste_cmd['i']
   nnoremap  <Esc>[1;3C <End>
   vmap      <Esc>[1;3C <End>
   imap      <Esc>[1;3C <End>
@@ -299,6 +310,7 @@ if ! has("gui_running")
   if $SYSTEM == "darwin"
     vmap <C-y> y:call system("pbcopy", getreg("\""))<CR>
     vmap <A-y> y:call system("pbcopy", getreg("\""))<CR>
+    vmap <Esc>y y:call system("pbcopy", getreg("\""))<CR>
   elseif $SYSTEM == "linux"
     vmap <C-y> y:call system("xclip", getreg("\""))<CR>
   endif
@@ -316,8 +328,8 @@ cmap  <C-]>  g<C-]>
 
 map <silent> <A-]>  :call Vertical_tag_jump()<CR>
 imap <silent> <A-]>  <Esc>:call Vertical_tag_jump()<CR>
-map <silent> <M-]>  :call Vertical_tag_jump()<CR>
-imap <silent> <M-]>  <Esc>:call Vertical_tag_jump()<CR>
+map <silent> <Esc>]  :call Vertical_tag_jump()<CR>
+imap <silent> <Esc>]  <Esc>:call Vertical_tag_jump()<CR>
 
 if ! has("gui_macvim")
   "alt
@@ -327,16 +339,31 @@ if ! has("gui_macvim")
   imap      <A-t>  <Esc>:tabnew<CR>
   cmap      <A-t>  <Esc>:tabnew<CR>
   omap      <A-t>  :tabnew<CR>
-  nnoremap  <A-}>  :tabNext<CR>
-  vmap      <A-}>  :tabNext<CR>
-  imap      <A-}>  <Esc>:tabNext<CR>
-  cmap      <A-}>  <Esc>:tabNext<CR>
-  omap      <A-}>  :tabNext<CR>
+  nnoremap  <A-}>  :tabnext<CR>
+  vmap      <A-}>  :tabnext<CR>
+  imap      <A-}>  <Esc>:tabnext<CR>
+  cmap      <A-}>  <Esc>:tabnext<CR>
+  omap      <A-}>  :tabnext<CR>
   nnoremap  <A-{>  :tabprevious<CR>
   vmap      <A-{>  :tabprevious<CR>
   imap      <A-{>  <Esc>:tabprevious<CR>
   cmap      <A-{>  <Esc>:tabprevious<CR>
   omap      <A-{>  :tabprevious<CR>
+  nnoremap  <Esc>t  :tabnew<CR>
+  vmap      <Esc>t  :tabnew<CR>
+  imap      <Esc>t  <Esc>:tabnew<CR>
+  cmap      <Esc>t  <Esc>:tabnew<CR>
+  omap      <Esc>t  :tabnew<CR>
+  nnoremap  <Esc>}  :tabnext<CR>
+  vmap      <Esc>}  :tabnext<CR>
+  imap      <Esc>}  <Esc>:tabnext<CR>
+  cmap      <Esc>}  <Esc>:tabnext<CR>
+  omap      <Esc>}  :tabnext<CR>
+  nnoremap  <Esc>{  :tabprevious<CR>
+  vmap      <Esc>{  :tabprevious<CR>
+  imap      <Esc>{  <Esc>:tabprevious<CR>
+  cmap      <Esc>{  <Esc>:tabprevious<CR>
+  omap      <Esc>{  :tabprevious<CR>
 endif
 
 "general options
@@ -352,8 +379,10 @@ let g:winManagerWindowLayout = "Project|TagList"
 
 "project plugin options
 map           <A-S-o> :Project<CR>:redraw<CR>
+map           <Esc><S-o> :Project<CR>:redraw<CR>
 map           <D-O> :Project<CR>:redraw<CR>
 map           <A-S-p> <Plug>ToggleProject
+map           <Esc><S-p> <Plug>ToggleProject
 map           <D-P> <Plug>ToggleProject
 nmap <silent> <F3>    <Plug>ToggleProject
 let g:proj_run1 = '!open %F'
@@ -368,6 +397,7 @@ let g:proj_run_fold1 = ":!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q -f - 
 " F4:  Switch on/off TagList
 nnoremap <silent> <F4> :TlistToggle<CR>
 nnoremap <silent> <A-S-t> :TlistToggle<CR>
+nnoremap <silent> <Esc><S-t> :TlistToggle<CR>
 nnoremap <silent> <D-T> :TlistToggle<CR>
 
 " TagListTagName  - Used for tag names
