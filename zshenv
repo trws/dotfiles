@@ -24,7 +24,7 @@ umask 022
 #  duplicates
 if [[ ! -r "$SSH_AUTH_SOCK" ]]
 then
-    for AGENT in `ls /tmp/ssh-*/agent*`
+    for AGENT in `ls /tmp/ssh-*/agent* 2> /dev/null`
     do
         if [[ -r $AGENT ]]
         then
