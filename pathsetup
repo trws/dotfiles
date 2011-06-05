@@ -9,10 +9,11 @@ then
 
  test -r /sw/bin/init.sh && . /sw/bin/init.sh
 fi
-
 [[ $system = solaris ]] && path=(
 	/p/zsh/bin /p/openssh/ /p/cvs/ $JAVACC/bin $CS352/bin $J2SE15/bin /usr/xpg4/bin /usr/ccs/bin $path /usr/ucb
 )
 [[ $domain = cs.purdue.edu ]] && path=($path /p/vim/bin) && MJ=($CS352/MJ)
-path=( ~/scripts ~/programs/$bintype/bin ~/programs/bin $path /usr/local/bin /bin /usr/bin /usr/[X]{,11{,R6}}/bin(N) /usr/local/cuda/bin /usr/local/SAS/SASFoundation/9.2/bin)
+path=( /usr/local/bin ~/scripts ~/programs/$bintype/bin ~/programs/bin $path /bin /usr/bin /usr/[X]{,11{,R6}}/bin(N) /usr/local/cuda/bin /usr/local/SAS/SASFoundation/9.2/bin)
 typeset -U path
+
+[[ $host = (ice[1-9]|wood[1-2]) ]] && . ~/dynamic/includes/prepare-zsh-link.sh
