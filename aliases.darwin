@@ -4,7 +4,6 @@ alias ls='ls --color=auto -h'
 #alias ls.='ls -dF .*'
 #alias tar=gtar
 alias rezsh='exec zsh'
-alias ssh='/usr/bin/ssh'
 alias -g '^=|'
 alias nocbreak=icanon
 alias cal=ncal
