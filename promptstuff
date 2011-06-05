@@ -115,16 +115,22 @@ setprompt () {
     if [[ "$TERM" == screen* ]]; then
         if [ -z "$SSH_CLIENT" ]
         then
+            #echo bah
             PR_STITLE="\ekzsh\e\\"
         else
+            #echo meh
             s=$(hostname)
             a=("${(s/./)s}")
-            PR_STITLE="\ek$a[1]:zsh\e\\"
+            PR_STITLE1=$'%{\ek'
+            PR_STITLE2="$a[1]:zsh"
+            PR_STITLE3=$'\e\\%}'
+            #PR_STITLE=$'%{\ekzsh\e\\%}'
         fi
     else
+        #echo zuh
 	PR_STITLE=''
     fi
-    echo -n $PR_STITLE
+    #echo -n $PR_STITLE
     
     
     ###
@@ -143,7 +149,7 @@ setprompt () {
     ###
     # Finally, the prompt.
     # removed $PR_STITLE
-    PROMPT='$PR_SET_CHARSET${(e)PR_TITLEBAR}\
+    PROMPT='$PR_SET_CHARSET$PR_STITLE1$PR_STITLE2$PR_STITLE3${(e)PR_TITLEBAR}\
 $PR_CYAN$PR_SHIFT_IN$PR_ULCORNER$PR_BLUE$PR_HBAR$PR_SHIFT_OUT(\
 $PR_GREEN%(!.%SROOT%s.%n)$PR_GREEN@%m:%l\
 $PR_BLUE)$PR_SHIFT_IN$PR_HBAR$PR_CYAN$PR_HBAR${(e)PR_FILLBAR}$PR_BLUE$PR_HBAR$PR_SHIFT_OUT(\
