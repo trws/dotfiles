@@ -413,7 +413,7 @@ highlight MyTagListComment guifg=DarkGreen ctermfg=DarkGreen
 highlight MyTagListFileName gui=bold guifg=Black guibg=LightBlue cterm=bold ctermfg=Black ctermbg=LightBlue
 
 "let Tlist_Ctags_Cmd = $VIM.'/vimfiles/ctags.exe' " location of ctags tool
-let Tlist_Show_One_File = 1 " Displaying tags for only one file~
+" let Tlist_Show_One_File = 1 " Displaying tags for only one file~
 let Tlist_Exist_OnlyWindow = 1 " if you are the last, kill yourself
 let Tlist_Use_Right_Window = 1 " split to the right side of the screen
 let Tlist_Sort_Type = "order" " sort by order or name
