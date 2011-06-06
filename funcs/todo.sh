@@ -1,8 +1,8 @@
 #!zsh
-if [[ -f ~/Dropbox/simplenote/todo.txt ]] 
+if [[ -f ~/Dropbox/simplenote/todo.txt ]]
 then
-    command todo.sh $@
+    command todo.sh ${@}
 else
-    command ssh hurricane todo.sh $@
+    command ssh hurricane todo.sh "${@}"
 fi
 
