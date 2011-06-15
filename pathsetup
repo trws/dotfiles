@@ -3,7 +3,7 @@
 (( $gotroot )) && path=($path /usr/local/sbin /sbin /usr/sbin)
 if [[ $system = darwin ]] 
 then
-  path=( /opt/local/libexec/gnubin /sw/bin /opt/local/bin /opt/local/sbin /Developer/usr/bin $path /usr/local/cuda/bin )
+  path=( ~/.ports/bin ~/.ports/libexec/gnubin /opt/local/libexec/gnubin /sw/bin /opt/local/bin /opt/local/sbin /Developer/usr/bin $path /usr/local/cuda/bin )
   manpath=( ~/programs/man ~/programs/share/man /opt/local/man $manpath )
   export PERL5LIB=~/programs/lib/perl5/5.8.8/darwin-2level:~/programs/lib/perl5/5.8.8:~/programs/lib/perl5/site_perl/5.8.8/darwin-2level:~/programs/lib/perl5/site_perl/5.8.8:~/programs/lib/perl5/site_perl:~/programs/lib/perl5/vendor_perl/5.8.8/darwin-2level:~/programs/lib/perl5/vendor_perl/5.8.8:~/programs/lib/perl5/vendor_perl
 
