@@ -1,6 +1,7 @@
 #!zsh
+path=(~/scripts ~/programs/$bintype/bin ~/programs/bin /usr/local/bin $path)
 [[ -x /usr/local/bin/defaultpaths ]] && eval `/usr/local/bin/defaultpaths`
-(( $gotroot )) && path=($path /usr/local/sbin /sbin /usr/sbin)
+(( $gotroot )) && path=(/usr/local/sbin $path /sbin /usr/sbin)
 if [[ $system = darwin ]] 
 then
   path=( ~/.ports/bin ~/.ports/libexec/gnubin /opt/local/libexec/gnubin /sw/bin /opt/local/bin /opt/local/sbin /Developer/usr/bin $path /usr/local/cuda/bin )
@@ -13,7 +14,7 @@ fi
 	/p/zsh/bin /p/openssh/ /p/cvs/ $JAVACC/bin $CS352/bin $J2SE15/bin /usr/xpg4/bin /usr/ccs/bin $path /usr/ucb
 )
 [[ $domain = cs.purdue.edu ]] && path=($path /p/vim/bin) && MJ=($CS352/MJ)
-path=( ~/scripts ~/programs/$bintype/bin ~/programs/bin $path /usr/local/bin /usr/bin /bin /usr/[X]{,11{,R6}}/bin(N) /usr/local/cuda/bin /usr/local/SAS/SASFoundation/9.2/bin)
+path=(  $path /usr/bin /bin /usr/[X]{,11{,R6}}/bin(N) /usr/local/cuda/bin /usr/local/SAS/SASFoundation/9.2/bin)
 typeset -U path
 
 [[ $host = (ice[1-9]|wood[1-2]) ]] && . ~/dynamic/includes/prepare-zsh-link.sh

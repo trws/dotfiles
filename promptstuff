@@ -31,7 +31,7 @@ function precmd {
 
     if [ -f ~/Dropbox/simplenote/todo.txt ]; then
         #PR_TASK=":$PR_RED$(t ls | head --lines=-2 | wc -l)$PR_LIGHT_BLUE"
-        PR_TASK=":$PR_RED$(tail --lines=+2 ~/Dropbox/simplenote/todo.txt | grep -v '^$' | wc -l)$PR_LIGHT_BLUE"
+        PR_TASK=":$PR_RED$(tail --lines=+2 ~/Dropbox/todo/todo.txt | grep -v '^$' | wc -l)$PR_LIGHT_BLUE"
         #PR_TASK=""
     else
         PR_TASK=""
