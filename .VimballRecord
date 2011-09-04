@@ -1,1 +1,2 @@
 tComment.vba: call delete('/Users/njustn/.vim/doc/tComment.txt')|call delete('/Users/njustn/.vim/plugin/tComment.vim')|call delete('/Users/njustn/.vim/autoload/tcomment.vim')
+tagbar.vba: call delete('/Users/njustn/.vim/plugin/tagbar.vim')|call delete('/Users/njustn/.vim/syntax/tagbar.vim')|call delete('/Users/njustn/.vim/doc/tagbar.txt')
