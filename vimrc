@@ -108,9 +108,9 @@ endif
   cmap          <BS>
   omap          <BS>
 
-if exists("$TMUX") "tmux specific settings, changed term to xterm-256
-  set ttymouse=xterm
-endif
+"if exists("$TMUX") "tmux specific settings, changed term to xterm-256
+"  set ttymouse=xterm
+"endif
 
 if &term =~ "screen.*" "screen configurations
   set ttymouse=xterm
@@ -396,10 +396,17 @@ let g:proj_run_fold1 = ":!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q -f - 
 " TagList
 " --------------------
 " F4:  Switch on/off TagList
-nnoremap <silent> <F4> :TlistToggle<CR>
-nnoremap <silent> <A-S-t> :TlistToggle<CR>
-nnoremap <silent> <Esc><S-t> :TlistToggle<CR>
-nnoremap <silent> <D-T> :TlistToggle<CR>
+nnoremap <silent> <F4> :TagbarToggle<CR>
+nnoremap <silent> <A-S-t> :TagbarToggle<CR>
+nnoremap <silent> <Esc><S-t> :TagbarToggle<CR>
+nnoremap <silent> <D-T> :TagbarToggle<CR>
+
+let g:tagbar_autoclose = 1
+
+"nnoremap <silent> <F4> :TlistToggle<CR>
+"nnoremap <silent> <A-S-t> :TlistToggle<CR>
+"nnoremap <silent> <Esc><S-t> :TlistToggle<CR>
+"nnoremap <silent> <D-T> :TlistToggle<CR>
 
 " TagListTagName  - Used for tag names
 highlight MyTagListTagName gui=bold guifg=Black guibg=Green cterm=bold ctermfg=Black ctermbg=Green
