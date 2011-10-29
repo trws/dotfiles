@@ -1,5 +1,6 @@
 #!zsh
-if [[ -f ~/Dropbox/simplenote/todo.txt ]]
+source ~/.todo/config
+if [[ -f $TODO_DIR/todo.txt ]]
 then
     command todo.sh ${@}
 else

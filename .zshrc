@@ -60,7 +60,7 @@ for func in ${^fpath}/*(N-.x:t); autoload $func
   zmodload -a zsh/stat stat
   zmodload -a zsh/zpty zpty
   zmodload -a zsh/zprof zprof
-  zmodload -a zsh/complist complist
+  #  zmodload -a zsh/complist complist # no longer needed
   zmodload -ap zsh/mapfile mapfile
 
   # Set up completion

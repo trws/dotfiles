@@ -10,6 +10,7 @@ then
 
  test -r /sw/bin/init.sh && . /sw/bin/init.sh
 fi
+[[ $host = [Tt]yphoon ]] && path=( $path ~/energyware/android-sdk-macosx/tools ~/energyware/android-sdk-macosx/platform-tools )
 [[ $system = solaris ]] && path=(
 	/p/zsh/bin /p/openssh/ /p/cvs/ $JAVACC/bin $CS352/bin $J2SE15/bin /usr/xpg4/bin /usr/ccs/bin $path /usr/ucb
 )
