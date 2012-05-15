@@ -1,12 +1,18 @@
 #!zsh aliases
 #alias lsd='ls -ld *(-/DN)'
-alias ls='ls --color=auto -h'
 #alias ls.='ls -dF .*'
 #alias tar=gtar
+#
 alias rezsh='exec zsh'
 alias -g '^=|'
 alias nocbreak=icanon
 alias cal=ncal
+[ -x '/Applications/MacVim.app/Contents/MacOS/Vim' ] && alias vim=/Applications/MacVim.app/Contents/MacOS/Vim
+for APP in tail find tar
+do
+    TEST=`which g$APP`
+    [ -x "$TEST" ] && alias $APP=g$APP
+done
 # Global aliases
 #alias -g M='|more'
 #alias -g H='|head'
