@@ -1,4 +1,5 @@
 function precmd {
+    _z --add "$(pwd -P)"
 
     local TERMWIDTH
     (( TERMWIDTH = ${COLUMNS} - 1 ))
