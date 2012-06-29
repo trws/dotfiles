@@ -19,3 +19,4 @@ path=(  $path /usr/bin /bin /usr/[X]{,11{,R6}}/bin(N) /usr/local/cuda/bin /usr/l
 typeset -U path
 
 [[ $host = (ice[1-9]|wood[1-2]) ]] && . ~/dynamic/includes/prepare-zsh-link.sh
+[[ -d /opt/pgi/linux86-64/2012/bin/ ]] && path=($path /opt/pgi/linux86-64/2012/bin/)
