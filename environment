@@ -18,3 +18,5 @@ export LC_ALL=C
 export GOROOT=$HOME/go
 export GOARCH=amd64
 export GOBIN=$HOME/programs/bin
+[[ -d /usr/local/cuda ]] && export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64:/usr/local/cuda/lib
+export PATH

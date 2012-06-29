@@ -26,5 +26,5 @@ typeset -U path
 
 [[ $host = (ice[1-9]|wood[1-2]) ]] && . ~/dynamic/includes/prepare-zsh-link.sh
 
-[[ -d '/opt/pgi/osx86-64/11.10/bin' ]] && path=( $path /opt/pgi/osx86-64/11.10/bin )
+[[ -d /opt/pgi/linux86-64/2012/bin/ ]] && path=( $path /opt/pgi/linux86-64/2012/bin/ )
 
