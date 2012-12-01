@@ -4,6 +4,7 @@ set runtimepath+=~/.vim/included/c-support
 set runtimepath+=~/.vim/included/vim-latex/vimfiles/
 set runtimepath+=~/.vim/included/vimoutliner
 set runtimepath+=~/.vim/included/enhanced-commentify
+set runtimepath+=~/.vim/included/conque_2.2/
 runtime ftplugin/man.vim
 
 
@@ -16,8 +17,9 @@ au BufNewFile,BufRead *.cu set ft=cuda
 au BufNewFile,BufRead *.cl set ft=opencl
 au BufNewFile,BufRead *.br set ft=brook
 au BufNewFile,BufRead *.go set ft=go
-au FileType go set formatprg=gofmt
+au FileType go setlocal formatprg=gofmt
 au BufRead COMMIT_EDITMSG set backupcopy=no
+au BufNewFile,BufRead *.txt set ft=txt
 
 
 "automatic formatting options
@@ -26,16 +28,21 @@ set formatoptions=crq
 " set fo-=t
 " au FileType tex set formatoptions+=a
 au FileType tex setlocal formatoptions+=t
+au FileType tex setlocal fp=
+au FileType txt setlocal formatoptions+=t
 "set formatoptions+=a
 
 "hilighting
 let python_highlight_all = 1
-
 au FileType cpp setlocal fp=astyle\ --pad-oper\ --unpad-paren\ --add-brackets\ --convert-tabs\ --align-pointer=name\ --indent-col1-comments\ --style=k/r\ --quiet
 au FileType c setlocal fp=astyle\ --pad-oper\ --unpad-paren\ --add-brackets\ --convert-tabs\ --align-pointer=name\ --indent-col1-comments\ --style=k/r\ --quiet
 
 "tags
 set tags+=~/.vim-systags
+
+"Conque
+nmap <C-w><S-v> :ConqueTermVSplit zsh<CR>
+nmap <C-w><S-s> :ConqueTermSplit zsh<CR>
 
 if exists("$SYSTEM")
   if $SYSTEM == "darwin"
@@ -180,6 +187,9 @@ if &term =~ "screen.*" "screen configurations
   omap      <Esc>[H  <Home>
 endif
 
+"enable wide mouse support for iTerm2 and urxvt, should also work in new xterms
+set ttymouse=urxvt
+
 "enhanced commentify
 let g:EnhCommentifyUseAltKeys='No'
 let g:EnhCommentifyAltOpen='/\\*'
@@ -187,6 +197,8 @@ let g:EnhCommentifyAltClose='*\\/'
 let g:EnhCommentifyTraditionalMode='No'
 let g:EnhCommentifyFirstLineMode='Yes'
 let g:EnhCommentifyUserMode='No'
+" let g:EnhCommentifyIgnoreWS='Yes'
+" let g:EnhCommentifyRespectIndent='No'
 let g:EnhCommentifyRespectIndent='Yes'
 let g:EnhCommentifyPretty='Yes'
 let g:EnhCommentifyMultiPartBlocks='Yes'
@@ -275,7 +287,7 @@ call Map_for_all("<C-c>","<Esc>", 1)
 
 map <S-Z><S-S> :up<CR> 
 
-if ! has("gui_macvim")
+if ! has("gui_running")
   nnoremap <special> <A-v> "+gP
   cnoremap <special> <A-v> <C-R>+
   execute 'vnoremap <script> <special> <A-v>' paste#paste_cmd['v']
@@ -332,7 +344,7 @@ imap <silent> <A-]>  <Esc>:call Vertical_tag_jump()<CR>
 map <silent> <Esc>]  :call Vertical_tag_jump()<CR>
 imap <silent> <Esc>]  <Esc>:call Vertical_tag_jump()<CR>
 
-if ! has("gui_macvim")
+if ! has("gui_running")
   "alt
 
   nnoremap  <A-t>  :tabnew<CR>
@@ -386,7 +398,7 @@ map           <A-S-p> <Plug>ToggleProject
 map           <Esc><S-p> <Plug>ToggleProject
 map           <D-P> <Plug>ToggleProject
 nmap <silent> <F3>    <Plug>ToggleProject
-let g:proj_run1 = '!open %F'
+let g:proj_run1 = "!open %f"
 let g:proj_window_width = 30
 let g:proj_window_increment = 50 
 let g:proj_run_fold1 = ":!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q -f - %f > %d/tags"
@@ -403,10 +415,6 @@ nnoremap <silent> <D-T> :TagbarToggle<CR>
 
 let g:tagbar_autoclose = 1
 
-"nnoremap <silent> <F4> :TlistToggle<CR>
-"nnoremap <silent> <A-S-t> :TlistToggle<CR>
-"nnoremap <silent> <Esc><S-t> :TlistToggle<CR>
-"nnoremap <silent> <D-T> :TlistToggle<CR>
 
 " TagListTagName  - Used for tag names
 highlight MyTagListTagName gui=bold guifg=Black guibg=Green cterm=bold ctermfg=Black ctermbg=Green
