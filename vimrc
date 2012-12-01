@@ -188,7 +188,11 @@ if &term =~ "screen.*" "screen configurations
 endif
 
 "enable wide mouse support for iTerm2 and urxvt, should also work in new xterms
-set ttymouse=urxvt
+if version >= 730
+    set ttymouse=urxvt
+else
+    set ttymouse=xterm2
+endif
 
 "enhanced commentify
 let g:EnhCommentifyUseAltKeys='No'
