@@ -469,8 +469,10 @@ if ! has("gui_running")
 endif
 
 "Powerline
+"source ~/.vim/included/powerline/powerline/ext/vim/source_plugin.vim " back in
+"if they fix it
 set laststatus=2 "keeps the statusbar on
-let g:Powerline_symbols = 'unicode'
+let g:Powerline_symbols = 'fancy'
 let g:Powerline_theme = 'default'
 "let g:Powerline_colorscheme = 'solarized256'
 
@@ -597,7 +599,7 @@ fun! SetupVAM()
 
     " Tell VAM which plugins to fetch & load:
     call vam#ActivateAddons(["The_NERD_tree","The_NERD_Commenter","Gundo","ctrlp",
-                \"clang_complete", "UltiSnips","SuperTab%1643",
+                \"clang_complete", "UltiSnips","SuperTab%1643", "Powerline",
                 \"Tagbar","LaTeX-Suite_aka_Vim-LaTeX","VimOutliner","fugitive"], {'auto_install' : 1})
     ""neosnippet","github:Shougo/neocomplcache-clang_complete.git","neocomplcache"
     " sample: call vam#ActivateAddons(['pluginA','pluginB', ...], {'auto_install' : 0})
