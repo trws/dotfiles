@@ -7,7 +7,7 @@ alias rezsh='exec zsh'
 alias -g '^=|'
 alias nocbreak=icanon
 alias cal=ncal
-[ -x '/Applications/MacVim.app/Contents/MacOS/Vim' ] && alias vim=/Applications/MacVim.app/Contents/MacOS/Vim
+#  [ -x '/Applications/MacVim.app/Contents/MacOS/Vim' ] && alias vim=/Applications/MacVim.app/Contents/MacOS/Vim
 for APP in tail find tar
 do
     TEST=`which g$APP`
