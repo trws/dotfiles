@@ -1,3 +1,6 @@
-[submodule "included/vim-latex"]
-	path = included/vim-latex
-	url = git://vim-latex.git.sourceforge.net/gitroot/vim-latex/vim-latex
+[submodule "included/vim-colors-solarized"]
+	path = included/vim-colors-solarized
+	url = https://github.com/altercation/vim-colors-solarized
+[submodule "included/powerline"]
+	path = included/powerline
+	url = git://github.com/Lokaltog/powerline.git

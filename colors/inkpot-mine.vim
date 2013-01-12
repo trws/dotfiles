@@ -48,7 +48,7 @@ if has("gui_running")
     if ! g:inkpot_black_background
         hi Normal         gui=NONE   guifg=#cfbfad   guibg=#1e1e27
     else
-        hi Normal         gui=NONE   guifg=#cfbfad   guibg=#000000
+        hi Normal         gui=NONE   guifg=#cfcfcf   guibg=#000000
     endif
 
     hi IncSearch      gui=BOLD   guifg=#303030   guibg=#cd8b60
@@ -138,11 +138,9 @@ if has("gui_running")
     endif
 else
     if ! g:inkpot_black_background
-        exec "hi Normal         cterm=NONE   ctermfg=" . <SID>X(79) 
-        ". " ctermbg=" . <SID>X(80)
+        exec "hi Normal         cterm=NONE   ctermfg=" . <SID>X(79) . " ctermbg=" . <SID>X(80)
     else
-        exec "hi Normal         cterm=NONE   ctermfg=" . <SID>X(79)
-        " . " ctermbg=" . <SID>X(16)
+        exec "hi Normal         cterm=NONE   ctermfg=" . <SID>X(79) . " ctermbg=" . <SID>X(16)
     endif
 
     exec "hi IncSearch      cterm=BOLD   ctermfg=" . <SID>X(80) . " ctermbg=" . <SID>X(73)

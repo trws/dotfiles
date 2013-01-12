@@ -1,0 +1,22 @@
+snippet tab
+\begin{tabular}{${1:c}}
+$0${1/((?<=.)c|l|r)|./(?1: & )/g}
+\end{tabular}
+endsnippet
+
+snippet efi
+\begin{figure}[${1:htb}]
+    \centering
+        \includegraphics[width=${3:\columnwidth}]{${2}}
+    \caption{${4:caption}}
+    \label{fig:${5:$2}}
+\end{figure}
+endsnippet
+snippet efi*
+\begin{figure*}[${1:t}]
+    \centering
+        \includegraphics[width=${3:\textwidth}]{${2}}
+    \caption{${4:caption}}
+    \label{fig:${5:$2}}
+\end{figure*}
+endsnippet
