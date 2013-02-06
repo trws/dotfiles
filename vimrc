@@ -81,6 +81,9 @@ au FileType go setlocal formatprg=gofmt
 au BufRead COMMIT_EDITMSG set backupcopy=no
 au BufNewFile,BufRead *.txt set ft=txt
 
+"for plugins, etc.
+set encoding=utf-8
+
 
 
 "remove ending whitespace on file write
@@ -123,6 +126,7 @@ let g:ConqueTerm_CWInsert = 1
 
 if exists("$SYSTEM")
   if $SYSTEM == "darwin"
+    let g:Powerline_symbols = 'fancy'
     let include_paths = '/opt/local/include /usr/local/include /usr/include /Developer/Headers'
   elseif $SYSTEM == "linux"
     let include_paths = '/usr/local/include /usr/include'
@@ -469,6 +473,11 @@ set laststatus=2 "keeps the statusbar on
 let g:Powerline_symbols = 'fancy'
 "let g:Powerline_theme = 'default'
 let g:Powerline_colorscheme = 'solarized256'
+"if
+"let g:Powerline_symbols = 'fancy'
+"let g:Powerline_symbols = 'unicode'
+"let g:Powerline_theme = 'default'
+"let g:Powerline_colorscheme = 'solarized256'
 
 "general options
 set grepprg=grep\ -nH\ $*
