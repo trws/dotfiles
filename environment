@@ -1,7 +1,7 @@
 #!zsh
 DEFAULT_USER=njustn
-[[ ! -z "$LC_TERM_PROGRAM" ]] && export TERM_PROGRAM=$LC_TERM_PROGRAM
-[[ ! -z "$LC_ITERM_PROFILE" ]] && export ITERM_PROFILE=$LC_ITERM_PROFILE
+[[ ! -z "$LC_TERM_PROGRAM" ]] && export TERM_PROGRAM=$LC_TERM_PROGRAM && unset LC_TERM_PROGRAM
+[[ ! -z "$LC_ITERM_PROFILE" ]] && export ITERM_PROFILE=$LC_ITERM_PROFILE  && unset LC_ITERM_PROFILE
 [[ -f ~/.units ]] && export UNITSFILE=~/.units
 LESS=-cex3MRs
 ENTOMB=yes
@@ -16,7 +16,7 @@ typeset -x LESS ENTOMB PAGER FIREFOX_OPEN_IN IRCNICK DATE_FMT
 export NNTPSERVER="snews://news.purdue.edu"
 export EDITOR=vim
 export CVS_RSH=ssh
-export LC_ALL=utf8
+export LC_ALL=en_US.UTF-8
 #[[ $TERM = "screen-256color-bce" ]] && infocmp screen-256color >& /dev/null && export TERM=screen-256color || echo screen-256color unavailable, fix it!
 [[ $COLORTERM = "gnome-terminal" ]] && export TERM=xterm-256color
 export GOROOT=$HOME/go

@@ -1,6 +1,11 @@
 # reload term definition after TERMINFO set from env
 TERM=$TERM;
-source ~/.oh-my-zsh/templates/zshrc.zsh-template
+ZSH=$ZDOTDIR/oh-my-zsh
+ZSH_THEME="tom"
+plugins=(git brew osx screen)
+
+source $ZSH/oh-my-zsh.sh
+#source ~/.oh-my-zsh/templates/zshrc.zsh-template
 
 #if [ "$SYSTEM" == "darwin" ]
 #then

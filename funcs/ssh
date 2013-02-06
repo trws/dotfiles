@@ -38,4 +38,7 @@ else
     command /usr/bin/ssh $@
 fi
 
+unset LC_ITERM_PROFILE
+unset LC_TERM_PROGRAM
+
 rm -f $TMPFILE
