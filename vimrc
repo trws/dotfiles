@@ -38,10 +38,12 @@ let g:ctrlp_working_path_mode = 'ra'
 let g:ctrlp_extensions = ['tag', 'buffertag', 'quickfix', 'changes', 'mixed', 'bookmarkdir']
 
 "clang_complete
+let g:clang_user_options="-I/opt/pgi/linux86-64/2012/cuda/4.2/include/ -Icommon -DPGI"
 let g:clang_complete_auto=0
 let g:clang_auto_select=0
 let g:clang_snippets=1
 let g:clang_trailing_placeholder=1
+let g:clang_snippets_engine = 'ultisnips'
 " let *g:clang_conceal_snippets*
 
 "syntax/visual options
