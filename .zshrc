@@ -1,9 +1,10 @@
 # reload term definition after TERMINFO set from env
 TERM=$TERM;
+source ~/.oh-my-zsh/templates/zshrc.zsh-template
 
 #if [ "$SYSTEM" == "darwin" ]
 #then
-#  if ps -A | grep quartz-wm > /dev/null 
+#  if ps -A | grep quartz-wm > /dev/null
 #  then
 #    if [[ -n `ps -A | grep autocut | grep -v grep` ]]
 #    then
@@ -25,7 +26,8 @@ if type dircolors > /dev/null ; then
 fi
 
 #echo $terminfo > ~/test1
-for task in aliases promptstuff; do
+#for task in aliases promptstuff; do
+for task in aliases; do
   for file in $ZDOTDIR/{,mine/}$task $ZDOTDIR/{,mine/}$task.${^zshuse}
   [[ -f $file ]] && source $file
   [[ -f $ZDOTDIR/mine/$i.override ]] && source $ZDOTDIR/$i.override
@@ -48,7 +50,7 @@ for func in ${^fpath}/*(N-.x:t); autoload $func
   # Watch for my friends
   [[ -f $ZDOTDIR/mine/friends ]] && watch=($(<$ZDOTDIR/mine/friends) $watch)
   for j in $zshuse; do
-    [[ -f $ZDOTDIR/mine/friends.$i ]] && 
+    [[ -f $ZDOTDIR/mine/friends.$i ]] &&
     watch=($(<$ZDOTDIR/mine/friends.$i) $watch )
   done
   LOGCHECK=300 WATCHFMT='%n %a %l from %m at %t.'
