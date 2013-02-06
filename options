@@ -30,8 +30,8 @@ unsetopt nomatch
   setopt recexact
 
 HISTFILE=~/.zsh-history-$HOST
-HISTSIZE=1000
-SAVEHIST=1000                # Default: 200
+HISTSIZE=10000
+SAVEHIST=10000                # Default: 200
 setopt INC_APPEND_HISTORY
 setopt   appendhistory        # multiple zsh's all append to same history file (rather than last
 # overwrites)  SET

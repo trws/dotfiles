@@ -8,7 +8,7 @@ zstyle ':completion:*::::' completer _expand _complete _ignored _approximate
 # allow one error for every three characters typed in approximate completer
 zstyle -e ':completion:*:approximate:*' max-errors \
 'reply=( $(( ($#PREFIX+$#SUFFIX)/3 )) numeric )'
-   
+
 # insert all expansions for expand completer
 zstyle ':completion:*:expand:*' tag-order all-expansions
 # formatting and messages
@@ -47,7 +47,7 @@ zstyle ':completion:*' matcher-list '+' '+m:{a-z}={A-Z} m:{a-zA-Z}={A-Za-z}' \
 		'+r:|[._-]=** r:|=** l:|=*' '+'
 zstyle ':completion:*' max-errors 3 numeric
 zstyle ':completion:*' substitute 1
-zstyle :compinstall filename $ZDOTDIR/.zcomprc
+zstyle :compinstall filename ~/.zcomprc
 zstyle ':completion:*:*:*:users' ignored-patterns \
 	adm apache bin daemon games gdm halt ident junkbust lp mail mailnull \
 	named news nfsnobody nscd ntp operator pcap postgres radvd rpc rpcuser \
