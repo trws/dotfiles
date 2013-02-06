@@ -52,6 +52,7 @@ syn on
 set background=dark
 let g:solarized_contrast = "high"
 " let g:solarized_termcolors=256
+let g:solarized_termtrans = 1
 colorscheme solarized
 set ruler
 set nowrap
@@ -158,14 +159,6 @@ if &term =~ ".*256color.*" || has("gui_running")
   " colorscheme inkpot
 endif
 
-"mouse options
-set mouse=a
-"enable wide mouse support for iTerm2 and urxvt, should also work in new xterms
-if version >= 720
-    set ttymouse=urxvt
-else
-    set ttymouse=xterm2
-endif
 
 "keyboard options
 set t_kb=
@@ -179,7 +172,7 @@ if &term =~ "screen.*" "screen configurations
   if &term =~ "screen.*-bce"
       set term=screen-256color
   endif
-  set ttymouse=xterm "falls back to xterm for unsupported terminal type
+  "set ttymouse=xterm "falls back to xterm for unsupported terminal type
   set t_ku=OA
   set t_kd=OB
   set t_kr=OC
@@ -330,6 +323,7 @@ au FileType make setlocal noautoindent
 au FileType make setlocal nosmartindent
 
 "general key remappings
+nmap Y y$
 function! Map_for_all(mapping, target, for_cmd)
   for item in ['nnoremap', 'vmap', 'omap']
     execute item . ' ' . a:mapping . ' ' . a:target
@@ -473,8 +467,8 @@ endif
 "if they fix it
 set laststatus=2 "keeps the statusbar on
 let g:Powerline_symbols = 'fancy'
-let g:Powerline_theme = 'default'
-"let g:Powerline_colorscheme = 'solarized256'
+"let g:Powerline_theme = 'default'
+let g:Powerline_colorscheme = 'solarized256'
 
 "general options
 set grepprg=grep\ -nH\ $*
@@ -512,6 +506,16 @@ nnoremap <silent> <Esc><S-t> :TagbarToggle<CR>
 nnoremap <silent> <D-T> :TagbarToggle<CR>
 
 let g:tagbar_autoclose = 1
+
+"mouse options
+set mouse=a
+"enable wide mouse support for iTerm2 and urxvt, should also work in new xterms
+if v:version >= 702
+    set t_RV=
+    set ttym=sgr
+else
+    set ttymouse=xterm2
+endif
 
 
 " TagListTagName  - Used for tag names
@@ -577,6 +581,8 @@ fun! EnsureVamIsOnDisk(plugin_root_dir)
     endif
 endfun
 
+inoremap <S-tab> <Esc>:call UltiSnips_ListSnippets()<CR>
+
 fun! SetupVAM()
     " Set advanced options like this:
     " let g:vim_addon_manager = {}
@@ -600,7 +606,7 @@ fun! SetupVAM()
     " Tell VAM which plugins to fetch & load:
     call vam#ActivateAddons(["The_NERD_tree","The_NERD_Commenter","Gundo","ctrlp",
                 \"clang_complete", "UltiSnips","SuperTab%1643", "Powerline",
-                \"Tagbar","LaTeX-Suite_aka_Vim-LaTeX","VimOutliner","fugitive"], {'auto_install' : 1})
+                \"Tagbar","LaTeX-Suite_aka_Vim-LaTeX","VimOutliner","fugitive","liquid"], {'auto_install' : 1})
     ""neosnippet","github:Shougo/neocomplcache-clang_complete.git","neocomplcache"
     " sample: call vam#ActivateAddons(['pluginA','pluginB', ...], {'auto_install' : 0})
 
@@ -625,3 +631,4 @@ call SetupVAM()
 " option2:  au GUIEnter * call SetupVAM()
 " See BUGS sections below [*]
 " Vim 7.0 users see BUGS section [3]
+
