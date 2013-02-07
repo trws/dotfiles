@@ -519,7 +519,7 @@ let g:tagbar_autoclose = 1
 "mouse options
 set mouse=a
 "enable wide mouse support for iTerm2 and urxvt, should also work in new xterms
-if v:version >= 702
+if v:version >= 703
     set t_RV=
     set ttym=sgr
 else

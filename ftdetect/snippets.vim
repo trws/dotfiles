@@ -1,1 +1,0 @@
-/Users/njustn/.vim/vim-addons/UltiSnips/ftdetect/snippets.vim
