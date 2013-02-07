@@ -27,10 +27,10 @@ hi Search ctermfg=NONE ctermbg=NONE cterm=underline guifg=NONE guibg=NONE gui=un
 hi Directory ctermfg=141 ctermbg=NONE cterm=NONE guifg=#ae81ff guibg=NONE gui=NONE
 hi Folded ctermfg=242 ctermbg=235 cterm=NONE guifg=#75715e guibg=#272822 gui=NONE
 
-hi SpellBad    cterm=underline   ctermfg=1   ctermbg=235  gui=undercurl  guisp=1
-hi SpellCap    cterm=underline   ctermfg=13   ctermbg=235  gui=undercurl  guisp=13
-hi SpellRare   cterm=underline   ctermfg=6   ctermbg=235  gui=undercurl  guisp=6
-hi SpellLocal  cterm=underline   ctermfg=3   ctermbg=235  gui=undercurl  guisp=3
+hi SpellBad    cterm=underline   ctermfg=NONE  ctermbg=NONE  gui=undercurl  guisp=NONE
+hi SpellCap    cterm=underline   ctermfg=NONE  ctermbg=NONE  gui=undercurl  guisp=NONE
+hi SpellRare   cterm=underline   ctermfg=NONE  ctermbg=NONE  gui=undercurl  guisp=NONE
+hi SpellLocal  cterm=underline   ctermfg=NONE  ctermbg=NONE  gui=undercurl  guisp=NONE
 
 hi Normal ctermfg=231 ctermbg=235 cterm=NONE guifg=#f8f8f2 guibg=#272822 gui=NONE
 hi Boolean ctermfg=141 ctermbg=NONE cterm=NONE guifg=#ae81ff guibg=NONE gui=NONE

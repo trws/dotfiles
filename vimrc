@@ -533,6 +533,16 @@ else
     set ttymouse=xterm2
 endif
 
+if exists("$TERM_PROGRAM") && $TERM_PROGRAM == 'iTerm.app'
+    if exists("$ITERM_PROFILE")
+        if $ITERM_PROFILE == 'Monokai'
+            colorscheme monokai
+        elseif $ITERM_PROFILE == 'Default'
+            colorscheme inkpot
+        endif
+    endif
+endif
+
 
 " TagListTagName  - Used for tag names
 highlight MyTagListTagName gui=bold guifg=Black guibg=Green cterm=bold ctermfg=Black ctermbg=Green
