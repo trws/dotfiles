@@ -38,7 +38,12 @@ let g:ctrlp_working_path_mode = 'ra'
 let g:ctrlp_extensions = ['tag', 'buffertag', 'quickfix', 'changes', 'mixed', 'bookmarkdir']
 
 "clang_complete
-let g:clang_user_options="-I/opt/pgi/linux86-64/2012/cuda/4.2/include/ -Icommon -DPGI"
+if exists("$HOST")
+    if $HOST == "escaflowne"
+        let g:clang_user_options="-I/opt/pgi/linux86-64/2012/cuda/5.0/include/ -Icommon -DPGI"
+    endif
+endif
+
 let g:clang_complete_auto=0
 let g:clang_auto_select=0
 let g:clang_snippets=1
