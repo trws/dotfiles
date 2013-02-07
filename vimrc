@@ -38,10 +38,17 @@ let g:ctrlp_working_path_mode = 'ra'
 let g:ctrlp_extensions = ['tag', 'buffertag', 'quickfix', 'changes', 'mixed', 'bookmarkdir']
 
 "clang_complete
+if exists("$HOST")
+    if $HOST == "escaflowne"
+        let g:clang_user_options="-I/opt/pgi/linux86-64/2012/cuda/5.0/include/ -Icommon -DPGI"
+    endif
+endif
+
 let g:clang_complete_auto=0
 let g:clang_auto_select=0
 let g:clang_snippets=1
 let g:clang_trailing_placeholder=1
+let g:clang_snippets_engine = 'ultisnips'
 " let *g:clang_conceal_snippets*
 
 "syntax/visual options
