@@ -40,7 +40,7 @@ let g:ctrlp_extensions = ['tag', 'buffertag', 'quickfix', 'changes', 'mixed', 'b
 "clang_complete
 if exists("$HOST")
     if $HOST == "escaflowne"
-        let g:clang_user_options="-I/opt/pgi/linux86-64/2012/cuda/5.0/include/ -Icommon -DPGI"
+        let g:clang_user_options="-I/opt/pgi/linux86-64/2012/cuda/5.0/include/ -Icommon -DPGI || exit 0"
     endif
 endif
 
@@ -49,6 +49,7 @@ let g:clang_auto_select=0
 let g:clang_snippets=1
 let g:clang_trailing_placeholder=1
 let g:clang_snippets_engine = 'ultisnips'
+let g:clang_complete_copen=1
 " let *g:clang_conceal_snippets*
 
 "syntax/visual options

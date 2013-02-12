@@ -3,3 +3,25 @@ while(${1:/* condition */}){
 	${0:/* code */}
 }
 endsnippet
+
+snippet timer "timer functions and includes"
+#include <sys/time.h>
+#include <sys/types.h>
+
+static struct timeval start_time;
+
+void init_time() {
+              gettimeofday(&start_time, NULL);
+}
+
+u_int64_t get_time() {
+    struct timeval t;
+    gettimeofday(&t, NULL);
+    return (u_int64_t) (t.tv_sec - start_time.tv_sec) * 1000000
+        + (t.tv_usec - start_time.tv_usec);
+}
+endsnippet
+
+snippet ptime "print time using get_time"
+fprintf(stderr, "time: %lu\n", get_time());
+endsnippet
