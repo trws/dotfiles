@@ -32,6 +32,7 @@ fi
 
 #echo $terminfo > ~/test1
 #for task in aliases promptstuff; do
+
 for task in aliases; do
   for file in $ZDOTDIR/{,mine/}$task $ZDOTDIR/{,mine/}$task.${^zshuse}
   [[ -f $file ]] && source $file
@@ -72,10 +73,11 @@ for func in ${^fpath}/*(N-.x:t); autoload $func
 
   # Set up completion
   # TODO zcomprc should probably be conditional
-  if [[ -f $ZDOTDIR/styles ]] { . $ZDOTDIR/styles }
-  autoload -U compinit
-  compinit -d ~/.zcompdump
-  compinit $(! (($UID)) && print -- "-i" "-d" ~/.zcompdump.root)
+zstyle :completion:*:default list-colors ${(s.:.)LS_COLORS}  #makes LS_COLORS actually work
+  #if [[ -f $ZDOTDIR/styles ]] { . $ZDOTDIR/styles }
+  #autoload -U compinit
+  #compinit -d ~/.zcompdump
+  #compinit $(! (($UID)) && print -- "-i" "-d" ~/.zcompdump.root)
 
   # Clean up arrays
   typeset -U path cdpath fpath manpath
