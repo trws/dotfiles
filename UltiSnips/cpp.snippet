@@ -1,0 +1,34 @@
+snippet timerclass "Timer class and includes"
+#include <sys/time.h>
+#include <sys/types.h>
+
+
+class Timer{
+    static u_int64_t count;
+    u_int64_t id_;
+    struct timeval start_time_;
+    string name_;
+
+    public:
+    Timer(const string &name, const std::function<int()> &fp) : id_(count), name_(name){
+        ++count;
+        cout << "start timer:" << id_ << " " << name_ << endl;
+        gettimeofday(&start_time_, NULL);
+        cout << "count: " << fp() << endl;
+    }
+    Timer(const string &name) : id_(count), name_(name){
+        ++count;
+        cout << "start timer:" << id_ << " " << name_ << endl;
+        gettimeofday(&start_time_, NULL);
+    }
+
+    ~Timer() {
+        struct timeval t;
+        gettimeofday(&t, NULL);
+        u_int64_t time = (u_int64_t) (t.tv_sec - start_time_.tv_sec) * 1000000
+            + (t.tv_usec - start_time_.tv_usec);
+        cout << "end timer:" << id_ << " " << name_ << " took:" << time << endl;
+    }
+};
+u_int64_t Timer::count;
+endsnippet
