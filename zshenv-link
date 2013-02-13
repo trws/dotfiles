@@ -1,7 +1,5 @@
 ZDOTDIR=~/.zsh
 [[ ! -d ~/.tmp ]] && mkdir ~/.tmp
-export _Z_DATA=~/.tmp/z-dirjump-list.txt
-. $ZDOTDIR/z.sh
 [[ "$TERM_PROGRAM" == "DTerm" ]] || source $ZDOTDIR/zshenv
 [[ "$TERM_PROGRAM" == "DTerm" ]] && export PATH=/opt/local/bin:$PATH
 

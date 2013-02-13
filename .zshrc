@@ -7,6 +7,12 @@ plugins=(git git-extras git-remote-branch history-substring-search brew osx scre
 source $ZSH/oh-my-zsh.sh
 #source ~/.oh-my-zsh/templates/zshrc.zsh-template
 
+. $ZDOTDIR/z.sh
+export _Z_DATA=~/.zsh/z-dirjump-list.txt
+function precmd () {
+_z --add "$(pwd -P)"
+}
+
 #if [ "$SYSTEM" == "darwin" ]
 #then
 #  if ps -A | grep quartz-wm > /dev/null
