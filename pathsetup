@@ -11,7 +11,7 @@ then
     done
   manpath=( ~/programs/man ~/programs/share/man /opt/local/man $manpath )
   export PERL5LIB=~/programs/lib/perl5/5.8.8/darwin-2level:~/programs/lib/perl5/5.8.8:~/programs/lib/perl5/site_perl/5.8.8/darwin-2level:~/programs/lib/perl5/site_perl/5.8.8:~/programs/lib/perl5/site_perl:~/programs/lib/perl5/vendor_perl/5.8.8/darwin-2level:~/programs/lib/perl5/vendor_perl/5.8.8:~/programs/lib/perl5/vendor_perl
-  [ -x /usr/local/bin/brew ] && path=( $(brew --prefix coreutils)/libexec/gnubin /usr/local/share/python /usr/local/Cellar/ruby/1.9.3-p194/bin $path )
+  [ -x /usr/local/bin/brew ] && path=( "$(brew --prefix coreutils)/libexec/gnubin" /usr/local/share/python /usr/local/Cellar/ruby/1.9.3-p194/bin $path )
 
  test -r /sw/bin/init.sh && . /sw/bin/init.sh
 fi
@@ -28,3 +28,4 @@ typeset -U path
 
 [[ -d /opt/pgi/linux86-64/2012/bin/ ]] && path=( $path /opt/pgi/linux86-64/2012/bin/ )
 
+[[ -d ~/build/clang ]] && path=( ~/build/clang/install/bin $path )
