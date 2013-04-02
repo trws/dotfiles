@@ -1,4 +1,5 @@
 # reload term definition after TERMINFO set from env
+[[ -d ~/.ssh ]] || (mkdir ~/.ssh && touch ~/.ssh/known_hosts)
 TERM=$TERM;
 ZSH=$ZDOTDIR/oh-my-zsh
 ZSH_THEME="tom"
@@ -52,7 +53,6 @@ for func in ${^fpath}/*(N-.x:t); autoload $func
 
   # Hosts to use for completion
   # thanks repose.cx/conf/.zshrc for the ssh/known_hosts trick
-  [[ -d ~/.ssh ]] || (mkdir ~/.ssh && touch ~/.ssh/known_hosts)
   ssh_hosts=(${${${${(f)"$(<$HOME/.ssh/known_hosts)"}:#[0-9]*}%%\ *}%%,*})
   hosts=( $hosts $ssh_hosts $(<$ZDOTDIR/hosts))
   typeset -U hosts ssh_hosts
