@@ -29,8 +29,8 @@ _z --add "$(pwd -P)"
 
 #color setup for ls
 if type dircolors > /dev/null ; then
-  if [[ -f ~/.dir_colors ]] ; then
-    eval $(dircolors -b ~/.dir_colors)
+  if [[ -f $ZDOTDIR/dir_colors ]] ; then
+    eval $(dircolors -b $ZDOTDIR/dir_colors)
   elif [[ -f /etc/DIR_COLORS ]] ; then
     eval $(dircolors -b /etc/DIR_COLORS)
   fi
