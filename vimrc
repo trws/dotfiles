@@ -4,6 +4,7 @@ execute pathogen#infect('included')
 "let $EX_DEV='~/.vim/exdev'
 "let g:ex_toolkit_path='~/.vim/included/exVim/toolkit/'
 " set runtimepath+=~/.vim/included/vim-colors-solarized
+" set runtimepath+=~/.vim/included/c-support
 " set runtimepath+=~/.vim/included/latex-suite
 " set runtimepath+=~/.vim/included/vim-latex
 " set runtimepath+=~/.vim/included/vimoutliner
@@ -83,7 +84,6 @@ set background=dark
 let g:solarized_contrast = "high"
 " let g:solarized_termcolors=256
 let g:solarized_termtrans = 1
-colorscheme solarized
 set ruler
 set nowrap
 
@@ -236,11 +236,6 @@ if has("gui_running")
   endif
 endif
 
-if &term =~ ".*256color.*" || has("gui_running")
-  set t_Co=256
-  " let g:inkpot_black_background=1
-  " colorscheme inkpot
-endif
 
 
 "keyboard options
@@ -648,15 +643,6 @@ else
     set ttymouse=xterm2
 endif
 
-if exists("$TERM_PROGRAM") && $TERM_PROGRAM == 'iTerm.app'
-    if exists("$ITERM_PROFILE")
-        if $ITERM_PROFILE == 'Monokai'
-            colorscheme monokai
-        elseif $ITERM_PROFILE == 'Default'
-            colorscheme inkpot
-        endif
-    endif
-endif
 
 
 " TagListTagName  - Used for tag names
@@ -752,8 +738,8 @@ fun! SetupVAM()
                 \"Tagbar","LaTeX-Suite_aka_Vim-LaTeX","VimOutliner","fugitive",
                 \"liquid", "slimv", "surround", "Conque_Shell",
                 \"vimux", "github:Rip-Rip/clang_complete", "project.tar.gz",
-                \"github:vim-jp/cpp-vim", "Syntastic", "EasyMotion", "vim-autoformat" ], {'auto_install' : 1})
-    ""AutoClose%2009",
+                \"github:vim-jp/cpp-vim", "Syntastic", "EasyMotion", "vim-autoformat",
+                \"Solarized"], {'auto_install' : 1})
     ""neosnippet","github:Shougo/neocomplcache-clang_complete.git","neocomplcache"
     " sample: call vam#ActivateAddons(['pluginA','pluginB', ...], {'auto_install' : 0})
 
@@ -779,3 +765,18 @@ call SetupVAM()
 " See BUGS sections below [*]
 " Vim 7.0 users see BUGS section [3]
 
+colorscheme solarized
+if &term =~ ".*256color.*" || has("gui_running")
+  set t_Co=256
+  " let g:inkpot_black_background=1
+  " colorscheme inkpot
+endif
+if exists("$TERM_PROGRAM") && $TERM_PROGRAM == 'iTerm.app'
+    if exists("$ITERM_PROFILE")
+        if $ITERM_PROFILE == 'Monokai'
+            colorscheme monokai
+        elseif $ITERM_PROFILE == 'Default'
+            colorscheme inkpot
+        endif
+    endif
+endif
