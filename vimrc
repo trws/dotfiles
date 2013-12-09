@@ -1,6 +1,8 @@
 "paths and includes
 execute pathogen#infect('included')
-" set runtimepath+=~/.vim/included/c-support
+"set runtimepath+=~/.vim/included/exProject/
+"let $EX_DEV='~/.vim/exdev'
+"let g:ex_toolkit_path='~/.vim/included/exVim/toolkit/'
 " set runtimepath+=~/.vim/included/vim-colors-solarized
 " set runtimepath+=~/.vim/included/latex-suite
 " set runtimepath+=~/.vim/included/vim-latex
@@ -11,6 +13,16 @@ execute pathogen#infect('included')
 " set runtimepath+=~/.vim/included/clang_complete/
 runtime ftplugin/man.vim
 runtime! macros/matchit.vim
+
+let $PYTHONPATH .= ":~/.vim/included/ropevim"
+source ~/.vim/included/ropevim/ropevim.vim
+
+"make command mode suck less
+cnoremap <C-A> <Home>
+cnoremap <C-F> <Right>
+cnoremap <C-B> <Left>
+cnoremap <Esc>b <S-Left>
+cnoremap <Esc>f <S-Right>
 
 "" add neocomplcache option
 "let g:neocomplcache_force_overwrite_completefunc=1
@@ -50,7 +62,17 @@ let g:clang_snippets=1
 let g:clang_trailing_placeholder=1
 let g:clang_snippets_engine = 'ultisnips'
 let g:clang_complete_copen=1
+let g:clang_complete_periodic_quickfix=1
 " let *g:clang_conceal_snippets*
+let g:clang_library_path=$HOME . "/build/clang/install/lib"
+if isdirectory(g:clang_library_path)
+    let g:clang_use_library=1
+else
+    let g:clang_use_library=0
+endif
+
+let g:SuperTabDefaultCompletionType="context"
+let g:SuperTabContextDefaultCompletionType="<c-x><c-u>"
 
 "syntax/visual options
 let g:vimsyn_folding = 'af'
@@ -88,6 +110,7 @@ au BufNewFile,BufRead *.go set ft=go
 au FileType go setlocal formatprg=gofmt
 au BufRead COMMIT_EDITMSG set backupcopy=no
 au BufNewFile,BufRead *.txt set ft=txt
+au BufNewFile,BufRead CMakeLists.txt set ft=cmake
 
 "for plugins, etc.
 set encoding=utf-8
@@ -104,8 +127,41 @@ endfun
 
 autocmd BufWritePre <buffer> :call <SID>StripTrailingWhitespaces()
 
+fun! TeX_fmt()
+    if (getline(".") != "")
+    let save_cursor = getpos(".")
+        let op_wrapscan = &wrapscan
+        set nowrapscan
+        let par_begin = '^\(%D\)\=\s*\($\|\\begin\|\\end\|\\Start\|\\Stop\|\\\(sub\)*section\>\|\\item\>\|\\NC\>\|\\blank\>\|\\noindent\>\)'
+        let par_end   = '^\(%D\)\=\s*\($\|\\begin\|\\end\|\\Start\|\\Stop\|\\place\|\\\(sub\)*section\>\|\\item\>\|\\NC\>\|\\blank\>\)'
+    try
+      exe '?'.par_begin.'?+'
+    catch /E384/
+      1
+    endtry
+        norm V
+    try
+      exe '/'.par_end.'/-'
+    catch /E385/
+      $
+    endtry
+    norm gq
+        let &wrapscan = op_wrapscan
+    call setpos('.', save_cursor)
+    endif
+endfun
+
+"CODE LINTING
+let g:syntastic_tex_checkers=[] "do NOT check latex files
+let g:syntastic_cpp_checkers=['cppcheck', 'gcc']
+let g:syntastic_python_checkers=['pylint', 'pep8', 'python']
+let g:syntastic_python_pylint_args=' --indent-string="    "'
+
+"CODE FORMATTING
+let g:formatprg_args_expr_python = '(&textwidth ? " --max-line-length=" . &textwidth : "") . " -" '
+
 "automatic formatting options
-set textwidth=80
+set textwidth=78
 set formatoptions=crq
 " set fo-=t
 " au FileType tex set formatoptions+=a
@@ -119,8 +175,24 @@ au FileType txt setlocal formatexpr=cindent
 let python_highlight_all = 1
 "there is no local value for fp, must set other languages to use cindent
 "manually
-au FileType cpp setlocal fp=astyle\ --pad-oper\ --unpad-paren\ --add-brackets\ --convert-tabs\ --align-pointer=name\ --indent-col1-comments\ --style=k/r\ --quiet
-au FileType c setlocal fp=astyle\ --pad-oper\ --unpad-paren\ --add-brackets\ --convert-tabs\ --align-pointer=name\ --indent-col1-comments\ --style=k/r\ --quiet
+
+"au FileType cpp setlocal fp=astyle\ --pad-oper\ --unpad-paren\ --add-brackets\ --convert-tabs\ --align-pointer=name\ --indent-col1-comments\ --style=k/r\ --quiet
+"if executable("astyle")
+    "au FileType cpp setlocal fp=astyle\ --pad-oper\ --unpad-paren\ --add-brackets\ --convert-tabs\ --align-pointer=name\ --indent-col1-comments\ --style=k/r\ --quiet
+    "au FileType c setlocal fp=astyle\ --pad-oper\ --unpad-paren\ --add-brackets\ --convert-tabs\ --align-pointer=name\ --indent-col1-comments\ --style=k/r\ --quiet
+    "au FileType cpp setlocal equalprg=astyle\ --indent=spaces=2\ --pad-oper\ --unpad-paren\ --add-brackets\ --convert-tabs\ --align-pointer=name\ --indent-col1-comments\ --style=k/r\ --quiet
+    "au FileType c setlocal equalprg=astyle\ --indent=spaces=2\ --pad-oper\ --unpad-paren\ --add-brackets\ --convert-tabs\ --align-pointer=name\ --indent-col1-comments\ --style=k/r\ --quiet
+"endif
+"
+"if filereadable("/Users/njustn/build/clang/llvm/tools/clang/tools/clang-format/clang-format.py")
+    "au FileType c,cpp map <buffer> <C-K> :pyf /Users/njustn/build/clang/llvm/tools/clang/tools/clang-format/clang-format.py<CR>
+    "au FileType c,cpp imap <buffer> <C-K> <ESC>:pyf /Users/njustn/build/clang/llvm/tools/clang/tools/clang-format/clang-format.py<CR>i
+"endif
+"if filereadable("/Users/njustn/scripts/PythonTidy-1.22.python")
+    "au FileType python map <buffer> <C-K> :pyf ~/scripts/PythonTidy-1.22.python<CR>
+    "au FileType python imap <buffer> <C-K> <ESC>:pyf ~/scripts/PythonTidy-1.22.python<CR>i
+"endif
+
 
 "tags
 set tags+=~/.vim-systags
@@ -148,11 +220,10 @@ map <A-C-T> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q $PWD<CR>
 map <Esc><C-T> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q $PWD<CR>
 execute 'map <C-S-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q -f - ' . include_paths . ' > ~/.vim-systags'
 
-
 if has("gui_running")
   set guioptions=egmt
   if has("gui_macvim")
-    set transparency=15
+    set transparency=10
     " set gfn=Courier\ New:h11.00
     set gfn=ProFont:h9.00
     set noantialias
@@ -271,11 +342,12 @@ imap <Esc>x <Esc><Plug>Traditionala
 let g:C_TypeOfH="c"
 
 "editing behavior
+set history=10000
 set backspace=2
 " set softtabstop=2 "used to favor the gnu style, getting used to K&R @ 4 spaces
 " set shiftwidth=2
-set softtabstop=4
-set shiftwidth=4
+set softtabstop=2
+set shiftwidth=2
 set expandtab
 set hlsearch
 set incsearch
@@ -296,6 +368,7 @@ au FileType c set foldmethod=syntax
 
 "latex options
 let g:tex_flavor='latex'
+let g:Imap_FreezeImap=1
 let g:Tex_FormatDependency_pdf = 'pdf'
 if exists("$SYSTEM")
   if $SYSTEM == "darwin"
@@ -324,6 +397,7 @@ au FileType txt setlocal spell spelllang=en_us
 " if no errors, it closes any open cwindow.
 command! -nargs=* Make make <args> | cwindow 3
 command! -nargs=* Scons scons <args> | cwindow 3
+nnoremap <Leader>m :Make<cr>
 
 au BufRead,BufNewFile SConstruct set filetype=python
 
@@ -352,23 +426,63 @@ call Map_for_all("<C-c>","<Esc>", 1)
 
 map <S-Z><S-S> :up<CR>
 
+
 if ! has("gui_running")
-  nnoremap <special> <A-c> "*Y
+    "if $TMUX "TODO: get copy support for tmux, need to figure out what mappings
+    "make sense...
+        "vmap <silent> <A-C>        "py:call eval('system("tmux set-buffer \'" . @p . "\'")')<CR>
+        "vmap <silent> <Esc>C       "py:call eval('system("tmux set-buffer \'" . @p . "\'")')<CR>
+        "vmap <silent> <A-V>        dh:call Paste_proper()<CR>
+        "vmap <silent> <Esc>V       dh:call Paste_proper()<CR>
+        "imap <silent> <A-V>        <Esc>: call Paste_proper()<CR>
+        "imap <silent> <Esc>V       <Esc>: call Paste_proper()<CR>
+        "nmap <silent> <A-C>        :yank p<CR>:call Yank_proper()<CR>
+        "nmap <silent> <Esc>C       :yank p<CR>:call Yank_proper()<CR>
+        "nmap <silent> <A-V>        :call Paste_proper()<CR>
+        "nmap <silent> <Esc>V       :call Paste_proper()<CR>
+    "endif
+  "nnoremap <special> <A-c> "*Y
   " cnoremap <special> <A-c> <C-R>+
-  vnoremap <special> <A-c> "*y
+  "vnoremap <special> <A-c> "*y
+  if $SYSTEM == "darwin"
+    let tmux_reattach_prefix=glob("~/Dropbox/config/tmux-MacOSX-pasteboard/reattach-to-user-namespace")
+
+    "paste from pbpaste as paste normally works, from the current cursor position
+    function! Paste_proper()
+        let @p=system(g:tmux_reattach_prefix . " pbpaste")
+        execute 'normal "pp'
+    endfunction
+    function! Yank_proper()
+        "each mode needs different copy, see below mappings
+        call system(g:tmux_reattach_prefix . " pbcopy", getreg("p"))
+    endfunction
+
+    vmap <silent> <A-c>        "py:call Yank_proper()<CR>
+    vmap <silent> <Esc>c       "py:call Yank_proper()<CR>
+    vmap <silent> <A-v>        dh:call Paste_proper()<CR>
+    vmap <silent> <Esc>v       dh:call Paste_proper()<CR>
+    imap <silent> <A-v>        <Esc>: call Paste_proper()<CR>
+    imap <silent> <Esc>v       <Esc>: call Paste_proper()<CR>
+    nmap <silent> <A-c>        :yank p<CR>:call Yank_proper()<CR>
+    nmap <silent> <Esc>c       :yank p<CR>:call Yank_proper()<CR>
+    nmap <silent> <A-v>        :call Paste_proper()<CR>
+    nmap <silent> <Esc>v       :call Paste_proper()<CR>
+  elseif $SYSTEM == "linux"
+    vmap <C-y> y:call system("xclip", getreg("\""))<CR>
+  endif
   " execute 'inoremap <script> <special> <A-c>' paste#paste_cmd['i']
   " nnoremap <special> <Esc>c "+gP
   " cnoremap <special> <Esc>c <C-R>+
   " execute 'cnoremap <script> <special> <Esc>c' paste#paste_cmd['c']
   " execute 'inoremap <script> <special> <Esc>c' paste#paste_cmd['i']
-  nnoremap <special> <A-v> "+gP
-  cnoremap <special> <A-v> <C-R>+
-  execute 'vnoremap <script> <special> <A-v>' paste#paste_cmd['v']
-  execute 'inoremap <script> <special> <A-v>' paste#paste_cmd['i']
-  nnoremap <special> <Esc>v "+gP
-  cnoremap <special> <Esc>v <C-R>+
-  execute 'vnoremap <script> <special> <Esc>v' paste#paste_cmd['v']
-  execute 'inoremap <script> <special> <Esc>v' paste#paste_cmd['i']
+  "nnoremap <special> <A-v> "+gP
+  "cnoremap <special> <A-v> <C-R>+
+  "execute 'vnoremap <script> <special> <A-v>' paste#paste_cmd['v']
+  "execute 'inoremap <script> <special> <A-v>' paste#paste_cmd['i']
+  "nnoremap <special> <Esc>v "+gP
+  "cnoremap <special> <Esc>v <C-R>+
+  "execute 'vnoremap <script> <special> <Esc>v' paste#paste_cmd['v']
+  "execute 'inoremap <script> <special> <Esc>v' paste#paste_cmd['i']
   nnoremap  <Esc>[1;3C <End>
   vmap      <Esc>[1;3C <End>
   imap      <Esc>[1;3C <End>
@@ -392,15 +506,6 @@ if ! has("gui_running")
 
 endif
 
-if ! has("gui_running")
-  if $SYSTEM == "darwin"
-    vmap <C-y> y:call system("pbcopy", getreg("\""))<CR>
-    vmap <A-y> y:call system("pbcopy", getreg("\""))<CR>
-    vmap <Esc>y y:call system("pbcopy", getreg("\""))<CR>
-  elseif $SYSTEM == "linux"
-    vmap <C-y> y:call system("xclip", getreg("\""))<CR>
-  endif
-endif
 
 ""tag jump remappings, makes <C-]> list if more than 1, immediate if only 1,
 ""alt does the same, but in a new vertical split so you can look at both
@@ -478,7 +583,12 @@ endif
 "source ~/.vim/included/powerline/powerline/ext/vim/source_plugin.vim " back in
 "if they fix it
 set laststatus=2 "keeps the statusbar on
-let g:Powerline_symbols = 'fancy'
+let g:Powerline_symbols = 'unicode'
+if exists("$HOST")
+    if $HOST == "typhoon"
+        let g:Powerline_symbols = 'fancy'
+    endif
+endif
 "let g:Powerline_theme = 'default'
 let g:Powerline_colorscheme = 'solarized256'
 "if
@@ -499,13 +609,17 @@ runtime ftplugin/man.vim
 "winmanager
 let g:winManagerWindowLayout = "Project|TagList"
 
+nnoremap <silent> <C-L> :noh<CR><C-L>
 "project plugin options
 " map           <A-S-o> :Project<CR>:redraw<CR>
 " map           <Esc><S-o> :Project<CR>:redraw<CR>
 " map           <D-O> :Project<CR>:redraw<CR>
-map           <A-S-p> <Plug>ToggleProject
-map           <Esc><S-p> <Plug>ToggleProject
-map           <D-P> <Plug>ToggleProject
+nnoremap   <silent>   <A-S-f> :NERDTreeToggle<CR>
+nnoremap   <silent>   <Esc><S-f> :NERDTreeToggle<CR>
+nnoremap   <silent>   <D-F> :NERDTreeToggle<CR>
+map  <silent>         <A-S-p> <Plug>ToggleProject
+map  <silent>         <Esc><S-p> <Plug>ToggleProject
+map  <silent>         <D-P> <Plug>ToggleProject
 nmap <silent> <F3>    <Plug>ToggleProject
 let g:proj_run1 = "!open %f"
 let g:proj_window_width = 30
@@ -572,14 +686,16 @@ let Tlist_WinWidth = 30
 " very slow, so I disable this
 "let Tlist_Process_File_Always = 1 " To use the :TlistShowTag and the :TlistShowPrototype commands without the taglist window and the taglist menu, you should set this variable to 1.
 ":TlistShowPrototype [filename] [linenumber]
+"
+let g:lisp_rainbow=1
 
 "unsorted, deal with later
 highlight WhitespaceEOL ctermbg=red guibg=red
 match WhitespaceEOL /\s\+$/
 
-au FileType tex highlight whichthat ctermfg=Magenta guifg=Magenta
+au FileType tex highlight whichthat ctermfg=Magenta guifg=#515996
 "ctermfg=black
-au FileType tex match whichthat /\(which\|that\)/
+au FileType tex match whichthat /\(\swhich\s\|\sthat\s\)/
 
 fun! EnsureVamIsOnDisk(plugin_root_dir)
     " windows users may want to use http://mawercer.de/~marc/vam/index.php
@@ -632,8 +748,12 @@ fun! SetupVAM()
 
     " Tell VAM which plugins to fetch & load:
     call vam#ActivateAddons(["The_NERD_tree","The_NERD_Commenter","Gundo","ctrlp",
-                \"clang_complete", "UltiSnips","SuperTab%1643", "Powerline",
-                \"Tagbar","LaTeX-Suite_aka_Vim-LaTeX","VimOutliner","fugitive","liquid"], {'auto_install' : 1})
+                \"UltiSnips","SuperTab%1643", "Powerline",
+                \"Tagbar","LaTeX-Suite_aka_Vim-LaTeX","VimOutliner","fugitive",
+                \"liquid", "slimv", "surround", "Conque_Shell",
+                \"vimux", "github:Rip-Rip/clang_complete", "project.tar.gz",
+                \"github:vim-jp/cpp-vim", "Syntastic", "EasyMotion", "vim-autoformat" ], {'auto_install' : 1})
+    ""AutoClose%2009",
     ""neosnippet","github:Shougo/neocomplcache-clang_complete.git","neocomplcache"
     " sample: call vam#ActivateAddons(['pluginA','pluginB', ...], {'auto_install' : 0})
 

@@ -4,6 +4,12 @@ $0${1/((?<=.)c|l|r)|./(?1: & )/g}
 \end{tabular}
 endsnippet
 
+snippet block
+\begin{block}{${1}}
+    ${2}
+\end{block}
+endsnippet
+
 snippet efi
 \begin{figure}[${1:htb}]
     \centering
@@ -12,6 +18,7 @@ snippet efi
     \label{fig:${5:$2}}
 \end{figure}
 endsnippet
+
 snippet efi*
 \begin{figure*}[${1:t}]
     \centering
