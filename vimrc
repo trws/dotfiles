@@ -11,7 +11,6 @@ execute pathogen#infect('included')
 " set runtimepath+=~/.vim/included/enhanced-commentify
 " set runtimepath+=~/.vim/included/conque_2.2/
 " set runtimepath+=~/.vim/bundle/ctrlp.vim
-" set runtimepath+=~/.vim/included/clang_complete/
 runtime ftplugin/man.vim
 runtime! macros/matchit.vim
 
@@ -24,6 +23,22 @@ cnoremap <C-F> <Right>
 cnoremap <C-B> <Left>
 cnoremap <Esc>b <S-Left>
 cnoremap <Esc>f <S-Right>
+
+ " Prompt for a command to run
+ map <Leader>vp :VimuxPromptCommand<CR>
+
+ " Run last command executed by VimuxRunCommand
+ map <Leader>vl :VimuxRunLastCommand<CR>
+
+ " Inspect runner pane
+ map <Leader>vi :VimuxInspectRunner<CR>
+
+ " Close vim tmux runner opened by VimuxRunCommand
+ map <Leader>vq :VimuxCloseRunner<CR>
+
+ " Interrupt any command running in the runner pane
+ map <Leader>vx :VimuxInterruptRunner<CR>
+
 
 "" add neocomplcache option
 "let g:neocomplcache_force_overwrite_completefunc=1
@@ -50,13 +65,24 @@ cnoremap <Esc>f <S-Right>
 let g:ctrlp_working_path_mode = 'ra'
 let g:ctrlp_extensions = ['tag', 'buffertag', 'quickfix', 'changes', 'mixed', 'bookmarkdir']
 
+"YouCompleteMe
+nnoremap <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<CR>
+let g:ycm_extra_conf_globlist = ['~/Dropbox/*']
+let g:ycm_autoclose_preview_window_after_insertion = 1
 "clang_complete
 if exists("$HOST")
     if $HOST == "escaflowne"
-        let g:clang_user_options="-I/opt/pgi/linux86-64/2012/cuda/5.0/include/ -Icommon -DPGI || exit 0"
+      let g:clang_user_options="-I/opt/pgi/linux86-64/2012/cuda/5.0/include/ -Icommon -DPGI || exit 0"
     endif
 endif
+" if $SYSTEM == "darwin"
+  " let cpp_inc_path =  substitute(system('xcrun --show-sdk-path'), '^\s*\(.\{-}\)\s*\n*$', '\1', '')
 
+  " let g:clang_user_options="-I" . cpp_inc_path . "/usr/include/c++/4.2.1 || exit 0"
+" endif
+
+let g:clang_auto_user_options='compile_commands.json,.clang_complete'
+let g:clang_close_preview=1
 let g:clang_complete_auto=0
 let g:clang_auto_select=0
 let g:clang_snippets=1
@@ -65,12 +91,14 @@ let g:clang_snippets_engine = 'ultisnips'
 let g:clang_complete_copen=1
 let g:clang_complete_periodic_quickfix=1
 " let *g:clang_conceal_snippets*
-let g:clang_library_path=$HOME . "/build/clang/install/lib"
-if isdirectory(g:clang_library_path)
-    let g:clang_use_library=1
-else
-    let g:clang_use_library=0
+let g:clang_use_library=1
+if $HOST == "escaflowne"
+  let g:clang_library_path=$HOME . "/build/clang/install/lib"
 endif
+" if isdirectory(g:clang_library_path)
+" else
+    " let g:clang_use_library=0
+" endif
 
 let g:SuperTabDefaultCompletionType="context"
 let g:SuperTabContextDefaultCompletionType="<c-x><c-u>"
@@ -153,12 +181,13 @@ endfun
 
 "CODE LINTING
 let g:syntastic_tex_checkers=[] "do NOT check latex files
-let g:syntastic_cpp_checkers=['cppcheck', 'gcc']
+let g:syntastic_cpp_checkers=['cpplint']
 let g:syntastic_python_checkers=['pylint', 'pep8', 'python']
 let g:syntastic_python_pylint_args=' --indent-string="    "'
 
 "CODE FORMATTING
 let g:formatprg_args_expr_python = '(&textwidth ? " --max-line-length=" . &textwidth : "") . " -" '
+let g:formatprg_args_expr_cpp = '"--mode=c --style=google -pcH".(&expandtab ? "s".&shiftwidth : "t")'
 
 "automatic formatting options
 set textwidth=78
@@ -327,6 +356,7 @@ let mapleader=','
 nnoremap <Leader>x :call NERDComment(0,"toggle")<C-m>
 vmap <Leader>x :call NERDComment(0,"toggle")<C-m>
 let g:NERDRemoveExtraSpaces=1
+let g:NERDSpaceDelims=1
 
 "map <Leader>x <plug>NERDCommenterToggleComment
 
@@ -710,10 +740,11 @@ fun! EnsureVamIsOnDisk(plugin_root_dir)
     endif
 endfun
 
+let g:UltiSnipsExpandTrigger="<c-j>"
 inoremap <S-tab> <Esc>:call UltiSnips_ListSnippets()<CR>
 
 fun! SetupVAM()
-    " Set advanced options like this:
+      " Set advanced options like this:
     " let g:vim_addon_manager = {}
     " let g:vim_addon_manager.key = value
     "     Pipe all output into a buffer which gets written to disk
@@ -734,14 +765,15 @@ fun! SetupVAM()
 
     " Tell VAM which plugins to fetch & load:
     call vam#ActivateAddons(["The_NERD_tree","The_NERD_Commenter","Gundo","ctrlp",
-                \"UltiSnips","SuperTab%1643", "Powerline",
+                \"UltiSnips", "Powerline",
                 \"Tagbar","LaTeX-Suite_aka_Vim-LaTeX","VimOutliner","fugitive",
                 \"liquid", "slimv", "surround", "Conque_Shell",
-                \"vimux", "github:Rip-Rip/clang_complete", "project.tar.gz",
-                \"github:vim-jp/cpp-vim", "Syntastic", "EasyMotion", "vim-autoformat",
+                \"vimux", "project.tar.gz", "YouCompleteMe",
+                \"github:vim-jp/cpp-vim", "github:scrooloose/syntastic", "EasyMotion", "vim-autoformat",
                 \"Solarized"], {'auto_install' : 1})
     ""neosnippet","github:Shougo/neocomplcache-clang_complete.git","neocomplcache"
     " sample: call vam#ActivateAddons(['pluginA','pluginB', ...], {'auto_install' : 0})
+    " "github:Rip-Rip/clang_complete","SuperTab%1643",
 
     " Addons are put into plugin_root_dir/plugin-name directory
     " unless those directories exist. Then they are activated.
