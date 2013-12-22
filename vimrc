@@ -1,28 +1,130 @@
-"paths and includes
-execute pathogen#infect('included')
-"set runtimepath+=~/.vim/included/exProject/
-"let $EX_DEV='~/.vim/exdev'
-"let g:ex_toolkit_path='~/.vim/included/exVim/toolkit/'
-" set runtimepath+=~/.vim/included/vim-colors-solarized
-" set runtimepath+=~/.vim/included/c-support
-" set runtimepath+=~/.vim/included/latex-suite
-" set runtimepath+=~/.vim/included/vim-latex
-" set runtimepath+=~/.vim/included/vimoutliner
-" set runtimepath+=~/.vim/included/enhanced-commentify
-" set runtimepath+=~/.vim/included/conque_2.2/
-" set runtimepath+=~/.vim/bundle/ctrlp.vim
+" set nocompatible              " be iMproved
+" filetype off                  " required!
+"
+" set rtp+=~/.vim/bundle/vundle/
+" call vundle#rc()
+
+if has('vim_starting')
+  set nocompatible               " Be iMproved
+  set runtimepath+=~/.vim/bundle/neobundle.vim/
+endif
+
+call neobundle#rc(expand('~/.vim/bundle/'))
+
+" let Vundle manage Vundle
+" required!
+" Bundle 'gmarik/vundle'
+NeoBundleFetch 'Shougo/neobundle.vim'
+" Bundle 'Shougo/vimproc.vim'
+NeoBundle 'Shougo/vimproc.vim', {
+      \ 'build' : {
+      \     'windows' : 'make -f make_mingw32.mak',
+      \     'cygwin' : 'make -f make_cygwin.mak',
+      \     'mac' : 'make -f make_mac.mak',
+      \     'unix' : 'make -f make_unix.mak',
+      \    },
+      \ }
+
+"colorschemes
+NeoBundle 'tomasr/molokai'
+NeoBundle 'sjl/badwolf'
+NeoBundle 'Solarized'
+NeoBundle 'github-theme'
+NeoBundle 'nanotech/jellybeans.vim'
+
+"visual
+"NeoBundle 'Powerline'
+"powerline not working, light alternative?
+NeoBundle 'bling/vim-airline'
+NeoBundle 'bling/vim-bufferline'
+NeoBundle 'edkolev/tmuxline.vim'
+
+"filetype handlers, highlighting etc
+NeoBundle 'LaTeX-Box'
+NeoBundle 'liquid.vim'
+"c++11 highlighting
+NeoBundle 'vim-jp/cpp-vim'
+NeoBundle 'VimOutliner'
+"cool csv highlighting
+NeoBundle 'chrisbra/csv.vim'
+
+"tmux integration
+NeoBundle 'vimux'
+
+"completion
+NeoBundle 'Valloric/YouCompleteMe', {
+      \ 'build' : {
+      \     'mac' : './install.sh --clang-completer',
+      \     'unix' : './install.sh --clang-completer',
+      \    },
+      \ }
+" not sure I want this one back... NeoBundle 'scrooloose/syntastic'
+
+"project management
+" NeoBundle 'project.tar.gz'
+
+"bindings
+
+"shell/terminal emulation
+NeoBundle 'Shougo/vimshell.vim'
+NeoBundle 'pthrasher/conqueterm-vim'
+
+"file management
+NeoBundle 'Shougo/unite.vim'
+NeoBundle 'kien/ctrlp.vim'
+NeoBundle 'tpope/vim-fugitive'
+
+NeoBundle 'terryma/vim-multiple-cursors'
+
+NeoBundle 'tpope/vim-surround'
+NeoBundle 'UltiSnips'
+NeoBundle 'Lokaltog/vim-easymotion'
+NeoBundle 'The-NERD-Commenter'
+NeoBundle 'majutsushi/tagbar'
+NeoBundle "Chiel92/vim-autoformat"
+NeoBundle 'Gundo'
+NeoBundle 'tpope/vim-repeat'
+NeoBundle 'visualrepeat'
+"new alignment plugin, CR from visual mode to use
+NeoBundle 'junegunn/vim-easy-align'
+NeoBundle 'tpope/vim-abolish'
+NeoBundle 'tpope/vim-pastie'
+NeoBundle 'tpope/vim-eunuch'
+NeoBundle 'tpope/vim-markdown'
+NeoBundle 'tpope/vim-rsi'
+NeoBundle 'tpope/vim-unimpaired'
+NeoBundle 'tpope/vim-dispatch'
+NeoBundle 'tomtom/tcomment_vim'
+
+filetype plugin indent on     " required!
+let mapleader      = ','
+let maplocalleader = ','
+"
+" Brief help
+" :BundleList          - list configured bundles
+" :BundleInstall(!)    - install (update) bundles
+" :BundleSearch(!) foo - search (or refresh cache first) for foo
+" :BundleClean(!)      - confirm (or auto-approve) removal of unused bundles
+"
+" see :h vundle for more details or wiki for FAQ
+" NOTE: comments after Bundle commands are not allowed.
+
+
 runtime ftplugin/man.vim
 runtime! macros/matchit.vim
 
-let $PYTHONPATH .= ":~/.vim/included/ropevim"
-source ~/.vim/included/ropevim/ropevim.vim
+"Alignment mapping to enter in visual mode
+vmap <CR> <Plug>(EasyAlign)
+
+" let $PYTHONPATH .= ":~/.vim/included/ropevim"
+" source ~/.vim/included/ropevim/ropevim.vim
 
 "make command mode suck less
-cnoremap <C-A> <Home>
-cnoremap <C-F> <Right>
-cnoremap <C-B> <Left>
-cnoremap <Esc>b <S-Left>
-cnoremap <Esc>f <S-Right>
+" cnoremap <C-A>  <Home>
+" cnoremap <C-F>  <Right>
+" cnoremap <C-B>  <Left>
+" cnoremap <Esc>b <S-Left>
+" cnoremap <Esc>f <S-Right>
 
  " Prompt for a command to run
  map <Leader>vp :VimuxPromptCommand<CR>
@@ -43,7 +145,6 @@ cnoremap <Esc>f <S-Right>
 "" add neocomplcache option
 "let g:neocomplcache_force_overwrite_completefunc=1
 
-
 "let g:neocomplcache_enable_at_startup = 1
 "let g:neocomplcache_disable_auto_complete = 1
 "" Plugin key-mappings.
@@ -60,6 +161,45 @@ cnoremap <Esc>f <S-Right>
 "if has('conceal')
   "set conceallevel=2 concealcursor=i
 "endif
+
+"Unite
+let g:unite_data_directory = '~/.vim/unite'
+" let g:unite_source_bookmark_directory = '~/.vim/unite-bookmarks'
+let g:unite_source_history_yank_enable = 1
+call unite#filters#matcher_default#use(['matcher_fuzzy'])
+call unite#filters#sorter_default#use(['sorter_rank'])
+call unite#custom#profile('files', 'filters', 'sorter_rank')
+nnoremap <leader>B :<C-u>Unite bookmark<CR>
+nnoremap <leader>y :<C-u>Unite history/yank<CR>
+" nnoremap <leader>f :<C-u>Unite file<CR>
+nnoremap <leader>f :<C-u>Unite -start-insert file<CR>
+nnoremap <leader>g :<C-u>Unite grep:.<CR>
+" nnoremap <leader>r :<C-u>Unite -start-insert file_rec<CR>
+nnoremap <leader>r :<C-u>Unite -start-insert file_rec/async:!<CR>
+nnoremap <leader>vr :<C-u>Unite -start-insert file_rec/async:!<CR>
+nnoremap <silent> <leader>b :<C-u>Unite buffer file_mru bookmark<CR>
+let g:unite_source_grep_max_candidates = 200
+
+if executable('ag')
+  " Use ag in unite grep source.
+  let g:unite_source_grep_command = 'ag'
+  let g:unite_source_grep_default_opts =
+  \ '--line-numbers --nocolor --nogroup --hidden --ignore ' .
+  \  '''.hg'' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr'''
+  let g:unite_source_grep_recursive_opt = ''
+  let g:unite_source_rec_async_command = 'ag -i --nocolor --nogroup --ignore --ignore ''.git'' --ignore ''.bzr'' --ignore ''node_modules'' --hidden -g ""'
+elseif executable('ack-grep')
+  " Use ack in unite grep source.
+  let g:unite_source_grep_command = 'ack-grep'
+  let g:unite_source_grep_default_opts =
+  \ '--no-heading --no-color -a -H'
+  let g:unite_source_grep_recursive_opt = ''
+elseif executable('ack')
+  " Use ack in unite grep source.
+  let g:unite_source_grep_command = 'ack'
+  let g:unite_source_grep_default_opts = '--no-heading --no-color -H'   " -k might be good, limit to known file types only
+  let g:unite_source_grep_recursive_opt = ''
+endif
 
 "ctrlp
 let g:ctrlp_working_path_mode = 'ra'
@@ -131,14 +271,14 @@ au FileType otl source ~/.vim/plugin/vo_checkbox.vim
 au FileType otl setlocal spell spelllang=en_us
 
 "additional buffer types
-au BufNewFile,BufRead *.cu set ft=cuda
-au BufNewFile,BufRead *.cl set ft=opencl
-au BufNewFile,BufRead *.br set ft=brook
-au BufNewFile,BufRead *.go set ft=go
-au FileType go setlocal formatprg=gofmt
-au BufRead COMMIT_EDITMSG set backupcopy=no
-au BufNewFile,BufRead *.txt set ft=txt
-au BufNewFile,BufRead CMakeLists.txt set ft=cmake
+au BufNewFile,BufRead *.cu           set      ft=cuda
+au BufNewFile,BufRead *.cl           set      ft=opencl
+au BufNewFile,BufRead *.br           set      ft=brook
+au BufNewFile,BufRead *.go           set      ft=go
+au FileType           go             setlocal formatprg=gofmt
+au BufRead            COMMIT_EDITMSG set      backupcopy=no
+au BufNewFile,BufRead *.txt          set      ft=txt
+au BufNewFile,BufRead CMakeLists.txt set      ft=cmake
 
 "for plugins, etc.
 set encoding=utf-8
@@ -181,13 +321,14 @@ endfun
 
 "CODE LINTING
 let g:syntastic_tex_checkers=[] "do NOT check latex files
-let g:syntastic_cpp_checkers=['cpplint']
+" let g:syntastic_cpp_checkers=['cpplint']
 let g:syntastic_python_checkers=['pylint', 'pep8', 'python']
 let g:syntastic_python_pylint_args=' --indent-string="    "'
 
 "CODE FORMATTING
 let g:formatprg_args_expr_python = '(&textwidth ? " --max-line-length=" . &textwidth : "") . " -" '
-let g:formatprg_args_expr_cpp = '"--mode=c --style=google -pcH".(&expandtab ? "s".&shiftwidth : "t")'
+let g:formatprg_args_expr_c = '"--mode=c --style=google --add-brackets --keep-one-line-statements -pcH".(&expandtab ? "s".&shiftwidth : "t")'
+let g:formatprg_args_expr_cpp = g:formatprg_args_expr_c
 
 "automatic formatting options
 set textwidth=78
@@ -222,6 +363,9 @@ let python_highlight_all = 1
     "au FileType python imap <buffer> <C-K> <ESC>:pyf ~/scripts/PythonTidy-1.22.python<CR>i
 "endif
 
+map <C-K> :Autoformat<CR>
+imap <C-K> :Autoformat<CR>
+
 
 "tags
 set tags+=~/.vim-systags
@@ -233,9 +377,15 @@ let g:ConqqueTerm_Color = 2
 let g:ConqueTerm_ReadUnfocused = 1
 let g:ConqueTerm_CWInsert = 1
 
+let g:tmuxline_preset = 'full'
+let g:tmuxline_powerline_separators = 0
+let g:airline#extensions#bufferline#enabled = 1
+let g:airline#extensions#branch#enabled = 1
+set ttimeoutlen=100
+
 if exists("$SYSTEM")
   if $SYSTEM == "darwin"
-    let g:Powerline_symbols = 'fancy'
+    " let g:Powerline_symbols = 'fancy'
     let include_paths = '/opt/local/include /usr/local/include /usr/include /Developer/Headers'
   elseif $SYSTEM == "linux"
     let include_paths = '/usr/local/include /usr/include'
@@ -252,6 +402,8 @@ execute 'map <C-S-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q -f - '
 if has("gui_running")
   set guioptions=egmt
   if has("gui_macvim")
+    "CRITICAL option, allows alt-based key-bindings to work in macvim
+    set macmeta
     set transparency=10
     " set gfn=Courier\ New:h11.00
     set gfn=ProFont:h9.00
@@ -347,14 +499,28 @@ if &term =~ "screen.*" "screen configurations
 endif
 
 
-let mapleader=','
 "let g:NERDCustomDelimiters = {
     "\ 'opencl': { 'left': '#', 'leftAlt': 'FOO', 'rightAlt': 'BAR' },
     "\ 'grondle': { 'left': '{{', 'right': '}}' }
 "\ }
 
+" tComment extra mappings:
+" yank visual before toggle comment
+vmap gy ygvgc
+" yank and past visual before toggle comment
+vmap gyy ygvgc'>gp'.
+" yank line before toggle comment
+nmap gy yygcc
+" yank and paste line before toggle comment and remember position
+" it works both in normal and insert mode
+" Use :t-1 instead of yyP to preserve registers
+nmap gyy mz:t-1<cr>gCc`zmz
+" imap gyy <esc>:t-1<cr>gCcgi
+vmap gcc gc
+
 nnoremap <Leader>x :call NERDComment(0,"toggle")<C-m>
 vmap <Leader>x :call NERDComment(0,"toggle")<C-m>
+" let g:NERDRemoveExtraSpaces=1
 let g:NERDRemoveExtraSpaces=1
 let g:NERDSpaceDelims=1
 
@@ -392,6 +558,10 @@ set smartindent
 au FileType c set foldmethod=syntax
 
 "latex options
+let g:LatexBox_viewer = 'open'
+let g:LatexBox_quickfix = 0
+let g:LatexBox_latexmk_options = '-pdf --shell-escape' "latter is needed for pygments
+let g:LatexBox_latexmk_preview_continuously=1
 let g:tex_flavor='latex'
 let g:Imap_FreezeImap=1
 let g:Tex_FormatDependency_pdf = 'pdf'
@@ -547,7 +717,7 @@ imap <silent> <A-]>  <Esc>:call Vertical_tag_jump()<CR>
 map <silent> <Esc>]  :call Vertical_tag_jump()<CR>
 imap <silent> <Esc>]  <Esc>:call Vertical_tag_jump()<CR>
 
-if ! has("gui_running")
+" if ! has("gui_running")
   "alt
   "tab management
   nnoremap  <A-t>  :tabnew<CR>
@@ -602,7 +772,7 @@ if ! has("gui_running")
   imap      <Esc><S-K>  <Esc>:wincmd k<CR>
   cmap      <Esc><S-K>  <Esc>:wincmd k<CR>
   omap      <Esc><S-K>  :wincmd k<CR>
-endif
+" endif
 
 "Powerline
 "source ~/.vim/included/powerline/powerline/ext/vim/source_plugin.vim " back in
@@ -634,18 +804,46 @@ runtime ftplugin/man.vim
 "winmanager
 let g:winManagerWindowLayout = "Project|TagList"
 
+function! ToggleVExplorer()
+  if exists("t:expl_buf_num")
+      let expl_win_num = bufwinnr(t:expl_buf_num)
+      if expl_win_num != -1
+          let cur_win_nr = winnr()
+          exec expl_win_num . 'wincmd w'
+          close
+          exec cur_win_nr . 'wincmd w'
+          unlet t:expl_buf_num
+      else
+          unlet t:expl_buf_num
+      endif
+  else
+      exec '1wincmd w'
+      Vexplore
+      let t:expl_buf_num = bufnr("%")
+  endif
+endfunction
+
+nnoremap <silent> <M-f>      :call ToggleVExplorer()<CR>
+nnoremap <silent> <A-S-f>    :call ToggleVExplorer()<CR>
+nnoremap <silent> <Esc><S-f> :call ToggleVExplorer()<CR>
+nnoremap <silent> <D-F>      :call ToggleVExplorer()<CR>
+nmap     <silent> <F3>       :call ToggleVExplorer()<CR>
+let g:netrw_liststyle = 4
+let g:netrw_home      = '~/.vim'
+
 nnoremap <silent> <C-L> :noh<CR><C-L>
 "project plugin options
 " map           <A-S-o> :Project<CR>:redraw<CR>
 " map           <Esc><S-o> :Project<CR>:redraw<CR>
 " map           <D-O> :Project<CR>:redraw<CR>
-nnoremap   <silent>   <A-S-f> :NERDTreeToggle<CR>
-nnoremap   <silent>   <Esc><S-f> :NERDTreeToggle<CR>
-nnoremap   <silent>   <D-F> :NERDTreeToggle<CR>
-map  <silent>         <A-S-p> <Plug>ToggleProject
-map  <silent>         <Esc><S-p> <Plug>ToggleProject
-map  <silent>         <D-P> <Plug>ToggleProject
-nmap <silent> <F3>    <Plug>ToggleProject
+" replaced with netrw for now
+" nnoremap   <silent>   <A-S-f> :NERDTreeToggle<CR>
+" nnoremap   <silent>   <Esc><S-f> :NERDTreeToggle<CR>
+" nnoremap   <silent>   <D-F> :NERDTreeToggle<CR>
+" map  <silent>         <A-S-p> <Plug>ToggleProject
+" map  <silent>         <Esc><S-p> <Plug>ToggleProject
+" map  <silent>         <D-P> <Plug>ToggleProject
+" nmap <silent> <F3>    <Plug>ToggleProject
 let g:proj_run1 = "!open %f"
 let g:proj_window_width = 30
 let g:proj_window_increment = 50
@@ -743,52 +941,56 @@ endfun
 let g:UltiSnipsExpandTrigger="<c-j>"
 inoremap <S-tab> <Esc>:call UltiSnips_ListSnippets()<CR>
 
-fun! SetupVAM()
-      " Set advanced options like this:
-    " let g:vim_addon_manager = {}
-    " let g:vim_addon_manager.key = value
-    "     Pipe all output into a buffer which gets written to disk
-    " let g:vim_addon_manager.log_to_buf =1
 
-    " Example: drop git sources unless git is in PATH. Same plugins can
-    " be installed from www.vim.org. Lookup MergeSources to get more control
-    " let g:vim_addon_manager.drop_git_sources = !executable('git')
-    " let g:vim_addon_manager.debug_activation = 1
 
-    " VAM install location:
-    let plugin_root_dir = expand('$HOME/.vim/vim-addons')
-    if !EnsureVamIsOnDisk(plugin_root_dir)
-        echohl ErrorMsg | echomsg "No VAM found!" | echohl NONE
-        return
-    endif
-    let &rtp.=(empty(&rtp)?'':',').plugin_root_dir.'/vim-addon-manager'
+" fun! SetupVAM()
+      " " Set advanced options like this:
+    " " let g:vim_addon_manager = {}
+    " " let g:vim_addon_manager.key = value
+    " "     Pipe all output into a buffer which gets written to disk
+    " " let g:vim_addon_manager.log_to_buf =1
 
-    " Tell VAM which plugins to fetch & load:
-    call vam#ActivateAddons(["The_NERD_tree","The_NERD_Commenter","Gundo","ctrlp",
-                \"UltiSnips", "Powerline",
-                \"Tagbar","LaTeX-Suite_aka_Vim-LaTeX","VimOutliner","fugitive",
-                \"liquid", "slimv", "surround", "Conque_Shell",
-                \"vimux", "project.tar.gz", "YouCompleteMe",
-                \"github:vim-jp/cpp-vim", "github:scrooloose/syntastic", "EasyMotion", "vim-autoformat",
-                \"Solarized"], {'auto_install' : 1})
-    ""neosnippet","github:Shougo/neocomplcache-clang_complete.git","neocomplcache"
-    " sample: call vam#ActivateAddons(['pluginA','pluginB', ...], {'auto_install' : 0})
-    " "github:Rip-Rip/clang_complete","SuperTab%1643",
+    " " Example: drop git sources unless git is in PATH. Same plugins can
+    " " be installed from www.vim.org. Lookup MergeSources to get more control
+    " " let g:vim_addon_manager.drop_git_sources = !executable('git')
+    " " let g:vim_addon_manager.debug_activation = 1
 
-    " Addons are put into plugin_root_dir/plugin-name directory
-    " unless those directories exist. Then they are activated.
-    " Activating means adding addon dirs to rtp and do some additional
-    " magic
+    " " VAM install location:
+    " let plugin_root_dir = expand('$HOME/.vim/vim-addons')
+    " if !EnsureVamIsOnDisk(plugin_root_dir)
+        " echohl ErrorMsg | echomsg "No VAM found!" | echohl NONE
+        " return
+    " endif
+    " let &rtp.=(empty(&rtp)?'':',').plugin_root_dir.'/vim-addon-manager'
 
-    " How to find addon names?
-    " - look up source from pool
-    " - (<c-x><c-p> complete plugin names):
-    " You can use name rewritings to point to sources:
-    "    ..ActivateAddons(["github:foo", .. => github://foo/vim-addon-foo
-    "    ..ActivateAddons(["github:user/repo", .. => github://user/repo
-    " Also see section "2.2. names of addons and addon sources" in VAM's documentation
-endfun
-call SetupVAM()
+    " " Tell VAM which plugins to fetch & load:
+    " call vam#ActivateAddons(["The_NERD_tree","The_NERD_Commenter","Gundo","ctrlp",
+                " \"UltiSnips", "Powerline", "LaTeX_Box",
+                " \"Tagbar","VimOutliner","fugitive", "github:tomasr/molokai",
+                " \"liquid", "slimv", "surround", "Conque_Shell",
+                " \"vimux", "project.tar.gz", "YouCompleteMe",
+                " \"github:vim-jp/cpp-vim", "github:scrooloose/syntastic", "EasyMotion", "vim-autoformat",
+                " \"Solarized"], {'auto_install' : 1})
+    " "nice plugin, really bad for terminal vim "vim-multiple-cursors",
+    " ""LaTeX-Suite_aka_Vim-LaTeX", "potentially replaced with LaTeX-BoX
+    " ""neosnippet","github:Shougo/neocomplcache-clang_complete.git","neocomplcache"
+    " " sample: call vam#ActivateAddons(['pluginA','pluginB', ...], {'auto_install' : 0})
+    " " "github:Rip-Rip/clang_complete","SuperTab%1643",
+
+    " " Addons are put into plugin_root_dir/plugin-name directory
+    " " unless those directories exist. Then they are activated.
+    " " Activating means adding addon dirs to rtp and do some additional
+    " " magic
+
+    " " How to find addon names?
+    " " - look up source from pool
+    " " - (<c-x><c-p> complete plugin names):
+    " " You can use name rewritings to point to sources:
+    " "    ..ActivateAddons(["github:foo", .. => github://foo/vim-addon-foo
+    " "    ..ActivateAddons(["github:user/repo", .. => github://user/repo
+    " " Also see section "2.2. names of addons and addon sources" in VAM's documentation
+" endfun
+" call SetupVAM()
 " experimental [E1]: load plugins lazily depending on filetype, See
 " NOTES
 " experimental [E2]: run after gui has been started (gvim) [3]
@@ -797,18 +999,26 @@ call SetupVAM()
 " See BUGS sections below [*]
 " Vim 7.0 users see BUGS section [3]
 
-colorscheme solarized
+" colorscheme solarized
 if &term =~ ".*256color.*" || has("gui_running")
   set t_Co=256
   " let g:inkpot_black_background=1
   " colorscheme inkpot
 endif
+
+" if !has("gui_running")
+  " let g:jellybeans_background_color = "000000"
+  " let g:jellybeans_background_color_256=0
+" endif
+
+colorscheme jellybeans
 if exists("$TERM_PROGRAM") && $TERM_PROGRAM == 'iTerm.app'
     if exists("$ITERM_PROFILE")
         if $ITERM_PROFILE == 'Monokai'
             colorscheme monokai
         elseif $ITERM_PROFILE == 'Default'
-            colorscheme inkpot
+            " colorscheme inkpot
+            " colorscheme badwolf
         endif
     endif
 endif
