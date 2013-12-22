@@ -4,3 +4,6 @@
 [submodule "included/powerline"]
 	path = included/powerline
 	url = git://github.com/Lokaltog/powerline.git
+[submodule "bundle/neobundle.vim"]
+	path = bundle/neobundle.vim
+	url = https://github.com/Shougo/neobundle.vim.git
