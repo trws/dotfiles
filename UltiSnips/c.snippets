@@ -25,3 +25,12 @@ endsnippet
 snippet ptime "print time using get_time"
 fprintf(stderr, "time: %lu\n", get_time());
 endsnippet
+
+snippet ifn "create ifndef header guard"
+#ifndef ${1:__HEADER_NAME}
+#define $1
+
+${0:/* code */}
+
+#endif /* $1 */
+endsnippet

@@ -28,3 +28,4 @@ patches-*
 .stgit-*.txt
 
 vim-addons
+bundle

@@ -47,6 +47,8 @@ NeoBundle 'vim-jp/cpp-vim'
 NeoBundle 'VimOutliner'
 "cool csv highlighting
 NeoBundle 'chrisbra/csv.vim'
+" CSupport plugin: XXX: reacts badly with several others
+" NeoBundle 'c.vim'
 
 "tmux integration
 NeoBundle 'vimux'
@@ -76,6 +78,7 @@ NeoBundle 'tpope/vim-fugitive'
 
 NeoBundle 'terryma/vim-multiple-cursors'
 
+" NeoBundle 'Raimondi/delimitMate'
 NeoBundle 'tpope/vim-surround'
 NeoBundle 'UltiSnips'
 NeoBundle 'Lokaltog/vim-easymotion'
@@ -97,6 +100,9 @@ NeoBundle 'tpope/vim-dispatch'
 NeoBundle 'tomtom/tcomment_vim'
 
 filetype plugin indent on     " required!
+
+set runtimepath+=~/.vim/pyclewn
+
 let mapleader      = ','
 let maplocalleader = ','
 "
@@ -379,7 +385,7 @@ let g:ConqueTerm_CWInsert = 1
 
 let g:tmuxline_preset = 'full'
 let g:tmuxline_powerline_separators = 0
-let g:airline#extensions#bufferline#enabled = 1
+let g:airline#extensions#bufferline#enabled = 0
 let g:airline#extensions#branch#enabled = 1
 set ttimeoutlen=100
 
@@ -907,6 +913,7 @@ let g:lisp_rainbow=1
 highlight WhitespaceEOL ctermbg=red guibg=red
 match WhitespaceEOL /\s\+$/
 
+" Highlight words I might use to mess up grammar
 au FileType tex highlight whichthat ctermfg=Magenta guifg=#515996
 "ctermfg=black
 au FileType tex match whichthat /\(\swhich\s\|\sthat\s\)/
