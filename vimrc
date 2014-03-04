@@ -41,6 +41,7 @@ NeoBundle 'edkolev/tmuxline.vim'
 
 "filetype handlers, highlighting etc
 NeoBundle 'LaTeX-Box'
+NeoBundle 'vim-latex/vim-latex'
 NeoBundle 'liquid.vim'
 "c++11 highlighting
 NeoBundle 'vim-jp/cpp-vim'
@@ -94,7 +95,7 @@ NeoBundle 'tpope/vim-abolish'
 NeoBundle 'tpope/vim-pastie'
 NeoBundle 'tpope/vim-eunuch'
 NeoBundle 'tpope/vim-markdown'
-NeoBundle 'tpope/vim-rsi'
+" NeoBundle 'tpope/vim-rsi'
 NeoBundle 'tpope/vim-unimpaired'
 NeoBundle 'tpope/vim-dispatch'
 NeoBundle 'tomtom/tcomment_vim'
