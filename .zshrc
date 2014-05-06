@@ -3,10 +3,11 @@
 TERM=$TERM;
 ZSH=$ZDOTDIR/oh-my-zsh
 ZSH_THEME="tom"
-plugins=(git git-extras git-remote-branch history-substring-search brew osx screen)
+plugins=(git git-extras git-remote-branch history-substring-search brew osx screen tmux)
+# source ~/.zsh/prezto/init.zsh
 
 source $ZSH/oh-my-zsh.sh
-#source ~/.oh-my-zsh/templates/zshrc.zsh-template
+# source ~/.oh-my-zsh/templates/zshrc.zsh-template
 
 . $ZDOTDIR/z.sh
 export _Z_DATA=~/.zsh/z-dirjump-list.txt

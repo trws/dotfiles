@@ -5,4 +5,5 @@ export LD_LIBRARY_PATH=/usr/local/cuda/lib:$LD_LIBRARY_PATH
 export GOOS=darwin
 export NODE_PATH=/usr/local/lib/node_modules
 export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:/usr/local/share/man:$MANPATH"
+export PYTHONPATH=/usr/local/lib/python2.7/site-packages:$PYTHONPATH
 
