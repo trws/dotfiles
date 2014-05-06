@@ -2,7 +2,7 @@
 TERM=$TERM;
 ZSH=$ZDOTDIR/oh-my-zsh
 ZSH_THEME="tom"
-plugins=(git git-extras git-remote-branch history-substring-search brew osx screen)
+plugins=(gitfast svn-fast-info git git-extras git-remote-branch history-substring-search brew osx screen)
 
 source $ZSH/oh-my-zsh.sh
 #source ~/.oh-my-zsh/templates/zshrc.zsh-template

@@ -2,14 +2,14 @@
 path=(~/scripts ~/programs/$bintype/bin ~/programs/bin /usr/local/bin $path)
 [[ -x /usr/local/bin/defaultpaths ]] && eval `/usr/local/bin/defaultpaths`
 (( $gotroot )) && path=(/usr/local/sbin $path /sbin /usr/sbin)
-if [[ $system = darwin ]] 
+if [[ $system = darwin ]]
 then
 
     for DIR in /opt/local/sbin /Developer/usr/bin ~/.ports/bin ~/.ports/libexec/gnubin /opt/local/libexec/gnubin /opt/local/bin
     do
         [ -d $DIR ] && path=( $DIR $path )
     done
-  manpath=( ~/programs/man ~/programs/share/man /opt/local/man $manpath )
+  export MANPATH=( ~/programs/man ~/programs/share/man /opt/local/man $manpath )
   export PERL5LIB=~/programs/lib/perl5/5.8.8/darwin-2level:~/programs/lib/perl5/5.8.8:~/programs/lib/perl5/site_perl/5.8.8/darwin-2level:~/programs/lib/perl5/site_perl/5.8.8:~/programs/lib/perl5/site_perl:~/programs/lib/perl5/vendor_perl/5.8.8/darwin-2level:~/programs/lib/perl5/vendor_perl/5.8.8:~/programs/lib/perl5/vendor_perl
   [ -x /usr/local/bin/brew ] && path=( "$(brew --prefix coreutils)/libexec/gnubin" /usr/local/share/python /usr/local/Cellar/ruby/1.9.3-p194/bin $path )
 
@@ -26,6 +26,6 @@ typeset -U path
 
 [[ $host = (ice[1-9]|wood[1-2]) ]] && . ~/dynamic/includes/prepare-zsh-link.sh
 
-[[ -d /opt/pgi/linux86-64/2012/bin/ ]] && path=( $path /opt/pgi/linux86-64/2012/bin/ )
+[[ -d /opt/pgi/linux86-64/2014/bin/ ]] && path=( $path /opt/pgi/linux86-64/2014/bin/ )
 
 [[ -d ~/build/clang ]] && path=( ~/build/clang/install/bin $path )

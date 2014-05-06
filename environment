@@ -26,3 +26,5 @@ export GOARCH=amd64
 export GOBIN=$HOME/programs/bin
 [[ -d /usr/local/cuda ]] && export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64:/usr/local/cuda/lib
 export PATH
+export OMP_NESTED=true
+export OMP_MAX_ACTIVE_LEVELS=5
