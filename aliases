@@ -1,10 +1,16 @@
 #!zsh aliases
 #alias lsd='ls -ld *(-/DN)'
-alias ls='ls --color=auto -h'
-alias la='ls -a'
-alias lla='ls -la'
-alias ll='ls -l'
-alias grep='grep --color=auto '
+
+#BSD ls returns failure when -h is used, easy way to distinguish a machine
+#lacking gnu tools
+if [ ls -h >& /dev/null ] ; then
+  alias ls='ls --color=auto -h'
+  alias la='ls -a'
+  alias lla='ls -la'
+  alias ll='ls -l'
+  alias grep='grep --color=auto '
+fi
+
 alias ls.='ls -dF .*'
 alias rezsh='exec zsh'
 alias -g '^=|'

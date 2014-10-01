@@ -13,6 +13,7 @@ history-substring-search
 brew
 osx
 screen
+taskwarrior
 tmux)
 
 source $ZSH/oh-my-zsh.sh

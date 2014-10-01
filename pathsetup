@@ -11,7 +11,7 @@ then
     done
   manpath=( ~/programs/man ~/programs/share/man /opt/local/man /usr/share/man $manpath )
   export PERL5LIB=~/programs/lib/perl5/5.8.8/darwin-2level:~/programs/lib/perl5/5.8.8:~/programs/lib/perl5/site_perl/5.8.8/darwin-2level:~/programs/lib/perl5/site_perl/5.8.8:~/programs/lib/perl5/site_perl:~/programs/lib/perl5/vendor_perl/5.8.8/darwin-2level:~/programs/lib/perl5/vendor_perl/5.8.8:~/programs/lib/perl5/vendor_perl
-  [ -x /usr/local/bin/brew ] && path=( "$(brew --prefix coreutils)/libexec/gnubin" /usr/local/share/python /usr/local/Cellar/ruby/1.9.3-p194/bin $path )
+  [ -x /usr/local/bin/brew ] && path=( "$(brew --prefix coreutils)/libexec/gnubin" /usr/local/Cellar/ruby/1.9.3-p194/bin $path )
 
  test -r /sw/bin/init.sh && . /sw/bin/init.sh
 fi
@@ -26,8 +26,10 @@ typeset -U path
 
 [[ $host = (ice[1-9]|wood[1-2]) ]] && . ~/dynamic/includes/prepare-zsh-link.sh
 
-[[ -d /opt/pgi/linux86-64/2014/bin/ ]] && path=( $path /opt/pgi/linux86-64/2014/bin/ ) && manpath=($manpath /opt/pgi/linux86-64/2013/man)
-[[ -d /opt/pgi/osx86-64/2014/bin/ ]] && path=( $path /opt/pgi/osx86-64/2014/bin/ ) && manpath=($manpath /opt/pgi/osx86-64/2013/man)
+[[ -d /usr/local/opt/go/libexec/bin ]] && path=( $path /usr/local/opt/go/libexec/bin )
+
+[[ -d /opt/pgi/linux86-64/2014/bin/ ]] && path=( $path /opt/pgi/linux86-64/2014/bin ) && manpath=($manpath /opt/pgi/linux86-64/2013/man)
+[[ -d /opt/pgi/osx86-64/2014/bin/ ]] && path=( $path /opt/pgi/osx86-64/2014/bin ) && manpath=($manpath /opt/pgi/osx86-64/2013/man)
 
 [[ -d ~/build/clang ]] && path=( ~/build/clang/install/bin $path )
-[[ -d ~/build/depot_tools/ ]] && path=( $path ~/build/depot_tools/ )
+[[ -d ~/build/depot_tools/ ]] && path=( $path ~/build/depot_tools )
