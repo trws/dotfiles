@@ -1,3 +1,0 @@
-#!/usr/bin/zsh
-"$@"&!
-print $! >&3

@@ -1,6 +1,0 @@
-#!zsh
-if (( $gotroot )) {
-	command su $@
-} else {
-	print "This machine is $HOST, on which you lack root access."
-}

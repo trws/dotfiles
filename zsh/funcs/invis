@@ -1,9 +1,0 @@
-#!zsh
-local mk me
-if [[ -n $terminfo[invis] ]] {
-	mk=$terminfo[invis] me=$terminfo[sgr0]
-} else {
-	mk='[30;40m' me=$terminfo[op]
-}
-
-print -n "%{$mk%}$*%{$me%}"

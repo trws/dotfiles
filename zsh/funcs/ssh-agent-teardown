@@ -1,5 +1,0 @@
-#!zsh
-if [[ $ssh_owned != yes ]] {
-	eval `command ssh-agent -k` 2>&1
-	ssh_owned=no
-}

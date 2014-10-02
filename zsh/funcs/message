@@ -1,3 +1,0 @@
-#!/usr/bin/zsh
-if [[ $TERM == screen* ]]
-	print -rn $'\e'!$*:WIN$WINDOW$'\e\\\a' > /dev/tty

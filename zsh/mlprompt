@@ -1,6 +1,0 @@
-my-accept-line () {
-	for func in $preaccept; do
-		$func;
-	done
-	zle accept-line;
-}

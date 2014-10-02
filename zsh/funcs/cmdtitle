@@ -1,5 +1,0 @@
-#!zsh
-settitle `print -P $TPROMPT`+"$1"
-if [[ $TERM == screen* ]] {
-	print -nr $'\e'k${1%% *}$'\e'\\
-}

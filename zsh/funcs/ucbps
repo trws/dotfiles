@@ -1,9 +1,0 @@
-#!zsh
-case $system in
-linux)
-	PS_PERSONALITY=bsd command ps $@ ;;
-solaris)
-	/usr/ucb/ps $@ ;;
-*)
-	command ps $@ ;;
-esac

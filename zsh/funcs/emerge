@@ -1,9 +1,0 @@
-# vim: ft=zsh
-command emerge $@
-if (($?)) {
-	message "Emerge exited with error $?"
-	beep
-} else {
-	message "Emerge exited successfully"
-	beep
-}

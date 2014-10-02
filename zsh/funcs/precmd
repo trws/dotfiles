@@ -1,5 +1,0 @@
-#!zsh
-for i ($precmd)
-	$i $@
-
-eval $PROMPT_COMMAND

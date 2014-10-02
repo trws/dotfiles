@@ -1,4 +1,0 @@
-#!zsh
-ttyctl -u
-command stty $@
-ttyctl -f

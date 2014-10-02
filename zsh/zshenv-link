@@ -1,6 +1,0 @@
-# ZDOTDIR=~/.zsh/prezto/runcoms
-ZDOTDIR=~/.zsh
-[[ ! -d ~/.tmp ]] && mkdir ~/.tmp
-[[ "$TERM_PROGRAM" == "DTerm" ]] || source $ZDOTDIR/zshenv
-[[ "$TERM_PROGRAM" == "DTerm" ]] && export PATH=/opt/local/bin:$PATH
-
