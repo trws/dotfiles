@@ -2,7 +2,8 @@
 [[ -d ~/.ssh ]] || (mkdir ~/.ssh && touch ~/.ssh/known_hosts)
 TERM=$TERM;
 ZSH=$ZDOTDIR/oh-my-zsh
-ZSH_THEME="tom"
+# ZSH_THEME="tom"
+ZSH_THEME="steeef"
 # source ~/.zsh/prezto/init.zsh
 plugins=(gitfast
 svn-fast-info
