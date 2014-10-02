@@ -1,7 +1,3 @@
-[submodule "vim"]
-	path = vim
-	url = git@github.com:trws/dotvim.git
-        branch = master
 [submodule "zsh"]
 	path = zsh
 	url = git@github.com:trws/dotzsh.git
