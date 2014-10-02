@@ -100,7 +100,10 @@ NeoBundle 'tpope/vim-fugitive'
 
 NeoBundle 'terryma/vim-multiple-cursors'
 
-NeoBundle 'farseer90718/vim-taskwarrior'
+if executable('task')
+  NeoBundle 'farseer90718/vim-taskwarrior'
+endif
+
 let g:task_default_prompt= ['description', 'project', 'tag', 'due']
 ", 'priority', 'depends'
 
