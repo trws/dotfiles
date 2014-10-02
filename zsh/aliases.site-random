@@ -1,0 +1,3 @@
+#!zsh aliases
+alias links=elinks
+alias grep=egrep

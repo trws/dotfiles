@@ -1,0 +1,5 @@
+#!zsh
+stty cbreak
+ttyctl -f
+freload stty 2>/dev/null
+setopt zle

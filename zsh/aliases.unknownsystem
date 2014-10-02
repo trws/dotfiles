@@ -1,0 +1,2 @@
+alias df='df -k'
+alias du='du -k'

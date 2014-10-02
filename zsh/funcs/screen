@@ -1,0 +1,8 @@
+#!zsh
+if (( ${#@} )) {
+	command screen "$@"
+} elif [[ -z $STY ]] {
+	command screen -aAxRR # nice reattach command
+} else {
+	command screen
+}
