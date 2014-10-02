@@ -1,9 +1,9 @@
-[submodule "zsh"]
-	path = zsh
-	url = git@github.com:trws/dotzsh.git
 [submodule "inspiration/mathias"]
 	path = inspiration/mathias
 	url = git@github.com:mathiasbynens/dotfiles.git
 [submodule "zsh/oh-my-zsh"]
 	path = zsh/oh-my-zsh
 	url = git@github.com:robbyrussell/oh-my-zsh.git
+[submodule "vim/bundle/neobundle.vim"]
+  path = vim/bundle/neobundle.vim
+  url = https://github.com/Shougo/neobundle.vim.git
