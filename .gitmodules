@@ -4,3 +4,6 @@
 [submodule "zsh"]
 	path = zsh
 	url = git@github.com:trws/dotzsh.git
+[submodule "inspiration/mathias"]
+	path = inspiration/mathias
+	url = git@github.com:mathiasbynens/dotfiles.git
