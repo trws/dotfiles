@@ -1,0 +1,2 @@
+#!zsh
+print -n "\a" > /dev/tty

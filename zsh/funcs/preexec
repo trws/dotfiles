@@ -1,0 +1,3 @@
+#!zsh
+for i ($preexec)
+	$i $@

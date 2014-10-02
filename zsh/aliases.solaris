@@ -1,0 +1,5 @@
+#!zsh
+alias ps=_ps_sun_auto
+alias pidof=pgrep
+alias killall="pkill -u $UID"
+alias killall5="command killall"

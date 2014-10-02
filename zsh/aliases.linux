@@ -1,0 +1,8 @@
+#!zsh aliases
+alias df='df -h'
+alias host=hostx
+alias xlock='xscreensaver-command -lock'
+
+if type xdg-open >/dev/null ; then
+  alias open=xdg-open
+fi

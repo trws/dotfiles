@@ -1,0 +1,6 @@
+export PS_PERSONALITY=linux
+export BLOCK_SIZE=human-readable
+MANPATH=$MANPATH:/opt/pgi/linux86-64/2013/man
+export MANPATH
+LM_LICENSE_FILE=$LM_LICENSE_FILE:/opt/pgi/license.dat
+export LM_LICENSE_FILE

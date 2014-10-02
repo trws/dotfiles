@@ -1,0 +1,17 @@
+#!zsh
+if (( ! ${#@} )) {
+	/usr/bin/ps "$@"
+} else {
+	case $1 in
+	*x*) 
+		if [[ $1 == -* ]] {
+			print "You seem to have included a bogus '-'." >&2
+		}
+		/usr/ucb/ps "$@" 
+		;;
+	-*) 
+		/usr/bin/ps "$@" ;;
+	*)
+		/usr/ucb/ps "$@" ;;
+	esac
+}
