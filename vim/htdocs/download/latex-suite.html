@@ -1,0 +1,987 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
+    "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<title>Latex-Suite Help</title>
+<meta name="Generator" content="Vim/6.1">
+<style type="text/css">
+<!--
+.c31 { color: #008b8b; }
+.c30 { color: #6a5acd; }
+.c38 { color: #0000ff; background-color: #ffff00; }
+.c33 { color: #cd00cd; }
+.c32 { color: #a52a2a; font-weight: bold; }
+.c36 { color: #ffdab9; }
+.c28 { color: #406090; }
+.c34 { color: #2e8b57; font-weight: bold; }
+pre { color: #000000; background-color: #ffdab9; }
+body { color: #000000; background-color: #ffdab9; }
+.c29 { color: #c00058; }
+-->
+</style>
+</head>
+<body>
+<pre>
+<span class="c29"><a name="latex-suite">*latex-suite*</a></span>   Tools for an enhanced LaTeX environment in Vim
+                        For <span class="c31">Vim version 6.0</span> and above.
+                  Last Change: czw maj 16 06:00  2002 C
+
+                 By Srinath Avadhanula &lt;srinath@fastmail.fm&gt;,
+                      Mikolaj Machowski &lt;mikmach@wp.pl&gt;
+                         et. al (<span class="c31"><a href="#latex-suite-credits">|latex-suite-credits|</a></span>)
+
+
+Latex-Suite attempts to provide a comprehensive set of tools to view, edit and
+compile LaTeX documents in Vim. Together, they provide tools starting from
+macros to speed up editing LaTeX documents to functions for forward searching
+.dvi documents. Latex-suite has been possible because of the contributions of
+many people. Please see <span class="c31"><a href="#latex-suite-credits">|latex-suite-credits|</a></span> for a list of people who have
+helped.
+
+For license and conditions of use look <span class="c31"><a href="#copyright">|copyright|</a></span>. All occurences of ``Vim''
+replace with ``latexSuite'', and as maintainers and owners of copyrights are
+Srinath Avadhanula and Mikolaj Machowski.
+
+Homepage: http://vim-latex.sourceforge.net
+
+<span class="c30">{Vi of course does not have any of this}</span>
+<span class="c38">NOTE</span>: If you are viewing this in vim 6.0+, then the sections should appear
+      folded (see <span class="c31"><a href="#folding">|folding|</a></span>). Use <span class="c31"><a href="#za">|za|</a></span> to toggle back and forth between open
+      and closed views.
+<span class="c38">NOTE</span>: If the sections do not appear folded, press za in normal mode. This will
+      fold up everything and it will be much easier to navigate.
+
+<span class="c33">===========================================================================</span>
+<span class="c32">OVERVIEW                               </span><span class="c29"><a name="latex-suite-overview">*latex-suite-overview*</a></span> {{{
+
+<span class="c32">                                             </span><span class="c29"><a name="latex-suite-optimal-settings">*latex-suite-optimal-settings*</a></span>
+Latex-Suite works best if you have the following settings in your ~/.vimrc:
+<span class="c36">&gt;</span>
+<span class="c28">    &quot; this line is responsible for loading latex-suite when a .tex file is</span>
+<span class="c28">    &quot; opened.</span>
+<span class="c36">&lt;</span>   filetype plugin on<span class="c36"> &gt;</span>
+<span class="c28">    &quot; for automatic indentation specific to LaTeX.</span>
+<span class="c36">&lt;</span>   filetype indent on<span class="c36"> &gt;</span>
+
+In addition, the following settings could go in your ~/.vim/ftplugin/tex.vim
+file: <span class="c36"> &gt;</span>
+
+<span class="c28">    &quot; this is mostly a matter of taste. but LaTeX looks good with just a bit</span>
+<span class="c28">    &quot; of indentation.</span>
+<span class="c36">&lt;</span>   set sw=2<span class="c36"> &gt;</span>
+<span class="c28">    &quot; TIP: if you write your \label's as \label{fig:something}, then if you</span>
+<span class="c28">    &quot; type in \ref{fig: and press &lt;C-n&gt; you will automatically cycle through </span>
+<span class="c28">    &quot; all the figure labels.</span>
+<span class="c36">&lt;</span>   set iskeyword+=:<span class="c36"> &gt;</span>
+
+
+The tools which are included in LaTeX suite can be grouped together into the
+following. Almost every feature described here can be customized to some
+degree. Please see the included file latex-suite/texrc file for the complete
+list of variables which can be customized.
+
+<span class="c32">TABLE OF CONTENTS                                         </span><span class="c29"><a name="latex-suite-toc">*latex-suite-toc*</a></span>
+
+<span class="c31"><a href="#latex-macros">|latex-macros|</a></span>      Insert and visual mode mappings and menu items for
+                    commonly used LaTeX typesetting elements
+
+<span class="c31"><a href="#latex-compiling">|latex-compiling|</a></span>   This version of latex-suite ships with a version of the
+                    compiler specification which produces slightly less
+                    verbose output. It can also be dynamically re-configured
+                    to change the verbosity level.
+
+<span class="c31"><a href="#latex-viewing">|latex-viewing|</a></span>     This is a set of functions which open up the compiled .dvi
+                    document using the specified DVI viewer.
+
+<span class="c31"><a href="#latex-searching">|latex-searching|</a></span>   Xdvi (for UNIX) and Yap (for Windows) both provide ways
+                    for &quot;forward searching&quot; LaTeX documents. This section
+                    describes how to use these features and how to set up your
+                    dvi viewer to best use this feature.
+
+<span class="c31"><a href="#latex-folding">|latex-folding|</a></span>     manual folding based on LaTeX syntax elements.
+
+<span class="c31"><a href="#latex-packages">|latex-packages|</a></span>    This module provides a way to generate custom menus based
+                    on the packages used in the file being edited.
+
+<span class="c31"><a href="#latex-templates">|latex-templates|</a></span>   Custom templates
+
+<span class="c31"><a href="#latex-macros">|latex-macros|</a></span>      Custom macros
+
+<span class="c31"><a href="#latex-help">|latex-help|</a></span>        LaTeX's tex-info file translated into a vim help file.
+
+<span class="c31"><a href="#latex-dictionary">|latex-dictionary|</a></span>  A dictionary of standard LaTeX terms.
+
+<span class="c31"><a href="#latex-suite-commands">|latex-suite-commands|</a></span>		Overwiew of commands supplied with LaTeX-Suite.
+
+<span class="c31"><a href="#latex-tools">|latex-tools|</a></span>       This version of latex-suite also ships with 2 external
+                    tools:
+                    1. <span class="c31"><a href="#vimlatex">|vimlatex|</a></span> an external utility which filters the output
+                       of the LaTeX compiler in order to ensure a more robust
+                       error-parsing.
+                    2. <span class="c31"><a href="#ltags">|ltags|</a></span> A script to generate a tags file. It recognizes
+                       files being \input'ed into a main file.
+                       (ltags is written by Dimitri Antoniou)
+}}}
+<span class="c33">===========================================================================</span>
+<span class="c32">LATEX MACROS                                   </span><span class="c29"><a name="latex-macros">*latex-macros*</a></span> {{{
+
+Latex-Suite ships with a very comprehensive set of insert mode and visual mode
+mappings and menu items to typeset most of the LaTeX elements.
+
+We use a &quot;macro&quot; to refer to the collection of 3 objects, an insert mode
+mapping, a visual mode mapping and a menu item. For example, a figure macro
+refers to the insert mode mapping 'EFI', the visual mode mapping ',fi' and the
+menu item Tex-Environments.figure.
+
+For environments, sections and fonts, the insert mode mappings are a sequence
+of 3 capital letters. The visual mode mapping follows from the insert mode
+mapping by replacing the first character by a comma (',') (for environments
+and sections) or back-tick ('`') (for fonts) and converting the rest to lower
+case.<span class="c36"> &gt;</span>
+<span class="c28">              | Insert Mode   |  Visual Mode</span>
+<span class="c28"> -------------+---------------+-------------</span>
+<span class="c28"> environmnts  |    EFI        |    ,fi</span>
+<span class="c28"> fonts        |    FSF        |    `sf</span>
+
+The menu item also specifies the insert and visual mode macros. The menus
+behave differently from the insert mode macros in that they ask questions on
+the command line in a &quot;wizard&quot; sort of manner and then generate a template
+which includes the information gathered.  By contrast, the insert mode macros
+do not ask any questions and generate a template with <span class="c31"><a href="#placeholders">|placeholders|</a></span> at each
+input location.
+
+<span class="c32">                                              </span><span class="c29"><a name="placeholders">*placeholders*</a></span> <span class="c29"><a name="placeholder">*placeholder*</a></span>
+<span class="c32">                                              </span><span class="c29"><a name="place-holder">*place-holder*</a></span> <span class="c29"><a name="place-holders">*place-holders*</a></span>
+<span class="c38">NOTE</span>: All these macros implement Stephen Riem's bracketing system and Gergely
+Kontra's JumpFunc() for handling place-holders. This consists of using
+&quot;place-holders&quot; to mark off locations where the next relevant editing has to
+be done. As an example, when the user types in &quot;EFI&quot; in insert mode, she will
+get the following:<span class="c36"> &gt;</span>
+
+<span class="c28">    \begin{figure}[h]</span>
+<span class="c28">        \centerline{\psfig{figure=«eps file»}}</span>
+<span class="c28">        \caption{«caption text»}</span>
+<span class="c28">        \label{fig:«label»}</span>
+<span class="c28">    \end{figure}«»</span>
+<span class="c36">&lt;</span>
+The text «eps file» will be selected and she will be left in <span class="c31"><a href="#select-mode">|select-mode|</a></span> so
+that she can continue typing straight away. After having typed in the file
+name, she can press Control-J (while still in insert-mode). This will take her
+directly to the next &quot;place-holder&quot;. i.e, the «caption text» will be visually
+selected with vim in select mode again for typing in the caption. This saves
+on a lot of key presses.
+
+<span class="c38">NOTE</span>: Furthermore these mappings are are not standard mappings in the sense
+that only the last character is mapped. See plugin/imaps.vim for further
+documentation. For example, in the example above, you can press the characters
+'E', 'F' and 'I' as slowly as you wish. The characters are visible as you type
+them and you can use the movement or backspace key to correct yourself unlike
+normal mappings.
+
+The macros can be divided into the following main categories:
+<span class="c33">---------------------------------------------------------------------------</span>
+Environment Mappings {{{
+
+These mappings insert LaTeX &quot;environments&quot; such as<span class="c36"> &gt;</span>
+<span class="c28">      \begin{center}</span>
+<span class="c28">          «»</span>
+<span class="c28">      \end{center}«»</span>
+with the cursor left at the first <span class="c31"><a href="#placeholder">|placeholder|</a></span>.
+(The environment above is generated by typing ECE in insert mode)
+
+Rule for remembering shortcuts:
+<span class="c33">-------------------------------</span>
+1. All environment mappings begin with 'E'
+
+2. If the environment can be broken up into 2 distinct words, such as
+   flushright (flush + right), then the next 2 letters are the first letters
+   of the 2 words.
+   Example:<span class="c36"> &gt;</span>
+<span class="c28">        flushleft  (_f_lush + _l_eft)  ---&gt; EFL</span>
+<span class="c28">        flushright (_f_lush + _r_ight) ---&gt; EFR</span>
+<span class="c28">        eqnarray   (_e_qn + _a_rray)   ---&gt; EEA</span>
+
+<span class="c36">&lt;</span>  If on the other hand, the environment name cannot be broken up into 2
+   distinct words, then the next 2 letters are the first 2 letters of the name
+   of the environment.
+   Example:<span class="c36"> &gt;</span>
+<span class="c28">        equation (_eq_uation)          ---&gt; EEQ</span>
+
+Of course, not every last one of the environments can follow this rule because
+of ambiguities. In case of doubt, pull down the Tex-Environments menu. The
+menu item should give the hint for the map.
+
+Along with the insert mode mappings, a set of visual mode mappings is
+provided which encloses the visually selected region in an environment.
+These maps are related to the corresponding insert mode mappings by the
+following rule:<span class="c36"> &gt;</span>
+<span class="c28">    ECE           --&gt; ,ce</span>
+and so on. i.e, the leading E becomes ',' and the next 2 letters are small
+case. Some of the visual mode mappings are sensetive to whether you choose
+line-wise or character wise. For example, if you choose a word and press
+,ce, then you get \centerline<span class="c30">{word}</span>, whereas if you press ,ce on a line-wise
+selection, you get:<span class="c36"> &gt;</span>
+<span class="c28">      \begin{center}</span>
+<span class="c28">          line</span>
+<span class="c28">      \end{center}</span>
+
+}}}
+<span class="c33">---------------------------------------------------------------------------</span>
+Font Mappings: {{{
+
+These mappings insert font descriptions such as:<span class="c36"> &gt;</span>
+<span class="c28">      \textsf{«»}«»</span>
+again with the cursor at the first place-holder.
+
+Mnemonic:
+
+1. first letter is always F (F for font)
+2. next 2 letters are the 2 letters describing the font.
+
+Example: the above mapping is triggered by FSF.
+
+Just like environment mappings, you can visually select an area and press
+`sf to have it enclosed in:<span class="c36"> &gt;</span>
+<span class="c28">      \textsf{word}</span>
+or<span class="c36"> &gt;</span>
+<span class="c28">      {\sffamily</span>
+<span class="c28">      line</span>
+<span class="c28">      }</span>
+depending on character-wise or line-wise selection.
+
+}}}
+<span class="c33">---------------------------------------------------------------------------</span>
+Section Mappings: {{{
+
+Inserts LaTeX sections:<span class="c36"> &gt;</span>
+<span class="c28">      \section</span>
+etc. Just as in the case of environments and fonts, can be enclosed with a
+visual selection. The enclosing is not sensetive to character or line-wise
+selection.
+
+Mnemonic: (make your own!)<span class="c36"> &gt;</span>
+<span class="c28">      SPA for part</span>
+<span class="c28">      SCH for chapter</span>
+<span class="c28">      SSE for section</span>
+<span class="c28">      SSS for subsection</span>
+<span class="c28">      SS2 for subsubsection</span>
+<span class="c28">      SPG for paragraph</span>
+<span class="c28">      SSP for subparagraph</span>
+
+Example:
+    SSE in insert mode inserts<span class="c36"> &gt;</span>
+<span class="c28">        \section{«»}«»</span>
+<span class="c36">&lt;</span>   If you select a word or line and press `se, then you get<span class="c36"> &gt;</span>
+<span class="c28">        \section{section name}</span>
+<span class="c36">&lt;</span>   The menu item in Tex-Environments.Sections have a sub-menu called
+    'Advanced'. Choosing an item from this sub-menu asks a couple of questions
+    (whether you want to include the section in the table of contents, whether
+    there is a shorter name for the table of contents) and then creates a more
+    intelligent template.
+
+}}}
+<span class="c33">---------------------------------------------------------------------------</span>
+AUC-TEX key bindings: {{{
+
+These are simple 2 key expansions for some very commonly used LaTeX elements.
+   Examples:<span class="c36"> &gt;</span>
+
+<span class="c28">    `^   expands to   \hat{«»}«»</span>
+<span class="c28">    `_   expands to   \bar{«»}«»</span>
+<span class="c28">    `6   expands to   \partial</span>
+<span class="c28">    `8   expands to   \infty</span>
+<span class="c28">    `/   expands to   \frac{«»}{«»}«»</span>
+<span class="c28">    `%   expands to   \frac{«»}{«»}«»</span>
+<span class="c28">    `@   expands to   \circ</span>
+<span class="c28">    `0   expands to   ^\circ</span>
+<span class="c28">    `=   expands to   \equiv</span>
+<span class="c28">    `\   expands to   \setminus</span>
+<span class="c28">    `.   expands to   \cdot</span>
+<span class="c28">    `*   expands to   \times</span>
+<span class="c28">    `&amp;   expands to   \wedge</span>
+<span class="c28">    `-   expands to   \bigcap</span>
+<span class="c28">    `+   expands to   \bigcup</span>
+<span class="c28">    `(   expands to   \subset</span>
+<span class="c28">    `)   expands to   \supset</span>
+<span class="c28">    `&lt;   expands to   \le</span>
+<span class="c28">    `&gt;   expands to   \ge</span>
+<span class="c28">    `,   expands to   \nonumber</span>
+<span class="c28">    `~   expands to   \tilde{«»}«»</span>
+<span class="c28">    `;   expands to   \dot{«»}«»</span>
+<span class="c28">    `:   expands to   \ddot{«»}«»</span>
+<span class="c28">    `2   expands to   \sqrt{«»}«»</span>
+<span class="c28">    `|   expands to   \Big|</span>
+<span class="c28">    `I   expands to   \int_{«»}^{«»}«»&quot;</span>
+<span class="c36">&lt;</span>
+    (again, notice the convenient place-holders)
+
+In addition the visual mode macros are provided:
+<span class="c36">&gt;</span>
+<span class="c28">    `(  encloses selection in \left( and \right)</span>
+<span class="c28">    `[  encloses selection in \left[ and \right]</span>
+<span class="c28">    `{  encloses selection in \left\{ and \right\}</span>
+<span class="c28">    `$  encloses selection in $$ or \[ \] depending on characterwise or</span>
+<span class="c28">                                          linewise selection</span>
+
+<span class="c38">NOTE</span>: There is no menu item for these mappings. (as of this writing).
+
+}}}
+<span class="c33">---------------------------------------------------------------------------</span>
+Diacritics: (by Lubomir Host) {{{
+
+Diacritics speed up typing European languages.
+
+<span class="c36">&gt;</span>
+<span class="c28">    +&lt;l&gt;     expands to \v{&lt;l&gt;}</span>
+<span class="c28">    =&lt;l&gt;     expands to \'{&lt;l&gt;}</span>
+<span class="c36">&lt;</span>   where <span class="c30">&lt;l&gt;</span> is a letter ('a' to 'z' and 'A' to 'Z')
+<span class="c36">&gt;</span>
+<span class="c28">    +}       expands to \&quot;{a} </span>
+<span class="c28">    +:       expands to \^{o} </span>
+<span class="c36">&lt;</span>
+Latex-Suite also ships with a function SmartBS(), which offers another
+convinience, i.e diacritic characters are treated as a single character for
+backspacing.
+
+}}}
+<span class="c33">---------------------------------------------------------------------------</span>
+Greek Letters:  {{{
+<span class="c36">&gt;</span>
+<span class="c28">   Lower case:</span>
+<span class="c28">        `a   through `z expand to \alpha through \zeta.</span>
+<span class="c28">    Upper case:</span>
+<span class="c28">        `D = \Delta</span>
+<span class="c28">        `F = \Phi</span>
+<span class="c28">        `G = \Gamma</span>
+<span class="c28">        `Q = \Theta</span>
+<span class="c28">        `L = \Lambda</span>
+<span class="c28">        `X = \Xi</span>
+<span class="c28">        `Y = \Psi</span>
+<span class="c28">        `S = \Sigma</span>
+<span class="c28">        `U = \Upsilon</span>
+<span class="c28">        `W = \Omega</span>
+
+<span class="c38">NOTE</span>: LaTeX does not support upper case for all greek alphabets.
+
+}}}
+<span class="c33">---------------------------------------------------------------------------</span>
+LaTeX Math Menu:  {{{
+<span class="c32">                                                          </span><span class="c29"><a name="latex-math-menu">*latex-math-menu*</a></span>
+
+This menu contains over 600 commands for inserting math signs into LaTeX
+document. They are grouped into submenus as: Arrows, MathFonts, Greek
+(letters), BinaryRel(ations) and many others. At the top are basic signs
+leading into math mode. Some of symbols have hints for mappings in AUC-TeX
+style.
+
+}}}
+<span class="c33">---------------------------------------------------------------------------</span>
+
+}}}
+<span class="c33">===========================================================================</span>
+<span class="c32">LATEX COMPILING                             </span><span class="c29"><a name="latex-compiling">*latex-compiling*</a></span> {{{
+
+This functionality is available via the TeX-Suite menu.
+
+Latex-suite ships with a set of tools to compile LaTeX files into various
+formats and view them.
+
+If you are using commonly used LaTeX tools, then you should be all set as soon
+as you download and install latex-suite.  In order to compile a LaTeX file,
+simply press \ll while editing the file.  This runs latex on the current file
+and displays the errors in a <span class="c31"><a href="#quickfix-window">|quickfix-window|</a></span>. You can then scroll through
+the errors and press <span class="c30">&lt;enter&gt;</span> to be taken to the location of the corresponding
+error.
+
+<span class="c31"><a href="#latex-compiler-target">|latex-compiler-target|</a></span>         : specifying a different target format for
+                                  compilation.
+<span class="c31"><a href="#latex-suite-compiler">|latex-suite-compiler|</a></span>          : specifying a diffrent compiler.
+<span class="c31"><a href="#latex-master-file">|latex-master-file|</a></span>             : specifying a different file for compilation
+                                  instead of file being edited.
+<span class="c31"><a href="#latex-compiler-customization">|latex-compiler-customization|</a></span>  : customizing the output of the
+                                  latex-compiler.
+
+<span class="c32">                                                     </span><span class="c29"><a name="latex-compiler-target">*latex-compiler-target*</a></span>
+In order to effectively use latex-suite to compile and view formats other than
+DVI, you will need to edit the <span class="c31"><a href="#texrc">|texrc|</a></span> file and set the variables:
+<span class="c36">&gt;</span>
+<span class="c28">    g:Tex_CompileRule_&lt;format&gt;</span>
+<span class="c28">    g:Tex_ViewRule_&lt;format&gt;</span>
+
+where <span class="c30">&lt;format&gt;</span> is a string like &quot;pdf&quot;, &quot;dvi&quot; etc. These variables define
+``rules'' for compiling and viewing the corresponding target.
+
+Example: In texrc, the compilation rule for dvi is by default:<span class="c36"> &gt;</span>
+<span class="c28">    g:Tex_CompileRule_dvi = 'latex --interaction=nonstopmode $*'</span>
+
+Default values are also provided for ps and pdf formats. You might want to
+change these rules in texrc according to your local tex environment.
+
+Once a ``rule'' has been set up for a format, you can set the target format by
+using the {TeX-Suite.Target Format} menu item. Alternatively, you can use the
+<span class="c31"><a href="#:TTarget">|:TTarget|</a></span> command. You can also set the viewer and compiler to different
+formats, by using the menu items or using the commands <span class="c31"><a href="#:TCTarget">|:TCTarget|</a></span> and
+<span class="c31"><a href="#:TVTarget">|:TVTarget|</a></span>.
+
+<span class="c38">NOTE</span>: If you try choosing a format for which a rule is not defined, you
+will get a short warning message and no action will be taken.
+
+<span class="c38">NOTE</span>: Specifying a different format does not automatically account for
+dependencies. For example, if in your case you do:
+    .tex -&gt; .dvi -&gt; .ps -&gt; .pdf
+then you will need to choose dvi first, compile, change format to ps, compile,
+change format and so on.
+
+<span class="c32">                                                    </span><span class="c29"><a name="latex-suite-compiler">*latex-suite-compiler*</a></span>
+The simplest way to choose a different compiler is to edit the<span class="c36"> &gt;</span>
+<span class="c28">    g:Tex_CompileRule_dvi</span>
+variable.
+
+If however, you are only using the compiler/tex.vim module from latex-suite,
+there are a couple of other ways to change things.
+
+Just as in the case of the standard tex compiler, ``if b:tex_flavor or
+g:tex_flavor (in this precedence) variable exists, it defines TeX flavor for
+:make (actually, this is the name of executed command), and if both variables
+do not exist, it defaults to &quot;latex&quot;'' (from <span class="c31"><a href="#compiler-tex">|compiler-tex|</a></span>)
+
+<span class="c38">NOTE</span>: For win32 users user MikTeX, sometimes the latex compiler's output has a
+bug where a single number is split across different lines. In this case, put
+the included vimlatex utility somehwere in your $PATH, make it executable and
+point g:tex_flavor to it. This is not always necessary, and you might want to
+try it without vimlatex till you first notice any problem.
+
+<span class="c32">                                                        </span><span class="c29"><a name="latex-master-file">*latex-master-file*</a></span>
+Often times the file you are currently editing is only a fragment being
+\input'ed into a master tex file. In such cases you will need to do create a
+dummy file in the directory containing the current file. This dummy file is of
+the form:
+<span class="c36">&gt;</span>
+<span class="c28">    &lt;mailfilename&gt;.latexmain</span>
+
+In other words, if the current file is ~/thesis/chapter.tex, where
+chapter.tex is being \input'ed into ~/thesis/main.tex, then create a file
+called<span class="c36"> &gt;</span>
+<span class="c28">    main.tex.latexmain </span>
+<span class="c36">&lt;</span>
+in the ~/thesis directory. This will then run &quot;latex main.tex&quot;
+<span class="c38">NOTE</span>: Here main.tex.latexmain is a different file from main.tex itself.
+main.tex need not be renamed. The contents of main.tex.latexmain are not used.
+This ofcourse restricts each directory to have a single master file.
+
+<span class="c32">                                               </span><span class="c29"><a name="latex-compiler-customization">*latex-compiler-customization*</a></span>
+Latex-suite ships with a modified (enhanced ?) version of the standard tex
+compiler plugin maintained by Artem Chuprina. The modifications allow this
+version to be customizable. i.e the user can set a verbosity level for the
+compiler.
+
+By default it is set up in a &quot;non-verbose&quot;, &quot;ignore-common-warnings&quot; mode,
+which means that irrelevant lines from the compilers output will be
+ignored and also some very common warnings are ignored.
+
+Depending on the &quot;ignore-level&quot;, (which can be set with the command TCLevel as
+described below) the following kinds of messages are ignored.  An ignore level
+of 3 for instance means that messages of type 1-3 will be ignored. By default,
+the ignore level is set to 4. (You can change this by setting
+g:Tex_IgnoreLevel in your .vimrc).
+
+1. LaTeX Warning: Underfull box ...
+2. LaTeX Warning: Overfull box ...
+   both these warnings (very common) are due to \hbox settings not being
+   satisfied nicely.
+3. LaTeX Warning: Specifier 'h' changed to 't'.
+   This errors occurs when TeX is not able to correctly place a floating
+   object at a specified location, because of which it defaulted to the
+   top of the page.
+4. LaTeX Warning: You have requested ...,
+   This warning occurs in slitex when using the xypic package.
+5. Missing number error:
+   Usually, when the name of an included eps file is spelled incorrectly,
+   then the \bb-error message is accompanied by a bunch of &quot;missing
+   number, treated as zero&quot; error messages. This level ignores these
+   warnings.
+   <span class="c38">NOTE</span>: number 5 is actually a LaTeX error, not a warning!
+
+Use<span class="c36"> &gt;</span>
+
+<span class="c28">    TCLevel &lt;level&gt;</span>
+
+where level is a number to set the ignore level dynamically. This will re-do
+the <span class="c34">'efm'</span> so that next time you do \ll, you will not be shown those kinds of
+warnings. Use &quot;TCLevel 0&quot; to ignore no warnings at all, but still remain in a
+&quot;non-verbose&quot;, i.e ignore unmatched lines mode.
+
+When TCLevel is called with the unquoted string strict as<span class="c36"> &gt;</span>
+
+<span class="c28">    TClevel strict</span>
+
+then the <span class="c34">'efm'</span> switches to a &quot;verbose&quot;, &quot;no-lines-ignored&quot; mode which is
+useful when you want to make final checks of your document and want to be
+careful not to let things slip by.
+
+You can also choose to ignore other kinds of patterns by setting
+g:IgnoreWarnings in your ~/.vimrc. This is a '¡' seperated list of commands.
+Its default value is:<span class="c36"> &gt;</span>
+<span class="c28">    let g:Tex_IgnoredWarnings =</span>
+<span class="c28">        \'Underfull¡'.</span>
+<span class="c28">        \'Overfull¡'.</span>
+<span class="c28">        \'specifier changed to¡'.</span>
+<span class="c28">        \'You have requested¡'.</span>
+<span class="c28">        \'Missing number, treated as zero.'</span>
+
+}}}
+<span class="c33">===========================================================================</span>
+<span class="c32">LATEX VIEWING AND SEARCHING                   </span><span class="c29"><a name="latex-viewing">*latex-viewing*</a></span> {{{
+
+Latex-suite ships with a set of functios for viewing .dvi files generated by
+LaTeX. Press \lv while viewing a tex file. This will start the dvi viewer on
+your system and display the current file in it. If the variable g:DviViewer
+exists, then it is used as the program for viewing DVI files, otherwise it
+defaults to yap for windows or xdvi for unix.
+<span class="c38">NOTE</span>: These programs are called with some additional arguments. If you DVI
+viewer doesnt accept these, then you will need to change the code itself. This
+will be configurable by a variable in the future.
+
+Like in the case of the compiler, you can specify the master file for the
+current file (see <span class="c31"><a href="#latex-master-file">|latex-master-file|</a></span>)
+
+<span class="c32">                                                       </span><span class="c29"><a name="latex-searching">*latex-searching*</a></span>
+Yap for windows and some versions of xdvi for windows provide the ability to
+do &quot;forward searching&quot; on the .dvi file. This means that you can have the DVI
+viewer jump to a specified location.
+
+Pressing \ls while viewing a LaTeX file will perform this function, i.e the
+viewer will jump to the location under the cursor.
+
+<span class="c38">NOTE</span>: MikTeX requires that the dvi file be generated using the --src-specials
+flag in order to enable forward/reverse searching. By default, latex-suite
+will call LaTeX with this argument on windows (where yap is assumed).
+
+These functions were added after a tip from Dimitri Antoniou on vim.sf.net.
+See<span class="c36"> &gt;</span>
+<span class="c28">   http://vim.sourceforge.net/tips/tip.php?tip_id=225</span>
+for a description on how to get xdvik/yap to play along with Vim.
+
+}}}
+<span class="c33">===========================================================================</span>
+<span class="c32">LATEX FOLDING                                 </span><span class="c29"><a name="latex-folding">*latex-folding*</a></span> {{{
+
+Latex-suite ships with the plugin SyntaxFolds.vim which is a plugin for
+creating &quot;fake&quot; syntax folds on the fly. The fold method is actually manual
+but the folding is based on LaTeX syntax. This offers a speed increase over
+regular syntax folding. Ofcourse it has the disadvantage that the folds are
+not dynamic, i.e newly created syntax items are not automatically folded up.
+(This is a compromise between speed and convinience).
+
+When you open up a LaTeX file, all the portions will be automatically folded
+up. However, no new folds will be created until you press <span class="c30">&lt;F6&gt;</span> or \rf. (rf
+stands for &quot;refresh folds&quot;).
+
+The fold-text is set to the first line of the folded text unless the fold is a
+table, figure etc. (an environment). In this case, if a \caption and/or a
+label is found in the folded region, then those are used to make a more
+meaningful fold-tex, otherwise the second line of the environment is displayed
+along with the name of the environment. In other words, the following<span class="c36"> &gt;</span>
+
+<span class="c28">    \begin{figure}[h]</span>
+<span class="c28">      \centerline{\psfig{figure=slidercrank.eps,height=6cm}}</span>
+<span class="c28">      \caption{The Slider Crank Mechanism.}</span>
+<span class="c28">      \label{fig:slidercrank}</span>
+<span class="c28">    \end{figure}</span>
+<span class="c28">    % a LaTeX comment.</span>
+<span class="c28">    \begin{eqnarray}</span>
+<span class="c28">      \sin(\pi) = 0</span>
+<span class="c28">    \end{eqnarray}</span>
+<span class="c36">&lt;</span>
+will be shown as:<span class="c36"> &gt;</span>
+
+<span class="c28">  +---  5 lines: figure (fig:slidercrank) : The Slider Crank Mechanism. -----</span>
+<span class="c28">  % a LaTeX comment.</span>
+<span class="c28">  +---  3 lines: eqnarray () : \sin(\pi) = 0 --------------------------------</span>
+<span class="c36">&lt;</span>
+}}}
+<span class="c33">===========================================================================</span>
+<span class="c32">PACKAGE HANDLING                             </span><span class="c29"><a name="latex-packages">*latex-packages*</a></span> {{{
+<span class="c32">                                        </span><span class="c29"><a name="latex-menu-packages">*latex-menu-packages*</a></span>
+
+This functionality is avaiable via the Tex-Packages menu.
+
+This module provides ways of customizing the menus based on which packages
+are being used in the current LaTeX file. When latex-suite first starts up, it
+scans the <span class="c31"><a href="#latex-master-file">|latex-master-file|</a></span> for<span class="c36"> &gt;</span>
+<span class="c28">    \usepackage{name}</span>
+lines and if the corresponding package is found in the latex-suite/packages/
+directory, then creates a sub-menu based on the specification found in that
+file.
+
+<span class="c32">                                                  </span><span class="c29"><a name="latex-package-dictionary">*latex-package-dictionary*</a></span>
+Furthermore, if a file with the same name is found in the
+latex-suite/dictionaries/ directory, then that file will be added to vim's
+<span class="c34">'dictionary'</span> setting for use with the <span class="c31"><a href="#i_CTRL-X_CTRL-K">|i_CTRL-X_CTRL-K|</a></span> command.  Package
+dictionary file should follow outlines specified in <span class="c34">'dictionary'</span>.
+
+
+<span class="c32">                                                        </span><span class="c29"><a name="latex-package-file">*latex-package-file*</a></span>
+A latex-package-file is a simple vim script which defines some global
+variables. These global variables are used by latex-suite to create the custom
+menu. See the <span class="c31"><a href="#latex-package-file-writing">|latex-package-file-writing|</a></span> section how to define a customized
+package file.
+
+If you do make a package file for latex-suite, please consider contacting the
+<span class="c31"><a href="#latex-suite-maintainer">|latex-suite-maintainer|</a></span>.
+
+Example:
+
+From the packages menu, choose the<span class="c36"> &gt;</span>
+<span class="c28">    Tex-Packages.Supported.SIunits </span>
+option. This will insert a line of form:<span class="c36"> &gt;</span>
+<span class="c28">    \usepackage[«»]«»{SIunits}«»</span>
+at the beginning of the file (with the cursor placed at the first
+<span class="c31"><a href="#placeholder">|placeholder|</a></span>. You will also notice that the packages menu now contains a
+sub-menu called SIunits, which contains the commands and options for the
+SIunits package.You can use this sub-menu to insert commands from the package,
+add options to the package etc.
+
+<span class="c38">NOTE</span>: Since the package file is a vim-script, you could define custom
+functions there, add mappings etc.
+
+You can perform the following actions via the packages menu:
+
+<span class="c30">{Update}</span>           This command is to be invoked with the cursor placed on the
+                   package name. If the corresponding package is found, then a
+                   sub-menu with the supported commands, options is created.
+                   A <span class="c31"><a href="#latex-package-dictionary">|latex-package-dictionary|</a></span> might also be created.
+
+<span class="c30">{UpdateAll}</span>        This function reads the preamble of the document for
+                   \usepackage lines and if latexSuite supports the detected
+                   packages, then sub-menus containing the package options and
+                   commands is created.
+                   A <span class="c31"><a href="#latex-package-dictionary">|latex-package-dictionary|</a></span> might also be created.
+
+<span class="c30">{Supported}</span>        This sub-menu contains a list of all the package files stored in
+                   latex-suite/packages directory. When you choose one of
+                   these, a \usepackage{package_name} line will inserted in
+                   the preamble of the <span class="c31"><a href="#latex-master-file">|latex-master-file|</a></span> and a sub-menu for
+                   the package will be created.
+                   If options are detected, then the inserted line is of the
+                   form:
+                        \usepackage[«»]{package_name}
+                   A <span class="c31"><a href="#latex-package-dictionary">|latex-package-dictionary|</a></span> might also be created.
+
+<span class="c32">                                               </span><span class="c29"><a name="latex-package-file-writing">*latex-package-file-writing*</a></span>
+Writing package files is very easy and gives possibility of creating simple
+templates with prefixes to command. Package file have to contain two
+variables:
+g:TeX_package_option_<span class="c30">&lt;package&gt;</span> and g:TeX_package_<span class="c30">&lt;package&gt;</span>
+
+First contain package options, second various commands supplied with
+<span class="c30">&lt;package&gt;</span>.
+
+Package option variable:<span class="c36"> &gt;</span>
+<span class="c28">    g:TeX_package_option_&lt;package&gt; = &quot;Option,Option2=&quot;</span>
+= at the end gives:<span class="c36"> &gt;</span>
+<span class="c28">    Option2=x,&lt;&lt;&gt;&gt;</span>
+Here is allowed one prefix:
+<span class="c30">{sbr:option}</span> Breaks option menu into submenu. <span class="c30">{option}</span> is the name of submenu.
+
+Package variable:<span class="c36"> &gt;</span>
+<span class="c28">    g:TeX_package_&lt;package&gt; = &quot;pre:Command,pre:Command1&quot;</span>
+More detailed example is in latex-suite/packages/exmpl file (slightly
+outdated).
+Here is short summary of prefixes which can be used in package files:
+(x - place with cursor, &lt;&lt;&gt;&gt; - <span class="c31"><a href="#placeholder">|placeholder|</a></span>)
+
+<span class="c30">{env:command}</span>  Environment: creates simple environment template<span class="c36"> &gt;</span>
+<span class="c28">            \begin{command}</span>
+<span class="c28">                x </span>
+<span class="c28">            \end{command}&lt;&lt;&gt;&gt;</span>
+<span class="c30">{eno:command}</span>  Environment with option:<span class="c36"> &gt;</span>
+<span class="c28">            \begin[x]{command}</span>
+<span class="c28">                &lt;&lt;&gt;&gt;</span>
+<span class="c28">            \end{command}&lt;&lt;&gt;&gt;</span>
+<span class="c30">{ens:command[&lt;&lt;option&gt;&gt;]...}</span>  Environment special:<span class="c36"> &gt;</span>
+<span class="c28">            \begin[&lt;&lt;option&gt;&gt;]...{command}</span>
+<span class="c28">                &lt;&lt;&gt;&gt;</span>
+<span class="c28">            \end{command}&lt;&lt;&gt;&gt;</span>
+<span class="c30">{bra:command}</span> Brackets:<span class="c36"> &gt;</span>
+<span class="c28">            \command{x}&lt;&lt;&gt;&gt;</span>
+<span class="c30">{brd:command}</span> Brackets double:<span class="c36"> &gt;</span>
+<span class="c28">            \command{x}{&lt;&lt;&gt;&gt;}&lt;&lt;&gt;&gt;</span>
+<span class="c30">{brs:command[&lt;&lt;option&gt;&gt;]...}</span> Brackets special (as environment special:<span class="c36"> &gt;</span>
+<span class="c28">            \command[&lt;&lt;x&gt;&gt;]{&lt;&lt;&gt;&gt;}{&lt;&lt;&gt;&gt;}&lt;&lt;&gt;&gt;</span>
+<span class="c30">{nor:command}</span> Normal:<span class="c36"> &gt;</span>
+<span class="c28">            \command&lt;Space&gt;</span>
+<span class="c30">{noo:command}</span> Normal with option:<span class="c36"> &gt;</span>
+<span class="c28">            \command[x]&lt;&lt;&gt;&gt;</span>
+<span class="c30">{nob:command}</span> Normal with option and brackets:<span class="c36"> &gt;</span>
+<span class="c28">            \command[x]{&lt;&lt;&gt;&gt;}&lt;&lt;&gt;&gt;</span>
+<span class="c30">{pla:command}</span> Plain:<span class="c36"> &gt;</span>
+<span class="c28">            command&lt;Space&gt;</span>
+<span class="c30">{spe:command}</span> Special:<span class="c36"> &gt;</span>
+<span class="c28">            command   &lt;-literal insertion of command</span>
+<span class="c30">{sep:command}</span> creates separator. Good for aesthetics and usability :)
+<span class="c30">{sbr:command}</span> Breaks menu into submenus. <span class="c30">&lt;command&gt;</span> will be title of submenu.
+            Can be used also in package variable.
+
+Command can be also given without prefix:. The result is<span class="c36"> &gt;</span>
+<span class="c28">           \command</span>
+
+}}}
+<span class="c33">===========================================================================</span>
+<span class="c32">CUSTOM TEMPLATES                            </span><span class="c29"><a name="latex-templates">*latex-templates*</a></span> {{{
+
+This functionality is available via the TeX-Suite.Templates menu.
+
+This module provides a way to insert custom templates at the beginning of the
+current file.
+
+When latex-suite first starts up, it scans the latex-suite/templates/ directory
+and creates menu items based on the files found there. When you select a
+template from this menu, the file will be read in above the first line of the
+current file.
+
+A template file can use <span class="c31"><a href="#placeholders">|placeholders|</a></span> for easy cursor movement. In addition,
+you can use lines such as the following for inserting dates, names
+dynamically:<span class="c36"> &gt;</span>
+<span class="c28">    %        File: ¡expand(&quot;%&quot;)¡</span>
+
+This will create a line of the form:<span class="c36"> &gt;</span>
+<span class="c28">    %       File: name.tex</span>
+
+if the current file name is name.tex.
+
+<span class="c38">NOTE</span>: Templates are also accessible for non-gui users with the command
+<span class="c31"><a href="#:TexTemplate">|:TexTemplate|</a></span>. The argument should be name of the corresponding template
+file.  If the command is called without arguments (preferred usage), then a
+list of avaiable templates is displayed and the user is asked to choose one of
+them.
+
+You can ofcourse place your own templates in this directory.
+
+}}}
+<span class="c33">===========================================================================</span>
+<span class="c32">CUSTOM MACROS                           </span><span class="c29"><a name="latex-custom-macros">*latex-custom-macros*</a></span> {{{
+
+This functionality is available via the TeX-Suite.Macros menu.
+
+This module provides a way of inserting customized macros into the current
+file.
+
+When latex-suite starts up, it scans the latex-suite/macros/ directory and
+creates a menu from the files found there. Each file is considered as a single
+macro. You can place your own macros in this directory, using <span class="c31"><a href="#placeholders">|placeholders|</a></span>
+if wanted.
+
+When you choose a macro from the menu, the corresponding file is read into the
+current buffer after the current cursor position. In non-gui mode, you can
+use the <span class="c31"><a href="#TexMacro">|TexMacro|</a></span> command instead of choosing from the menu. This command
+takes the macro file name as an argument. When called without arguments
+(preferred usage), then a list of avaiable macro files is displayed and the
+user is prompted to choose one of them).
+
+There are some other tools provided in this menu, namely:
+
+<span class="c30">{New}</span>            Creates a new (unnamed) buffer in the latex-suite/macros/
+                 directory.
+                 Use the command :TexMacroNew in non-gui mode.
+
+<span class="c30">{Edit}</span>           Opens up the corresponding macro file for editing.
+                 Use :TexMacroEdit in non-gui mode.
+
+<span class="c30">{Delete}</span>         Deletes the corresponding macro.
+                 Use the prefixed numbers for fast navigation of menus.
+                 Use :TexMacroDelete in non-gui mode.
+
+<span class="c30">{Redraw}</span>         Rescans the macros/ directory and refreshes the macros list.
+
+}}}
+<span class="c33">===========================================================================</span>
+<span class="c32">LATEX MENU CONFIGURATION           </span><span class="c29"><a name="latex-menu-configuration">*latex-menu-configuration*</a></span> {{{
+
+<span class="c32">                                                    </span><span class="c29"><a name="latex-menu-configure">*latex-menu-configure*</a></span>
+
+Generally latex-suite's menus should be configured by setting options in the
+<span class="c31"><a href="#texrc">|texrc|</a></span> file. But if you feel the need to change after startup, then use the
+'TeX-Suite.Configure Menu' menu option to turn some of the menus off and on,
+control the nested-ness of some of the menus etc.
+
+}}}
+<span class="c33">===========================================================================</span>
+<span class="c32">LATEX HELP                                       </span><span class="c29"><a name="latex-help">*latex-help*</a></span>  {{{
+
+latexhelp.txt is a collection of latex.info files `translated' into vim help
+format. Now you can seek for help for specific LaTeX item without exiting vim.
+
+Example:<span class="c36"> &gt;</span>
+<span class="c28">    :help \kill</span>
+gives help for the LaTeX \kill command.
+
+In order to use this help file, you will need to run <span class="c31"><a href="#:helptags">|:helptags|</a></span> once after
+you download and unzip latex-suite.
+
+}}}
+<span class="c33">===========================================================================</span>
+<span class="c32">LATEX DICTIONARY                           </span><span class="c29"><a name="latex-dictionary">*latex-dictionary*</a></span> {{{
+
+Latex-suite ships with a dictionary of over 600 commands from LaTeX and
+popular packages. When latex-suite starts up, it automatically adds this
+dictionary to vim's <span class="c34">'dictionary'</span> option for use with vim's <span class="c31"><a href="#i_CTRL-X_CTRL-K">|i_CTRL-X_CTRL-K|</a></span>
+command.
+
+It is also possible to load custom dictionaries automatically when packages
+load. This will happen if a package definition file<span class="c36"> &gt;</span>
+<span class="c28">    latex-suite/packages/package.vim</span>
+has a corrresponding dictionary<span class="c36"> &gt;</span>
+<span class="c28">    latex-suite/dictionaries/package</span>
+
+
+}}}
+<span class="c33">===========================================================================</span>
+<span class="c32">LATEX SUITE COMMANDS                   </span><span class="c29"><a name="latex-suite-commands">*latex-suite-commands*</a></span> {{{
+
+LatexSuite defines set of commands for non-GUI and power users. They are
+taking care about Macros, Templates and Packages.
+
+:TMacro [<span class="c30">{macro}</span>]                      <span class="c29"><a name="TMacro">*TMacro*</a></span>
+                When used without any arguments lists all available macros
+                defined in latex-suite/macros/ directory and prompt you to
+                choose one of them.
+                With one argument <span class="c31"><a href="#:read">|:read|</a></span> this macro under cursor position.
+                With more than one argument it will not work :)
+
+:TMacroEdit [<span class="c30">{macro}</span>]                  <span class="c29"><a name="TMacroEdit">*TMacroEdit*</a></span>
+                Splits window for editing <span class="c30">{macro}</span>.
+                When used without any arguments lists all available macros
+                defined in latex-suite/macros/ directory and prompt you to
+                choose one of them.
+
+:TMacroNew                             <span class="c29"><a name="TMacroNew">*TMacroNew*</a></span>
+                Splits window to write new macro. Directory in new buffer is
+                locally changed to latex-suite/macros/.
+
+:TMacroDelete [<span class="c30">{macro}</span>]                <span class="c29"><a name="TMacroDelete">*TMacroDelete*</a></span>
+                Delets <span class="c30">{macro}</span> from latex-suite/macros/ directory.
+                When used without any arguments lists all available macros
+                defined in latex-suite/macros/ directory and prompt you to
+                choose one of them.
+
+:TPackage [<span class="c30">{package}</span> [<span class="c30">{package}</span> ...]]  <span class="c29"><a name="TPackage">*TPackage*</a></span>
+                When used without any arguments lists name of the packages for
+                which support is available. Report depends if you are using
+                GUI version and/or g:Tex_Menus is set to 1 or not. When you
+                are not using menus command lists files from
+                latex-suite/dictionaries/ (this is main support for non-menus
+                version of latexSuite) if menus are on <span class="c31"><a href="#TPackage">|TPackage|</a></span> lists
+                files from latex-suite/packages/ directory.
+
+                When <span class="c30">{package}</span> is given command turns on all possible support
+                for this <span class="c30">{package}</span> (<span class="c31"><a href="#latex-menu-packages">|latex-menu-packages|</a></span>,
+                <span class="c31"><a href="#latex-packages-dictionary">|latex-packages-dictionary|</a></span>). Number of arguments separated
+                with spaces is limited only with common sense.
+
+:TPackageUpdate                        <span class="c29"><a name="TPackageUpdate">*TPackageUpdate*</a></span>
+                This command `reads' name of package under cursor and turns on
+                possible support.
+
+:TPackageUpdateAll                     <span class="c29"><a name="TPackageUpdateAll">*TPackageUpdateAll*</a></span>
+                After issuing this command latexSuite scans the file in
+                looking for not declared packages, removing not needed entries
+                from Packages menu and turning off not necessary packages'
+                dictionaries.
+
+:TTemplate [<span class="c30">{template}</span>]                <span class="c29"><a name="TTemplate">*TTemplate*</a></span>
+                When used without any arguments lists all available templates
+                from latex-suite/templates/ directory and prompts to choose
+                one of them.
+                With one argument :0<span class="c31"><a href="#read">|read|</a></span> <span class="c30">{template}</span> file.
+                With more than one argument it will not work :)
+
+:TSection [<span class="c30">{argument}</span>]                 <span class="c29"><a name="TSection">*TSection*</a></span>
+                Used without any arguments inserts last section type
+                (<span class="c31"><a href="#latex-sectioning">|latex-sectioning|</a></span>).
+                Accepts arguments:
+                <span class="c30">&lt;n&gt;</span>     inserts section name in <span class="c30">&lt;n&gt;</span> logical level.
+                        Levels are:
+                        0 part
+                        1 chapter
+                        2 section
+                        3 subsection
+                        4 subsubsection
+                        5 paragraph
+                        6 subparagraph
+
+                +<span class="c30">&lt;n&gt;</span>    inserts section name <span class="c30">&lt;n&gt;</span> logical levels above the last
+                        used comand
+
+                -<span class="c30">&lt;n&gt;</span>    inserts section name <span class="c30">&lt;n&gt;</span> logical levels below the last
+                        used comand
+
+                +       inserts section name one logical level below the last
+                        used command (equal to +1).
+
+                ++      inserts section name two logical levels below the last
+                        used command (equal to +2).
+
+                -       inserts section name one logical level over the last
+                        used command (equal to -1).
+
+                --      inserts section name two logical levels over the last
+                        used command (equal to -2).
+
+                Command accepts also latexSuite mappings (<span class="c31"><a href="#latex-macros">|latex-macros|</a></span>)
+                without preceding S and in lowercase:<span class="c36"> &gt;</span>
+<span class="c28">                        :TSection pa </span>
+<span class="c36">&lt;</span>               will result in \part{}. It is possible to use full names of
+                sections:<span class="c36"> &gt;</span>
+<span class="c28">                        :TSection part </span>
+<span class="c36">&lt;</span>
+:TSectionAdvanced                      <span class="c29"><a name="TSectionAdvanced">*TSectionAdvanced*</a></span>
+                Accepts the same arguments as <span class="c31"><a href="#TSection">|TSection|</a></span> but leads to a couple
+                of questions (whether you want to include the section in the
+                table of contents, whether there is a shorter name for the
+                table of contents) and then creates a more intelligent
+                template.
+}}}
+<span class="c33">===========================================================================</span>
+<span class="c32">CREDITS                                 </span><span class="c29"><a name="latex-suite-credits">*latex-suite-credits*</a></span> {{{
+
+And finally, the credits:
+
+Benji Fisher      : a large number of functions, environments and valuable
+                    guidance. (You'll see the name often if you browse the
+                    files).
+Lubomir Host      : provided the diacritics and also helped in development.
+Alexander Wagner  : valuable suggestions during development.
+Luc Hermitte      : his variation of Stephen Riehm's bracketing system is used
+                    in latex-suite.
+Gergely Kontra    : the clever little JumpFunc() in imaps.vim is due to him.
+                    The implementation of the templates also borrows from
+                    mu-template.vim by him.
+Dimitri Antoniou  : author of ltags and also provided the nice tip about
+                    forward / reverse search on DVI documents.
+Stephen Riehm     : the extremely helpful bracketing system is from him.
+Alan Schmitt      : provided some macros/folding elements.
+Hari Krishna Dara : for ExecMap(), the clever little function which makes
+                    typing visual mode mappings so much easier and error-free.
+Alan G Isac       : for the comprehensive BibT() function for entering bibtex
+                    entries.
+Gontran Baerts    : for libList.vim
+
+A large number of functions in latex-suite come from various other people.
+Some of those people might have been missed here. Each function should however
+have the author's name/e-mail above it. Thats the more authoritative place to
+check out who has done what.
+
+<span class="c32">                                                </span><span class="c29"><a name="latex-suite-maintainer">*latex-suite-maintainer*</a></span>
+The current maintainer(s) of latex-suite is(are)
+
+Srinath Avadhanula &lt;srinath@fastmail.fm&gt;
+Mikolaj Machowski &lt;mikmach@wp.pl&gt;
+
+}}}
+<span class="c33">===========================================================================</span>
+
+vim:tw=78:et:ts=4:ft=help:norl:fo+=2:fdm=marker
+</pre>
+</body>
+</html>
