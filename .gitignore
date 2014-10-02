@@ -29,3 +29,6 @@ patches-*
 
 vim-addons
 bundle
+
+#temporary cache directory for unite
+unite
