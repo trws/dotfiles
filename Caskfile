@@ -1,0 +1,16 @@
+# Install native apps
+# Usage: `brew bundle Caskfile`
+
+install caskroom/cask/brew-cask
+tap caskroom/versions
+
+#waiting for 64-bit to become the stable default
+#cask install google-chrome 2> /dev/null
+# cask install iterm2
+cask install the-unarchiver
+cask install vlc
+cask install bettertouchtool
+cask install mjolnir
+cask install radiant-player
+cask install bibdesk
+

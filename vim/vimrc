@@ -41,6 +41,7 @@ NeoBundle 'sjl/badwolf'
 NeoBundle 'Solarized'
 " NeoBundle 'github-theme'
 NeoBundle 'nanotech/jellybeans.vim'
+NeoBundle 'w0ng/vim-hybrid'
 
 "visual
 "NeoBundle 'Powerline'
@@ -284,10 +285,6 @@ let g:vimsyn_folding = 'af'
 set vb
 set t_vb=
 syn on
-set background=dark
-let g:solarized_contrast = "high"
-" let g:solarized_termcolors=256
-let g:solarized_termtrans = 1
 set ruler
 set nowrap
 
@@ -1000,6 +997,15 @@ endif
 " let g:jellybeans_background_color_256=0
 " endif
 
+set background=dark
+" let g:solarized_contrast = "high"
+let g:solarized_contrast = "normal"
+let g:solarized_visibility = "normal"
+let g:solarized_termcolors=256
+" let g:solarized_termcolors=16
+let g:solarized_termtrans = 1
+" colorscheme solarized
+
 colorscheme jellybeans
 if exists("$TERM_PROGRAM") && $TERM_PROGRAM == 'iTerm.app'
   if exists("$ITERM_PROFILE")
@@ -1011,3 +1017,4 @@ if exists("$TERM_PROGRAM") && $TERM_PROGRAM == 'iTerm.app'
     endif
   endif
 endif
+
