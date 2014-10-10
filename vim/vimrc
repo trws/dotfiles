@@ -103,6 +103,7 @@ NeoBundle 'terryma/vim-multiple-cursors'
 
 if executable('task')
   NeoBundle 'farseer90718/vim-taskwarrior'
+  " let g:task_rc_override = 'defaultwidth=999'
 endif
 
 let g:task_default_prompt= ['description', 'project', 'tag', 'due']
