@@ -25,6 +25,8 @@ link_files = {
         "zsh/zshenv-link" : "~/.zshenv",
         "mjolnir" : "~/.mjolnir",
         "tmux.conf" : "~/.tmux.conf",
+        "inspiration/mathias/.wgetrc" : "~/.wgetrc",
+        "inspiration/mathias/.curlrc" : "~/.curlrc",
         }
 
 for target, link in link_files.items():
