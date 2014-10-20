@@ -42,6 +42,7 @@ install p7zip
 install tree
 
 install lua
+install luarocks
 
 # Remove outdated versions from the cellar
 cleanup
