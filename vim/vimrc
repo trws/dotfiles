@@ -327,11 +327,14 @@ set encoding=utf-8
 
 "remove ending whitespace on file write
 fun! <SID>StripTrailingWhitespaces()
-  let l = line(".")
-  let c = col(".")
-  %s/\s\+$//e
-  call cursor(l, c)
+  let save_cursor = getpos(".")
+  let old_query = getreg('/')
+  :%s/\s\+$//e
+  call setpos('.', save_cursor)
+  call setreg('/', old_query)
 endfun
+" Save a file as root (,W)
+noremap <leader>W :w !sudo tee % > /dev/null<CR>
 
 augroup extra_filetypes
   autocmd!
@@ -600,6 +603,41 @@ set ignorecase
 set smartcase
 set modeline
 set modelines=5
+" Optimize for fast terminal connections
+set ttyfast
+" Use UTF-8 without BOM
+set encoding=utf-8 nobomb
+" Centralize backups, swapfiles and undo history, make dropbox happy!
+set backupdir=~/.vim/backups
+set directory=~/.vim/swaps
+if exists("&undodir")
+	set undodir=~/.vim/undo
+endif
+" Enable per-directory .vimrc files and disable unsafe commands in them
+set exrc
+set secure
+" Highlight current line
+set cursorline
+" Show “invisible” characters
+set lcs=tab:▸\ ,trail:·,eol:¬,nbsp:_
+set list
+" Always show status line
+set laststatus=2
+" Don’t reset cursor to start of line when moving around.
+set nostartofline
+" Show the cursor position
+set ruler
+" Don’t show the intro message when starting Vim
+set shortmess=atI
+" Show the current mode
+set showmode
+" Show the (partial) command as it’s being typed
+set showcmd
+" Start scrolling three lines before the vertical window border
+set scrolloff=3
+" Start scrolling three lines before the horizontal window border
+set sidescrolloff=3
+
 
 "diff behavior
 set diffopt+=iwhite
@@ -866,6 +904,7 @@ let g:Powerline_colorscheme = 'solarized256'
 
 "general options
 set grepprg=grep\ -nH\ $*
+" Enhance command-line completion
 set wildmenu
 set wildmode=longest:list,full
 "set foldmethod=syntax
@@ -935,7 +974,7 @@ let g:tagbar_autoclose = 1
 "mouse options
 set mouse=a
 "enable wide mouse support for iTerm2 and urxvt, should also work in new xterms
-if v:version >= 703
+if has('mouse_sgr')
   set t_RV=
   set ttym=sgr
 else
