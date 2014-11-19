@@ -29,12 +29,15 @@ unsetopt nomatch
   setopt rcquotes
   setopt recexact
 
-HISTFILE=~/.zsh-history-$HOST
+#The extra component removes digits from the hostname, mean this to be
+#trailing digits only, but it's all of them for now (TODO)
+HISTFILE=~/.zsh-history-${HOST//[0-9]/}
 HISTSIZE=10000
 SAVEHIST=10000                # Default: 200
 setopt INC_APPEND_HISTORY
-setopt   appendhistory        # multiple zsh's all append to same history file (rather than last
+setopt   APPEND_HISTORY        # multiple zsh's all append to same history file (rather than last
 # overwrites)  SET
+setopt HIST_FCNTL_LOCK #use file locking to allow multiple writers to collaborate on a history file, important for clusters with NFS
 setopt banghist             # Perform textual history expansion, csh-style, treating '!' specially  SET
 unsetopt cshjunkiehistory     # A history reference without an event specifier will always refer to
 # the previous command. Without this option, such a history reference

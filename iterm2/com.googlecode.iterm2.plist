@@ -1175,17 +1175,19 @@
 	<key>NSTableView Sort Ordering KeyBingingTable</key>
 	<array/>
 	<key>NSWindow Frame Preferences</key>
-	<string>3521 347 924 485 2560 0 2560 1418 </string>
+	<string>478 866 924 485 0 0 2560 1418 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>2560 1092 490 326 2560 0 2560 1418 </string>
+	<string>3200 8 1276 1166 2560 0 2560 1418 </string>
 	<key>NSWindow Frame iTerm Window 1</key>
-	<string>1280 1084 490 326 0 0 2560 1418 </string>
+	<string>960 4 960 1174 0 0 1920 1178 </string>
 	<key>NSWindow Frame iTerm Window 2</key>
-	<string>-1920 0 960 1178 -1920 0 1920 1178 </string>
+	<string>1419 571 490 326 0 0 2560 1418 </string>
 	<key>NSWindow Frame iTerm Window 3</key>
-	<string>573 128 916 1046 0 0 1920 1178 </string>
+	<string>1280 4 1280 1414 0 0 2560 1418 </string>
 	<key>NSWindow Frame iTerm Window 4</key>
-	<string>1153 1092 490 326 0 0 2560 1418 </string>
+	<string>1016 707 490 326 0 0 2560 1418 </string>
+	<key>NSWindow Frame iTerm Window 5</key>
+	<string>1280 6 1698 1406 0 0 2560 1440 </string>
 	<key>NeverWarnAboutShortLivedSessions_1C54F591-EF5F-44FE-9740-DF7DB738BCC2</key>
 	<true/>
 	<key>New Bookmarks</key>
@@ -5515,7 +5517,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2014-10-02T16:13:58Z</date>
+	<date>2014-11-02T06:05:17Z</date>
 	<key>SavePasteHistory</key>
 	<false/>
 	<key>Show Toolbelt</key>
@@ -5558,7 +5560,7 @@
 	<key>WebKitDefaultFontSize</key>
 	<integer>11</integer>
 	<key>WebKitStandardFont</key>
-	<string>Lucida Grande</string>
+	<string>.Lucida Grande UI</string>
 	<key>WindowNumber</key>
 	<true/>
 	<key>WindowStyle</key>

@@ -27,6 +27,8 @@ link_files = {
         "tmux.conf" : "~/.tmux.conf",
         "inspiration/mathias/.wgetrc" : "~/.wgetrc",
         "inspiration/mathias/.curlrc" : "~/.curlrc",
+        "inspiration/mathias/.gitignore" : "~/.gitignore",
+        "gitconfig" : "~/.gitconfig",
         }
 
 for target, link in link_files.items():
