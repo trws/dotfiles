@@ -125,3 +125,21 @@
 	# installations. To use `simple` instead, add this to your `~/.extra` file:
 	# `git config --global push.default simple`. See http://git.io/mMah-w.
 	default = matching
+
+[merge "wiggle"]
+    name = "Wiggle flexible merging"
+    driver = wiggle -o %A %A %O %B
+    recursive = binary
+; [merge]
+;     tool = wiggle
+[mergetool "wiggle"]
+    cmd = wiggle -Bb -o $MERGED $LOCAL $BASE $REMOTE
+[difftool "wiggle"]
+    cmd = wiggle -Bdb $LOCAL $REMOTE
+[difftool "wdiff"]
+    cmd = wdiff -3 $LOCAL $REMOTE
+[user]
+	name = Tom Scogland
+	email = scogland1@llnl.gov
+[credential]
+	helper = osxkeychain
