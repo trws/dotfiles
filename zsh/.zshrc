@@ -2,6 +2,7 @@
 [[ -d ~/.ssh ]] || (mkdir ~/.ssh && touch ~/.ssh/known_hosts)
 TERM=$TERM;
 ZSH=$ZDOTDIR/oh-my-zsh
+ZSH_CUSTOM=$ZDOTDIR/oh_my_zsh_custom
 # ZSH_THEME="tom"
 ZSH_THEME="steeef"
 # source ~/.zsh/prezto/init.zsh
@@ -16,6 +17,7 @@ brew
 osx
 screen
 taskwarrior
+hub
 tmux
 z)
 
