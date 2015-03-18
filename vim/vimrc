@@ -275,6 +275,14 @@ let g:ctrlp_extensions = ['tag', 'buffertag', 'quickfix', 'changes', 'mixed', 'b
 
 "YouCompleteMe
 nnoremap <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<CR>
+"attempt to fix the awful latex input behavior
+set omnifunc=syntaxcomplete#Complete
+" let g:ycm_semantic_triggers = {
+"       \  'tex'  : ['{'],
+"       \ }
+let g:ycm_filetype_blacklist = {
+      \ 'tex' : 1
+      \}
 let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
 let g:ycm_extra_conf_globlist = ['~/Dropbox/*','~/projects/*']
 let g:ycm_autoclose_preview_window_after_insertion = 1
@@ -374,9 +382,17 @@ let g:syntastic_python_pylint_args=' --indent-string="    "'
 
 "CODE FORMATTING
 let g:formatprg_args_expr_python = '(&textwidth ? " --max-line-length=" . &textwidth : "") . " -" '
+" if executable("clang-format")
+"   let g:formatprg_c = 'clang-format'
+"   let g:formatprg_cpp = 'clang-format'
+"   let g:formatprg_args_expr_c = ''
+"   let g:formatprg_args_expr_cpp = g:formatprg_args_expr_c
+" elseif executable("astyle")
 "astyle args for C and C++
-let g:formatprg_args_expr_c = '"--mode=c --style=google --add-brackets --indent-preproc-define --keep-one-line-statements -pcH".(&expandtab ? "s".&shiftwidth : "t")'
+let g:formatprg_args_expr_c = '"--indent-col1-comments --style=stroustrup -A4 --align-pointer=name --max-code-length=80 --convert-tabs"'
+" let g:formatprg_args_expr_c = '"--mode=c --style=google --add-brackets --indent-preproc-define --keep-one-line-statements -pcH".(&expandtab ? "s".&shiftwidth : "t")'
 let g:formatprg_args_expr_cpp = g:formatprg_args_expr_c
+" endif
 
 "automatic formatting options
 set textwidth=78
@@ -398,7 +414,6 @@ let python_highlight_all = 1
 "manually
 
 "au FileType cpp setlocal fp=astyle\ --pad-oper\ --unpad-paren\ --add-brackets\ --convert-tabs\ --align-pointer=name\ --indent-col1-comments\ --style=k/r\ --quiet
-"if executable("astyle")
 "au FileType cpp setlocal fp=astyle\ --pad-oper\ --unpad-paren\ --add-brackets\ --convert-tabs\ --align-pointer=name\ --indent-col1-comments\ --style=k/r\ --quiet
 "au FileType c setlocal fp=astyle\ --pad-oper\ --unpad-paren\ --add-brackets\ --convert-tabs\ --align-pointer=name\ --indent-col1-comments\ --style=k/r\ --quiet
 "au FileType cpp setlocal equalprg=astyle\ --indent=spaces=2\ --pad-oper\ --unpad-paren\ --add-brackets\ --convert-tabs\ --align-pointer=name\ --indent-col1-comments\ --style=k/r\ --quiet
@@ -613,7 +628,7 @@ set encoding=utf-8 nobomb
 set backupdir=~/.vim/backups
 set directory=~/.vim/swaps
 if exists("&undodir")
-	set undodir=~/.vim/undo
+  set undodir=~/.vim/undo
 endif
 " Enable per-directory .vimrc files and disable unsafe commands in them
 set exrc
@@ -711,6 +726,27 @@ augroup build_autos
   au FileType make setlocal noautoindent
   au FileType make setlocal nosmartindent
 augroup END
+
+function! Clang_rename_string(new_name)
+  "Save window state
+  let winview=winsaveview()
+
+  "Rename symbol
+  exe "1,$!clang-rename -offset " . (line2byte( line('.'))+col('.')) . " -new-name='" . a:new_name . "' %"
+  "clang-rename -offset 4156 -new-name=do_other_stuff_for_some_reason -pl -pn
+
+  "Recall window state
+  call winrestview(winview)
+endfunction
+
+function! Clang_rename()
+  call inputsave()
+  let name = input('Enter name: ')
+  call inputrestore()
+  call Clang_rename_string(name)
+endfunction
+
+
 
 "general key remappings
 nmap Y y$
