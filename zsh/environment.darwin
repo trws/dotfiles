@@ -2,6 +2,7 @@
 #typeset -x LC_ALL=C LC_TIME=en_GB.ISO-8859-15
 export LD_LIBRARY_PATH=/usr/local/cuda/lib:$LD_LIBRARY_PATH
 [[ -f /sw/bin/init.sh ]] && source /sw/bin/init.sh
+[[ -d /usr/local/opt/llvm/share/llvm ]] && PATH=$PATH:/usr/local/opt/llvm/bin
 export GOOS=darwin
 export NODE_PATH=/usr/local/lib/node_modules
 export MANPATH="/usr/local/opt/coreutils/libexec/gnuman:/usr/local/share/man:$MANPATH"

@@ -1,9 +1,32 @@
+-- Make sure packages are here
+
+get_module = function(mod)
+  print("installing: " .. mod)
+  os.execute('/usr/local/bin/luarocks ' .. ' install ' .. mod)
+end
+
+modules = { "mjolnir.application",
+"mjolnir.keycodes",
+"mjolnir.hotkey",
+"mjolnir.window",
+"mjolnir.fnutils",
+"mjolnir.screen",
+"mjolnir.geometry"
+}
+
+for k,m in pairs(modules) do
+  get_module(m)
+end
+
+
 local application = require "mjolnir.application"
 local hotkey = require "mjolnir.hotkey"
 local window = require "mjolnir.window"
 local fnutils = require "mjolnir.fnutils"
 local screens = require "mjolnir.screen"
 local geometry = require "mjolnir.geometry"
+
+
 
 hotkey.bind({"cmd", "alt", "ctrl"}, "D", function()
   local win = window.focusedwindow()
