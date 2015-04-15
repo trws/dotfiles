@@ -2,7 +2,7 @@
 DEFAULT_USER=njustn
 
 export GIT_AUTHOR_NAME='Tom Scogland'
-export GIT_AUTHOR_EMAIL=scogland1@llnl.gov
+export GIT_AUTHOR_EMAIL=tscogland@llnl.gov
 export GITHUB_USER=trws
 
 [[ -f ~/perl5/perlbrew/etc/bashrc ]] && source ~/perl5/perlbrew/etc/bashrc
