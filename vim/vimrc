@@ -9,7 +9,7 @@ if $SYSTEM != 'windows'
     set runtimepath+=~/.vim/bundle/neobundle.vim/
   endif
 
-  call neobundle#rc(expand('~/.vim/bundle/'))
+  call neobundle#begin(expand('~/.vim/bundle/'))
 endif
 
 NeoBundleFetch 'Shougo/neobundle.vim'
@@ -110,7 +110,7 @@ let g:task_default_prompt= ['description', 'project', 'tag', 'due']
 ", 'priority', 'depends'
 
 augroup taskwarrior_quick_add
-  au FileType taskreport nmap <silent> <buffer> <Plug>(taskwarrior_new_quick)             :call taskwarrior#system_call('', 'add', taskwarrior#data#get_args('add', ['description', 'project', 'due']), 'echo')<CR>
+  au FileType taskreport nmap <silent> <buffer> <Plug>(taskwarrior_new_quick)             :call taskwarrior#system_call('', 'add', taskwarrior#data#get_args('add', ['description', 'project', 'tag']), 'echo')<CR>
   au FileType taskreport nmap <silent> <buffer> n        <Plug>(taskwarrior_new_quick)
 augroup END
 
@@ -148,7 +148,8 @@ NeoBundle 'reedes/vim-wordy'
 call neobundle#end()
 
 filetype plugin indent on     " required!
-" NeoBundleCheck
+
+NeoBundleCheck
 
 " set runtimepath+=~/.vim/pyclewn
 
@@ -386,7 +387,8 @@ let g:syntastic_python_pylint_args=' --indent-string="    "'
 
 "CODE FORMATTING
 let g:formatprg_args_expr_python = '(&textwidth ? " --max-line-length=" . &textwidth : "") . " -" '
-let g:formatprg_args_expr_c = '"--mode=c --style=google --add-brackets --keep-one-line-statements -pcH".(&expandtab ? "s".&shiftwidth : "t")'
+"astyle args for C and C++
+let g:formatprg_args_expr_c = '"--mode=c --style=google --add-brackets --indent-preproc-define --keep-one-line-statements -pcH".(&expandtab ? "s".&shiftwidth : "t")'
 let g:formatprg_args_expr_cpp = g:formatprg_args_expr_c
 
 "automatic formatting options

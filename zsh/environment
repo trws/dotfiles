@@ -5,6 +5,9 @@ export GIT_AUTHOR_NAME='Tom Scogland'
 export GIT_AUTHOR_EMAIL=scogland1@llnl.gov
 export GIT_COMMITTER_NAME='Tom Scogland'
 export GIT_COMMITTER_EMAIL=scogland1@llnl.gov
+export GITHUB_USER=trws
+
+[[ -f ~/perl5/perlbrew/etc/bashrc ]] && source ~/perl5/perlbrew/etc/bashrc
 
 [[ ! -z "$LC_TERM_PROGRAM" ]] && export TERM_PROGRAM=$LC_TERM_PROGRAM && unset LC_TERM_PROGRAM
 [[ ! -z "$LC_ITERM_PROFILE" ]] && export ITERM_PROFILE=$LC_ITERM_PROFILE  && unset LC_ITERM_PROFILE

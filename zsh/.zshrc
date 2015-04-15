@@ -2,9 +2,11 @@
 [[ -d ~/.ssh ]] || (mkdir ~/.ssh && touch ~/.ssh/known_hosts)
 TERM=$TERM;
 ZSH=$ZDOTDIR/oh-my-zsh
+ZSH_CUSTOM=$ZDOTDIR/oh_my_zsh_custom
 # ZSH_THEME="tom"
 ZSH_THEME="steeef"
 # source ~/.zsh/prezto/init.zsh
+export _Z_DATA=~/.zsh/z-dirjump-list.txt
 plugins=(gitfast
 svn-fast-info
 git
@@ -15,16 +17,18 @@ brew
 osx
 screen
 taskwarrior
-tmux)
+hub
+tmux
+z)
 
 source $ZSH/oh-my-zsh.sh
 # source ~/.oh-my-zsh/templates/zshrc.zsh-template
 
-. $ZDOTDIR/z.sh
-export _Z_DATA=~/.zsh/z-dirjump-list.txt
-function precmd () {
-_z --add "$(pwd -P)"
-}
+#now using oh-my-zsh plugin for this functionality
+# . $ZDOTDIR/z.sh
+# function precmd () {
+# _z --add "$(pwd -P)"
+# }
 
 #if [ "$SYSTEM" == "darwin" ]
 #then
