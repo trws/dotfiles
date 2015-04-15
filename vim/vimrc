@@ -174,12 +174,25 @@ vmap <CR> <Plug>(EasyAlign)
 " let $PYTHONPATH .= ":~/.vim/included/ropevim"
 " source ~/.vim/included/ropevim/ropevim.vim
 
-"make command mode suck less
-" cnoremap <C-A>  <Home>
-" cnoremap <C-F>  <Right>
-" cnoremap <C-B>  <Left>
-" cnoremap <Esc>b <S-Left>
-" cnoremap <Esc>f <S-Right>
+"make command mode suck less, mimic a shell
+" start of line
+:cnoremap <C-A>		<Home>
+" back one character
+:cnoremap <C-B>		<Left>
+" delete character under cursor
+:cnoremap <C-D>		<Del>
+" end of line
+:cnoremap <C-E>		<End>
+" forward one character
+:cnoremap <C-F>		<Right>
+" recall newer command-line
+" :cnoremap <C-N>		<Down>
+" recall previous (older) command-line
+" :cnoremap <C-P>		<Up>
+" back one word
+" :cnoremap <Esc><B>	<S-Left>
+" forward one word
+" :cnoremap <Esc><F>	<S-Right>
 
 " Prompt for a command to run
 map <Leader>vp :VimuxPromptCommand<CR>
