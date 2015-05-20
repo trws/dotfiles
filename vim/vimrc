@@ -52,7 +52,7 @@ NeoBundle 'edkolev/tmuxline.vim'
 
 "filetype handlers, highlighting etc
 NeoBundle 'LaTeX-Box-Team/LaTeX-Box'
-NeoBundle 'vim-latex/vim-latex'
+" NeoBundle 'vim-latex/vim-latex'
 NeoBundle 'liquid.vim'
 "c++11 highlighting
 NeoBundle 'vim-jp/cpp-vim'
@@ -66,7 +66,7 @@ NeoBundle 'vim-scripts/utl.vim'
 NeoBundle 'chrisbra/csv.vim'
 " CSupport plugin: XXX: reacts badly with several others
 " NeoBundle 'c.vim'
-" NeoBundle "jceb/vim-orgmode"
+NeoBundle "jceb/vim-orgmode"
 "deps
 NeoBundle "tpope/vim-speeddating"
 
@@ -280,9 +280,9 @@ set omnifunc=syntaxcomplete#Complete
 " let g:ycm_semantic_triggers = {
 "       \  'tex'  : ['{'],
 "       \ }
-let g:ycm_filetype_blacklist = {
-      \ 'tex' : 1
-      \}
+" let g:ycm_filetype_blacklist = {
+"       \ 'tex' : 1
+"       \}
 let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
 let g:ycm_extra_conf_globlist = ['~/Dropbox/*','~/projects/*']
 let g:ycm_autoclose_preview_window_after_insertion = 1
@@ -345,10 +345,10 @@ endfun
 " Save a file as root (,W)
 noremap <leader>W :w !sudo tee % > /dev/null<CR>
 
-augroup extra_filetypes
-  autocmd!
-  autocmd BufWritePre <buffer> :call <SID>StripTrailingWhitespaces()
-augroup END
+" augroup extra_filetypes
+  " autocmd!
+  " autocmd BufWritePre <buffer> :call <SID>StripTrailingWhitespaces()
+" augroup END
 
 fun! TeX_fmt()
   if (getline(".") != "")
