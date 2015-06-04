@@ -9,13 +9,6 @@ alias rezsh='exec zsh'
 alias -g '^=|'
 alias nocbreak=icanon
 alias cal=ncal
-if [ -x tg ] ; then
-  alias t=tg 
-  compdef _task tg
-  compdef _task t=tg
-else
-  alias t='task'
-fi
 # alias t='todo.sh'
 #  alias t='[[ -f ~/Dropbox/simplenote/todo.txt ]] && t $* ; [[ -f ~/Dropbox/simplenote/todo.txt ]] || ssh hurricane t $*'
 # Global aliases

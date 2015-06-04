@@ -118,10 +118,5 @@ true
 
 [[ -n "$terminfo[kbs]" ]] && stty erase $terminfo[kbs]
 
-if [ -x tg ] ; then
-  alias t=tg 
-  compdef _task tg
-  compdef _task t=tg
-fi
 #echo $terminfo > ~/test2
 # vim:ts=4:
