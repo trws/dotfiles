@@ -22,6 +22,7 @@ tmux
 z)
 
 source $ZSH/oh-my-zsh.sh
+compdef _task tg
 # source ~/.oh-my-zsh/templates/zshrc.zsh-template
 
 #now using oh-my-zsh plugin for this functionality

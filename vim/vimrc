@@ -95,6 +95,11 @@ NeoBundle 'pthrasher/conqueterm-vim'
 
 "file management
 NeoBundle 'Shougo/unite.vim'
+NeoBundle 'Shougo/vimfiler.vim'
+NeoBundle 'Shougo/unite-ssh'
+NeoBundleLazy 'ujihisa/vimshell-ssh', { 'autoload' : {
+      \ 'filetypes' : 'vimshell',
+      \ }}
 NeoBundle 'Shougo/neomru.vim'
 NeoBundle 'kien/ctrlp.vim'
 NeoBundle 'tpope/vim-fugitive'
@@ -222,6 +227,7 @@ map <Leader>vx :VimuxInterruptRunner<CR>
 let g:unite_data_directory = '~/.vim/unite'
 " let g:unite_source_bookmark_directory = '~/.vim/unite-bookmarks'
 let g:unite_source_history_yank_enable = 1
+let g:unite_source_vimshell_external_history_path="~/.zsh-history:~/.zsh-history-$HOST"
 call unite#filters#matcher_default#use(['matcher_fuzzy'])
 call unite#filters#sorter_default#use(['sorter_rank'])
 call unite#custom#profile('files', 'filters', 'sorter_rank')
@@ -229,6 +235,7 @@ nnoremap <leader>uB :<C-u>Unite bookmark<CR>
 nnoremap <leader>uY :<C-u>Unite history/yank<CR>
 " nnoremap <leader>uf :<C-u>Unite file<CR>
 nnoremap <leader>uf :<C-u>Unite -start-insert file<CR>
+nnoremap <leader>un :<C-u>Unite -start-insert file_rec/async:~/Projects/notes/<CR>
 nnoremap <leader>ug :<C-u>Unite grep:.<CR>
 nnoremap <leader>uG :<C-u>Unite grep:.:-i<CR>
 " nnoremap <leader>ur :<C-u>Unite -start-insert file_rec<CR>
@@ -246,7 +253,8 @@ if executable('pt')
         \ '--ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr'' ' .
         \ '--ignore ''*.dat'' --ignore ''*.pdf'' --ignore ''*.bib'' -e '
   let g:unite_source_grep_recursive_opt = ''
-  let g:unite_source_rec_async_command = 'pt --nocolor --nogroup -g . '
+  " The empty perens set the pattern, all files should match
+  let g:unite_source_rec_async_command = 'pt --nocolor --nogroup -g "." "" '
 elseif executable('ag')
   " Use ag in unite grep source.
   let g:unite_source_grep_command = 'ag'
@@ -350,6 +358,8 @@ noremap <leader>W :w !sudo tee % > /dev/null<CR>
   " autocmd BufWritePre <buffer> :call <SID>StripTrailingWhitespaces()
 " augroup END
 
+" Disable spell checking in comments
+let g:tex_comment_nospell= 1
 fun! TeX_fmt()
   if (getline(".") != "")
     let save_cursor = getpos(".")
@@ -976,6 +986,7 @@ nnoremap <silent> <A-S-f>    :call ToggleVExplorer()<CR>
 nnoremap <silent> <Esc><S-f> :call ToggleVExplorer()<CR>
 nnoremap <silent> <D-F>      :call ToggleVExplorer()<CR>
 nmap     <silent> <F3>       :call ToggleVExplorer()<CR>
+:let g:vimfiler_as_default_explorer = 1
 let g:netrw_liststyle = 4
 " let g:netrw_home      = '~/.vim'
 

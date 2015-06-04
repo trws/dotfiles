@@ -29,6 +29,7 @@ link_files = {
         "inspiration/mathias/.curlrc" : "~/.curlrc",
         "gitignore" : "~/.gitignore",
         "gitconfig" : "~/.gitconfig",
+        "scripts" : "~/scripts",
         }
 
 for target, link in link_files.items():

@@ -1,5 +1,4 @@
 #!zsh
-path=(~/scripts ~/programs/$bintype/bin ~/programs/bin /usr/local/bin $path)
 [[ -x /usr/local/bin/defaultpaths ]] && eval `/usr/local/bin/defaultpaths`
 (( $gotroot )) && path=(/usr/local/sbin $path /sbin /usr/sbin)
 if [[ $system = darwin ]]
@@ -33,3 +32,5 @@ typeset -U path
 
 [[ -d ~/build/clang ]] && path=( ~/build/clang/install/bin $path )
 [[ -d ~/build/depot_tools/ ]] && path=( $path ~/build/depot_tools )
+
+path=(~/scripts ~/programs/$bintype/bin ~/programs/bin /usr/local/bin $path)
