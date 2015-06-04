@@ -9,7 +9,13 @@ alias rezsh='exec zsh'
 alias -g '^=|'
 alias nocbreak=icanon
 alias cal=ncal
-alias t='task'
+if [ -x tg ] ; then
+  alias t=tg 
+  compdef _task tg
+  compdef _task t=tg
+else
+  alias t='task'
+fi
 # alias t='todo.sh'
 #  alias t='[[ -f ~/Dropbox/simplenote/todo.txt ]] && t $* ; [[ -f ~/Dropbox/simplenote/todo.txt ]] || ssh hurricane t $*'
 # Global aliases
@@ -39,9 +45,9 @@ alias j="jobs"
 
 # Detect which `ls` flavor is in use
 if ls --color > /dev/null 2>&1; then # GNU `ls`
-	colorflag="--color"
+  colorflag="--color"
 else # OS X `ls`
-	colorflag="-G"
+  colorflag="-G"
 fi
 
 # List all files colorized in long format
@@ -142,7 +148,7 @@ alias map="xargs -n1"
 
 # One of @janmoesen’s ProTip™s
 for method in GET HEAD POST PUT DELETE TRACE OPTIONS; do
-	alias "$method"="lwp-request -m '$method'"
+  alias "$method"="lwp-request -m '$method'"
 done
 
 # Make Grunt print stack traces by default

@@ -1,15 +1,15 @@
 #!/usr/bin/env zsh
- 
+
 # copyright 2014 Renato Alves
 # distributed under the GPL licence
 TASKDIR=$HOME/.task 
 if [ -z "$TASKDIR" ]; then
-    #TODO Look for data location in rc:location instead of assuming ~/.taskrc
-    TASKDIR="$(grep data.location $HOME/.taskrc | sed -e 's/^.*=\(.*\)$/\1/')"
+  #TODO Look for data location in rc:location instead of assuming ~/.taskrc
+  TASKDIR="$(grep data.location $HOME/.taskrc | sed -e 's/^.*=\(.*\)$/\1/')"
 fi
- 
+
 if [ -z "$TASKBIN" ]; then
-    TASKBIN="task"
+  TASKBIN="task"
 fi
 
 EXITCODE=1
@@ -22,9 +22,7 @@ parse_git_dirty() {
     if [[ $POST_1_7_2_GIT -gt 0 ]]; then
       FLAGS+='--ignore-submodules=dirty'
     fi
-    if [[ "$DISABLE_UNTRACKED_FILES_DIRTY" == "true" ]]; then
-      FLAGS+='--untracked-files=no'
-    fi
+    FLAGS+='--untracked-files=no'
     STATUS=$(command git status ${FLAGS} 2> /dev/null | tail -n1)
   fi
   if [[ -n $STATUS ]]; then
@@ -36,8 +34,8 @@ move_to_dir(){
   if [ -d "$TASKDIR" ]; then
     cd "$(echo $TASKDIR)"
   else
-      echo "Couldn't navigate to TASKDIR: $TASKDIR"
-      exit $EXITCODE
+    echo "Couldn't navigate to TASKDIR: $TASKDIR"
+    exit $EXITCODE
   fi
 }
 
@@ -53,22 +51,23 @@ if [ ! "$1" == "git" ] ; then
 
   exit $EXITCODE
 fi
- 
+
 move_to_dir
 
 if ! [ -d "$TASKDIR/.git" ]; then
-    git init 2>&1 > git.log
-    echo "git.log" > .gitignore
-    echo "git.log.old" >> .gitignore
-    echo "*.pem" >> .gitignore
-    git add .gitignore 2>&1 >> git.log
-    git add *.data *.theme 2>&1 >> git.log
-    git commit -a -m "Initial log" 2>&1 >> git.log
+  git init 2>&1 > git.log
+  echo "git.log" > .gitignore
+  echo "git.log.old" >> .gitignore
+  echo "*.pem" >> .gitignore
+  git add .gitignore 2>&1 >> git.log
+  git add *.data *.theme 2>&1 >> git.log
+  git commit -a -m "Initial log" 2>&1 >> git.log
 fi
- 
+
 if [ "$#" -gt "0" ]; then
-    git commit -a -m "$*" 2>&1 | tee -a git.log
-    git push 2>&1 | tee -a git.log
+  git commit -a -m "$*" 2>&1 | tee -a git.log
+  git pull 2>&1 | tee -a git.log
+  git push 2>&1 | tee -a git.log
 fi
 
 if [ ! -f git.log ] ; then
@@ -77,7 +76,7 @@ fi
 
 # Rotate git.log if bigger than 1M
 if [ "$(stat -c '%s' git.log)" -gt "1000000" ]; then
-    mv -f git.log git.log.old
-    touch git.log
+  mv -f git.log git.log.old
+  touch git.log
 fi
- 
+
