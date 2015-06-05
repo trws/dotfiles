@@ -45,6 +45,10 @@ if [ ! "$1" == "git" ] ; then
 
   move_to_dir
 
+  if [ "$#" -gt "0" ]; then
+    git commit -a -m "$*" 2>&1 | tee -a git.log
+  fi
+
   if [[ -n "$(parse_git_dirty)" ]] ; then
     echo There are local un-pushed changes.  Task git sync required. 
   fi
@@ -65,7 +69,9 @@ if ! [ -d "$TASKDIR/.git" ]; then
 fi
 
 if [ "$#" -gt "0" ]; then
-  git commit -a -m "$*" 2>&1 | tee -a git.log
+  if [ "$2" == "-f" ] ; then
+    git commit -a -m "$*" 2>&1 | tee -a git.log
+  fi
   git pull 2>&1 | tee -a git.log
   git push 2>&1 | tee -a git.log
 fi
