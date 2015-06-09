@@ -1,4 +1,5 @@
 #!zsh
+path=
 [[ -x /usr/local/bin/defaultpaths ]] && eval `/usr/local/bin/defaultpaths`
 (( $gotroot )) && path=(/usr/local/sbin $path /sbin /usr/sbin)
 if [[ $system = darwin ]]
@@ -21,7 +22,6 @@ fi
 [[ $domain = cs.purdue.edu ]] && path=($path /p/vim/bin) && MJ=($CS352/MJ)
 path=(  $path /usr/bin /bin /usr/[X]{,11{,R6}}/bin(N) /usr/local/cuda/bin )
 #/usr/local/SAS/SASFoundation/9.2/bin)
-typeset -U path
 
 [[ $host = (ice[1-9]|wood[1-2]) ]] && . ~/dynamic/includes/prepare-zsh-link.sh
 
@@ -33,4 +33,9 @@ typeset -U path
 [[ -d ~/build/clang ]] && path=( ~/build/clang/install/bin $path )
 [[ -d ~/build/depot_tools/ ]] && path=( $path ~/build/depot_tools )
 
-path=(~/scripts ~/programs/$bintype/bin ~/programs/bin /usr/local/bin $path)
+path=( /usr/local/bin $path)
+path=(~/programs/bin $path )
+path=(~/scripts $path)
+
+typeset -U path
+typeset -U manpath

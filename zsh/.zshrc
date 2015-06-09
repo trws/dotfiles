@@ -21,7 +21,22 @@ hub
 tmux
 z)
 
+
 source $ZSH/oh-my-zsh.sh
+
+#pull in dotkit with emulation for crappy shells
+if [ -f /usr/local/tools/dotkit/init.sh ] ; then
+  emulate sh -c 'source /usr/local/tools/dotkit/init.sh'
+  myuse(){
+    emulate sh
+    use $@
+    emulate zsh
+  }
+  alias use=myuse
+  myuse git
+  myuse python
+fi
+
 # source ~/.oh-my-zsh/templates/zshrc.zsh-template
 
 #now using oh-my-zsh plugin for this functionality
