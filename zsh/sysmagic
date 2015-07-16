@@ -15,7 +15,7 @@ solaris*)
 	bintype="`bintype -os`"
 	;;
 linux*)
-	system=linux
+	system=Linux
 	bintype=$MACHTYPE-linux
 	bintype=${bintype/i?86/i386} # is this wanted?
 	  if [[ -e /etc/gentoo-release ]]; then distro=gentoo

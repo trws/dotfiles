@@ -1,5 +1,7 @@
+export EDITOR=vim
 # reload term definition after TERMINFO set from env
 [[ -d ~/.ssh ]] || (mkdir ~/.ssh && touch ~/.ssh/known_hosts)
+
 TERM=$TERM;
 ZSH=$ZDOTDIR/oh-my-zsh
 ZSH_CUSTOM=$ZDOTDIR/oh_my_zsh_custom
@@ -20,6 +22,38 @@ taskwarrior
 hub
 tmux
 z)
+
+
+
+if [ -f /usr/local/tools/dotkit/init.sh ] ; then
+  emulate sh -c 'source /usr/local/tools/dotkit/init.sh'
+
+  #wrap the bloody thing, this is to support ancient zsh versions as on LC
+  eval "orig_$(functions use)"
+  eval "orig_$(functions unuse)"
+  emulate sh -c '
+  function use(){
+    orig_use $@
+  }
+  function unuse(){
+    orig_unuse $@
+  }'
+  use clang-omp-3.5.0
+fi
+
+if [ -x $(which spack) ] ; then
+  source $(dirname $(which spack ))/../share/spack/setup-env.sh
+  # using links in programs dir
+  # for PKG in git python tmux vim task taskd ruby tmuxinator the_silver_searcher; do
+  #   spack use $PKG
+  # done
+else
+#pull in dotkit with emulation for crappy shells
+  if [ -f /usr/local/tools/dotkit/init.sh ] ; then
+    myuse git
+    myuse python
+  fi
+fi
 
 source $ZSH/oh-my-zsh.sh
 # source ~/.oh-my-zsh/templates/zshrc.zsh-template
