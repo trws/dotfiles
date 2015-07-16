@@ -1,31 +1,39 @@
 #!zsh
-path=
+
+function add_to_path_front(){
+for p in $@ ; do
+  if [ -d $p ] ; then
+    if [[ ! ${path[(i)$p]} -le ${#path} ]] ; then
+      path=($p $path)
+    fi
+  fi
+done
+}
+function add_to_path_back(){
+for p in $@ ; do
+  if [ -d $p ] ; then
+    if [[ ! ${path[(i)$p]} -le ${#path} ]] ; then
+      path=($path $p)
+    fi
+  fi
+done
+}
+
 [[ -x /usr/local/bin/defaultpaths ]] && eval `/usr/local/bin/defaultpaths`
-(( $gotroot )) && path=(/usr/local/sbin $path /sbin /usr/sbin)
-if [[ $system = darwin ]]
-then
-
-    for DIR in /opt/local/sbin /Developer/usr/bin ~/.ports/bin ~/.ports/libexec/gnubin /opt/local/libexec/gnubin /opt/local/bin
-    do
-        [ -d $DIR ] && path=( $DIR $path )
-    done
-  manpath=( ~/programs/man ~/programs/share/man /opt/local/man /usr/share/man $manpath )
-  export PERL5LIB=~/programs/lib/perl5/5.8.8/darwin-2level:~/programs/lib/perl5/5.8.8:~/programs/lib/perl5/site_perl/5.8.8/darwin-2level:~/programs/lib/perl5/site_perl/5.8.8:~/programs/lib/perl5/site_perl:~/programs/lib/perl5/vendor_perl/5.8.8/darwin-2level:~/programs/lib/perl5/vendor_perl/5.8.8:~/programs/lib/perl5/vendor_perl
-  [ -x /usr/local/bin/brew ] && path=( "$(brew --prefix coreutils)/libexec/gnubin" /usr/local/Cellar/ruby/1.9.3-p194/bin $path )
-
- test -r /sw/bin/init.sh && . /sw/bin/init.sh
+if (( $gotroot )) ; then
+  add_to_path_front /usr/local/sbin /opt/local/sbin
+  add_to_path_back /sbin /usr/sbin
 fi
-[[ $host = [Tt]yphoon ]] && path=( $path ~/energyware/android-sdk-macosx/tools ~/energyware/android-sdk-macosx/platform-tools )
-[[ $system = solaris ]] && path=(
-	/p/zsh/bin /p/openssh/ /p/cvs/ $JAVACC/bin $CS352/bin $J2SE15/bin /usr/xpg4/bin /usr/ccs/bin $path /usr/ucb
-)
-[[ $domain = cs.purdue.edu ]] && path=($path /p/vim/bin) && MJ=($CS352/MJ)
-path=(  $path /usr/bin /bin /usr/[X]{,11{,R6}}/bin(N) /usr/local/cuda/bin )
-#/usr/local/SAS/SASFoundation/9.2/bin)
+add_to_path_front /Developer/usr/bin ~/.ports/bin ~/.ports/libexec/gnubin /opt/local/libexec/gnubin /opt/local/bin
 
-[[ $host = (ice[1-9]|wood[1-2]) ]] && . ~/dynamic/includes/prepare-zsh-link.sh
+manpath=( ~/programs/man ~/programs/share/man /opt/local/man /usr/share/man $manpath )
 
-[[ -d /usr/local/opt/go/libexec/bin ]] && path=( $path /usr/local/opt/go/libexec/bin )
+if [[ $system = solaris ]] ; then
+  add_to_path_front /p/zsh/bin /p/openssh/ /p/cvs/ $JAVACC/bin $CS352/bin $J2SE15/bin /usr/xpg4/bin /usr/ccs/bin 
+  add_to_path_back /usr/ucb
+fi
+
+add_to_path_back /usr/bin /bin /usr/[X]{,11{,R6}}/bin(N) /usr/local/cuda/bin  /usr/local/opt/go/libexec/bin 
 
 [[ -d /opt/pgi/linux86-64/2014/bin/ ]] && path=( $path /opt/pgi/linux86-64/2014/bin ) && manpath=($manpath /opt/pgi/linux86-64/2013/man)
 [[ -d /opt/pgi/osx86-64/2014/bin/ ]] && path=( $path /opt/pgi/osx86-64/2014/bin ) && manpath=($manpath /opt/pgi/osx86-64/2013/man)
@@ -33,9 +41,7 @@ path=(  $path /usr/bin /bin /usr/[X]{,11{,R6}}/bin(N) /usr/local/cuda/bin )
 [[ -d ~/build/clang ]] && path=( ~/build/clang/install/bin $path )
 [[ -d ~/build/depot_tools/ ]] && path=( $path ~/build/depot_tools )
 
-path=( /usr/local/bin $path)
-path=(~/programs/bin $path )
-path=(~/scripts $path)
+add_to_path_front ~/go/bin /usr/local/bin ~/spack/bin ~/programs/bin ~/scripts
 
 typeset -U path
 typeset -U manpath

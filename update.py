@@ -30,6 +30,7 @@ link_files = {
         "gitignore" : "~/.gitignore",
         "gitconfig" : "~/.gitconfig",
         "scripts" : "~/scripts",
+        "globalrc" : "~/.globalrc",
         }
 
 for target, link in link_files.items():
