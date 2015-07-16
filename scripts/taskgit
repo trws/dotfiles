@@ -45,13 +45,14 @@ if [ ! "$1" == "git" ] ; then
 
   move_to_dir
 
-  if [ "$#" -gt "0" ]; then
-    git commit -a -m "$*" 2>&1 | tee -a git.log
-  fi
-
-  if [[ -n "$(parse_git_dirty)" ]] ; then
-    echo There are local un-pushed changes.  Task git sync required. 
-  fi
+  # put back for git sync
+  # if [ "$#" -gt "0" ]; then
+  #   git commit -a -m "$*" 2>&1 | tee -a git.log
+  # fi
+  #
+  # if [[ -n "$(parse_git_dirty)" ]] ; then
+  #   echo There are local un-pushed changes.  Task git sync required. 
+  # fi
 
   exit $EXITCODE
 fi

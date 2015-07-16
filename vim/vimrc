@@ -94,6 +94,8 @@ NeoBundle 'Shougo/vimshell.vim'
 NeoBundle 'pthrasher/conqueterm-vim'
 
 "file management
+NeoBundle 'xolox/vim-misc'
+NeoBundle 'xolox/vim-notes'
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/vimfiler.vim'
 NeoBundle 'Shougo/unite-ssh'
@@ -235,7 +237,8 @@ nnoremap <leader>uB :<C-u>Unite bookmark<CR>
 nnoremap <leader>uY :<C-u>Unite history/yank<CR>
 " nnoremap <leader>uf :<C-u>Unite file<CR>
 nnoremap <leader>uf :<C-u>Unite -start-insert file<CR>
-nnoremap <leader>un :<C-u>Unite -start-insert file_rec/async:~/Projects/notes/<CR>
+let g:notes_directories =  ['~/Projects/notes']
+nnoremap <leader>un :<C-u>Unite -start-insert file_rec:~/Projects/notes/<CR>
 nnoremap <leader>ug :<C-u>Unite grep:.<CR>
 nnoremap <leader>uG :<C-u>Unite grep:.:-i<CR>
 " nnoremap <leader>ur :<C-u>Unite -start-insert file_rec<CR>

@@ -11,7 +11,8 @@ modules = { "mjolnir.application",
 "mjolnir.window",
 "mjolnir.fnutils",
 "mjolnir.screen",
-"mjolnir.geometry"
+"mjolnir.geometry",
+"mjolnir.bg.grid"
 }
 
 for k,m in pairs(modules) do
@@ -25,8 +26,7 @@ local window = require "mjolnir.window"
 local fnutils = require "mjolnir.fnutils"
 local screens = require "mjolnir.screen"
 local geometry = require "mjolnir.geometry"
-
-
+local grid = require "mjolnir.bg.grid"
 
 hotkey.bind({"cmd", "alt", "ctrl"}, "D", function()
   local win = window.focusedwindow()
@@ -35,32 +35,60 @@ hotkey.bind({"cmd", "alt", "ctrl"}, "D", function()
   win:setframe(f)
 end)
 
-hotkey.bind({"alt", "ctrl"}, "H", function()
-  -- local new_rect = geometry.rect(x=0, y=0, w=0.5, h=1.0)
-  window.focusedwindow():focuswindow_west()
-end)
-hotkey.bind({"alt", "ctrl"}, "L", function()
-  window.focusedwindow():focuswindow_east()
-end)
-hotkey.bind({"alt", "ctrl"}, "K", function()
-  window.focusedwindow():focuswindow_north()
-end)
-hotkey.bind({"alt", "ctrl"}, "J", function()
-  window.focusedwindow():focuswindow_south()
-end)
+local mash = {'alt', 'ctrl'}
+local mashshift = {'alt', 'ctrl', 'shift'}
 
-hotkey.bind({"shift", "alt", "ctrl"}, "H", function()
+
+-- Set grid size.
+grid.GRIDWIDTH  = 12
+grid.GRIDHEIGHT = 12
+grid.MARGINX    = 0
+grid.MARGINY    = 0
+
+-- Grid key expariments
+hotkey.bind(mash, ';', function() grid.snap(window.focusedwindow()) end)
+hotkey.bind(mash, "'", function() fnutils.map(window.visiblewindows(), grid.snap) end)
+hotkey.bind(mash,      '=', function() grid.adjustwidth(1) end)
+hotkey.bind(mash,      '-', function() grid.adjustwidth(-1) end)
+hotkey.bind(mashshift, '=', function() grid.adjustheight(1) end)
+hotkey.bind(mashshift, '-', function() grid.adjustheight(-1) end)
+
+hotkey.bind(mash, 'N', grid.pushwindow_nextscreen)
+hotkey.bind(mash, 'P', grid.pushwindow_prevscreen)
+
+hotkey.bind(mash, 'J', grid.pushwindow_down)
+hotkey.bind(mash, 'K', grid.pushwindow_up)
+hotkey.bind(mash, 'H', grid.pushwindow_left)
+hotkey.bind(mash, 'L', grid.pushwindow_right)
+--
+-- Window focus hotkeys
+-- hotkey.bind(mash, "H", function()
+--   -- local new_rect = geometry.rect(x=0, y=0, w=0.5, h=1.0)
+--   window.focusedwindow():focuswindow_west()
+-- end)
+-- hotkey.bind(mash, "L", function()
+--   window.focusedwindow():focuswindow_east()
+-- end)
+-- hotkey.bind(mash, "K", function()
+--   window.focusedwindow():focuswindow_north()
+-- end)
+-- hotkey.bind(mash, "J", function()
+--   window.focusedwindow():focuswindow_south()
+-- end)
+
+-- Window throwing
+hotkey.bind(mashshift, "H", function()
   -- local new_rect = geometry.rect(x=0, y=0, w=0.5, h=1.0)
   window.focusedwindow():movetounit(geometry.rect(0.0, 0.0, 0.5, 1.0))
 end)
-hotkey.bind({"shift", "alt", "ctrl"}, "L", function()
+hotkey.bind(mashshift, "L", function()
   local w = window.focusedwindow()
   w:movetounit(geometry.rect(0.5, 0.0, 0.5, 1.0))
 end)
-hotkey.bind({"shift", "alt", "ctrl"}, "K", function()
+hotkey.bind(mashshift, "K", function()
   window.focusedwindow():movetounit(geometry.rect(0.0, 0.0, 1.0, 0.5))
 end)
-hotkey.bind({"shift", "alt", "ctrl"}, "J", function()
+hotkey.bind(mashshift, "J", function()
   window.focusedwindow():movetounit(geometry.rect(0.0, 0.5, 1.0, 0.5))
 end)
 
@@ -76,24 +104,24 @@ move_to_screen = function(target_screen)
   end
 end
 
-hotkey.bind({"shift", "alt", "ctrl"}, "1", function()
+hotkey.bind(mashshift, "1", function()
   window.focusedwindow():movetounit(geometry.rect(0.0, 0.0, 1/3, 1.0))
   -- move_to_screen(screens:allscreens()[2])
 end)
-hotkey.bind({"shift", "alt", "ctrl"}, "2", function()
+hotkey.bind(mashshift, "2", function()
   window.focusedwindow():movetounit(geometry.rect(1/3, 0.0, 1/3, 1.0))
   -- move_to_screen(screens:allscreens()[1])
 end)
-hotkey.bind({"shift", "alt", "ctrl"}, "3", function()
+hotkey.bind(mashshift, "3", function()
   window.focusedwindow():movetounit(geometry.rect(2/3, 0.0, 1/3, 1.0))
   -- move_to_screen(screens:allscreens()[3])
 end)
 
-hotkey.bind({"shift", "alt", "ctrl"}, "Left", function()
+hotkey.bind(mashshift, "Left", function()
   move_to_screen(window.focusedwindow():screen():towest())
 end)
 
-hotkey.bind({"shift", "alt", "ctrl"}, "Right", function()
+hotkey.bind(mashshift, "Right", function()
   move_to_screen(window.focusedwindow():screen():toeast())
 end)
 
@@ -113,7 +141,7 @@ disable_modal_hotkeys = function()
   end
 end
 
-hotkey.bind({"shift", "alt", "ctrl"}, "S", function()
+hotkey.bind(mashshift, "S", function()
   enable_modal_hotkeys(s_modal_hotkeys)
 end)
 
