@@ -126,6 +126,10 @@ NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/vimfiler.vim'
 NeoBundle 'Shougo/unite-ssh'
 NeoBundle 'hewes/unite-gtags'
+NeoBundle 'vim-scripts/gtags.vim'
+" These are nice, but they are *way* too slow
+" NeoBundle 'xolox/vim-misc'
+" NeoBundle 'xolox/vim-easytags'
 NeoBundleLazy 'ujihisa/vimshell-ssh', { 'autoload' : {
             \ 'filetypes' : 'vimshell',
             \ }}
@@ -274,6 +278,76 @@ nnoremap <leader>utd :<C-u>Unite gtags/def<CR>
 nnoremap <leader>utg :<C-u>Unite gtags/grep<CR>
 nnoremap <leader>utf :<C-u>Unite gtags/file<CR>
 nnoremap <leader>utC :<C-u>Unite gtags/completion<CR>
+
+let include_paths = ['/opt/local/include','/usr/local/include','/usr/include','/Developer/Headers','~/programs/include']
+let g:unite_source_gtags_project_config = {
+            \ '_':                   { 'gtags_libpath': include_paths }
+            \ }
+if has("cscope")
+    set csprg=gtags-cscope
+    set csto=0
+    set cst
+    set nocsverb
+
+    let g:global_objdir = $HOME . "/.dotfiles/global-obj"
+    " add all databases in objdir
+    function! LoadCscope()
+        let dbs = findfile("GTAGS", g:global_objdir . "/**", -1)
+        for db in dbs
+            let path = substitute(db, g:global_objdir, '', '')
+            let path = strpart(path, 0, match(path, "/GTAGS$"))
+            let current_dir=getcwd()
+            exe 'cd ' . path
+            set nocscopeverbose " suppress 'duplicate connection' error
+            exe "cs add " . db . " " . path
+            set cscopeverbose
+            exe 'cd ' . current_dir
+        endfor
+    endfunction
+
+    function! UpdateTagDir(dir)
+        if isdirectory(a:dir)
+            exe 'cd ' . a:dir
+            if (! filereadable(g:global_objdir . '/' . a:dir . '/GTAGS') )
+                call system('gtags -O')
+            else
+                call system('global -u')
+            endif
+            cd -
+        endif
+    endfunction
+    function! UpdateTags()
+        call UpdateTagDir('.')
+        for dir in g:include_paths
+            call UpdateTagDir(dir)
+        endfor
+        call LoadCscope()
+    endfunction
+
+    " add any database in or above the current directory
+    " function! LoadCscope()
+    "     let db = findfile("GTAGS", $HOME . "/.dotfiles/global-obj" . getcwd() . ";")
+    "     if (!empty(db))
+    "         let path = strpart(db, 0, match(db, "/GTAGS$"))
+    "         set nocscopeverbose " suppress 'duplicate connection' error
+    "         exe "cs add " . db . " " . getcwd()
+    "         set cscopeverbose
+    "     endif
+    " endfunction
+    " augroup cscopeloader
+    "     au!
+    "     au BufEnter /* call LoadCscope()
+    " augroup END
+    call LoadCscope()
+    set csverb
+endif
+" augroup unite_gtags_binding
+"     au!
+"     autocmd BufEnter *
+"                 \   if empty(&buftype)
+"                 \|      nnoremap <buffer> <C-]> :<C-u>Unite -immediately gtags/context<CR>
+"                 \|  endif
+" augroup END
 " nnoremap <leader>ur :<C-u>Unite -start-insert file_rec<CR>
 nnoremap <leader>ur :<C-u>Unite -start-insert file_rec/async:!<CR>
 nnoremap <leader>uvr :<C-u>Unite -start-insert file_rec/async:!<CR>
@@ -521,21 +595,10 @@ let g:airline#extensions#branch#displayed_head_limit = 10
 let g:airline#extensions#csv#enabled = 1
 set ttimeoutlen=100
 
-if exists("$SYSTEM")
-    if $SYSTEM == "darwin"
-        " let g:Powerline_symbols = 'fancy'
-        let include_paths = '/opt/local/include /usr/local/include /usr/include /Developer/Headers'
-    elseif $SYSTEM =~ "[lL]inux"
-        let include_paths = '/usr/local/include /usr/include'
-    endif
-else
-    let include_paths = '/usr/local/include /usr/include'
-endif
-
 map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q $PWD<CR>
 map <A-C-T> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q $PWD<CR>
 map <Esc><C-T> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q $PWD<CR>
-execute 'map <C-S-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q -f - ' . include_paths . ' > ~/.vim-systags'
+" execute 'map <C-S-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q -f - ' . include_paths . ' > ~/.vim-systags'
 
 if has("gui_running")
     set guioptions=egmt
@@ -701,6 +764,15 @@ set exrc
 set secure
 " Highlight current line
 set cursorline
+set cursorcolumn
+augroup cursorhighlight
+    au!
+    autocmd BufEnter *
+                \   if (&buftype == 'nofile')
+                \|      set nocursorline
+                \|      set nocursorcolumn
+                \|  endif
+augroup END
 " Show “invisible” characters
 " set lcs=tab:▸\ ,trail:·,eol:¬,nbsp:_
 set lcs=tab:▸\ ,trail:·,nbsp:_
@@ -718,7 +790,8 @@ set shortmess=atI
 " Show the current mode
 set showmode
 " Show the (partial) command as it’s being typed
-set showcmd
+" nice, but slow
+" set showcmd
 " Start scrolling three lines before the vertical window border
 set scrolloff=3
 " Start scrolling three lines before the horizontal window border
@@ -922,12 +995,12 @@ endif
 ""tag jump remappings, makes <C-]> list if more than 1, immediate if only 1,
 ""alt does the same, but in a new vertical split so you can look at both
 ""together, awesome for looking at function arguments and defs together
-function! Vertical_tag_jump()
-    execute "vert rightb stj " . expand("<cword>")
-endfunction
-map  <C-]>   g<C-]>
-imap  <C-]>  <Esc>g<C-]>
-cmap  <C-]>  g<C-]>
+" function! Vertical_tag_jump()
+"     execute "vert rightb stj " . expand("<cword>")
+" endfunction
+" map  <C-]>   g<C-]>
+" imap  <C-]>  <Esc>g<C-]>
+" cmap  <C-]>  g<C-]>
 
 map <silent> <A-]>  :call Vertical_tag_jump()<CR>
 imap <silent> <A-]>  <Esc>:call Vertical_tag_jump()<CR>
