@@ -294,17 +294,28 @@ if has("cscope")
 
     let g:global_objdir = $HOME . "/.dotfiles/global-obj"
     " add all databases in objdir
-    function! LoadCscope()
-        let dbs = findfile("GTAGS", g:global_objdir . "/**", -1)
-        for db in dbs
-            let path = substitute(db, g:global_objdir, '', '')
-            let path = strpart(path, 0, match(path, "/GTAGS$"))
-            let current_dir=getcwd()
+    function! LoadCscopeDir(dir)
+        echo a:dir
+        let db = findfile("GTAGS", g:global_objdir . a:dir . "/;")
+        if (!empty(db))
+            let path = strpart(db, 0, match(db, "/GTAGS$"))
             exe 'cd ' . path
             set nocscopeverbose " suppress 'duplicate connection' error
             exe "cs add " . db . " " . path
             set cscopeverbose
-            exe 'cd ' . current_dir
+            cd -
+        endif
+    endfunction
+    function! LoadCscope()
+        echo 'here'
+        " let dbs = findfile("GTAGS", g:global_objdir . "/**", -1)
+        call LoadCscopeDir(fnamemodify('.', ':p:h'))
+        call LoadCscopeDir(expand('%:p:h'))
+        for dir in g:include_paths
+            echo dir
+            " let path = substitute(db, g:global_objdir, '', '')
+            " let path = strpart(path, 0, match(path, "/GTAGS$"))
+            call LoadCscopeDir(dir)
         endfor
     endfunction
 
@@ -341,7 +352,6 @@ if has("cscope")
     "     au!
     "     au BufEnter /* call LoadCscope()
     " augroup END
-    call LoadCscope()
     set csverb
 endif
 " augroup unite_gtags_binding
