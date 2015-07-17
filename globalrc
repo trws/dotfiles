@@ -25,7 +25,7 @@
 # GTAGSLABEL environment variable. Default target is 'default'.
 #
 default:\
-	:tc=ctags:tc=pygments:
+	:tc=ctags:
 native:\
 	:tc=gtags:tc=htags:
 user:\
