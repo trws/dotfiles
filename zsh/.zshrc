@@ -19,6 +19,7 @@ screen
 taskwarrior
 hub
 tmux
+tmuxinator
 z)
 
 source $ZSH/oh-my-zsh.sh
