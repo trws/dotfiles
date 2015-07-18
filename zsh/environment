@@ -7,6 +7,15 @@ export GIT_COMMITTER_NAME='Tom Scogland'
 export GIT_COMMITTER_EMAIL=scogland1@llnl.gov
 export GITHUB_USER=trws
 
+# Give global tags an exuberant ctags backend
+[[ -e ~/.globalrc ]] && export GTAGSCONF=~/.globalrc
+export MAKEOBJDIRPREFIX=~/.dotfiles/global-obj
+export GTAGS_OPTIONS=-O
+export GTAGSLIBPATH=/opt/local/include:/usr/local/include:/usr/include:/Developer/Headers:~/programs/include
+
+#Gentoo prefix setup
+[[ -d ~/programs ]] && export EPREFIX=~/programs
+
 [[ -f ~/perl5/perlbrew/etc/bashrc ]] && source ~/perl5/perlbrew/etc/bashrc
 
 [[ ! -z "$LC_TERM_PROGRAM" ]] && export TERM_PROGRAM=$LC_TERM_PROGRAM && unset LC_TERM_PROGRAM
@@ -14,7 +23,14 @@ export GITHUB_USER=trws
 [[ -f ~/.units ]] && export UNITSFILE=~/.units
 LESS=-cex3MRs
 ENTOMB=yes
-PAGER=less
+
+if [ -x vimpager ] ; then
+  PAGER=vimpager
+else
+  PAGER=less
+fi
+
+
 [[ -x =lesspipe.sh ]] && export LESSOPEN="|lesspipe.sh %s"
 [[ -d ~/.terminfo ]] && export TERMINFO=~/.terminfo
 [[ -d ~/build/clang ]] && export PYTHONPATH=~/build/clang/llvm/tools/clang/bindings/python:$PYTHONPATH
@@ -24,15 +40,20 @@ FIREFOX_OPEN_IN=tab
 (( $gotroot )) && path=($path /usr/local/sbin /sbin /usr/sbin)
 DATE_FMT="%c"
 typeset -x LESS ENTOMB PAGER FIREFOX_OPEN_IN IRCNICK DATE_FMT
+
 export NNTPSERVER="snews://news.purdue.edu"
 export EDITOR=vim
 export CVS_RSH=ssh
 export LC_ALL=en_US.UTF-8
 #[[ $TERM = "screen-256color-bce" ]] && infocmp screen-256color >& /dev/null && export TERM=screen-256color || echo screen-256color unavailable, fix it!
 [[ $COLORTERM = "gnome-terminal" ]] && export TERM=xterm-256color
-export GOROOT=/usr/local/opt/go/libexec
+if [ -d ~/go ] ; then
+  export GOROOT=~/go
+elif [ -d /usr/local/opt/go/libexec ] ; then
+  export GOROOT=/usr/local/opt/go/libexec
+fi
 # export GOARCH=amd64
-export GOBIN=/usr/local/go/bin
+# export GOBIN=/usr/local/go/bin
 export GOPATH=~/go
 [[ -d /usr/local/cuda ]] && export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64:/usr/local/cuda/lib
 export PATH
