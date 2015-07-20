@@ -1,36 +1,46 @@
 #!zsh
 
-function add_to_path_front(){
+function remove_from_path(){
 for p in $@ ; do
-  if [ -d $p ] ; then
-    if [[ ! ${path[(i)$p]} -le ${#path} ]] ; then
-      path=($p $path)
-    fi
-  fi
-done
-}
-function add_to_path_back(){
-for p in $@ ; do
-  if [ -d $p ] ; then
-    if [[ ! ${path[(i)$p]} -le ${#path} ]] ; then
-      path=($path $p)
-    fi
-  fi
+    path=("${(@)path:#$p}")
 done
 }
 
+function add_to_path_front(){
+for p in $@ ; do
+    if [ -d $p ] ; then
+        if [[ ! ${path[(i)$p]} -le ${#path} ]] ; then
+            path[1,0]=($p)
+        fi
+    fi
+done
+}
+
+function add_to_path_back(){
+for p in $@ ; do
+    if [ -d $p ] ; then
+        if [[ ! ${path[(i)$p]} -le ${#path} ]] ; then
+            path+=($p)
+        fi
+    fi
+done
+}
+
+# remove standard directories from the path to allow them to be reordered
+remove_from_path  ~/go/bin /usr/local/bin ~/spack/bin ~/programs/bin ~/scripts 
+
 [[ -x /usr/local/bin/defaultpaths ]] && eval `/usr/local/bin/defaultpaths`
 if (( $gotroot )) ; then
-  add_to_path_front /usr/local/sbin /opt/local/sbin
-  add_to_path_back /sbin /usr/sbin
+    add_to_path_front /usr/local/sbin /opt/local/sbin
+    add_to_path_back /sbin /usr/sbin
 fi
 add_to_path_front /Developer/usr/bin ~/.ports/bin ~/.ports/libexec/gnubin /opt/local/libexec/gnubin /opt/local/bin
 
 manpath=( ~/programs/man ~/programs/share/man /opt/local/man /usr/share/man $manpath )
 
 if [[ $system = solaris ]] ; then
-  add_to_path_front /p/zsh/bin /p/openssh/ /p/cvs/ $JAVACC/bin $CS352/bin $J2SE15/bin /usr/xpg4/bin /usr/ccs/bin 
-  add_to_path_back /usr/ucb
+    add_to_path_front /p/zsh/bin /p/openssh/ /p/cvs/ $JAVACC/bin $CS352/bin $J2SE15/bin /usr/xpg4/bin /usr/ccs/bin 
+    add_to_path_back /usr/ucb
 fi
 
 add_to_path_back /usr/bin /bin /usr/[X]{,11{,R6}}/bin(N) /usr/local/cuda/bin  /usr/local/opt/go/libexec/bin 

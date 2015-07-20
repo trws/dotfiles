@@ -41,7 +41,7 @@ if [ -f /usr/local/tools/dotkit/init.sh ] ; then
   use clang-omp-3.5.0
 fi
 
-if [ -x $(which spack) ] ; then
+if [ -x "$(which spack)" ] ; then
   source $(dirname $(which spack ))/../share/spack/setup-env.sh
   # using links in programs dir
   # for PKG in git python tmux vim task taskd ruby tmuxinator the_silver_searcher; do
