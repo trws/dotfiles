@@ -217,12 +217,25 @@ vmap <CR> <Plug>(EasyAlign)
 " let $PYTHONPATH .= ":~/.vim/included/ropevim"
 " source ~/.vim/included/ropevim/ropevim.vim
 
-"make command mode suck less
-" cnoremap <C-A>  <Home>
-" cnoremap <C-F>  <Right>
-" cnoremap <C-B>  <Left>
-" cnoremap <Esc>b <S-Left>
-" cnoremap <Esc>f <S-Right>
+"make command mode suck less, mimic a shell
+" start of line
+:cnoremap <C-A>		<Home>
+" back one character
+:cnoremap <C-B>		<Left>
+" delete character under cursor
+:cnoremap <C-D>		<Del>
+" end of line
+:cnoremap <C-E>		<End>
+" forward one character
+:cnoremap <C-F>		<Right>
+" recall newer command-line
+" :cnoremap <C-N>		<Down>
+" recall previous (older) command-line
+" :cnoremap <C-P>		<Up>
+" back one word
+" :cnoremap <Esc><B>	<S-Left>
+" forward one word
+" :cnoremap <Esc><F>	<S-Right>
 
 " Prompt for a command to run
 map <Leader>vp :VimuxPromptCommand<CR>
@@ -309,38 +322,49 @@ endfunction
 set csprg=gtags-cscope
 let g:global_objdir = $HOME . "/.dotfiles/global-obj"
 " add all databases in objdir
-function! LoadCscope()
-    let dbs = findfile("GTAGS", g:global_objdir . "/**", -1)
-    for db in dbs
-        let path = substitute(db, g:global_objdir, '', '')
-        let path = strpart(path, 0, match(path, "/GTAGS$"))
-        let current_dir=getcwd()
-        exe 'cd ' . path
-        set nocscopeverbose " suppress 'duplicate connection' error
-        exe "cs add " . db . " " . path
-        set cscopeverbose
-        exe 'cd ' . current_dir
-    endfor
-endfunction
-
-function! UpdateTagDir(dir)
-    if isdirectory(a:dir)
-        exe 'cd ' . a:dir
-        if (! filereadable(g:global_objdir . '/' . a:dir . '/GTAGS') )
-            call system('gtags -O')
-        else
-            call system('global -u')
+    function! LoadCscopeDir(dir)
+        echo a:dir
+        let db = findfile("GTAGS", g:global_objdir . a:dir . "/;")
+        if (!empty(db))
+            let path = strpart(db, 0, match(db, "/GTAGS$"))
+            exe 'cd ' . path
+            set nocscopeverbose " suppress 'duplicate connection' error
+            exe "cs add " . db . " " . path
+            set cscopeverbose
+            cd -
         endif
-        cd -
-    endif
-endfunction
-function! UpdateGTags()
-    call UpdateTagDir('.')
-    for dir in g:include_paths
-        call UpdateTagDir(dir)
-    endfor
-    call LoadCscope()
-endfunction
+    endfunction
+    function! LoadCscope()
+        echo 'here'
+        " let dbs = findfile("GTAGS", g:global_objdir . "/**", -1)
+        call LoadCscopeDir(fnamemodify('.', ':p:h'))
+        call LoadCscopeDir(expand('%:p:h'))
+        for dir in g:include_paths
+            echo dir
+            " let path = substitute(db, g:global_objdir, '', '')
+            " let path = strpart(path, 0, match(path, "/GTAGS$"))
+            call LoadCscopeDir(dir)
+        endfor
+    endfunction
+
+    function! UpdateTagDir(dir)
+        if isdirectory(a:dir)
+            exe 'cd ' . a:dir
+            if (! filereadable(g:global_objdir . '/' . a:dir . '/GTAGS') )
+                call system('gtags -O')
+            else
+                call system('global -u')
+            endif
+            cd -
+        endif
+    endfunction
+    function! UpdateGTags()
+        call UpdateTagDir('.')
+        for dir in g:include_paths
+            call UpdateTagDir(dir)
+        endfor
+        call LoadCscope()
+    endfunction
 function! UpdateAllTags()
     call UpdateGTags()
     call UpdateCTags()

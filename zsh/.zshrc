@@ -21,6 +21,7 @@ screen
 taskwarrior
 hub
 tmux
+tmuxinator
 z)
 
 
