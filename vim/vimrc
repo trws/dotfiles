@@ -128,6 +128,7 @@ NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/vimfiler.vim'
 NeoBundle 'Shougo/unite-ssh'
 NeoBundle 'hewes/unite-gtags'
+NeoBundle 'tsukkee/unite-tag'
 NeoBundle 'vim-scripts/gtags.vim'
 " These are nice, but they are *way* too slow
 " NeoBundle 'xolox/vim-misc'
@@ -282,67 +283,93 @@ nnoremap <leader>utg :<C-u>Unite gtags/grep<CR>
 nnoremap <leader>utf :<C-u>Unite gtags/file<CR>
 nnoremap <leader>utC :<C-u>Unite gtags/completion<CR>
 
-let include_paths = ['/opt/local/include','/usr/local/include','/usr/include','/Developer/Headers','~/programs/include']
+let include_paths = ['/opt/local/include','/usr/local/include','/usr/include','/Developer/Headers',fnamemodify('~/programs/include',':p')]
 let g:unite_source_gtags_project_config = {
             \ '_':                   { 'gtags_libpath': include_paths }
             \ }
-if has("cscope")
-    set csprg=gtags-cscope
-    set csto=0
-    set cst
-    set nocsverb
 
-    let g:global_objdir = $HOME . "/.dotfiles/global-obj"
-    " add all databases in objdir
-    function! LoadCscope()
-        let dbs = findfile("GTAGS", g:global_objdir . "/**", -1)
-        for db in dbs
-            let path = substitute(db, g:global_objdir, '', '')
-            let path = strpart(path, 0, match(path, "/GTAGS$"))
-            let current_dir=getcwd()
-            exe 'cd ' . path
-            set nocscopeverbose " suppress 'duplicate connection' error
-            exe "cs add " . db . " " . path
-            set cscopeverbose
-            exe 'cd ' . current_dir
-        endfor
-    endfunction
-
-    function! UpdateTagDir(dir)
-        if isdirectory(a:dir)
-            exe 'cd ' . a:dir
-            if (! filereadable(g:global_objdir . '/' . a:dir . '/GTAGS') )
-                call system('gtags -O')
-            else
-                call system('global -u')
-            endif
-            cd -
+" For regular tags
+set tags+=~/.dotfiles/global-obj/tags
+function! UpdateTagDir(dir)
+    if isdirectory(a:dir)
+        exe 'cd ' . a:dir
+        if (! filereadable(g:global_objdir . '/' . a:dir . '/GTAGS') )
+            call system('gtags -O')
+        else
+            call system('global -u')
         endif
-    endfunction
-    function! UpdateTags()
-        call UpdateTagDir('.')
-        for dir in g:include_paths
-            call UpdateTagDir(dir)
-        endfor
-        call LoadCscope()
-    endfunction
+        cd -
+    endif
+endfunction
+function! UpdateCTags()
+    let ctags_command = 'ctags -R --c++-kinds=+p --fields=+liaS --extra=+q --tag-relative=yes --exclude=.git --exclude=.svn --exclude=.hg '
+    call system(ctags_command . ' -f ~/.dotfiles/global-obj/tags ' . join(g:include_paths))
+    call system(ctags_command . ' -f ./tags ' . getcwd())
+endfunction
+set csprg=gtags-cscope
+let g:global_objdir = $HOME . "/.dotfiles/global-obj"
+" add all databases in objdir
+function! LoadCscope()
+    let dbs = findfile("GTAGS", g:global_objdir . "/**", -1)
+    for db in dbs
+        let path = substitute(db, g:global_objdir, '', '')
+        let path = strpart(path, 0, match(path, "/GTAGS$"))
+        let current_dir=getcwd()
+        exe 'cd ' . path
+        set nocscopeverbose " suppress 'duplicate connection' error
+        exe "cs add " . db . " " . path
+        set cscopeverbose
+        exe 'cd ' . current_dir
+    endfor
+endfunction
 
-    " add any database in or above the current directory
-    " function! LoadCscope()
-    "     let db = findfile("GTAGS", $HOME . "/.dotfiles/global-obj" . getcwd() . ";")
-    "     if (!empty(db))
-    "         let path = strpart(db, 0, match(db, "/GTAGS$"))
-    "         set nocscopeverbose " suppress 'duplicate connection' error
-    "         exe "cs add " . db . " " . getcwd()
-    "         set cscopeverbose
-    "     endif
-    " endfunction
-    " augroup cscopeloader
-    "     au!
-    "     au BufEnter /* call LoadCscope()
-    " augroup END
+function! UpdateTagDir(dir)
+    if isdirectory(a:dir)
+        exe 'cd ' . a:dir
+        if (! filereadable(g:global_objdir . '/' . a:dir . '/GTAGS') )
+            call system('gtags -O')
+        else
+            call system('global -u')
+        endif
+        cd -
+    endif
+endfunction
+function! UpdateGTags()
+    call UpdateTagDir('.')
+    for dir in g:include_paths
+        call UpdateTagDir(dir)
+    endfor
     call LoadCscope()
-    set csverb
+endfunction
+function! UpdateAllTags()
+    call UpdateGTags()
+    call UpdateCTags()
+endfunction
+if 0
+    " For global tags
+    if has("cscope")
+        set csto=0
+        set cst
+        set nocsverb
+
+
+        " add any database in or above the current directory
+        " function! LoadCscope()
+        "     let db = findfile("GTAGS", $HOME . "/.dotfiles/global-obj" . getcwd() . ";")
+        "     if (!empty(db))
+        "         let path = strpart(db, 0, match(db, "/GTAGS$"))
+        "         set nocscopeverbose " suppress 'duplicate connection' error
+        "         exe "cs add " . db . " " . getcwd()
+        "         set cscopeverbose
+        "     endif
+        " endfunction
+        " augroup cscopeloader
+        "     au!
+        "     au BufEnter /* call LoadCscope()
+        " augroup END
+        call LoadCscope()
+        set csverb
+    endif
 endif
 " augroup unite_gtags_binding
 "     au!
@@ -409,6 +436,7 @@ let g:ycm_extra_conf_vim_data=['&filetype']
 let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
 let g:ycm_extra_conf_globlist = ['~/Dropbox/*','~/projects/*']
 let g:ycm_autoclose_preview_window_after_insertion = 1
+let g:ycm_key_invoke_completion = '<C-S-Space>'
 
 let g:SuperTabDefaultCompletionType="context"
 let g:SuperTabContextDefaultCompletionType="<c-x><c-u>"
@@ -576,8 +604,6 @@ cmap     <C-k>     <Esc>:Autoformat<CR>
 omap     <C-k>     <Esc>:Autoformat<CR>
 
 
-"tags
-" set tags+=~/.vim-systags
 
 "Conque
 nmap <C-w><S-v> :ConqueTermVSplit zsh<CR>
