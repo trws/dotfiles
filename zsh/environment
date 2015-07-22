@@ -8,9 +8,9 @@ export GIT_COMMITTER_EMAIL=scogland1@llnl.gov
 export GITHUB_USER=trws
 
 # Give global tags an exuberant ctags backend
-[[ -e ~/.globalrc ]] && export GTAGSCONF=~/.globalrc
+# [[ -e ~/.globalrc ]] && export GTAGSCONF=~/.globalrc
 export MAKEOBJDIRPREFIX=~/.dotfiles/global-obj
-export GTAGS_OPTIONS=-O
+export GTAGS_OPTIONS='-O --gtagslabel ctags'
 export GTAGSLIBPATH=/opt/local/include:/usr/local/include:/usr/include:/Developer/Headers:~/programs/include
 
 #Gentoo prefix setup
