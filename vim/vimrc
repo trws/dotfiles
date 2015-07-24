@@ -1029,6 +1029,22 @@ if ! has("gui_running")
         nmap <silent> <Esc>v       :call Paste_proper()<CR>
     elseif $SYSTEM == "linux"
         vmap <C-y> y:call system("xclip", getreg("\""))<CR>
+        "attempt to yank through iterm2 termcode
+        function! Yank_proper()
+            "each mode needs different copy, see below mappings
+            " echo system("cat << StringNotLikelyToBeCopied\n" . getreg("p") . "\nStringNotLikelyToBeCopied")
+            python import vim, sys, subprocess
+            python p=subprocess.Popen(["cat"], stdin=subprocess.PIPE)
+            python p.stdin.write('\033]50;CopyToClipboard=')
+            python p.stdin.write(vim.eval('getreg("p")'))
+            python p.stdin.write('\033]50;EndCopy')
+            python p.stdin.close()
+            redraw!
+        endfunction
+        vmap <silent> <A-c>        "py:call Yank_proper()<CR>
+        vmap <silent> <Esc>c       "py:call Yank_proper()<CR>
+        nmap <silent> <A-c>        :yank p<CR>:call Yank_proper()<CR>
+        nmap <silent> <Esc>c       :yank p<CR>:call Yank_proper()<CR>
     endif
     " execute 'inoremap <script> <special> <A-c>' paste#paste_cmd['i']
     " nnoremap <special> <Esc>c "+gP

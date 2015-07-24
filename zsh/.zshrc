@@ -9,7 +9,7 @@ ZSH_CUSTOM=$ZDOTDIR/oh_my_zsh_custom
 ZSH_THEME="steeef"
 # source ~/.zsh/prezto/init.zsh
 export _Z_DATA=~/.zsh/z-dirjump-list.txt
-plugins=(gitfast
+plugins=(
 svn-fast-info
 git
 git-extras
