@@ -60,6 +60,20 @@ hotkey.bind(mash, 'J', grid.pushwindow_down)
 hotkey.bind(mash, 'K', grid.pushwindow_up)
 hotkey.bind(mash, 'H', grid.pushwindow_left)
 hotkey.bind(mash, 'L', grid.pushwindow_right)
+
+
+hotkey.bind({'cmd', 'ctrl'}, 'W', function()
+    local all = window.allwindows()
+    for _, w in ipairs(all) do
+        print("checking window: " .. w:title())
+        if string.find(w:title(), 'vit') then
+            w:focus()
+            break
+        end
+    end
+end)
+
+
 --
 -- Window focus hotkeys
 -- hotkey.bind(mash, "H", function()
