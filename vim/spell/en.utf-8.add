@@ -260,3 +260,7 @@ C99
 Cilk+
 pre-processor
 firstprivate
+K40m
+C2070
+APUs
+QCD

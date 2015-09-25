@@ -145,7 +145,7 @@ NeoBundle 'terryma/vim-multiple-cursors'
 
 if executable('task')
     NeoBundle 'farseer90718/vim-taskwarrior'
-    " let g:task_rc_override = 'defaultwidth=999'
+    " let g:task_rc_override = 'defaultwidth=150 rc.color=no'
 endif
 
 let g:task_default_prompt= ['description', 'project', 'tag', 'due']
@@ -180,6 +180,7 @@ NeoBundle 'tpope/vim-pastie'
 "Unix command aliases, Chmod and company
 NeoBundle 'tpope/vim-eunuch'
 NeoBundle 'tpope/vim-markdown'
+NeoBundle 'jtratner/vim-flavored-markdown'
 " NeoBundle 'tpope/vim-rsi'
 NeoBundle 'tpope/vim-unimpaired'
 NeoBundle 'tpope/vim-dispatch'
