@@ -10,7 +10,7 @@
 export VIRTUAL_ENV_DISABLE_PROMPT=1
 
 function virtualenv_info {
-    [ $VIRTUAL_ENV ] && echo '('$fg[blue]`basename $VIRTUAL_ENV`%{$reset_color%}') '
+[ $VIRTUAL_ENV ] && echo '('$fg[blue]`basename $VIRTUAL_ENV`%{$reset_color%}') '
 }
 PR_GIT_UPDATE=1
 
@@ -63,41 +63,51 @@ zstyle ':vcs_info:*:prompt:*' nvcsformats   ""
 
 
 function steeef_preexec {
-    case "$(history $HISTCMD)" in
-        *git*)
-            PR_GIT_UPDATE=1
-            ;;
-        *svn*)
-            PR_GIT_UPDATE=1
-            ;;
-    esac
+case "$(history $HISTCMD)" in
+    *git*)
+        PR_GIT_UPDATE=1
+        ;;
+    *svn*)
+        PR_GIT_UPDATE=1
+        ;;
+esac
 }
 add-zsh-hook preexec steeef_preexec
 
 function steeef_chpwd {
-    PR_GIT_UPDATE=1
+PR_GIT_UPDATE=1
 }
 add-zsh-hook chpwd steeef_chpwd
 
 function steeef_precmd {
-    code=$?
-    [[ $code -ne "0" ]] && exit_code="$fg[red]!$code!%{$reset_color%}" || exit_code=''
-    if [[ -n "$PR_GIT_UPDATE" ]] ; then
-        # check for untracked files or updated submodules, since vcs_info doesn't
-        if git ls-files --other --exclude-standard 2> /dev/null | grep -q "."; then
-            PR_GIT_UPDATE=1
-            FMT_BRANCH="(%{$turquoise%}%b%u%c%{$hotpink%}●${PR_RST})"
-        else
-            FMT_BRANCH="(%{$turquoise%}%b%u%c${PR_RST})"
-        fi
-        zstyle ':vcs_info:*:prompt:*' formats "${FMT_BRANCH} "
-
-        vcs_info 'prompt'
-        PR_GIT_UPDATE=
+code=$?
+[[ $code -ne "0" ]] && exit_code="$fg[red]!$code!%{$reset_color%}" || exit_code=''
+if [[ -n "$FLUX_URI" ]] ; then
+    in_job="($fg[green]FLUX:$FLUX_URI%{$reset_color%})"
+else
+    in_job=''
+fi
+if [[ -n "$SLURM_JOB_ID" ]] ; then
+    in_job+="($fg[red]SLURM:$SLURM_JOB_ID%{$reset_color%})"
+else
+    in_job+=''
+fi
+if [[ -n "$PR_GIT_UPDATE" ]] ; then
+    # check for untracked files or updated submodules, since vcs_info doesn't
+    if git ls-files --other --exclude-standard 2> /dev/null | grep -q "."; then
+        PR_GIT_UPDATE=1
+        FMT_BRANCH="(%{$turquoise%}%b%u%c%{$hotpink%}●${PR_RST})"
+    else
+        FMT_BRANCH="(%{$turquoise%}%b%u%c${PR_RST})"
     fi
+    zstyle ':vcs_info:*:prompt:*' formats "${FMT_BRANCH} "
+
+    vcs_info 'prompt'
+    PR_GIT_UPDATE=
+fi
 }
 add-zsh-hook precmd steeef_precmd
 
 PROMPT=$'
-%{$purple%}%n%{$reset_color%} at %{$orange%}%m%{$reset_color%} in %{$limegreen%}%~%{$reset_color%} $vcs_info_msg_0_$(virtualenv_info)%{$reset_color%} ${exit_code}
+%{$purple%}%n%{$reset_color%} at %{$orange%}%m%{$reset_color%} in %{$limegreen%}%~%{$reset_color%} $vcs_info_msg_0_$(virtualenv_info)%{$reset_color%} ${in_job} ${exit_code}
 $ '
