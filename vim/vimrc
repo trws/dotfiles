@@ -7,6 +7,10 @@
 " set rtp+=~/.vim/bundle/vundle/
 " call vundle#rc()
 if $SYSTEM != 'windows'
+    if !isdirectory("~/.vim/bundle/neobundle.vim")
+        echo('fetching neobundle for initial install')
+        call system('git clone https://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim')
+    endif
     if has('vim_starting')
         set nocompatible               " Be iMproved
         set runtimepath+=~/.vim/bundle/neobundle.vim/
@@ -61,6 +65,8 @@ NeoBundle 'LaTeX-Box-Team/LaTeX-Box'
 NeoBundle 'liquid.vim'
 "c++11 highlighting
 NeoBundle 'vim-jp/cpp-vim'
+"doxygen toolkit
+NeoBundle 'mrtazz/DoxygenToolkit.vim'
 "rust highlighting
 NeoBundle 'wting/rust.vim'
 " map <silent> <buffer> <C-A-K> <Plug>VO_FollowLink
@@ -587,17 +593,18 @@ if executable('yapf')
 else
     let g:formatprg_args_expr_python = '(&textwidth ? " --max-line-length=" . &textwidth : "") . " -" '
 endif
-" if executable("clang-format")
-"   let g:formatprg_c = 'clang-format'
-"   let g:formatprg_cpp = 'clang-format'
-"   let g:formatprg_args_expr_c = ''
-"   let g:formatprg_args_expr_cpp = g:formatprg_args_expr_c
-" elseif executable("astyle")
+"  && findfile(".clang-format", ".;")
+if executable("clang-format")
+  let g:formatprg_c = 'clang-format'
+  let g:formatprg_cpp = 'clang-format'
+  let g:formatprg_args_expr_c = '""'
+  let g:formatprg_args_expr_cpp = g:formatprg_args_expr_c
+elseif executable("astyle")
 "astyle args for C and C++
 let g:formatprg_args_expr_c = '"--indent-col1-comments --style=stroustrup -A4 --align-pointer=name --max-code-length=80 --convert-tabs"'
 " let g:formatprg_args_expr_c = '"--mode=c --style=google --add-brackets --indent-preproc-define --keep-one-line-statements -pcH".(&expandtab ? "s".&shiftwidth : "t")'
 let g:formatprg_args_expr_cpp = g:formatprg_args_expr_c
-" endif
+endif
 
 "automatic formatting options
 set textwidth=78
@@ -1030,6 +1037,22 @@ if ! has("gui_running")
         nmap <silent> <Esc>v       :call Paste_proper()<CR>
     elseif $SYSTEM == "linux"
         vmap <C-y> y:call system("xclip", getreg("\""))<CR>
+        "attempt to yank through iterm2 termcode
+        function! Yank_proper()
+            "each mode needs different copy, see below mappings
+            " echo system("cat << StringNotLikelyToBeCopied\n" . getreg("p") . "\nStringNotLikelyToBeCopied")
+            python import vim, sys, subprocess
+            python p=subprocess.Popen(["cat"], stdin=subprocess.PIPE)
+            python p.stdin.write('\033]50;CopyToClipboard=')
+            python p.stdin.write(vim.eval('getreg("p")'))
+            python p.stdin.write('\033]50;EndCopy')
+            python p.stdin.close()
+            redraw!
+        endfunction
+        vmap <silent> <A-c>        "py:call Yank_proper()<CR>
+        vmap <silent> <Esc>c       "py:call Yank_proper()<CR>
+        nmap <silent> <A-c>        :yank p<CR>:call Yank_proper()<CR>
+        nmap <silent> <Esc>c       :yank p<CR>:call Yank_proper()<CR>
     endif
     " execute 'inoremap <script> <special> <A-c>' paste#paste_cmd['i']
     " nnoremap <special> <Esc>c "+gP
