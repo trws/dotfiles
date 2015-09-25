@@ -7,7 +7,7 @@
 " set rtp+=~/.vim/bundle/vundle/
 " call vundle#rc()
 if $SYSTEM != 'windows'
-    if !isdirectory("~/.vim/bundle/neobundle.vim")
+    if !isdirectory(expand("~/.vim/bundle/neobundle.vim"))
         echo('fetching neobundle for initial install')
         call system('git clone https://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim')
     endif
