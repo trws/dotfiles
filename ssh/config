@@ -1,0 +1,310 @@
+host amdscdemo
+    hostname neo.microway.com
+    user microway
+#web
+Host icpp2012.org
+    User icpp2012
+
+#Livermore
+Host puffin
+    HostName puffin.cray.com
+    User p01329
+Host puffin.cray.com
+    User p01329
+
+host edge.llnl.gov
+    user scogland
+host edge
+    hostname edge.llnl.gov
+    user scogland
+
+#abokia
+#  Host genocad
+  #  HostName 71.62.120.130
+  #  Port 1022
+Host abokia
+    HostName 128.173.239.210
+Host orion
+  HostName 71.62.120.130
+  Port 2022
+Host orion-galaxy
+  HostName 71.62.120.130
+  Port 2022
+
+#Synergy
+#
+Host hokiespeed
+     hostname 198.82.161.62
+    #  hostname 198.82.161.61
+
+Host fire
+    hostname fire.cs.vt.edu
+
+
+Host mini.cs.vt.edu
+  port 4196
+  LocalForward 5904 localhost:5900
+
+#BIO
+Host chekhov.cs.vt.edu
+  User scogland
+
+Host chekhov
+  User scogland
+  HostName chekhov.cs.vt.edu
+
+Host bio.cs.vt.edu
+  User cs6824_2010
+  identityfile ~/.ssh/id_dsa
+
+#NDSSL
+Host zuni
+  HostName 128.173.98.79
+
+Host blup.apsc.vt.edu
+  Port 18922
+
+#ANL
+Host terra.mcs.anl.gov
+  identityfile ~/.ssh/id_anl
+Host bblogin.mcs.anl.gov
+  identityfile ~/.ssh/id_anl
+Host bblogin
+  HostName bblogin.mcs.anl.gov
+  IdentityFile ~/.ssh/id_anl
+
+#misc
+Host sc09
+  HostName 64.169.30.9
+  User toms
+    ForwardAgent yes
+
+
+Host robots.kernelspace.net
+  IdentityFile ~/.ssh/id_dsa
+
+
+
+#CUT_HERE
+
+Host olympus
+    hostname charon.cs.vt.edu
+    port 17853
+Host olympus.synergy
+    hostname 192.168.254.254
+    port 17853
+
+Host armor1 armor2 dna1 dna2 dna3 athena amdlow1 amdlow2 amdlow3 caterpillar tnsi1 tnsi2 wood1 wood2
+    Protocol 2
+    HostName armor2
+    LocalForward 2022 localhost:22
+    ProxyCommand ssh charon.cs.vt.edu -W %h:22
+
+Host green500
+    Protocol 2
+    User green55
+    HostName green500.org
+    LocalForward 8753 localhost:8753
+    LocalForward 7022 localhost:22
+    ProxyCommand ssh njustn@gale nc -q 0 green500.org 22
+
+Host escaflowne
+    User njustn
+    Protocol 2
+    HostName escaflowne
+    LocalForward 8753 localhost:8753
+    LocalForward 2022 localhost:22
+    ProxyCommand ssh charon.cs.vt.edu -W escaflowne:22
+
+#global home, more in ether
+Host wind
+  #HostName n.homelinux.org
+  #switched to static IP
+  User njustn
+  HostName ssh.scogland.com
+  Port  2022
+
+Host breath
+  HostName ssh.scogland.com
+  User root
+  Port  5022
+  DynamicForward localhost:12345
+  LocalForward 5903 localhost:5900
+
+Host breathproxy
+  HostName ssh.scogland.com
+  User root
+  Port  443
+  DynamicForward localhost:12345
+  LocalForward 9933 imap.gmail.com:993
+  LocalForward 5587 smtp.gmail.com:587
+  ProxyCommand nc -X connect -x 128.115.190.235:6082 %h %p
+
+Host breathvlc
+  HostName ssh.scogland.com
+  User root
+  Port  5022
+  DynamicForward localhost:12345
+  LocalForward 9933 imap.gmail.com:993
+  LocalForward 5587 smtp.gmail.com:587
+  ProxyCommand ssh rzgw -W ssh.scogland.com:5022
+
+Host hurricane
+  HostName ssh.scogland.com
+  User njustn
+  Port  3022
+  DynamicForward localhost:12345
+  LocalForward 5903 localhost:5900
+
+Host hurricanevlc
+  HostName ssh.scogland.com
+  User njustn
+  Port  3022
+  ProxyCommand ssh rzgw -W ssh.scogland.com:3022
+  DynamicForward localhost:12345
+  LocalForward 5903 localhost:5900
+
+Host galevlc
+  HostName ssh.scogland.com
+  User njustn
+  Port  4022
+  ProxyCommand ssh rzgw -W ssh.scogland.com:4022
+  DynamicForward localhost:12345
+  LocalForward 5903 localhost:5900
+
+
+Host hurricane.local
+  HostName hurricane.local
+  User njustn
+  Port  22
+  DynamicForward localhost:12345
+  LocalForward 5903 localhost:5900
+
+Host gale
+  #hostname 24.127.43.86
+  #port 1022
+  User njustn
+  HostName ssh.scogland.com
+  Port  4022
+
+Host scogland.com
+  HostName ssh.scogland.com
+  Port  2022
+
+
+
+#energyware
+host tegra
+    hostname 192.168.1.76
+    user root
+host droid3
+    hostname 192.168.1.87
+    Port 2222
+    user root
+#  Host gecko1*
+  #  HostName gecko1.energyware.com
+  #  Port 10022
+  #  IdentityFile ~/.ssh/id_dsa
+
+Host iguana1
+  HostName iguana1.energyware.com
+  #  HostName  207.42.85.30
+  #  Port 10022
+  IdentityFile ~/.ssh/id_dsa
+Host iguana1.local
+  HostName 192.168.1.117
+  #  HostName  207.42.85.30
+  #  Port 10022
+  IdentityFile ~/.ssh/id_dsa
+
+#  Host gecko0*
+  #  HostName gecko0.energyware.com
+  #  Port 10022
+  #  IdentityFile ~/.ssh/id_dsa
+
+#  Host iguana0*
+  #  HostName iguana0.energyware.com
+  #  Port 10022
+  #  IdentityFile ~/.ssh/id_dsa
+Host *.cs.vt.edu
+    User njustn
+
+#LLNL HOSTS
+Host rzgw
+  HostName rzgw.llnl.gov
+  #taskwarrior sync port
+  LocalForward 53589 localhost:53589
+
+#LC
+Host czgw hype
+  HostName hype.llnl.gov
+  #taskwarrior sync port
+  LocalForward 53589 localhost:53589
+  ProxyCommand ssh rzgw -W %h:622
+
+Host cab surface vulcan sierra impetus rzalastor
+    HostName %h.llnl.gov
+    ForwardX11 yes
+    ProxyCommand ssh rzgw -W %h:622
+
+Host czvnc
+    HostName czvnc.llnl.gov
+    ForwardX11 yes
+    RemoteForward 19752 localhost:5500
+    ProxyCommand ssh rzgw -W %h:622
+
+# Power lab
+Host hayes
+    Protocol 2
+    HostName 192.168.1.104
+    ProxyCommand ssh impetus -W 192.168.1.104:22
+
+Host embarcadero
+    Protocol 2
+    HostName 192.168.1.200
+    ProxyCommand ssh impetus -W 192.168.1.200:22
+
+Host hayes-power
+    Protocol 2
+    HostName 192.168.1.115
+    LocalForward 2022 localhost:22
+    User penguin
+    ProxyCommand ssh impetus -W 192.168.1.115:22
+
+
+#Redirect
+Host charon charon.cs.vt.edu
+    Protocol 2
+    HostName charon.cs.vt.edu
+    User njustn
+    LocalForward 2022 localhost:22
+    DynamicForward localhost:12345
+    ProxyCommand ssh rzgw -W charon.cs.vt.edu:22
+
+Host hurricane-passthrough
+  HostName ssh.scogland.com
+  User njustn
+  Port  3022
+  LocalForward 5903 localhost:5900
+  DynamicForward localhost:12345
+  ProxyCommand ssh rzgw -W ssh.scogland.com:3022
+
+Host gale-passthrough
+  HostName ssh.scogland.com
+  User njustn
+  Port  4022
+  LocalForward 5903 localhost:5900
+  DynamicForward localhost:12345
+  ProxyCommand ssh rzgw -W ssh.scogland.com:4022
+
+Host *
+    User scogland
+    ForwardAgent yes
+    ServerAliveInterval 15
+    ServerAliveCountMax 3
+    ControlPath ~/.ssh/master-%r@%h:%p
+    ControlMaster auto
+    ControlPersist 12h
+    PermitLocalCommand yes
+    SendEnv LC_TERM_PROGRAM LC_ITERM_PROFILE
+
