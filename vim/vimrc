@@ -69,6 +69,8 @@ NeoBundle 'vim-jp/cpp-vim'
 NeoBundle 'mrtazz/DoxygenToolkit.vim'
 "rust highlighting
 NeoBundle 'wting/rust.vim'
+NeoBundle 'wavded/vim-stylus'
+NeoBundle 'digitaltoad/vim-jade'
 " map <silent> <buffer> <C-A-K> <Plug>VO_FollowLink
 " NeoBundle 'VimOutliner'
 "link handler

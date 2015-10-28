@@ -27,6 +27,8 @@ local fnutils = require "mjolnir.fnutils"
 local screens = require "mjolnir.screen"
 local geometry = require "mjolnir.geometry"
 local grid = require "mjolnir.bg.grid"
+local tiling = require "mjolnir.tiling"
+
 
 hotkey.bind({"cmd", "alt", "ctrl"}, "D", function()
   local win = window.focusedwindow()
@@ -38,6 +40,11 @@ end)
 local mash = {'alt', 'ctrl'}
 local mashshift = {'alt', 'ctrl', 'shift'}
 
+hotkey.bind(mash, "c", function() tiling.cyclelayout() end)
+hotkey.bind(mash, "j", function() tiling.cycle(1) end)
+hotkey.bind(mash, "k", function() tiling.cycle(-1) end)
+hotkey.bind(mash, "space", function() tiling.promote() end)
+hotkey.bind(mash, "f", function() tiling.gotolayout("fullscreen") end)
 
 -- Set grid size.
 grid.GRIDWIDTH  = 12
