@@ -247,6 +247,18 @@ Host cab surface vulcan sierra impetus rzalastor
     ForwardX11 yes
     ProxyCommand ssh rzgw -W %h:622
 
+Host lanlgw ihpc-gate
+    HostName ihpc-gate.lanl.gov
+    ForwardX11 yes
+    ProxyCommand ssh rzgw -W %h:22
+
+
+Host trinitite
+    HostName tt-fey.lanl.gov
+    ForwardX11 yes
+    RemoteForward 19752 localhost:22
+    ProxyCommand ssh lanlgw -W %h:22
+
 Host czvnc
     HostName czvnc.llnl.gov
     ForwardX11 yes
@@ -296,6 +308,9 @@ Host gale-passthrough
   LocalForward 5903 localhost:5900
   DynamicForward localhost:12345
   ProxyCommand ssh rzgw -W ssh.scogland.com:4022
+
+Host localhost
+    ControlMaster no
 
 Host *
     User scogland
