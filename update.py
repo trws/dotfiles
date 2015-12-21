@@ -19,6 +19,7 @@ os.chdir(script_dir)
 # subprocess.call(['git', 'submodule', 'update', '--init', '--recursive'], stdout=sys.stdout, stderr=sys.stderr)
 
 link_files = {
+        "pystartup.py" : "~/.pystartup",
         "ssh/config" : "~/.ssh/config",
         "vim" : "~/.vim",
         "vim/vimrc" : "~/.vimrc",
@@ -31,6 +32,7 @@ link_files = {
         "gitignore" : "~/.gitignore",
         "gitconfig" : "~/.gitconfig",
         "scripts" : "~/scripts",
+        "Xresources" : "~/.Xresources",
         }
 
 for target, link in link_files.items():

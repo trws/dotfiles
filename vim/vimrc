@@ -610,6 +610,10 @@ endif
 
 "automatic formatting options
 set textwidth=78
+augroup git_messages
+    autocmd!
+    au FileType gitcommit setlocal textwidth=72
+augroup END
 set formatoptions=crq
 " set fo-=t
 " au FileType tex set formatoptions+=a

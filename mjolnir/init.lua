@@ -12,6 +12,7 @@ modules = { "mjolnir.application",
 "mjolnir.fnutils",
 "mjolnir.screen",
 "mjolnir.geometry",
+"mjolnir.tiling",
 "mjolnir.bg.grid"
 }
 
