@@ -1179,21 +1179,21 @@
 	<key>NSWindow Frame SUStatusFrame</key>
 	<string>-1472 967 384 129 -2560 0 2560 1418 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>1280 4 1280 1414 0 0 2560 1418 </string>
+	<string>-1594 7 1432 1250 -2560 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 1</key>
-	<string>0 1064 490 326 0 0 2560 1418 </string>
+	<string>-1280 731 490 326 -2560 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 2</key>
-	<string>576 851 490 326 0 0 1920 1178 </string>
+	<string>945 414 490 326 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 3</key>
-	<string>0 1092 490 326 0 0 2560 1418 </string>
+	<string>960 367 960 1046 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 4</key>
-	<string>2 540 1276 878 0 0 2560 1418 </string>
+	<string>3 371 1078 1046 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 5</key>
-	<string>1297 322 1276 878 0 0 2560 1418 </string>
+	<string>320 851 490 326 0 0 1920 1177 </string>
 	<key>NSWindow Frame iTerm Window 6</key>
-	<string>-2068 1092 490 326 -2560 0 2560 1418 </string>
+	<string>492 851 490 326 0 0 1920 1177 </string>
 	<key>NSWindow Frame iTerm Window 7</key>
-	<string>-1280 0 1280 1418 -2560 0 2560 1418 </string>
+	<string>4 1091 490 326 0 0 2560 1417 </string>
 	<key>NSWindow Frame iTerm Window 8</key>
 	<string>464 950 490 326 0 0 2560 1418 </string>
 	<key>NeverWarnAboutShortLivedSessions_1C54F591-EF5F-44FE-9740-DF7DB738BCC2</key>
@@ -5470,7 +5470,7 @@
 	<key>NoSyncTimeOfLastPromo</key>
 	<real>453955135.56236398</real>
 	<key>NoSyncTimeOfLastPromoDownload</key>
-	<real>460344585.76096398</real>
+	<real>464835534.06599498</real>
 	<key>OnlyWhenMoreTabs</key>
 	<true/>
 	<key>OpenArrangementAtStartup</key>
@@ -5537,7 +5537,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2015-08-03T23:29:25Z</date>
+	<date>2015-10-12T16:44:49Z</date>
 	<key>SavePasteHistory</key>
 	<false/>
 	<key>Show Toolbelt</key>
@@ -5580,7 +5580,7 @@
 	<key>WebKitDefaultFontSize</key>
 	<integer>11</integer>
 	<key>WebKitStandardFont</key>
-	<string>.Lucida Grande UI</string>
+	<string>.Helvetica Neue DeskInterface</string>
 	<key>WindowNumber</key>
 	<true/>
 	<key>WindowStyle</key>

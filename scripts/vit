@@ -1,0 +1,3 @@
+#!/bin/sh
+
+perlbrew exec --with perl-5.22.0 /usr/local/bin/vit "$@"

@@ -1,45 +1,32 @@
--- Make sure packages are here
+local application = hs.application
+local hotkey = hs.hotkey
+local window = hs.window
+local fnutils = hs.fnutils
+local screens = hs.screens
+local geometry = hs.geometry
+local grid = hs.grid
+local tiling = hs.window.tiling
 
-get_module = function(mod)
-  print("installing: " .. mod)
-  os.execute('/usr/local/bin/luarocks ' .. ' install ' .. mod)
-end
-
-modules = { "mjolnir.application",
-"mjolnir.keycodes",
-"mjolnir.hotkey",
-"mjolnir.window",
-"mjolnir.fnutils",
-"mjolnir.screen",
-"mjolnir.geometry",
-"mjolnir.tiling",
-"mjolnir.bg.grid"
-}
-
-for k,m in pairs(modules) do
-  get_module(m)
-end
-
-
-local application = require "mjolnir.application"
-local hotkey = require "mjolnir.hotkey"
-local window = require "mjolnir.window"
-local fnutils = require "mjolnir.fnutils"
-local screens = require "mjolnir.screen"
-local geometry = require "mjolnir.geometry"
-local grid = require "mjolnir.bg.grid"
-local tiling = require "mjolnir.tiling"
-
+-- set up your instance(s)
+-- expose = hs.expose.new(nil,{showThumbnails=false}) -- default windowfilter, no thumbnails
+-- expose_app = hs.expose.new(nil,{onlyActiveApplication=true}) -- show windows for the current application
+-- expose_space = hs.expose.new(nil,{includeOtherSpaces=false}) -- only windows in the current Mission Control Space
+-- expose_browsers = hs.expose.new{'Safari','Google Chrome'} -- specialized expose using a custom windowfilter
+-- for your dozens of browser windows :)
 
 hotkey.bind({"cmd", "alt", "ctrl"}, "D", function()
-  local win = window.focusedwindow()
+  local win = window.focusedWindow()
   local f = win:frame()
   f.x = f.x + 10
-  win:setframe(f)
+  win:setFrame(f)
 end)
 
 local mash = {'alt', 'ctrl'}
 local mashshift = {'alt', 'ctrl', 'shift'}
+
+-- then bind to a hotkey
+-- hs.hotkey.bind(mash,'e','Expose',function()expose:toggleShow()end)
+-- hs.hotkey.bind(mashshift,'e','App Expose',function()expose_app:toggleShow()end)
 
 hotkey.bind(mash, "c", function() tiling.cyclelayout() end)
 hotkey.bind(mash, "j", function() tiling.cycle(1) end)
@@ -54,20 +41,20 @@ grid.MARGINX    = 0
 grid.MARGINY    = 0
 
 -- Grid key expariments
-hotkey.bind(mash, ';', function() grid.snap(window.focusedwindow()) end)
+hotkey.bind(mash, ';', function() grid.snap(window.focusedWindow()) end)
 hotkey.bind(mash, "'", function() fnutils.map(window.visiblewindows(), grid.snap) end)
 hotkey.bind(mash,      '=', function() grid.adjustwidth(1) end)
 hotkey.bind(mash,      '-', function() grid.adjustwidth(-1) end)
 hotkey.bind(mashshift, '=', function() grid.adjustheight(1) end)
 hotkey.bind(mashshift, '-', function() grid.adjustheight(-1) end)
 
-hotkey.bind(mash, 'N', grid.pushwindow_nextscreen)
-hotkey.bind(mash, 'P', grid.pushwindow_prevscreen)
+-- hotkey.bind(mash, 'N', grid.pushwindow_nextscreen)
+-- hotkey.bind(mash, 'P', grid.pushwindow_prevscreen)
 
-hotkey.bind(mash, 'J', grid.pushwindow_down)
-hotkey.bind(mash, 'K', grid.pushwindow_up)
-hotkey.bind(mash, 'H', grid.pushwindow_left)
-hotkey.bind(mash, 'L', grid.pushwindow_right)
+hotkey.bind(mash, 'J', grid.pushWindowDown)
+hotkey.bind(mash, 'K', grid.pushWindowUp)
+hotkey.bind(mash, 'H', grid.pushWindowLeft)
+hotkey.bind(mash, 'L', grid.pushWindowRight)
 
 
 hotkey.bind({'cmd', 'ctrl'}, 'W', function()
@@ -86,65 +73,65 @@ end)
 -- Window focus hotkeys
 -- hotkey.bind(mash, "H", function()
 --   -- local new_rect = geometry.rect(x=0, y=0, w=0.5, h=1.0)
---   window.focusedwindow():focuswindow_west()
+--   window.focusedWindow():focuswindow_west()
 -- end)
 -- hotkey.bind(mash, "L", function()
---   window.focusedwindow():focuswindow_east()
+--   window.focusedWindow():focuswindow_east()
 -- end)
 -- hotkey.bind(mash, "K", function()
---   window.focusedwindow():focuswindow_north()
+--   window.focusedWindow():focuswindow_north()
 -- end)
 -- hotkey.bind(mash, "J", function()
---   window.focusedwindow():focuswindow_south()
+--   window.focusedWindow():focuswindow_south()
 -- end)
 
 -- Window throwing
 hotkey.bind(mashshift, "H", function()
   -- local new_rect = geometry.rect(x=0, y=0, w=0.5, h=1.0)
-  window.focusedwindow():movetounit(geometry.rect(0.0, 0.0, 0.5, 1.0))
+  window.focusedWindow():moveToUnit(geometry.rect(0.0, 0.0, 0.5, 1.0))
 end)
 hotkey.bind(mashshift, "L", function()
-  local w = window.focusedwindow()
-  w:movetounit(geometry.rect(0.5, 0.0, 0.5, 1.0))
+  local w = window.focusedWindow()
+  w:moveToUnit(geometry.rect(0.5, 0.0, 0.5, 1.0))
 end)
 hotkey.bind(mashshift, "K", function()
-  window.focusedwindow():movetounit(geometry.rect(0.0, 0.0, 1.0, 0.5))
+  window.focusedWindow():moveToUnit(geometry.rect(0.0, 0.0, 1.0, 0.5))
 end)
 hotkey.bind(mashshift, "J", function()
-  window.focusedwindow():movetounit(geometry.rect(0.0, 0.5, 1.0, 0.5))
+  window.focusedWindow():moveToUnit(geometry.rect(0.0, 0.5, 1.0, 0.5))
 end)
 
 move_to_screen = function(target_screen)
   if target_screen ~= nil then
-    local w = window.focusedwindow()
+    local w = window.focusedWindow()
     local s = w:screen()
     local f = w:frame()
-    f.x = target_screen:fullframe().x + target_screen:fullframe().w * ((f.x - s:fullframe().x) / s:fullframe().w)
-    f.y = target_screen:fullframe().y + target_screen:fullframe().w * ((f.y - s:fullframe().y) / s:fullframe().w)
+    f.x = target_screen:fullFrame().x + target_screen:fullFrame().w * ((f.x - s:fullFrame().x) / s:fullFrame().w)
+    f.y = target_screen:fullFrame().y + target_screen:fullFrame().w * ((f.y - s:fullFrame().y) / s:fullFrame().w)
 
-    w:setframe(f)
+    w:setFrame(f)
   end
 end
 
 hotkey.bind(mashshift, "1", function()
-  window.focusedwindow():movetounit(geometry.rect(0.0, 0.0, 1/3, 1.0))
-  -- move_to_screen(screens:allscreens()[2])
+  window.focusedWindow():moveToUnit(geometry.rect(0.0, 0.0, 1/3, 1.0))
+  -- move_to_screen(screens:allScreens()[2])
 end)
 hotkey.bind(mashshift, "2", function()
-  window.focusedwindow():movetounit(geometry.rect(1/3, 0.0, 1/3, 1.0))
-  -- move_to_screen(screens:allscreens()[1])
+  window.focusedWindow():moveToUnit(geometry.rect(1/3, 0.0, 1/3, 1.0))
+  -- move_to_screen(screens:allScreens()[1])
 end)
 hotkey.bind(mashshift, "3", function()
-  window.focusedwindow():movetounit(geometry.rect(2/3, 0.0, 1/3, 1.0))
-  -- move_to_screen(screens:allscreens()[3])
+  window.focusedWindow():moveToUnit(geometry.rect(2/3, 0.0, 1/3, 1.0))
+  -- move_to_screen(screens:allScreens()[3])
 end)
 
 hotkey.bind(mashshift, "Left", function()
-  move_to_screen(window.focusedwindow():screen():towest())
+  move_to_screen(window.focusedWindow():screen():toWest())
 end)
 
 hotkey.bind(mashshift, "Right", function()
-  move_to_screen(window.focusedwindow():screen():toeast())
+  move_to_screen(window.focusedWindow():screen():toEast())
 end)
 
 -- modal hotkey support
@@ -172,50 +159,50 @@ end)
 
 table.insert(modal_hotkeys,
 hotkey.bind({}, "R", function()
-  mjolnir.reload()
+  hs.reload()
 end))
 
 -- maximize
 table.insert(modal_hotkeys,
 hotkey.bind({}, "M", function()
   disable_modal_hotkeys()
-  window.focusedwindow():maximize()
+  window.focusedWindow():maximize()
 end))
 
 -- resize
 table.insert(modal_hotkeys,
 hotkey.bind({}, "K", function()
   disable_modal_hotkeys()
-  local w = window.focusedwindow()
+  local w = window.focusedWindow()
   local f = w:frame()
   f.h = f.h/2
-  w:setframe(f)
+  w:setFrame(f)
 end))
 table.insert(modal_hotkeys,
 hotkey.bind({}, "J", function()
   disable_modal_hotkeys()
-  local w = window.focusedwindow()
+  local w = window.focusedWindow()
   local f = w:frame()
   f.y = f.y + f.h / 2
   f.h = f.h / 2
-  w:setframe(f)
+  w:setFrame(f)
 end))
 table.insert(modal_hotkeys,
 hotkey.bind({}, "H", function()
   disable_modal_hotkeys()
-  local w = window.focusedwindow()
+  local w = window.focusedWindow()
   local f = w:frame()
   f.w = f.w/2
-  w:setframe(f)
+  w:setFrame(f)
 end))
 table.insert(modal_hotkeys,
 hotkey.bind({}, "L", function()
   disable_modal_hotkeys()
-  local w = window.focusedwindow()
+  local w = window.focusedWindow()
   local f = w:frame()
   f.x = f.x + f.w / 2
   f.w = f.w / 2
-  w:setframe(f)
+  w:setFrame(f)
 end))
 
 -- Move a screen left and maximize
@@ -223,38 +210,38 @@ end))
 table.insert(modal_hotkeys,
 hotkey.bind({}, "Left", function()
   disable_modal_hotkeys()
-  local w = window.focusedwindow()
-  local s = w:screen():towest()
-  w:setframe(s:fullframe())
+  local w = window.focusedWindow()
+  local s = w:screen():toWest()
+  w:setFrame(s:fullFrame())
 end))
 
 table.insert(modal_hotkeys,
 hotkey.bind({}, "Right", function()
   disable_modal_hotkeys()
-  local w = window.focusedwindow()
-  local s = w:screen():toeast()
-  w:setframe(s:fullframe())
+  local w = window.focusedWindow()
+  local s = w:screen():toEast()
+  w:setFrame(s:fullFrame())
 end))
 
 table.insert(modal_hotkeys,
 hotkey.bind({}, "1", function()
   disable_modal_hotkeys()
-  move_to_screen(screens:allscreens()[2])
-  window.focusedwindow():maximize()
+  move_to_screen(screens:allScreens()[2])
+  window.focusedWindow():maximize()
 end))
 
 table.insert(modal_hotkeys,
 hotkey.bind({}, "2", function()
   disable_modal_hotkeys()
-  move_to_screen(screens:allscreens()[1])
-  window.focusedwindow():maximize()
+  move_to_screen(screens:allScreens()[1])
+  window.focusedWindow():maximize()
 end))
 
 table.insert(modal_hotkeys,
 hotkey.bind({}, "3", function()
   disable_modal_hotkeys()
-  move_to_screen(screens:allscreens()[3])
-  window.focusedwindow():maximize()
+  move_to_screen(screens:allScreens()[3])
+  window.focusedWindow():maximize()
 end))
 
 

@@ -30,6 +30,7 @@ else
   PAGER=less
 fi
 
+[[ -e ~/.pystartup ]] && export PYTHONSTARTUP=$HOME/.pystartup
 
 [[ -x =lesspipe.sh ]] && export LESSOPEN="|lesspipe.sh %s"
 [[ -d ~/.terminfo ]] && export TERMINFO=~/.terminfo
