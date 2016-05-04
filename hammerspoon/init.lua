@@ -8,10 +8,10 @@ local grid = hs.grid
 local tiling = hs.window.tiling
 
 -- set up your instance(s)
-expose = hs.expose.new(nil,{showThumbnails=false}) -- default windowfilter, no thumbnails
-expose_app = hs.expose.new(nil,{onlyActiveApplication=true}) -- show windows for the current application
-expose_space = hs.expose.new(nil,{includeOtherSpaces=false}) -- only windows in the current Mission Control Space
-expose_browsers = hs.expose.new{'Safari','Google Chrome'} -- specialized expose using a custom windowfilter
+-- expose = hs.expose.new(nil,{showThumbnails=false}) -- default windowfilter, no thumbnails
+-- expose_app = hs.expose.new(nil,{onlyActiveApplication=true}) -- show windows for the current application
+-- expose_space = hs.expose.new(nil,{includeOtherSpaces=false}) -- only windows in the current Mission Control Space
+-- expose_browsers = hs.expose.new{'Safari','Google Chrome'} -- specialized expose using a custom windowfilter
 -- for your dozens of browser windows :)
 
 hotkey.bind({"cmd", "alt", "ctrl"}, "D", function()
@@ -25,8 +25,8 @@ local mash = {'alt', 'ctrl'}
 local mashshift = {'alt', 'ctrl', 'shift'}
 
 -- then bind to a hotkey
-hs.hotkey.bind(mash,'e','Expose',function()expose:toggleShow()end)
-hs.hotkey.bind(mashshift,'e','App Expose',function()expose_app:toggleShow()end)
+-- hs.hotkey.bind(mash,'e','Expose',function()expose:toggleShow()end)
+-- hs.hotkey.bind(mashshift,'e','App Expose',function()expose_app:toggleShow()end)
 
 hotkey.bind(mash, "c", function() tiling.cyclelayout() end)
 hotkey.bind(mash, "j", function() tiling.cycle(1) end)
