@@ -33,6 +33,8 @@ link_files = {
         "gitconfig" : "~/.gitconfig",
         "scripts" : "~/scripts",
         "Xresources" : "~/.Xresources",
+        "pip" : "~/.config/pip",
+        "pip" : "~/Library/Application Support/pip",
         }
 
 for target, link in link_files.items():
