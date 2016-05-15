@@ -169,7 +169,7 @@ Host charon charon.cs.vt.edu
     User njustn
     LocalForward 2022 localhost:22
     DynamicForward localhost:12345
-    ProxyCommand ssh rzgw -W charon.cs.vt.edu:22
+    ProxyCommand ssh rzgw -W charon.cs.vt.edu:2222
 
 Host hurricane-passthrough
   HostName ssh.scogland.com

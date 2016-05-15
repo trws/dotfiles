@@ -34,6 +34,8 @@ link_files = {
         "scripts" : "~/scripts",
         "Xresources" : "~/.Xresources",
         "vim" : "~/.config/nvim",
+        "pip" : "~/.config/pip",
+        "pip" : "~/Library/Application Support/pip",
         }
 
 
