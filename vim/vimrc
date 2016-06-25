@@ -488,8 +488,8 @@ set nowrap
 set winaltkeys=no
 set virtualedit=block,insert
 
-set wildignore+=*.com,*.class,*.dll,*.exe,*.o,*.so
-set wildignore+=*.dmg,*.iso,*.jar,*.rar,*.tar,*.zip
+" set wildignore+=*.com,*.class,*.dll,*.exe,*.o,*.so
+" set wildignore+=*.dmg,*.iso,*.jar,*.rar,*.tar,*.zip
 set wildignore+=".DS_Store,.DS_Store?,._*,.Spotlight-V100,ehthumbs.db,Thumbs.db"
 set wildignore+=*.swp,*~
 set wildignore+=*.aux,*.lot,*.lof,*.pyg,*.toc

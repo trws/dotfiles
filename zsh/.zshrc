@@ -153,5 +153,7 @@ true
 
 [[ -n "$terminfo[kbs]" ]] && stty erase $terminfo[kbs]
 
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
 #echo $terminfo > ~/test2
 # vim:ts=4:
