@@ -8,7 +8,7 @@
 " call vundle#rc()
 if $SYSTEM != 'windows'
     if !isdirectory(expand("~/.vim/bundle/dein.vim"))
-        echo('fetching neobundle for initial install')
+        echo('fetching dein for initial install')
         call system('git clone https://github.com/Shougo/dein.vim ~/.vim/bundle/dein.vim')
     endif
     if has('vim_starting')
@@ -38,11 +38,11 @@ call dein#add('diefans/notmuch-vim')
 
 "colorschemes
 call dein#add('tomasr/molokai')
-call dein#add('sjl/badwolf')
+" call dein#add('sjl/badwolf')
 call dein#add('Solarized')
 " call dein#add('github-theme')
 call dein#add('nanotech/jellybeans.vim')
-call dein#add('w0ng/vim-hybrid')
+" call dein#add('w0ng/vim-hybrid')
 
 "visual
 "call dein#add('Powerline')
@@ -105,7 +105,7 @@ let g:jedi#documentation_command = "<leader>pk"
 let g:jedi#usages_command = "<leader>pu"
 let g:jedi#rename_command = "<leader>pr"
 
-call dein#add('scrooloose/syntastic')
+" call dein#add('scrooloose/syntastic')
 
 "project management
 " call dein#add('project.tar.gz')
@@ -143,16 +143,18 @@ call dein#add('airblade/vim-gitgutter.git')
 
 call dein#add('terryma/vim-multiple-cursors')
 
-if executable('task')
-    call dein#add('farseer90718/vim-taskwarrior')
-    " let g:task_rc_override = 'defaultwidth=150 rc.color=no'
-    let g:task_default_prompt= ['description', 'project', 'tag', 'due']
-    ", 'priority', 'depends'
+if 0 "I haven't been using taskwarrior, so why?
+    if executable('task')
+        call dein#add('farseer90718/vim-taskwarrior')
+        " let g:task_rc_override = 'defaultwidth=150 rc.color=no'
+        let g:task_default_prompt= ['description', 'project', 'tag', 'due']
+        ", 'priority', 'depends'
 
-    augroup taskwarrior_quick_add
-        au FileType taskreport nmap <silent> <buffer> <Plug>(taskwarrior_new_quick)             :call taskwarrior#system_call('', 'add', taskwarrior#data#get_args('add', ['description', 'project', 'tag']), 'echo')<CR>
-        au FileType taskreport nmap <silent> <buffer> n        <Plug>(taskwarrior_new_quick)
-    augroup END
+        augroup taskwarrior_quick_add
+            au FileType taskreport nmap <silent> <buffer> <Plug>(taskwarrior_new_quick)             :call taskwarrior#system_call('', 'add', taskwarrior#data#get_args('add', ['description', 'project', 'tag']), 'echo')<CR>
+            au FileType taskreport nmap <silent> <buffer> n        <Plug>(taskwarrior_new_quick)
+        augroup END
+    endif
 endif
 
 " call dein#add('Raimondi/delimitMate')
@@ -488,13 +490,13 @@ set nowrap
 set winaltkeys=no
 set virtualedit=block,insert
 
-" set wildignore+=*.com,*.class,*.dll,*.exe,*.o,*.so
-" set wildignore+=*.dmg,*.iso,*.jar,*.rar,*.tar,*.zip
-set wildignore+=".DS_Store,.DS_Store?,._*,.Spotlight-V100,ehthumbs.db,Thumbs.db"
-set wildignore+=*.swp,*~
-set wildignore+=*.aux,*.lot,*.lof,*.pyg,*.toc
-" set wildignore+=*.pdf,*.eps,*.epsi,*.png,*.jpg,*.svg
-" set wildignore+=*.xls,*.xlsx,*.ppt,*.pptx,*.doc,*.docx,*.graffle
+set suffixes+=*.com,*.class,*.dll,*.exe,*.o,*.so
+set suffixes+=*.dmg,*.iso,*.jar,*.rar,*.tar,*.zip
+set suffixes+=".DS_Store,.DS_Store?,._*,.Spotlight-V100,ehthumbs.db,Thumbs.db"
+set suffixes+=*.swp,*~
+set suffixes+=*.aux,*.lot,*.lof,*.pyg,*.toc
+set suffixes+=*.pdf,*.eps,*.epsi,*.png,*.jpg,*.svg
+set suffixes+=*.xls,*.xlsx,*.ppt,*.pptx,*.doc,*.docx,*.graffle
 
 "outliner checkboxes
 augroup filetype_otl
