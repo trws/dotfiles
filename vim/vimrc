@@ -579,24 +579,12 @@ let g:syntastic_mode_map = {
             \ "active_filetypes": [],
             \ "passive_filetypes": [] }
 
-"CODE FORMATTING
-if executable('yapf')
-    let g:formatprg_python = 'yapf'
-    let g:formatprg_args_expr_python = '""'
-else
-    let g:formatprg_args_expr_python = '(&textwidth ? " --max-line-length=" . &textwidth : "") . " -" '
-endif
-"  && findfile(".clang-format", ".;")
-if executable("clang-format")
-    let g:formatprg_c = 'clang-format'
-    let g:formatprg_cpp = 'clang-format'
-    let g:formatprg_args_expr_c = '""'
-    let g:formatprg_args_expr_cpp = g:formatprg_args_expr_c
-elseif executable("astyle")
+if executable("astyle")
     "astyle args for C and C++
-    let g:formatprg_args_expr_c = '"--indent-col1-comments --style=stroustrup -A4 --align-pointer=name --max-code-length=80 --convert-tabs"'
+    let g:formatdef_my_custom_astyle = '"--indent-col1-comments --style=stroustrup -A4 --align-pointer=name --max-code-length=80 --convert-tabs"'
+    let g:formatters_c = ['my_custom_astyle'] + g:formatters_c
+    let g:formatters_cpp = ['my_custom_astyle'] + g:formatters_cpp
     " let g:formatprg_args_expr_c = '"--mode=c --style=google --add-brackets --indent-preproc-define --keep-one-line-statements -pcH".(&expandtab ? "s".&shiftwidth : "t")'
-    let g:formatprg_args_expr_cpp = g:formatprg_args_expr_c
 endif
 
 "automatic formatting options
