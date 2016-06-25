@@ -579,13 +579,13 @@ let g:syntastic_mode_map = {
             \ "active_filetypes": [],
             \ "passive_filetypes": [] }
 
-if executable("astyle")
-    "astyle args for C and C++
-    let g:formatdef_my_custom_astyle = '"--indent-col1-comments --style=stroustrup -A4 --align-pointer=name --max-code-length=80 --convert-tabs"'
-    let g:formatters_c = ['my_custom_astyle'] + g:formatters_c
-    let g:formatters_cpp = ['my_custom_astyle'] + g:formatters_cpp
-    " let g:formatprg_args_expr_c = '"--mode=c --style=google --add-brackets --indent-preproc-define --keep-one-line-statements -pcH".(&expandtab ? "s".&shiftwidth : "t")'
-endif
+" if executable("astyle")
+"     "astyle args for C and C++
+"     let g:formatdef_my_custom_astyle = '"--indent-col1-comments --style=stroustrup -A4 --align-pointer=name --max-code-length=80 --convert-tabs"'
+"     let g:formatters_c = ['my_custom_astyle'] + g:formatters_c
+"     let g:formatters_cpp = ['my_custom_astyle'] + g:formatters_cpp
+"     " let g:formatprg_args_expr_c = '"--mode=c --style=google --add-brackets --indent-preproc-define --keep-one-line-statements -pcH".(&expandtab ? "s".&shiftwidth : "t")'
+" endif
 
 "automatic formatting options
 set textwidth=78
