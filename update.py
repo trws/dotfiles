@@ -33,7 +33,11 @@ link_files = {
         "gitconfig" : "~/.gitconfig",
         "scripts" : "~/scripts",
         "Xresources" : "~/.Xresources",
+        "vim" : "~/.config/nvim",
+        "pip" : "~/.config/pip",
+        "pip" : "~/Library/Application Support/pip",
         }
+
 
 for target, link in link_files.items():
     l_path = os.path.expanduser(link)

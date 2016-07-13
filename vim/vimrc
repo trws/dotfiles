@@ -7,84 +7,77 @@
 " set rtp+=~/.vim/bundle/vundle/
 " call vundle#rc()
 if $SYSTEM != 'windows'
-    if !isdirectory(expand("~/.vim/bundle/neobundle.vim"))
-        echo('fetching neobundle for initial install')
-        call system('git clone https://github.com/Shougo/neobundle.vim ~/.vim/bundle/neobundle.vim')
+    if !isdirectory(expand("~/.vim/bundle/dein.vim"))
+        echo('fetching dein for initial install')
+        call system('git clone https://github.com/Shougo/dein.vim ~/.vim/bundle/dein.vim')
     endif
     if has('vim_starting')
         set nocompatible               " Be iMproved
-        set runtimepath+=~/.vim/bundle/neobundle.vim/
+        set runtimepath+=~/.vim/bundle/dein.vim
     endif
 
-    call neobundle#begin(expand('~/.vim/bundle/'))
+    call dein#begin(expand('~/.cache/dein'))
 endif
 
-NeoBundleFetch 'Shougo/neobundle.vim'
+call dein#local(expand('~/.vim/bundle/repos/github.com/Shougo/dein.vim'))
 
 " Bundle 'Shougo/vimproc.vim'
-NeoBundle 'Shougo/vimproc.vim', {
-            \ 'build' : {
-            \     'windows' : 'make -f make_mingw32.mak',
-            \     'cygwin' : 'make -f make_cygwin.mak',
-            \     'mac' : 'make -f make_mac.mak',
-            \     'unix' : 'make -f make_unix.mak',
-            \    },
-            \ }
+call dein#add('Shougo/vimproc.vim', { 'build' : 'make'})
 
 "split management
-NeoBundle 'wesQ3/vim-windowswap'
+call dein#add('wesQ3/vim-windowswap')
 let g:windowswap_map_keys = 0 "prevent default bindings
 nnoremap <silent> <leader>yw :call WindowSwap#MarkWindowSwap()<CR>
 nnoremap <silent> <leader>pw :call WindowSwap#DoWindowSwap()<CR>
 nnoremap <silent> <leader>ww :call WindowSwap#EasyWindowSwap()<CR>
 
 "Mail search
-NeoBundle 'daisuzu/unite-notmuch'
-NeoBundle 'diefans/notmuch-vim'
+call dein#add('daisuzu/unite-notmuch')
+call dein#add('diefans/notmuch-vim')
 
 
 "colorschemes
-NeoBundle 'tomasr/molokai'
-NeoBundle 'sjl/badwolf'
-NeoBundle 'Solarized'
-" NeoBundle 'github-theme'
-NeoBundle 'nanotech/jellybeans.vim'
-NeoBundle 'w0ng/vim-hybrid'
+call dein#add('tomasr/molokai')
+" call dein#add('sjl/badwolf')
+call dein#add('Solarized')
+" call dein#add('github-theme')
+call dein#add('nanotech/jellybeans.vim')
+" call dein#add('w0ng/vim-hybrid')
 
-""visual
-""NeoBundle 'Powerline'
-""powerline not working, light alternative?
-NeoBundle 'bling/vim-airline'
-"" NeoBundle 'tomtom/quickfixsigns_vim'
-"" NeoBundle 'bling/vim-bufferline'
-" NeoBundle 'edkolev/tmuxline.vim'
+"visual
+"call dein#add('Powerline')
+"powerline not working, light alternative?
+call dein#add('bling/vim-airline')
+" call dein#add('tomtom/quickfixsigns_vim')
+" call dein#add('bling/vim-bufferline')
+call dein#add('edkolev/tmuxline.vim')
 
 "filetype handlers, highlighting etc
-NeoBundle 'LaTeX-Box-Team/LaTeX-Box'
-" NeoBundle 'vim-latex/vim-latex'
-NeoBundle 'liquid.vim'
+call dein#add('LaTeX-Box-Team/LaTeX-Box')
+" call dein#add('vim-latex/vim-latex')
+call dein#add('liquid.vim')
 "c++11 highlighting
-NeoBundle 'vim-jp/cpp-vim'
+call dein#add('vim-jp/cpp-vim')
 "doxygen toolkit
-NeoBundle 'mrtazz/DoxygenToolkit.vim'
+call dein#add('mrtazz/DoxygenToolkit.vim')
 "rust highlighting
-NeoBundle 'wting/rust.vim'
-NeoBundle 'wavded/vim-stylus'
-NeoBundle 'digitaltoad/vim-jade'
+call dein#add('wting/rust.vim')
+call dein#add('wavded/vim-stylus')
+call dein#add('digitaltoad/vim-jade')
 " map <silent> <buffer> <C-A-K> <Plug>VO_FollowLink
-" NeoBundle 'VimOutliner'
+" call dein#add('VimOutliner')
 "link handler
-NeoBundle 'vim-scripts/utl.vim'
+call dein#add('vim-scripts/utl.vim')
 "cool csv highlighting
-NeoBundle 'chrisbra/csv.vim'
+call dein#add('chrisbra/csv.vim')
 " CSupport plugin: XXX: reacts badly with several others
-" NeoBundle 'c.vim'
-NeoBundle "jceb/vim-orgmode"
+" call dein#add('c.vim')
+call dein#add('jceb/vim-orgmode')
 "deps
-NeoBundle "tpope/vim-speeddating"
+call dein#add('tpope/vim-speeddating')
 
 "tmux integration
-NeoBundle 'vimux'
+call dein#add('vimux')
 
 if $SYSTEM != 'windows'
     " let ycmcomp =  'git submodule update --recursive && export EXTRA_CMAKE_ARGS="-DPYTHON_EXECUTABLE=$(which python)" ./install.sh --clang-completer --system-libclang --gocode-completer '
@@ -95,15 +88,10 @@ if $SYSTEM != 'windows'
     "-DCMAKE_CXX_
     "COMPILER=$(which g++)" ./install.sh --clang-completer --gocode-completer
     "--system-libclang
-    NeoBundle 'Valloric/YouCompleteMe', {
-                \ 'build' : {
-                \     'mac' :   'git submodule update --recursive && export EXTRA_CMAKE_ARGS="-DPYTHON_EXECUTABLE=$(which python)" ./install.sh --clang-completer --system-libclang --gocode-completer ',
-                \     'unix' :    'git submodule update --recursive && export EXTRA_CMAKE_ARGS="-DPYTHON_EXECUTABLE=$(which python)" ./install.sh --clang-completer --system-libclang --gocode-completer ',
-                \    },
-                \ }
+    call dein#add('Valloric/YouCompleteMe', { 'build' : expand('~/.vim/ycm_build.sh'), 'timeout' : 6000 })
 endif
 
-NeoBundle 'davidhalter/jedi-vim'
+call dein#add('davidhalter/jedi-vim')
 let g:jedi#auto_vim_configuration = 0
 let g:jedi#popup_on_dot = 0
 let g:jedi#popup_select_first = 0
@@ -117,92 +105,95 @@ let g:jedi#documentation_command = "<leader>pk"
 let g:jedi#usages_command = "<leader>pu"
 let g:jedi#rename_command = "<leader>pr"
 
-NeoBundle 'scrooloose/syntastic'
-
+" call dein#add('scrooloose/syntastic')
 
 "project management
-" NeoBundle 'project.tar.gz'
+" call dein#add('project.tar.gz')
 
 "bindings
 
 "shell/terminal emulation
-NeoBundle 'Shougo/vimshell.vim'
-NeoBundle 'pthrasher/conqueterm-vim'
+call dein#add('Shougo/vimshell.vim')
+call dein#add('pthrasher/conqueterm-vim')
 
 "file management
-NeoBundle 'xolox/vim-misc'
-NeoBundle 'xolox/vim-notes'
-NeoBundle 'Shougo/unite.vim'
-NeoBundle 'Shougo/vimfiler.vim'
-NeoBundle 'Shougo/unite-ssh'
-NeoBundle 'hewes/unite-gtags'
-NeoBundle 'tsukkee/unite-tag'
-NeoBundle 'vim-scripts/gtags.vim'
+call dein#add('xolox/vim-misc')
+call dein#add('xolox/vim-notes')
+call dein#add('Shougo/unite.vim')
+call dein#add('Shougo/vimfiler.vim')
+call dein#add('Shougo/unite-ssh')
+call dein#add('hewes/unite-gtags')
+call dein#add('tsukkee/unite-tag')
+call dein#add('vim-scripts/gtags.vim')
 " These are nice, but they are *way* too slow
-" NeoBundle 'xolox/vim-misc'
-" NeoBundle 'xolox/vim-easytags'
-NeoBundleLazy 'ujihisa/vimshell-ssh', { 'autoload' : {
-            \ 'filetypes' : 'vimshell',
-            \ }}
-NeoBundle 'Shougo/neomru.vim'
-NeoBundle 'kien/ctrlp.vim'
-NeoBundle 'tpope/vim-fugitive'
-NeoBundle 'airblade/vim-gitgutter.git'
+" call dein#add('xolox/vim-misc')
+" call dein#add('xolox/vim-easytags')
+" NeoBundleLazy 'ujihisa/vimshell-ssh', { 'autoload' : {
+"             \ 'filetypes' : 'vimshell',
+"             \ }}
+call dein#add('Shougo/neomru.vim')
+call dein#add('kien/ctrlp.vim')
+call dein#add('tpope/vim-fugitive')
+"
+" cmdline-mode mappings
+" call dein#add('tpope/vim-rsi')
+call dein#add('critiqjo/husk-x.vim')
 
-NeoBundle 'terryma/vim-multiple-cursors'
+call dein#add('airblade/vim-gitgutter.git')
 
-if executable('task')
-    NeoBundle 'farseer90718/vim-taskwarrior'
-    " let g:task_rc_override = 'defaultwidth=150 rc.color=no'
+call dein#add('terryma/vim-multiple-cursors')
+
+if 0 "I haven't been using taskwarrior, so why?
+    if executable('task')
+        call dein#add('farseer90718/vim-taskwarrior')
+        " let g:task_rc_override = 'defaultwidth=150 rc.color=no'
+        let g:task_default_prompt= ['description', 'project', 'tag', 'due']
+        ", 'priority', 'depends'
+
+        augroup taskwarrior_quick_add
+            au FileType taskreport nmap <silent> <buffer> <Plug>(taskwarrior_new_quick)             :call taskwarrior#system_call('', 'add', taskwarrior#data#get_args('add', ['description', 'project', 'tag']), 'echo')<CR>
+            au FileType taskreport nmap <silent> <buffer> n        <Plug>(taskwarrior_new_quick)
+        augroup END
+    endif
 endif
 
-let g:task_default_prompt= ['description', 'project', 'tag', 'due']
-", 'priority', 'depends'
-
-augroup taskwarrior_quick_add
-    au FileType taskreport nmap <silent> <buffer> <Plug>(taskwarrior_new_quick)             :call taskwarrior#system_call('', 'add', taskwarrior#data#get_args('add', ['description', 'project', 'tag']), 'echo')<CR>
-    au FileType taskreport nmap <silent> <buffer> n        <Plug>(taskwarrior_new_quick)
-augroup END
-
-
-
-" NeoBundle 'Raimondi/delimitMate'
-NeoBundle 'tpope/vim-surround'
-NeoBundle 'tommcdo/vim-exchange'
-" NeoBundle 'UltiSnips'
-NeoBundle 'SirVer/ultisnips'
+" call dein#add('Raimondi/delimitMate')
+call dein#add('tpope/vim-surround')
+call dein#add('tommcdo/vim-exchange')
+" call dein#add('UltiSnips')
+call dein#add('SirVer/ultisnips')
 " Snippets are separated from the engine. Add this if you want them:
-NeoBundle 'honza/vim-snippets'
-NeoBundle 'Lokaltog/vim-easymotion'
+call dein#add('honza/vim-snippets')
+call dein#add('Lokaltog/vim-easymotion')
 " map <Leader>e <Plug>(easymotion-prefix)
-" NeoBundle 'The-NERD-Commenter'
-NeoBundle 'majutsushi/tagbar'
-NeoBundle "Chiel92/vim-autoformat"
-NeoBundle 'Gundo'
-NeoBundle 'tpope/vim-repeat'
-NeoBundle 'visualrepeat'
+" call dein#add('The-NERD-Commenter')
+call dein#add('majutsushi/tagbar')
+call dein#add('Chiel92/vim-autoformat')
+call dein#add('Gundo')
+call dein#add('tpope/vim-repeat')
+call dein#add('visualrepeat')
 "new alignment plugin, CR from visual mode to use
-NeoBundle 'junegunn/vim-easy-align'
-NeoBundle 'tpope/vim-abolish'
-NeoBundle 'tpope/vim-pastie'
+call dein#add('junegunn/vim-easy-align')
+call dein#add('tpope/vim-abolish')
+call dein#add('tpope/vim-pastie')
 "Unix command aliases, Chmod and company
-NeoBundle 'tpope/vim-eunuch'
-NeoBundle 'tpope/vim-markdown'
-NeoBundle 'jtratner/vim-flavored-markdown'
-" NeoBundle 'tpope/vim-rsi'
-NeoBundle 'tpope/vim-unimpaired'
-NeoBundle 'tpope/vim-dispatch'
-NeoBundle 'tomtom/tcomment_vim'
+call dein#add('tpope/vim-eunuch')
+call dein#add('tpope/vim-markdown')
+call dein#add('jtratner/vim-flavored-markdown')
+" call dein#add('tpope/vim-rsi')
+call dein#add('tpope/vim-unimpaired')
+call dein#add('tpope/vim-dispatch')
+call dein#add('tomtom/tcomment_vim')
 "Word highlighting for possible but uncertain errors
-NeoBundle 'reedes/vim-wordy'
+call dein#add('reedes/vim-wordy')
 
-call neobundle#end()
+call dein#end()
+
+if dein#check_install()
+    call dein#install()
+endif
 
 filetype plugin indent on     " required!
-
-NeoBundleCheck
-
-" set runtimepath+=~/.vim/pyclewn
 
 let mapleader      = ','
 let maplocalleader = ','
@@ -228,23 +219,23 @@ vmap <CR> <Plug>(EasyAlign)
 
 "make command mode suck less, mimic a shell
 " start of line
-:cnoremap <C-A>		<Home>
+:cnoremap <C-A>         <Home>
 " back one character
-:cnoremap <C-B>		<Left>
+:cnoremap <C-B>         <Left>
 " delete character under cursor
-:cnoremap <C-D>		<Del>
+:cnoremap <C-D>         <Del>
 " end of line
-:cnoremap <C-E>		<End>
+:cnoremap <C-E>         <End>
 " forward one character
-:cnoremap <C-F>		<Right>
+:cnoremap <C-F>         <Right>
 " recall newer command-line
-" :cnoremap <C-N>		<Down>
+" :cnoremap <C-N>               <Down>
 " recall previous (older) command-line
-" :cnoremap <C-P>		<Up>
+" :cnoremap <C-P>               <Up>
 " back one word
-" :cnoremap <Esc><B>	<S-Left>
+" :cnoremap <Esc><B>    <S-Left>
 " forward one word
-" :cnoremap <Esc><F>	<S-Right>
+" :cnoremap <Esc><F>    <S-Right>
 
 " Prompt for a command to run
 map <Leader>vp :VimuxPromptCommand<CR>
@@ -499,13 +490,13 @@ set nowrap
 set winaltkeys=no
 set virtualedit=block,insert
 
-set wildignore+=*.com,*.class,*.dll,*.exe,*.o,*.so
-set wildignore+=*.dmg,*.iso,*.jar,*.rar,*.tar,*.zip
-set wildignore+=".DS_Store,.DS_Store?,._*,.Spotlight-V100,ehthumbs.db,Thumbs.db"
-set wildignore+=*.swp,*~
-set wildignore+=*.aux,*.lot,*.lof,*.pyg,*.toc
-" set wildignore+=*.pdf,*.eps,*.epsi,*.png,*.jpg,*.svg
-" set wildignore+=*.xls,*.xlsx,*.ppt,*.pptx,*.doc,*.docx,*.graffle
+set suffixes+=*.com,*.class,*.dll,*.exe,*.o,*.so
+set suffixes+=*.dmg,*.iso,*.jar,*.rar,*.tar,*.zip
+set suffixes+=".DS_Store,.DS_Store?,._*,.Spotlight-V100,ehthumbs.db,Thumbs.db"
+set suffixes+=*.swp,*~
+set suffixes+=*.aux,*.lot,*.lof,*.pyg,*.toc
+set suffixes+=*.pdf,*.eps,*.epsi,*.png,*.jpg,*.svg
+set suffixes+=*.xls,*.xlsx,*.ppt,*.pptx,*.doc,*.docx,*.graffle
 
 "outliner checkboxes
 augroup filetype_otl
@@ -588,25 +579,13 @@ let g:syntastic_mode_map = {
             \ "active_filetypes": [],
             \ "passive_filetypes": [] }
 
-"CODE FORMATTING
-if executable('yapf')
-    let g:formatprg_python = 'yapf'
-    let g:formatprg_args_expr_python = '""'
-else
-    let g:formatprg_args_expr_python = '(&textwidth ? " --max-line-length=" . &textwidth : "") . " -" '
-endif
-"  && findfile(".clang-format", ".;")
-if executable("clang-format")
-  let g:formatprg_c = 'clang-format'
-  let g:formatprg_cpp = 'clang-format'
-  let g:formatprg_args_expr_c = '""'
-  let g:formatprg_args_expr_cpp = g:formatprg_args_expr_c
-elseif executable("astyle")
-"astyle args for C and C++
-let g:formatprg_args_expr_c = '"--indent-col1-comments --style=stroustrup -A4 --align-pointer=name --max-code-length=80 --convert-tabs"'
-" let g:formatprg_args_expr_c = '"--mode=c --style=google --add-brackets --indent-preproc-define --keep-one-line-statements -pcH".(&expandtab ? "s".&shiftwidth : "t")'
-let g:formatprg_args_expr_cpp = g:formatprg_args_expr_c
-endif
+" if executable("astyle")
+"     "astyle args for C and C++
+"     let g:formatdef_my_custom_astyle = '"--indent-col1-comments --style=stroustrup -A4 --align-pointer=name --max-code-length=80 --convert-tabs"'
+"     let g:formatters_c = ['my_custom_astyle'] + g:formatters_c
+"     let g:formatters_cpp = ['my_custom_astyle'] + g:formatters_cpp
+"     " let g:formatprg_args_expr_c = '"--mode=c --style=google --add-brackets --indent-preproc-define --keep-one-line-statements -pcH".(&expandtab ? "s".&shiftwidth : "t")'
+" endif
 
 "automatic formatting options
 set textwidth=78
@@ -652,7 +631,6 @@ noremap  <C-k>     :Autoformat<CR>
 nnoremap <C-k>     :Autoformat<CR>
 vmap     <C-k>     <Esc>:Autoformat<CR>
 imap     <C-k>     <Esc>:Autoformat<CR>
-cmap     <C-k>     <Esc>:Autoformat<CR>
 omap     <C-k>     <Esc>:Autoformat<CR>
 
 
@@ -1191,6 +1169,19 @@ filetype plugin on
 "winmanager
 let g:winManagerWindowLayout = "Project|TagList"
 
+"window switching
+
+if has("nvim")
+    tnoremap <A-h> <C-\><C-n><C-w>h
+    tnoremap <A-j> <C-\><C-n><C-w>j
+    tnoremap <A-k> <C-\><C-n><C-w>k
+    tnoremap <A-l> <C-\><C-n><C-w>l
+endif
+nnoremap <A-h> <C-w>h
+nnoremap <A-j> <C-w>j
+nnoremap <A-k> <C-w>k
+nnoremap <A-l> <C-w>l
+
 let g:vimfiler_as_default_explorer = 1
 function! ToggleVExplorer()
     if g:vimfiler_as_default_explorer
@@ -1257,11 +1248,13 @@ let g:tagbar_autoclose = 1
 "mouse options
 set mouse=a
 "enable wide mouse support for iTerm2 and urxvt, should also work in new xterms
-if has('mouse_sgr')
-    set t_RV=
-    set ttym=sgr
-else
-    set ttymouse=xterm2
+if !has("nvim")
+    if has('mouse_sgr')
+        set t_RV=
+        set ttymouse=sgr
+    else
+        set ttymouse=xterm2
+    endif
 endif
 
 

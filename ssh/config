@@ -1,90 +1,3 @@
-host amdscdemo
-    hostname neo.microway.com
-    user microway
-#web
-Host icpp2012.org
-    User icpp2012
-
-#Livermore
-Host puffin
-    HostName puffin.cray.com
-    User p01329
-Host puffin.cray.com
-    User p01329
-
-host edge.llnl.gov
-    user scogland
-host edge
-    hostname edge.llnl.gov
-    user scogland
-
-#abokia
-#  Host genocad
-  #  HostName 71.62.120.130
-  #  Port 1022
-Host abokia
-    HostName 128.173.239.210
-Host orion
-  HostName 71.62.120.130
-  Port 2022
-Host orion-galaxy
-  HostName 71.62.120.130
-  Port 2022
-
-#Synergy
-#
-Host hokiespeed
-     hostname 198.82.161.62
-    #  hostname 198.82.161.61
-
-Host fire
-    hostname fire.cs.vt.edu
-
-
-Host mini.cs.vt.edu
-  port 4196
-  LocalForward 5904 localhost:5900
-
-#BIO
-Host chekhov.cs.vt.edu
-  User scogland
-
-Host chekhov
-  User scogland
-  HostName chekhov.cs.vt.edu
-
-Host bio.cs.vt.edu
-  User cs6824_2010
-  identityfile ~/.ssh/id_dsa
-
-#NDSSL
-Host zuni
-  HostName 128.173.98.79
-
-Host blup.apsc.vt.edu
-  Port 18922
-
-#ANL
-Host terra.mcs.anl.gov
-  identityfile ~/.ssh/id_anl
-Host bblogin.mcs.anl.gov
-  identityfile ~/.ssh/id_anl
-Host bblogin
-  HostName bblogin.mcs.anl.gov
-  IdentityFile ~/.ssh/id_anl
-
-#misc
-Host sc09
-  HostName 64.169.30.9
-  User toms
-    ForwardAgent yes
-
-
-Host robots.kernelspace.net
-  IdentityFile ~/.ssh/id_dsa
-
-
-
 #CUT_HERE
 
 Host olympus
@@ -191,41 +104,6 @@ Host scogland.com
   HostName ssh.scogland.com
   Port  2022
 
-
-
-#energyware
-host tegra
-    hostname 192.168.1.76
-    user root
-host droid3
-    hostname 192.168.1.87
-    Port 2222
-    user root
-#  Host gecko1*
-  #  HostName gecko1.energyware.com
-  #  Port 10022
-  #  IdentityFile ~/.ssh/id_dsa
-
-Host iguana1
-  HostName iguana1.energyware.com
-  #  HostName  207.42.85.30
-  #  Port 10022
-  IdentityFile ~/.ssh/id_dsa
-Host iguana1.local
-  HostName 192.168.1.117
-  #  HostName  207.42.85.30
-  #  Port 10022
-  IdentityFile ~/.ssh/id_dsa
-
-#  Host gecko0*
-  #  HostName gecko0.energyware.com
-  #  Port 10022
-  #  IdentityFile ~/.ssh/id_dsa
-
-#  Host iguana0*
-  #  HostName iguana0.energyware.com
-  #  Port 10022
-  #  IdentityFile ~/.ssh/id_dsa
 Host *.cs.vt.edu
     User njustn
 
@@ -242,7 +120,7 @@ Host czgw hype
   LocalForward 53589 localhost:53589
   ProxyCommand ssh rzgw -W %h:622
 
-Host cab surface vulcan sierra impetus rzalastor
+Host cab ipa surface vulcan sierra impetus hype2 rzalastor rzhasgpu rzmist
     HostName %h.llnl.gov
     ForwardX11 yes
     ProxyCommand ssh rzgw -W %h:622
@@ -291,7 +169,7 @@ Host charon charon.cs.vt.edu
     User njustn
     LocalForward 2022 localhost:22
     DynamicForward localhost:12345
-    ProxyCommand ssh rzgw -W charon.cs.vt.edu:22
+    ProxyCommand ssh rzgw -W charon.cs.vt.edu:2222
 
 Host hurricane-passthrough
   HostName ssh.scogland.com
