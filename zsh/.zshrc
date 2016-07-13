@@ -26,7 +26,9 @@ z)
 
 
 
-if [ -f /usr/local/tools/dotkit/init.sh ] ; then
+if [ -f /usr/local/tools/dotkit/init.zsh ] ; then
+    source /usr/local/tools/dotkit/init.zsh
+elif [ -f /usr/local/tools/dotkit/init.sh ] ; then
   emulate sh -c 'source /usr/local/tools/dotkit/init.sh'
 
   #wrap the bloody thing, this is to support ancient zsh versions as on LC

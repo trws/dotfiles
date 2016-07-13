@@ -51,13 +51,13 @@ NeoBundle 'Solarized'
 NeoBundle 'nanotech/jellybeans.vim'
 NeoBundle 'w0ng/vim-hybrid'
 
-"visual
-"NeoBundle 'Powerline'
-"powerline not working, light alternative?
+""visual
+""NeoBundle 'Powerline'
+""powerline not working, light alternative?
 NeoBundle 'bling/vim-airline'
-" NeoBundle 'tomtom/quickfixsigns_vim'
-" NeoBundle 'bling/vim-bufferline'
-NeoBundle 'edkolev/tmuxline.vim'
+"" NeoBundle 'tomtom/quickfixsigns_vim'
+"" NeoBundle 'bling/vim-bufferline'
+" NeoBundle 'edkolev/tmuxline.vim'
 
 "filetype handlers, highlighting etc
 NeoBundle 'LaTeX-Box-Team/LaTeX-Box'
@@ -1311,10 +1311,10 @@ if &term =~ ".*256color.*" || has("gui_running")
     " colorscheme inkpot
 endif
 
-" if !has("gui_running")
-" let g:jellybeans_background_color = "000000"
-" let g:jellybeans_background_color_256=0
-" endif
+ if !has("gui_running")
+ let g:jellybeans_background_color = "000000"
+ let g:jellybeans_background_color_256=0
+ endif
 
 set background=dark
 " let g:solarized_contrast = "high"
