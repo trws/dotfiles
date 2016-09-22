@@ -43,7 +43,11 @@ if [ -f /usr/local/tools/dotkit/init.sh ] ; then
 fi
 
 if [ -x "$(which spack)" ] ; then
-  source $(dirname $(which spack ))/../share/spack/setup-env.sh
+  SPACKDIR=$(dirname $(dirname $(which spack )))
+  export MODULEPATH=${SPACKDIR}/share/spack/modules:${MODULEPATH}
+
+  source ${SPACKDIR}/share/spack/setup-env.sh
+
   # using links in programs dir
   # for PKG in git python tmux vim task taskd ruby tmuxinator the_silver_searcher; do
   #   spack use $PKG

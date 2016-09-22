@@ -7,91 +7,88 @@
 " set rtp+=~/.vim/bundle/vundle/
 " call vundle#rc()
 if $SYSTEM != 'windows'
-    if !isdirectory(expand("~/.vim/bundle/dein.vim"))
-        echo('fetching dein for initial install')
-        call system('git clone https://github.com/Shougo/dein.vim ~/.vim/bundle/dein.vim')
+    if !isdirectory(expand("~/.vim/plugged/"))
+        echo('fetching plug for initial install')
+        call system('curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
     endif
-    if has('vim_starting')
-        set nocompatible               " Be iMproved
-        set runtimepath+=~/.vim/bundle/dein.vim
-    endif
-
-    call dein#begin(expand('~/.cache/dein'))
+    call plug#begin(expand('~/.vim/plugged'))
 endif
 
-call dein#local(expand('~/.vim/bundle/repos/github.com/Shougo/dein.vim'))
-
 " Bundle 'Shougo/vimproc.vim'
-call dein#add('Shougo/vimproc.vim', { 'build' : 'make'})
+Plug 'Shougo/vimproc.vim' , { 'do' : 'make'}
 
 "split management
-call dein#add('wesQ3/vim-windowswap')
+Plug 'wesQ3/vim-windowswap' 
 let g:windowswap_map_keys = 0 "prevent default bindings
 nnoremap <silent> <leader>yw :call WindowSwap#MarkWindowSwap()<CR>
 nnoremap <silent> <leader>pw :call WindowSwap#DoWindowSwap()<CR>
 nnoremap <silent> <leader>ww :call WindowSwap#EasyWindowSwap()<CR>
 
 "Mail search
-call dein#add('daisuzu/unite-notmuch')
-call dein#add('diefans/notmuch-vim')
+"Plug 'daisuzu/unite-notmuch' 
+"Plug 'diefans/notmuch-vim' 
 
 
 "colorschemes
-call dein#add('tomasr/molokai')
-" call dein#add('sjl/badwolf')
-call dein#add('Solarized')
-" call dein#add('github-theme')
-call dein#add('nanotech/jellybeans.vim')
-" call dein#add('w0ng/vim-hybrid')
+" Plug 'tomasr/molokai' 
+" Plug 'sjl/badwolf' 
+" Plug 'Solarized' 
+" Plug 'github-theme' 
+Plug 'nanotech/jellybeans.vim' 
+" Plug 'w0ng/vim-hybrid' 
+
+Plug 'vim-utils/vim-man'
 
 "visual
-"call dein#add('Powerline')
+"Plug 'Powerline' 
 "powerline not working, light alternative?
-call dein#add('bling/vim-airline')
-" call dein#add('tomtom/quickfixsigns_vim')
-" call dein#add('bling/vim-bufferline')
-call dein#add('edkolev/tmuxline.vim')
+Plug 'bling/vim-airline' 
+" Plug 'tomtom/quickfixsigns_vim' 
+" Plug 'bling/vim-bufferline' 
+Plug 'edkolev/tmuxline.vim' 
 
 "filetype handlers, highlighting etc
-call dein#add('LaTeX-Box-Team/LaTeX-Box')
-" call dein#add('vim-latex/vim-latex')
-call dein#add('liquid.vim')
+Plug 'LaTeX-Box-Team/LaTeX-Box', { 'for' : ['latex', 'tex', 'bibtex']}
+" Plug 'vim-latex/vim-latex' 
+Plug 'liquid.vim' 
 "c++11 highlighting
-call dein#add('vim-jp/cpp-vim')
+Plug 'vim-jp/cpp-vim', { 'for' : 'c++'}
 "doxygen toolkit
-call dein#add('mrtazz/DoxygenToolkit.vim')
+Plug 'mrtazz/DoxygenToolkit.vim' 
 "rust highlighting
-call dein#add('wting/rust.vim')
-call dein#add('wavded/vim-stylus')
-call dein#add('digitaltoad/vim-jade')
+Plug 'wting/rust.vim', { 'for' : 'rust' }
+Plug 'wavded/vim-stylus' 
+Plug 'digitaltoad/vim-jade', {'for' : 'jade'} 
 " map <silent> <buffer> <C-A-K> <Plug>VO_FollowLink
-" call dein#add('VimOutliner')
+" Plug 'VimOutliner' 
 "link handler
-call dein#add('vim-scripts/utl.vim')
+Plug 'vim-scripts/utl.vim' 
 "cool csv highlighting
-call dein#add('chrisbra/csv.vim')
+Plug 'chrisbra/csv.vim', 
 " CSupport plugin: XXX: reacts badly with several others
-" call dein#add('c.vim')
-call dein#add('jceb/vim-orgmode')
+" Plug 'c.vim' 
+Plug 'jceb/vim-orgmode', {'for' : 'orgmode'}
 "deps
-call dein#add('tpope/vim-speeddating')
+Plug 'tpope/vim-speeddating' 
 
 "tmux integration
-call dein#add('vimux')
+Plug 'vimux' 
 
 if $SYSTEM != 'windows'
-    " let ycmcomp =  'git submodule update --recursive && export EXTRA_CMAKE_ARGS="-DPYTHON_EXECUTABLE=$(which python)" ./install.sh --clang-completer --system-libclang --gocode-completer '
-    "completion
-    "LC build command: GOROOT=~/go
-    "EXTRA_CMAKE_ARGS="-DEXTERNAL_LIBCLANG_PATH=/usr/global/tools/clang/chaos_5_x86_64_ib/clang-omp-3.5.0/lib/libclang.so
-    "-DPYTHON_EXECUTABLE=$(which python) -DCMAKE_C_COMPILER=$(which gcc)
-    "-DCMAKE_CXX_
-    "COMPILER=$(which g++)" ./install.sh --clang-completer --gocode-completer
-    "--system-libclang
-    call dein#add('Valloric/YouCompleteMe', { 'build' : expand('~/.vim/ycm_build.sh'), 'timeout' : 6000 })
+    function! BuildYCM(info)
+      " info is a dictionary with 3 fields
+      " - name:   name of the plugin
+      " - status: 'installed', 'updated', or 'unchanged'
+      " - force:  set on PlugInstall! or PlugUpdate!
+      if a:info.status == 'installed' || a:info.force
+        !./install.py
+      endif
+    endfunction
+
+    Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') }
 endif
 
-call dein#add('davidhalter/jedi-vim')
+Plug 'davidhalter/jedi-vim' 
 let g:jedi#auto_vim_configuration = 0
 let g:jedi#popup_on_dot = 0
 let g:jedi#popup_select_first = 0
@@ -105,47 +102,47 @@ let g:jedi#documentation_command = "<leader>pk"
 let g:jedi#usages_command = "<leader>pu"
 let g:jedi#rename_command = "<leader>pr"
 
-" call dein#add('scrooloose/syntastic')
+" Plug 'scrooloose/syntastic' 
 
 "project management
-" call dein#add('project.tar.gz')
+" Plug 'project.tar.gz' 
 
 "bindings
 
 "shell/terminal emulation
-call dein#add('Shougo/vimshell.vim')
-call dein#add('pthrasher/conqueterm-vim')
+Plug 'Shougo/vimshell.vim', {'on' : 'VimShell'}
+Plug 'pthrasher/conqueterm-vim', {'on' : 'ConqueTerm'} 
 
 "file management
-call dein#add('xolox/vim-misc')
-call dein#add('xolox/vim-notes')
-call dein#add('Shougo/unite.vim')
-call dein#add('Shougo/vimfiler.vim')
-call dein#add('Shougo/unite-ssh')
-call dein#add('hewes/unite-gtags')
-call dein#add('tsukkee/unite-tag')
-call dein#add('vim-scripts/gtags.vim')
+Plug 'xolox/vim-misc' 
+Plug 'xolox/vim-notes' 
+Plug 'Shougo/unite.vim' 
+Plug 'Shougo/vimfiler.vim' 
+Plug 'Shougo/unite-ssh' 
+Plug 'hewes/unite-gtags' 
+Plug 'tsukkee/unite-tag' 
+Plug 'vim-scripts/gtags.vim' 
 " These are nice, but they are *way* too slow
-" call dein#add('xolox/vim-misc')
-" call dein#add('xolox/vim-easytags')
+" Plug 'xolox/vim-misc' 
+" Plug 'xolox/vim-easytags' 
 " NeoBundleLazy 'ujihisa/vimshell-ssh', { 'autoload' : {
 "             \ 'filetypes' : 'vimshell',
 "             \ }}
-call dein#add('Shougo/neomru.vim')
-call dein#add('kien/ctrlp.vim')
-call dein#add('tpope/vim-fugitive')
+Plug 'Shougo/neomru.vim' 
+Plug 'kien/ctrlp.vim' 
+Plug 'tpope/vim-fugitive' 
 "
 " cmdline-mode mappings
-" call dein#add('tpope/vim-rsi')
-call dein#add('critiqjo/husk-x.vim')
+" Plug 'tpope/vim-rsi' 
+Plug 'critiqjo/husk-x.vim' 
 
-call dein#add('airblade/vim-gitgutter.git')
+Plug 'airblade/vim-gitgutter.git' 
 
-call dein#add('terryma/vim-multiple-cursors')
+Plug 'terryma/vim-multiple-cursors' 
 
 if 0 "I haven't been using taskwarrior, so why?
     if executable('task')
-        call dein#add('farseer90718/vim-taskwarrior')
+        Plug 'farseer90718/vim-taskwarrior' 
         " let g:task_rc_override = 'defaultwidth=150 rc.color=no'
         let g:task_default_prompt= ['description', 'project', 'tag', 'due']
         ", 'priority', 'depends'
@@ -157,55 +154,40 @@ if 0 "I haven't been using taskwarrior, so why?
     endif
 endif
 
-" call dein#add('Raimondi/delimitMate')
-call dein#add('tpope/vim-surround')
-call dein#add('tommcdo/vim-exchange')
-" call dein#add('UltiSnips')
-call dein#add('SirVer/ultisnips')
+" Plug 'Raimondi/delimitMate' 
+Plug 'tpope/vim-surround' 
+Plug 'tommcdo/vim-exchange' 
+" Plug 'UltiSnips' 
+Plug 'SirVer/ultisnips' 
 " Snippets are separated from the engine. Add this if you want them:
-call dein#add('honza/vim-snippets')
-call dein#add('Lokaltog/vim-easymotion')
+Plug 'honza/vim-snippets' 
+Plug 'Lokaltog/vim-easymotion' 
 " map <Leader>e <Plug>(easymotion-prefix)
-" call dein#add('The-NERD-Commenter')
-call dein#add('majutsushi/tagbar')
-call dein#add('Chiel92/vim-autoformat')
-call dein#add('Gundo')
-call dein#add('tpope/vim-repeat')
-call dein#add('visualrepeat')
+" Plug 'The-NERD-Commenter' 
+Plug 'majutsushi/tagbar' 
+Plug 'Chiel92/vim-autoformat' 
+Plug 'Gundo' 
+Plug 'tpope/vim-repeat' 
+Plug 'visualrepeat' 
 "new alignment plugin, CR from visual mode to use
-call dein#add('junegunn/vim-easy-align')
-call dein#add('tpope/vim-abolish')
-call dein#add('tpope/vim-pastie')
+Plug 'junegunn/vim-easy-align' 
+Plug 'tpope/vim-abolish' 
+Plug 'tpope/vim-pastie' 
 "Unix command aliases, Chmod and company
-call dein#add('tpope/vim-eunuch')
-call dein#add('tpope/vim-markdown')
-call dein#add('jtratner/vim-flavored-markdown')
-" call dein#add('tpope/vim-rsi')
-call dein#add('tpope/vim-unimpaired')
-call dein#add('tpope/vim-dispatch')
-call dein#add('tomtom/tcomment_vim')
+Plug 'tpope/vim-eunuch' 
+Plug 'tpope/vim-markdown' 
+Plug 'jtratner/vim-flavored-markdown' 
+" Plug 'tpope/vim-rsi' 
+Plug 'tpope/vim-unimpaired' 
+Plug 'tpope/vim-dispatch' 
+Plug 'tomtom/tcomment_vim' 
 "Word highlighting for possible but uncertain errors
-call dein#add('reedes/vim-wordy')
+Plug 'reedes/vim-wordy' 
 
-call dein#end()
-
-if dein#check_install()
-    call dein#install()
-endif
-
-filetype plugin indent on     " required!
+call plug#end()
 
 let mapleader      = ','
 let maplocalleader = ','
-"
-" Brief help
-" :BundleList          - list configured bundles
-" :BundleInstall(!)    - install (update) bundles
-" :BundleSearch(!) foo - search (or refresh cache first) for foo
-" :BundleClean(!)      - confirm (or auto-approve) removal of unused bundles
-"
-" see :h vundle for more details or wiki for FAQ
-" NOTE: comments after Bundle commands are not allowed.
 
 
 runtime ftplugin/man.vim
