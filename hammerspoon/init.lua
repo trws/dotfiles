@@ -6,6 +6,7 @@ local screens = hs.screens
 local geometry = hs.geometry
 local grid = hs.grid
 local tiling = hs.window.tiling
+local hints = hs.hints
 
 -- set up your instance(s)
 -- expose = hs.expose.new(nil,{showThumbnails=false}) -- default windowfilter, no thumbnails
@@ -27,6 +28,10 @@ local mashshift = {'alt', 'ctrl', 'shift'}
 -- then bind to a hotkey
 -- hs.hotkey.bind(mash,'e','Expose',function()expose:toggleShow()end)
 -- hs.hotkey.bind(mashshift,'e','App Expose',function()expose_app:toggleShow()end)
+
+hints.style = 'vimperator'
+hotkey.bind(mash, "g", function() hs.hints.windowHints() end)
+hotkey.bind(mashshift, "g", function() hs.hints.windowHints(hs.window.focusedWindow():application():allWindows()) end)
 
 hotkey.bind(mash, "c", function() tiling.cyclelayout() end)
 hotkey.bind(mash, "j", function() tiling.cycle(1) end)
@@ -58,7 +63,7 @@ hotkey.bind(mash, 'L', grid.pushWindowRight)
 
 
 hotkey.bind({'cmd', 'ctrl'}, 'W', function()
-    local all = window.allwindows()
+    local all = window.allWindows()
     for _, w in ipairs(all) do
         print("checking window: " .. w:title())
         if string.find(w:title(), 'vit') then

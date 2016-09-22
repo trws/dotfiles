@@ -53,6 +53,7 @@ call dein#add('bling/vim-airline')
 call dein#add('edkolev/tmuxline.vim')
 
 "filetype handlers, highlighting etc
+call dein#add('cespare/vim-toml')
 call dein#add('LaTeX-Box-Team/LaTeX-Box')
 " call dein#add('vim-latex/vim-latex')
 call dein#add('liquid.vim')
@@ -60,6 +61,8 @@ call dein#add('liquid.vim')
 call dein#add('vim-jp/cpp-vim')
 "doxygen toolkit
 call dein#add('mrtazz/DoxygenToolkit.vim')
+"julia highlighting
+call dein#add('JuliaLang/julia-vim')
 "rust highlighting
 call dein#add('wting/rust.vim')
 call dein#add('wavded/vim-stylus')
@@ -426,10 +429,12 @@ if executable('pt')
     " Use pt in unite grep source.
     " https://github.com/monochromegane/the_platinum_searcher
     let g:unite_source_grep_command = 'pt'
-    let g:unite_source_grep_default_opts = ' --nogroup --nocolor ' .
+    let g:unite_source_grep_default_opts = ' --smart-case --nogroup --nocolor ' .
                 \ '--ignore ''.hg'' ' .
+                \ '--ignore ''CMakeFiles'' ' .
+                \ '--ignore ''*.dSYM'' ' .
                 \ '--ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr'' ' .
-                \ '--ignore ''*.dat'' --ignore ''*.pdf'' --ignore ''*.bib'' -e -- '
+                \ '--ignore ''*.dat'' --ignore ''*.pdf'' --ignore ''*.bib'' -e '
     let g:unite_source_grep_recursive_opt = ''
     " The empty perens set the pattern, all files should match
     let g:unite_source_rec_async_command = 'pt --nocolor --nogroup -g "." "" '
@@ -438,7 +443,7 @@ elseif executable('ag')
     let g:unite_source_grep_command = 'ag'
     let g:unite_source_grep_default_opts =
                 \ '--line-numbers --nocolor --nogroup --hidden --ignore ' .
-                \  '''.hg'' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr'' ' .
+                \  '''.hg'' --ignore ''.svn'' --ignore ''CMakeFiles'' --ignore ''.git'' --ignore ''.bzr'' ' .
                 \  '--ignore ''*.dat'' --ignore ''*.pdf'' -- '
     let g:unite_source_grep_recursive_opt = ''
     let g:unite_source_rec_async_command = 'ag -i --nocolor --nogroup --ignore --ignore ''.git'' --ignore ''.bzr'' --ignore ''node_modules'' --hidden -g ""'

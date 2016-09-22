@@ -1150,27 +1150,61 @@
 	<key>MinimumContrast</key>
 	<real>0.0</real>
 	<key>NSNavLastRootDirectory</key>
-	<string>~/.dotfiles/iterm2</string>
-	<key>NSNavPanelExpandedSizeForOpenMode</key>
-	<string>{712, 459}</string>
+	<string>~/config-sync/iterm2</string>
 	<key>NSQuotedKeystrokeBinding</key>
 	<string></string>
 	<key>NSRepeatCountBinding</key>
 	<string></string>
 	<key>NSScrollAnimationEnabled</key>
 	<false/>
+	<key>NSScrollViewShouldScrollUnderTitlebar</key>
+	<false/>
+	<key>NSTableView Columns KeyBingingTable</key>
+	<array>
+		<data>
+		BAtzdHJlYW10eXBlZIHoA4QBQISEhAhOU1N0cmluZwGEhAhOU09iamVjdACF
+		hAErATCG
+		</data>
+		<string>198</string>
+		<data>
+		BAtzdHJlYW10eXBlZIHoA4QBQISEhAhOU1N0cmluZwGEhAhOU09iamVjdACF
+		hAErATGG
+		</data>
+		<string>322</string>
+	</array>
+	<key>NSTableView Hidden Columns KeyBingingTable</key>
+	<array/>
+	<key>NSTableView Sort Ordering KeyBingingTable</key>
+	<array/>
+	<key>NSToolbar Configuration com.apple.NSColorPanel</key>
+	<dict>
+		<key>TB Is Shown</key>
+		<integer>1</integer>
+	</dict>
 	<key>NSWindow Frame Preferences</key>
-	<string>1265 718 924 485 0 0 2560 1417 </string>
+	<string>720 715 606 456 0 0 1920 1177 </string>
+	<key>NSWindow Frame SUStatusFrame</key>
+	<string>-1472 967 384 129 -2560 0 2560 1418 </string>
+	<key>NSWindow Frame SUUpdateAlert</key>
+	<string>650 607 620 392 0 0 1920 1200 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>1280 11 1276 1406 0 0 2560 1417 </string>
+	<string>0 0 1920 1200 0 0 1920 1177 </string>
 	<key>NSWindow Frame iTerm Window 1</key>
-	<string>0 940 490 326 0 0 2560 1417 </string>
+	<string>960 10 958 1167 0 0 1920 1177 </string>
 	<key>NSWindow Frame iTerm Window 2</key>
-	<string>0 11 1276 1406 0 0 2560 1417 </string>
+	<string>960 10 958 1167 0 0 1920 1177 </string>
 	<key>NSWindow Frame iTerm Window 3</key>
-	<string>0 11 1276 1406 0 0 2560 1417 </string>
+	<string>960 10 958 1167 0 0 1920 1177 </string>
 	<key>NSWindow Frame iTerm Window 4</key>
-	<string>0 138 1436 1262 0 0 2560 1440 </string>
+	<string>761 493 490 327 0 0 1920 1177 </string>
+	<key>NSWindow Frame iTerm Window 5</key>
+	<string>320 851 490 326 0 0 1920 1177 </string>
+	<key>NSWindow Frame iTerm Window 6</key>
+	<string>492 851 490 326 0 0 1920 1177 </string>
+	<key>NSWindow Frame iTerm Window 7</key>
+	<string>4 1091 490 326 0 0 2560 1417 </string>
+	<key>NSWindow Frame iTerm Window 8</key>
+	<string>464 950 490 326 0 0 2560 1418 </string>
 	<key>NeverWarnAboutShortLivedSessions_1C54F591-EF5F-44FE-9740-DF7DB738BCC2</key>
 	<true/>
 	<key>New Bookmarks</key>
@@ -5440,10 +5474,26 @@
 			<string>/Users/njustn</string>
 		</dict>
 	</array>
+	<key>NoSyncCommandHistoryHasEverBeenUsed</key>
+	<true/>
+	<key>NoSyncConfirmBeta</key>
+	<true/>
+	<key>NoSyncHaveShownPromoWithId_4</key>
+	<true/>
+	<key>NoSyncInstallationId</key>
+	<string>64433657-60E2-466B-BC63-D9AA6ECE285A</string>
+	<key>NoSyncNeverRemindPrefsChangesCopy</key>
+	<true/>
+	<key>NoSyncPermissionToShowTip</key>
+	<false/>
+	<key>NoSyncSuppressAnnyoingBellOffer</key>
+	<true/>
+	<key>NoSyncTimeOfFirstLaunchOfVersionWithTip</key>
+	<real>477945667.65283698</real>
 	<key>NoSyncTimeOfLastPromo</key>
-	<real>477363016.94216698</real>
+	<real>477700893.07944399</real>
 	<key>NoSyncTimeOfLastPromoDownload</key>
-	<real>486660484.10375398</real>
+	<real>477854381.243267</real>
 	<key>OnlyWhenMoreTabs</key>
 	<true/>
 	<key>OpenArrangementAtStartup</key>
@@ -5458,6 +5508,8 @@
 	<false/>
 	<key>PasteFromClipboard</key>
 	<false/>
+	<key>PasteTabToStringTabStopSize</key>
+	<integer>4</integer>
 	<key>PointerActions</key>
 	<dict>
 		<key>Button,1,1,,</key>
@@ -5492,7 +5544,7 @@
 		</dict>
 	</dict>
 	<key>PrefsCustomFolder</key>
-	<string>/Users/scogland1/.dotfiles/iterm2</string>
+	<string>~/.dotfiles/iterm2</string>
 	<key>PromptOnClose</key>
 	<true/>
 	<key>PromptOnQuit</key>
@@ -5505,12 +5557,14 @@
 	<integer>3</integer>
 	<key>SUEnableAutomaticChecks</key>
 	<true/>
+	<key>SUFeedAlternateAppNameKey</key>
+	<string>iTerm</string>
 	<key>SUFeedURL</key>
-	<string>https://iterm2.com/appcasts/testing.xml</string>
+	<string>https://iterm2.com/appcasts/testing.xml?shard=10</string>
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2016-06-01T15:26:47Z</date>
+	<date>2016-08-22T03:56:17Z</date>
 	<key>SavePasteHistory</key>
 	<false/>
 	<key>Show Toolbelt</key>
@@ -5565,6 +5619,6 @@
 	<key>findRegex_iTerm</key>
 	<false/>
 	<key>iTerm Version</key>
-	<string>2.1.4</string>
+	<string>3.0.4</string>
 </dict>
 </plist>

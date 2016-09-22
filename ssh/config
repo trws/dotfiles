@@ -123,7 +123,14 @@ Host czgw hype
 Host cab ipa surface vulcan sierra impetus hype2 rzalastor rzhasgpu rzmist
     HostName %h.llnl.gov
     ForwardX11 yes
+    ForwardAgent yes
     ProxyCommand ssh rzgw -W %h:622
+
+Host cz-stash cz-stash.llnl.gov cz-bitbucket cz-bitbucket.llnl.gov
+    HostName cz-bitbucket.llnl.gov
+    User git
+    Port 7999
+    ProxyCommand ssh rzgw -W %h:7999
 
 Host lanlgw ihpc-gate
     HostName ihpc-gate.lanl.gov
