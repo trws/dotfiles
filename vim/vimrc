@@ -1,18 +1,8 @@
-" profile start vim.log
-" profile func *
-" profile file *
-" set nocompatible              " be iMproved
-" filetype off                  " required!
-"
-" set rtp+=~/.vim/bundle/vundle/
-" call vundle#rc()
-if $SYSTEM != 'windows'
-    if !isdirectory(expand("~/.vim/plugged/"))
-        echo('fetching plug for initial install')
-        call system('curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
-    endif
-    call plug#begin(expand('~/.vim/plugged'))
+if !isdirectory(expand("~/.vim/plugged/"))
+    echo('fetching plug for initial install')
+    call system('curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
 endif
+call plug#begin(expand('~/.vim/plugged'))
 
 " Bundle 'Shougo/vimproc.vim'
 Plug 'Shougo/vimproc.vim' , { 'do' : 'make'}
@@ -190,7 +180,6 @@ let mapleader      = ','
 let maplocalleader = ','
 
 
-runtime ftplugin/man.vim
 runtime! macros/matchit.vim
 
 "Alignment mapping to enter in visual mode
