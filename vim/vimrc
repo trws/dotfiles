@@ -57,6 +57,7 @@ Plug 'vim-jp/cpp-vim', { 'for' : 'c++'}
 "doxygen toolkit
 "julia highlighting
 Plug 'JuliaLang/julia-vim'
+Plug 'keith/swift.vim'
 Plug 'mrtazz/DoxygenToolkit.vim' 
 "rust highlighting
 Plug 'wting/rust.vim', { 'for' : 'rust' }
@@ -139,7 +140,7 @@ Plug 'tpope/vim-fugitive'
 " Plug 'tpope/vim-rsi' 
 Plug 'critiqjo/husk-x.vim' 
 
-Plug 'airblade/vim-gitgutter.git' 
+Plug 'airblade/vim-gitgutter' 
 
 Plug 'terryma/vim-multiple-cursors' 
 

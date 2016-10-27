@@ -132,6 +132,12 @@ Host cz-stash cz-stash.llnl.gov cz-bitbucket cz-bitbucket.llnl.gov
     Port 7999
     ProxyCommand ssh rzgw -W %h:7999
 
+Host rz-stash rz-stash.llnl.gov rz-bitbucket rz-bitbucket.llnl.gov
+    HostName rz-bitbucket.llnl.gov
+    User git
+    Port 7999
+    ProxyCommand ssh rzgw -W %h:7999
+
 Host lanlgw ihpc-gate
     HostName ihpc-gate.lanl.gov
     ForwardX11 yes
