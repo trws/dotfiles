@@ -163,7 +163,6 @@ brew 'ruby'
 brew 'rust'
 brew 'sbcl'
 brew 'source-highlight'
-brew 'sqlitebrowser'
 brew 'stash-cli'
 brew 'swig'
 brew 'task', args: ['with-gnutls']
