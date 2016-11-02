@@ -139,6 +139,8 @@ zmodload -ap zsh/mapfile mapfile
 zstyle :completion:*:default list-colors ${(s.:.)LS_COLORS}  #makes LS_COLORS actually work
 #if [[ -f $ZDOTDIR/styles ]] { . $ZDOTDIR/styles }
 #autoload -U compinit
+autoload bashcompinit
+bashcompinit
 #compinit -d ~/.zcompdump
 #compinit $(! (($UID)) && print -- "-i" "-d" ~/.zcompdump.root)
 
