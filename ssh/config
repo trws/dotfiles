@@ -1,5 +1,3 @@
-#CUT_HERE
-
 Host olympus
     hostname charon.cs.vt.edu
     port 17853
@@ -8,8 +6,9 @@ Host olympus.synergy
     port 17853
 
 Host armor1 armor2 dna1 dna2 dna3 athena amdlow1 amdlow2 amdlow3 caterpillar tnsi1 tnsi2 wood1 wood2
+    User njustn
     Protocol 2
-    HostName armor2
+    HostName %h
     LocalForward 2022 localhost:22
     ProxyCommand ssh charon.cs.vt.edu -W %h:22
 
@@ -29,114 +28,67 @@ Host escaflowne
     LocalForward 2022 localhost:22
     ProxyCommand ssh charon.cs.vt.edu -W escaflowne:22
 
-#global home, more in ether
-Host wind
-  #HostName n.homelinux.org
-  #switched to static IP
-  User njustn
-  HostName ssh.scogland.com
-  Port  2022
-
-Host breath
-  HostName ssh.scogland.com
-  User root
-  Port  5022
-  DynamicForward localhost:12345
-  LocalForward 5903 localhost:5900
-
-Host breathproxy
-  HostName ssh.scogland.com
-  User root
-  Port  443
-  DynamicForward localhost:12345
-  LocalForward 9933 imap.gmail.com:993
-  LocalForward 5587 smtp.gmail.com:587
-  ProxyCommand nc -X connect -x 128.115.190.235:6082 %h %p
-
-Host breathvlc
-  HostName ssh.scogland.com
-  User root
-  Port  5022
-  DynamicForward localhost:12345
-  LocalForward 9933 imap.gmail.com:993
-  LocalForward 5587 smtp.gmail.com:587
-  ProxyCommand ssh rzgw -W ssh.scogland.com:5022
+# Home
+Host gale hurricane typhoon
+    User njustn
 
 Host hurricane
-  HostName ssh.scogland.com
-  User njustn
-  Port  3022
-  DynamicForward localhost:12345
-  LocalForward 5903 localhost:5900
-
-Host hurricanevlc
-  HostName ssh.scogland.com
-  User njustn
-  Port  3022
-  ProxyCommand ssh rzgw -W ssh.scogland.com:3022
-  DynamicForward localhost:12345
-  LocalForward 5903 localhost:5900
-
-Host galevlc
-  HostName ssh.scogland.com
-  User njustn
-  Port  4022
-  ProxyCommand ssh rzgw -W ssh.scogland.com:4022
-  DynamicForward localhost:12345
-  LocalForward 5903 localhost:5900
-
-
-Host hurricane.local
-  HostName hurricane.local
-  User njustn
-  Port  22
   DynamicForward localhost:12345
   LocalForward 5903 localhost:5900
 
 Host gale
-  #hostname 24.127.43.86
-  #port 1022
-  User njustn
-  HostName ssh.scogland.com
-  Port  4022
+  DynamicForward localhost:12346
+  LocalForward 5904 localhost:5900
 
-Host scogland.com
+Match originalhost gale exec "[ !~/.dotfiles/scripts/at-home.py ]"
   HostName ssh.scogland.com
-  Port  2022
+  Port 4022
+
+Match originalhost hurricane exec "[ !~/.dotfiles/scripts/at-home.py ]"
+  HostName ssh.scogland.com
+  Port 3022
+
+Match originalhost breath exec "[ !~/.dotfiles/scripts/at-home.py ]"
+  HostName ssh.scogland.com
+  Port 5022
+
 
 Host *.cs.vt.edu
     User njustn
 
-#LLNL HOSTS
-Host rzgw
-  HostName rzgw.llnl.gov
-  #taskwarrior sync port
-  LocalForward 53589 localhost:53589
+# LLNL
 
-#LC
-Host czgw hype
-  HostName hype.llnl.gov
-  #taskwarrior sync port
-  LocalForward 53589 localhost:53589
-  ProxyCommand ssh rzgw -W %h:622
 
-Host cab ipa surface vulcan sierra impetus hype2 rzalastor rzhasgpu rzmist
+Host cab ipa hype surface vulcan sierra impetus hype2 rz* cz*
     HostName %h.llnl.gov
     ForwardX11 yes
     ForwardAgent yes
+
+Match exec "[ ~/.dotfiles/scripts/at-llnl.py ]" host *.llnl.gov !originalhost rzgw
     ProxyCommand ssh rzgw -W %h:622
+
+Match exec "[ ~/.dotfiles/scripts/at-llnl.py ]" !host *.llnl.gov
+    ProxyCommand ssh rzgw -W %h:%p
+
+Match originalhost rzgw
+    PubkeyAuthentication no
+    PasswordAuthentication yes
 
 Host cz-stash cz-stash.llnl.gov cz-bitbucket cz-bitbucket.llnl.gov
     HostName cz-bitbucket.llnl.gov
     User git
     Port 7999
-    ProxyCommand ssh rzgw -W %h:7999
+
+# Host rz-stash.llnl.gov rz-stash
+#     HostName rz-stash.llnl.gov
+#     Port 7999
+#     ProxyCommand ssh rzalastor -W %h:%p
+
 
 Host rz-stash rz-stash.llnl.gov rz-bitbucket rz-bitbucket.llnl.gov
     HostName rz-bitbucket.llnl.gov
     User git
     Port 7999
-    ProxyCommand ssh rzgw -W %h:7999
 
 Host lanlgw ihpc-gate
     HostName ihpc-gate.lanl.gov
@@ -184,28 +136,13 @@ Host charon charon.cs.vt.edu
     DynamicForward localhost:12345
     ProxyCommand ssh rzgw -W charon.cs.vt.edu:2222
 
-Host hurricane-passthrough
-  HostName ssh.scogland.com
-  User njustn
-  Port  3022
-  LocalForward 5903 localhost:5900
-  DynamicForward localhost:12345
-  ProxyCommand ssh rzgw -W ssh.scogland.com:3022
-
-Host gale-passthrough
-  HostName ssh.scogland.com
-  User njustn
-  Port  4022
-  LocalForward 5903 localhost:5900
-  DynamicForward localhost:12345
-  ProxyCommand ssh rzgw -W ssh.scogland.com:4022
-
 Host localhost
     ControlMaster no
 
 Host *
     User scogland
     ForwardAgent yes
+    ForwardX11 yes
     ServerAliveInterval 15
     ServerAliveCountMax 3
     ControlPath ~/.ssh/master-%r@%h:%p
