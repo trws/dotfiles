@@ -1281,10 +1281,10 @@ if &term =~ ".*256color.*" || has("gui_running")
     " colorscheme inkpot
 endif
 
-" if !has("gui_running")
-" let g:jellybeans_background_color = "000000"
-" let g:jellybeans_background_color_256=0
-" endif
+ if !has("gui_running")
+ let g:jellybeans_background_color = "000000"
+ let g:jellybeans_background_color_256=0
+ endif
 
 set background=dark
 " let g:solarized_contrast = "high"

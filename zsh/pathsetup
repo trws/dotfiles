@@ -52,8 +52,8 @@ add_to_path_back /usr/bin /bin /usr/[X]{,11{,R6}}/bin(N) /usr/local/cuda/bin  /u
 [[ -d ~/build/depot_tools/ ]] && path=( $path ~/build/depot_tools )
 
 add_to_path_front ~/go/bin /usr/local/bin ~/spack/bin
-if [[ -e /etc/toss-release ]] ; then
-    add_to_path_front  ~/programs/$(cat /etc/toss-release)
+if [[ -n "$SYS_TYPE" ]] ; then
+    add_to_path_front  ~/programs/${SYS_TYPE}/bin
 else
     add_to_path_front  ~/programs/default/bin 
 fi

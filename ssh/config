@@ -139,7 +139,12 @@ Host charon charon.cs.vt.edu
 Host localhost
     ControlMaster no
 
-Host *
+# Host rz-stash.llnl.gov
+#     ControlMaster no
+#     User git
+#     ForwardAgent no
+
+Host !rz-stash*
     User scogland
     ForwardAgent yes
     ForwardX11 yes

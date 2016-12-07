@@ -7,11 +7,14 @@ ZSH=$ZDOTDIR/oh-my-zsh
 ZSH_CUSTOM=$ZDOTDIR/oh_my_zsh_custom
 # ZSH_THEME="tom"
 ZSH_THEME="steeef"
+DISABLE_UNTRACKED_FILES_DIRTY="true"
 # source ~/.zsh/prezto/init.zsh
 export _Z_DATA=~/.zsh/z-dirjump-list.txt
 plugins=(
 svn-fast-info
 git
+git-prompt
+git-flow
 git-extras
 git-remote-branch
 history-substring-search
@@ -26,7 +29,9 @@ z)
 
 
 
-if [ -f /usr/local/tools/dotkit/init.sh ] ; then
+if [ -f /usr/local/tools/dotkit/init.zsh ] ; then
+    source /usr/local/tools/dotkit/init.zsh
+elif [ -f /usr/local/tools/dotkit/init.sh ] ; then
   emulate sh -c 'source /usr/local/tools/dotkit/init.sh'
 
   #wrap the bloody thing, this is to support ancient zsh versions as on LC
@@ -141,6 +146,8 @@ zmodload -ap zsh/mapfile mapfile
 zstyle :completion:*:default list-colors ${(s.:.)LS_COLORS}  #makes LS_COLORS actually work
 #if [[ -f $ZDOTDIR/styles ]] { . $ZDOTDIR/styles }
 #autoload -U compinit
+autoload bashcompinit
+bashcompinit
 #compinit -d ~/.zcompdump
 #compinit $(! (($UID)) && print -- "-i" "-d" ~/.zcompdump.root)
 

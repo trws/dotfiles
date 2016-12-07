@@ -1,6 +1,10 @@
 #!zsh aliases
 #alias lsd='ls -ld *(-/DN)'
 
+if which srun > /dev/null  ; then
+    alias sr1='srun -N 1 --exclusive'
+    alias sr4='srun -N 4 --exclusive'
+fi
 
 alias ls.='ls -dF .*'
 
