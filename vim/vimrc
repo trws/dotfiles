@@ -126,7 +126,7 @@ Plug 'tpope/vim-fugitive'
 " Plug 'tpope/vim-rsi' 
 Plug 'critiqjo/husk-x.vim' 
 
-Plug 'airblade/vim-gitgutter.git' 
+Plug 'airblade/vim-gitgutter' 
 
 Plug 'terryma/vim-multiple-cursors' 
 

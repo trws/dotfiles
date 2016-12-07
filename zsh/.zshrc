@@ -7,11 +7,14 @@ ZSH=$ZDOTDIR/oh-my-zsh
 ZSH_CUSTOM=$ZDOTDIR/oh_my_zsh_custom
 # ZSH_THEME="tom"
 ZSH_THEME="steeef"
+DISABLE_UNTRACKED_FILES_DIRTY="true"
 # source ~/.zsh/prezto/init.zsh
 export _Z_DATA=~/.zsh/z-dirjump-list.txt
 plugins=(
 svn-fast-info
 git
+git-prompt
+git-flow
 git-extras
 git-remote-branch
 history-substring-search

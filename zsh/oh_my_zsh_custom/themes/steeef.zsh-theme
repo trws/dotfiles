@@ -40,7 +40,7 @@ zstyle ':vcs_info:*' enable git svn
 
 # check-for-changes can be really slow.
 # you should disable it, if you work with large repositories
-zstyle ':vcs_info:*:prompt:*' check-for-changes true
+# zstyle ':vcs_info:*:prompt:*' check-for-changes true
 
 # set formats
 # %b - branchname
@@ -94,12 +94,13 @@ else
 fi
 if [[ -n "$PR_GIT_UPDATE" ]] ; then
     # check for untracked files or updated submodules, since vcs_info doesn't
-    if git ls-files --other --exclude-standard 2> /dev/null | grep -q "."; then
-        PR_GIT_UPDATE=1
-        FMT_BRANCH="(%{$turquoise%}%b%u%c%{$hotpink%}●${PR_RST})"
-    else
+    # git_super_status
+    # if git ls-files --other --exclude-standard 2> /dev/null | grep -q "."; then
+    #     PR_GIT_UPDATE=1
+    #     FMT_BRANCH="(%{$turquoise%}%b%u%c%{$hotpink%}●${PR_RST})"
+    # else
         FMT_BRANCH="(%{$turquoise%}%b%u%c${PR_RST})"
-    fi
+    # fi
     zstyle ':vcs_info:*:prompt:*' formats "${FMT_BRANCH} "
 
     vcs_info 'prompt'
