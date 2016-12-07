@@ -58,16 +58,19 @@ Host *.cs.vt.edu
 
 # LLNL
 
+Host rzmanta
+    Port 22
 
 Host cab ipa hype surface vulcan sierra impetus hype2 rz* cz*
+    User scogland
     HostName %h.llnl.gov
     ForwardX11 yes
     ForwardAgent yes
 
-Match exec "[ ~/.dotfiles/scripts/at-llnl.py ]" host *.llnl.gov !originalhost rzgw
-    ProxyCommand ssh rzgw -W %h:622
 
-Match exec "[ ~/.dotfiles/scripts/at-llnl.py ]" !host *.llnl.gov
+Match exec "[ ~/.dotfiles/scripts/at-llnl.py ]" !originalhost rzgw
+    #this must be overridden above if wrong
+    Port 622 
     ProxyCommand ssh rzgw -W %h:%p
 
 Match originalhost rzgw
@@ -144,7 +147,7 @@ Host localhost
 #     User git
 #     ForwardAgent no
 
-Host !rz-stash*
+match !originalhost *stash*
     User scogland
     ForwardAgent yes
     ForwardX11 yes
