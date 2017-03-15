@@ -1,3 +1,9 @@
+function! FindOrCreate(dir)
+    if !isdirectory(expand(a:dir))
+        call mkdir(expand(a:dir), "p")
+    endif
+endfunction
+
 if !isdirectory(expand("~/.vim/plugged/"))
     echo('fetching plug for initial install')
     call system('curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
@@ -170,7 +176,7 @@ Plug 'tpope/vim-pastie'
 "Unix command aliases, Chmod and company
 Plug 'tpope/vim-eunuch' 
 Plug 'tpope/vim-markdown' 
-Plug 'jtratner/vim-flavored-markdown' 
+let g:markdown_fenced_languages = ['html', 'python', 'bash=sh', "c", "c++=cpp", "latex=tex"]
 " Plug 'tpope/vim-rsi' 
 Plug 'tpope/vim-unimpaired' 
 Plug 'tpope/vim-dispatch' 
@@ -790,10 +796,13 @@ set ttyfast
 " Use UTF-8 without BOM
 set encoding=utf-8 nobomb
 " Centralize backups, swapfiles and undo history, make dropbox happy!
-set backupdir=~/.vim/backups
-set directory=~/.vim/swaps//
+call FindOrCreate("~/.vim-backups")
+set backupdir=~/.vim-backups
+call FindOrCreate("~/.vim-swaps")
+set directory=~/.vim-swaps//
 if exists("&undodir")
-    set undodir=~/.vim/undo
+    call FindOrCreate("~/.vim-undo")
+    set undodir=~/.vim-undo
 endif
 " Enable per-directory .vimrc files and disable unsafe commands in them
 set exrc
@@ -1281,12 +1290,16 @@ if &term =~ ".*256color.*" || has("gui_running")
     " colorscheme inkpot
 endif
 
+let g:jellybeans_overrides = {
+\    'background': { 'ctermbg': 'Black' },
+\}
  if !has("gui_running")
  let g:jellybeans_background_color = "000000"
- let g:jellybeans_background_color_256=0
+ let g:jellybeans_use_lowcolor_black = 1
+ let g:jellybeans_background_color_256="0"
  endif
 
-set background=dark
+" set background=dark
 " let g:solarized_contrast = "high"
 let g:solarized_contrast = "normal"
 let g:solarized_visibility = "normal"

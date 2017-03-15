@@ -33,12 +33,17 @@ Host gale hurricane typhoon
     User njustn
 
 Host hurricane
-  DynamicForward localhost:12345
   LocalForward 5903 localhost:5900
 
 Host gale
   DynamicForward localhost:12346
   LocalForward 5904 localhost:5900
+
+Match originalhost ddwrt exec "[ !~/.dotfiles/scripts/at-home.py ]"
+  User root
+  HostName ssh.scogland.com
+  DynamicForward 12345
+  Port 5022
 
 Match originalhost gale exec "[ !~/.dotfiles/scripts/at-home.py ]"
   HostName ssh.scogland.com
@@ -49,33 +54,44 @@ Match originalhost hurricane exec "[ !~/.dotfiles/scripts/at-home.py ]"
   Port 3022
 
 Match originalhost breath exec "[ !~/.dotfiles/scripts/at-home.py ]"
-  HostName ssh.scogland.com
-  Port 5022
+  User root
+  ProxyCommand ssh ddwrt -W 192.168.1.3:22
+
 
 
 Host *.cs.vt.edu
     User njustn
 
+Host charon charon.cs.vt.edu
+    Protocol 2
+    port 2222
+    HostName charon.cs.vt.edu
+    User njustn
+    LocalForward 2022 localhost:22
+
 # LLNL
 
-Host rzmanta
+Host rzmanta rzgw ray
     Port 22
 
-Host cab ipa hype surface vulcan sierra impetus hype2 rz* cz*
+Host cab ipa hype ray surface vulcan sierra impetus hype2 rz* cz*
     User scogland
     HostName %h.llnl.gov
+    Port 622 
     ForwardX11 yes
     ForwardAgent yes
 
 
-Match exec "[ ~/.dotfiles/scripts/at-llnl.py ]" !originalhost rzgw
+Match exec " ~/.dotfiles/scripts/at-llnl.py " !originalhost rzgw !originalhost vortex !originalhost localhost !originalhost 127.0.0.1
     #this must be overridden above if wrong
-    Port 622 
     ProxyCommand ssh rzgw -W %h:%p
 
 Match originalhost rzgw
     PubkeyAuthentication no
     PasswordAuthentication yes
+
+Host github.com
+    User git
 
 Host cz-stash cz-stash.llnl.gov cz-bitbucket cz-bitbucket.llnl.gov
     HostName cz-bitbucket.llnl.gov
@@ -131,13 +147,6 @@ Host hayes-power
 
 
 #Redirect
-Host charon charon.cs.vt.edu
-    Protocol 2
-    HostName charon.cs.vt.edu
-    User njustn
-    LocalForward 2022 localhost:22
-    DynamicForward localhost:12345
-    ProxyCommand ssh rzgw -W charon.cs.vt.edu:2222
 
 Host localhost
     ControlMaster no
@@ -148,9 +157,7 @@ Host localhost
 #     ForwardAgent no
 
 match !originalhost *stash*
-    User scogland
     ForwardAgent yes
-    ForwardX11 yes
     ServerAliveInterval 15
     ServerAliveCountMax 3
     ControlPath ~/.ssh/master-%r@%h:%p

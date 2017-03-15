@@ -34,7 +34,7 @@ if (( $gotroot )) ; then
     add_to_path_front /usr/local/sbin /opt/local/sbin
     add_to_path_back /sbin /usr/sbin
 fi
-add_to_path_front /Developer/usr/bin ~/.ports/bin ~/.ports/libexec/gnubin /opt/local/libexec/gnubin /opt/local/bin
+add_to_path_front /Developer/usr/bin ~/.ports/bin ~/.ports/libexec/gnubin /usr/local/opt/coreutils/libexec/gnubin /opt/local/libexec/gnubin /opt/local/bin
 
 manpath=( ~/programs/man ~/programs/share/man /opt/local/man /usr/share/man $manpath )
 

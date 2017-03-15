@@ -1,0 +1,59 @@
+#!/usr/bin/env python
+
+import os
+import sys
+import argparse
+import subprocess as sp
+import shutil
+
+parser = argparse.ArgumentParser("Make a build directory")
+parser.add_argument("-C", "--changedir",
+                    help="directory to use as base", default=os.getcwd())
+parser.add_argument(
+    "-e", "--extra", help="extra directory component, for multiple build directories")
+parser.add_argument("-c", "--config", help="run configuration command", action='store_true')
+parser.add_argument("-x", "--clean", help="clean directory", action='store_true')
+
+parser.add_argument("args", nargs='*')
+
+args = parser.parse_args()
+
+basedir = os.path.abspath(args.changedir)
+
+home = os.path.expanduser("~")
+projects = os.path.join(home, "Projects")
+if projects not in basedir:
+    print("mkbdir only works with directories under projects at present")
+
+bdir = os.path.join(os.path.expanduser("~/Builds"),
+                    os.path.relpath(basedir, start=projects))
+
+if args.extra:
+    bdir = os.path.join(bdir, args.extra)
+
+if args.clean and os.path.exists(bdir):
+    shutil.rmtree(bdir)
+
+try:
+    os.makedirs(bdir)
+except:
+    pass
+
+if args.config:
+    arglist = list(args.args)
+    if os.path.exists("./drun"):
+        arglist.insert(0, os.path.abspath("./drun"))
+
+    os.chdir(bdir)
+    if os.path.exists(os.path.join(basedir, "CMakeLists.txt")):
+        if not [x for x in args.args if "-DCMAKE_INSTALL_PREFIX" in x ]:
+            arglist.insert(0, "-DCMAKE_INSTALL_PREFIX=" + os.path.join(bdir, "install"))
+        arglist = ["cmake", basedir] + arglist
+    elif os.path.exists(os.path.join(basedir, "configure")):
+        if not [x for x in args.args if "--prefix=" in x ]:
+            arglist.insert(0, "--prefix=" + os.path.join(bdir, "install"))
+        arglist = [os.path.join(basedir, "configure")] + arglist
+    print arglist
+    sp.call(arglist)
+
+print bdir
