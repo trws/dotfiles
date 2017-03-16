@@ -47,11 +47,11 @@ export CVS_RSH=ssh
 export LC_ALL=en_US.UTF-8
 #[[ $TERM = "screen-256color-bce" ]] && infocmp screen-256color >& /dev/null && export TERM=screen-256color || echo screen-256color unavailable, fix it!
 [[ $COLORTERM = "gnome-terminal" ]] && export TERM=xterm-256color
-if [ -d ~/go ] ; then
-  export GOROOT=~/go
-elif [ -d /usr/local/opt/go/libexec ] ; then
-  export GOROOT=/usr/local/opt/go/libexec
-fi
+# if [ -d ~/go ] ; then
+#   export GOROOT=~/go
+# elif [ -d /usr/local/opt/go/libexec ] ; then
+#   export GOROOT=/usr/local/opt/go/libexec
+# fi
 # export GOARCH=amd64
 # export GOBIN=/usr/local/go/bin
 export GOPATH=~/go

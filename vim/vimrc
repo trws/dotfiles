@@ -4,11 +4,19 @@ function! FindOrCreate(dir)
     endif
 endfunction
 
-if !isdirectory(expand("~/.vim/plugged/"))
+" Deal with single home/multi-arch systems
+let plugged_directory = substitute(system("uname -m"), '[ \n]\+$', '', '')
+if plugged_directory == "x86_64"
+    let plugged_directory = ""
+endif
+let plugged_directory = "~/.vim/plugged/" . plugged_directory
+if !isdirectory(expand(plugged_directory))
     echo('fetching plug for initial install')
     call system('curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
+    call system('mkdir -p ' . plugged_directory)
 endif
-call plug#begin(expand('~/.vim/plugged'))
+
+call plug#begin(expand(plugged_directory))
 
 " Bundle 'Shougo/vimproc.vim'
 Plug 'Shougo/vimproc.vim' , { 'do' : 'make'}
@@ -41,7 +49,7 @@ Plug 'vim-utils/vim-man'
 Plug 'bling/vim-airline' 
 " Plug 'tomtom/quickfixsigns_vim' 
 " Plug 'bling/vim-bufferline' 
-Plug 'edkolev/tmuxline.vim' 
+" Plug 'edkolev/tmuxline.vim'
 
 "filetype handlers, highlighting etc
 Plug 'cespare/vim-toml'
@@ -103,7 +111,7 @@ let g:jedi#documentation_command = "<leader>pk"
 let g:jedi#usages_command = "<leader>pu"
 let g:jedi#rename_command = "<leader>pr"
 
-" Plug 'scrooloose/syntastic' 
+Plug 'scrooloose/syntastic'
 
 "project management
 " Plug 'project.tar.gz' 
