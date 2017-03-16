@@ -8,52 +8,92 @@ import shutil
 
 parser = argparse.ArgumentParser("Make a build directory")
 parser.add_argument("-C", "--changedir",
-                    help="directory to use as base", default=os.getcwd())
+                    help="directory to use as base")
 parser.add_argument(
     "-e", "--extra", help="extra directory component, for multiple build directories")
-parser.add_argument("-c", "--config", help="run configuration command", action='store_true')
-parser.add_argument("-x", "--clean", help="clean directory", action='store_true')
+parser.add_argument(
+    "-c", "--config", help="run configuration command", action='store_true')
+parser.add_argument(
+    "-x", "--clean", help="clean directory", action='store_true')
+parser.add_argument("-p", "--pretend", help="print only", action='store_true')
+parser.add_argument(
+    "-r", "--reverse", help="make and print project directory", action='store_true')
 
 parser.add_argument("args", nargs='*')
 
 args = parser.parse_args()
 
-basedir = os.path.abspath(args.changedir)
-
 home = os.path.expanduser("~")
 projects = os.path.join(home, "Projects")
+builds = os.path.join(home, "Builds")
+
+if args.reverse:
+    if args.changedir:
+        basedir = args.changedir
+    else:
+        basedir = os.getcwd()
+    if builds not in basedir:
+        print("mkbdir -r only works with directories under ~/Builds at present")
+    pdir = None
+    while builds in basedir:
+        pdir = os.path.join(projects, os.path.relpath(basedir, start=builds))
+        if os.path.exists(pdir):
+            break
+        basedir = os.path.dirname(basedir)
+    if pdir is None:
+        sys.exit(1)
+    print pdir
+    sys.exit(0)
+
+if args.changedir:
+    basedir = os.path.abspath(args.changedir)
+else: #not specified, search for repo
+    basedir = os.getcwd()
+    while True:
+        if (os.path.exists(os.path.join(basedir, ".git")) or
+                os.path.exists(os.path.join(basedir, ".svn")) or
+                os.path.exists(os.path.join(basedir, ".hg"))):
+            break
+        basedir = os.path.dirname(basedir)
+        if basedir == '/':
+            # We're not in a repo, trust the user...
+            basedir = os.getcwd()
+            break
+
 if projects not in basedir:
     print("mkbdir only works with directories under projects at present")
 
-bdir = os.path.join(os.path.expanduser("~/Builds"),
+bdir = os.path.join(builds,
                     os.path.relpath(basedir, start=projects))
 
-if args.extra:
-    bdir = os.path.join(bdir, args.extra)
+if not args.pretend:
+    if args.extra:
+        bdir = os.path.join(bdir, args.extra)
 
-if args.clean and os.path.exists(bdir):
-    shutil.rmtree(bdir)
+    if args.clean and os.path.exists(bdir):
+        shutil.rmtree(bdir)
 
-try:
-    os.makedirs(bdir)
-except:
-    pass
+    try:
+        os.makedirs(bdir)
+    except:
+        pass
 
-if args.config:
-    arglist = list(args.args)
-    if os.path.exists("./drun"):
-        arglist.insert(0, os.path.abspath("./drun"))
+    if args.config:
+        arglist = list(args.args)
+        if os.path.exists("./drun"):
+            arglist.insert(0, os.path.abspath("./drun"))
 
-    os.chdir(bdir)
-    if os.path.exists(os.path.join(basedir, "CMakeLists.txt")):
-        if not [x for x in args.args if "-DCMAKE_INSTALL_PREFIX" in x ]:
-            arglist.insert(0, "-DCMAKE_INSTALL_PREFIX=" + os.path.join(bdir, "install"))
-        arglist = ["cmake", basedir] + arglist
-    elif os.path.exists(os.path.join(basedir, "configure")):
-        if not [x for x in args.args if "--prefix=" in x ]:
-            arglist.insert(0, "--prefix=" + os.path.join(bdir, "install"))
-        arglist = [os.path.join(basedir, "configure")] + arglist
-    print arglist
-    sp.call(arglist)
+        os.chdir(bdir)
+        if os.path.exists(os.path.join(basedir, "CMakeLists.txt")):
+            if not [x for x in args.args if "-DCMAKE_INSTALL_PREFIX" in x]:
+                arglist.insert(0, "-DCMAKE_INSTALL_PREFIX=" +
+                               os.path.join(bdir, "install"))
+            arglist = ["cmake", basedir] + arglist
+        elif os.path.exists(os.path.join(basedir, "configure")):
+            if not [x for x in args.args if "--prefix=" in x]:
+                arglist.insert(0, "--prefix=" + os.path.join(bdir, "install"))
+            arglist = [os.path.join(basedir, "configure")] + arglist
+        print arglist
+        sp.call(arglist)
 
 print bdir
