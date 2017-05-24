@@ -1,5 +1,8 @@
 #!zsh
 
+typeset -U path
+typeset -U manpath
+
 function remove_from_path(){
 for p in $@ ; do
     path=("${(@)path:#$p}")
@@ -8,42 +11,47 @@ done
 
 function add_to_path_front(){
 for p in $@ ; do
-    if [ -d $p ] ; then
-        if [[ ! ${path[(i)$p]} -le ${#path} ]] ; then
-            path[1,0]=($p)
-        fi
+    if [ -d $p/bin ] ; then
+        path=($p/bin $path)
+    fi
+    if [ -d $p/man ] ; then
+        manpath=($p/man $manpath)
+    fi
+    if [ -d $p/share/man ] ; then
+        manpath=($p/share/man $manpath)
     fi
 done
 }
 
 function add_to_path_back(){
 for p in $@ ; do
-    if [ -d $p ] ; then
-        if [[ ! ${path[(i)$p]} -le ${#path} ]] ; then
-            path+=($p)
-        fi
+    if [ -d $p/bin ] ; then
+        path=($path $p/bin)
+    fi
+    if [ -d $p/man ] ; then
+        manpath=($manpath $p/man)
+    fi
+    if [ -d $p/share/man ] ; then
+        manpath=($manpath $p/share/man)
     fi
 done
 }
 
-# remove standard directories from the path to allow them to be reordered
-remove_from_path  ~/go/bin /usr/local/bin ~/spack/bin ~/programs/bin ~/scripts 
-
 [[ -x /usr/local/bin/defaultpaths ]] && eval `/usr/local/bin/defaultpaths`
 if (( $gotroot )) ; then
-    add_to_path_front /usr/local/sbin /opt/local/sbin
-    add_to_path_back /sbin /usr/sbin
+    path=(/usr/local/sbin /opt/local/sbin $path)
+    path=($path /sbin /usr/sbin)
 fi
-add_to_path_front /Developer/usr/bin ~/.ports/bin ~/.ports/libexec/gnubin /usr/local/opt/coreutils/libexec/gnubin /opt/local/libexec/gnubin /opt/local/bin
+add_to_path_front /Developer/usr /usr/local/opt/coreutils/libexec/gnubin /opt/local/libexec/gnubin /opt/local
 
 manpath=( ~/programs/man ~/programs/share/man /opt/local/man /usr/share/man $manpath )
 
 if [[ $system = solaris ]] ; then
-    add_to_path_front /p/zsh/bin /p/openssh/ /p/cvs/ $JAVACC/bin $CS352/bin $J2SE15/bin /usr/xpg4/bin /usr/ccs/bin 
+    add_to_path_front /p/zsh /p/openssh/ /p/cvs/ $JAVACC $CS352 $J2SE15 /usr/xpg4 /usr/ccs 
     add_to_path_back /usr/ucb
 fi
 
-add_to_path_back /usr/bin /bin /usr/[X]{,11{,R6}}/bin(N) /usr/local/cuda/bin  /usr/local/opt/go/libexec/bin 
+add_to_path_back /usr/[X]{,11{,R6}} /usr/local/cuda  /usr/local/opt/go/libexec
 
 [[ -d /opt/pgi/linux86-64/2014/bin/ ]] && path=( $path /opt/pgi/linux86-64/2014/bin ) && manpath=($manpath /opt/pgi/linux86-64/2013/man)
 [[ -d /opt/pgi/osx86-64/2014/bin/ ]] && path=( $path /opt/pgi/osx86-64/2014/bin ) && manpath=($manpath /opt/pgi/osx86-64/2013/man)
@@ -51,15 +59,13 @@ add_to_path_back /usr/bin /bin /usr/[X]{,11{,R6}}/bin(N) /usr/local/cuda/bin  /u
 [[ -d ~/build/clang ]] && path=( ~/build/clang/install/bin $path )
 [[ -d ~/build/depot_tools/ ]] && path=( $path ~/build/depot_tools )
 
-add_to_path_front ~/go/bin /usr/local/bin ~/spack/bin
+add_to_path_front ~/go /usr/local ~/spack
 if [[ -n "$SYS_TYPE" ]] ; then
-    add_to_path_front  ~/programs/${SYS_TYPE}/bin
+    add_to_path_front  ~/programs/${SYS_TYPE}
 else
-    add_to_path_front  ~/programs/default/bin 
+    add_to_path_front  ~/programs/default
 fi
 
 
 add_to_path_front  ~/scripts
 
-typeset -U path
-typeset -U manpath

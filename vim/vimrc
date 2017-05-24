@@ -58,7 +58,7 @@ Plug 'mrtazz/DoxygenToolkit.vim'
 "rust highlighting
 Plug 'wting/rust.vim', { 'for' : 'rust' }
 Plug 'wavded/vim-stylus' 
-Plug 'digitaltoad/vim-jade', {'for' : 'jade'} 
+Plug 'digitaltoad/vim-jade'
 " map <silent> <buffer> <C-A-K> <Plug>VO_FollowLink
 " Plug 'VimOutliner' 
 "link handler
@@ -88,6 +88,7 @@ if $SYSTEM != 'windows'
     Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') }
 endif
 
+" Plug 'klen/python-mode' 
 Plug 'davidhalter/jedi-vim' 
 let g:jedi#auto_vim_configuration = 0
 let g:jedi#popup_on_dot = 0
@@ -133,26 +134,13 @@ Plug 'kien/ctrlp.vim'
 Plug 'tpope/vim-fugitive' 
 "
 " cmdline-mode mappings
-" Plug 'tpope/vim-rsi' 
-Plug 'critiqjo/husk-x.vim' 
+Plug 'tpope/vim-rsi' 
+" Plug 'critiqjo/husk-x.vim' 
 
 Plug 'airblade/vim-gitgutter' 
 
 Plug 'terryma/vim-multiple-cursors' 
 
-if 0 "I haven't been using taskwarrior, so why?
-    if executable('task')
-        Plug 'farseer90718/vim-taskwarrior' 
-        " let g:task_rc_override = 'defaultwidth=150 rc.color=no'
-        let g:task_default_prompt= ['description', 'project', 'tag', 'due']
-        ", 'priority', 'depends'
-
-        augroup taskwarrior_quick_add
-            au FileType taskreport nmap <silent> <buffer> <Plug>(taskwarrior_new_quick)             :call taskwarrior#system_call('', 'add', taskwarrior#data#get_args('add', ['description', 'project', 'tag']), 'echo')<CR>
-            au FileType taskreport nmap <silent> <buffer> n        <Plug>(taskwarrior_new_quick)
-        augroup END
-    endif
-endif
 
 " Plug 'Raimondi/delimitMate' 
 Plug 'tpope/vim-surround' 
@@ -177,7 +165,6 @@ Plug 'tpope/vim-pastie'
 Plug 'tpope/vim-eunuch' 
 Plug 'tpope/vim-markdown' 
 let g:markdown_fenced_languages = ['html', 'python', 'bash=sh', "c", "c++=cpp", "latex=tex"]
-" Plug 'tpope/vim-rsi' 
 Plug 'tpope/vim-unimpaired' 
 Plug 'tpope/vim-dispatch' 
 Plug 'tomtom/tcomment_vim' 
@@ -403,7 +390,30 @@ nnoremap <leader>uvr :<C-u>Unite -start-insert file_rec/async:!<CR>
 nnoremap <silent> <leader>ub :<C-u>Unite buffer file_mru bookmark<CR>
 let g:unite_source_grep_max_candidates = 500
 
-if executable('pt')
+if executable('rg')
+    let unite_ignores = ["!CMakeFiles",
+                        \"!*.dSYM",
+                        \"!*.dat",
+                        \"!*.pdf",
+                        \"!*.bib"]
+    let unite_globs = []
+    for ig in unite_ignores
+        call add(unite_globs, "--glob '" . ig . "'")
+    endfor
+    " Use rg in unite grep source.
+    let g:unite_source_grep_command = 'rg'
+    let g:unite_source_grep_default_opts = ' --smart-case -n --no-heading --color never --no-messages ' .
+                \ join(unite_globs) . ' -e '
+    let g:unite_source_grep_separator = "" "avoid having unite add '--' where it doesn't go
+    let g:unite_source_grep_recursive_opt = ''
+    " The empty perens set the pattern, all files should match
+    let unite_globs2 = []
+    for ig in unite_ignores
+        call add(unite_globs2, '--glob')
+        call add(unite_globs2, ig)
+    endfor
+    let g:unite_source_rec_async_command = ['rg', '--color', 'never', '--no-heading', '--files'] + unite_globs2
+elseif executable('pt')
     " Use pt in unite grep source.
     " https://github.com/monochromegane/the_platinum_searcher
     let g:unite_source_grep_command = 'pt'
@@ -873,6 +883,45 @@ if exists("$SYSTEM")
         let g:Tex_ViewRuleComplete_pdf = 'evince $*.pdf'
     endif
 endif
+map <silent> <Leader>ls :silent
+                \ !/Applications/Skim.app/Contents/SharedSupport/displayline
+                \ <C-R>=line('.')<CR> "<C-R>=LatexBox_GetOutputFile()<CR>"
+                \ "%:p" <CR>
+
+let g:Tex_DefaultTargetFormat = 'pdf'
+ 
+let g:Tex_CompileRule_pdf = 'pdflatex -synctex=1 --interaction=nonstopmode $*'
+ 
+let g:Tex_ViewRule_pdf = 'Skim'
+ 
+" let g:Tex_IgnoredWarnings ='
+"       \"Underfull\n".
+"       \"Overfull\n".
+"       \"specifier changed to\n".
+"       \"You have requested\n".
+"       \"Missing number, treated as zero.\n".
+"       \"There were undefined references\n".
+"       \"Citation %.%# undefined\n".
+"       \"\oval, \circle, or \line size unavailable\n"' 
+
+function! Find_main_latex()
+    let latexmain = findfile("paper.tex", ".;")
+    if (!empty(latexmain))
+        return latexmain
+    endif
+    let latexmain = findfile("header.tex", ".;")
+    if (!empty(latexmain))
+        return latexmain
+    endif
+    let basedir = finddir(".git", ".;")
+    if (isdirectory(basedir))
+        let latexmain = glob(basedir . "/*.latexmain")
+        if (filereadable(latexmain))
+            return substitute(latexmain, ".latexmain", "", "")
+        endif
+    endif
+    return ""
+endfunction
 
 augroup text_setup
     autocmd!
@@ -884,6 +933,7 @@ augroup text_setup
     au FileType tex imap <buffer> <C-p> <Plug>Tex_InsertItemOnThisLine
     au FileType tex imap <buffer> <A-i> <Plug>Tex_InsertItemOnThisLine
     au FileType tex imap <buffer> <Esc>i <Plug>Tex_InsertItemOnThisLine
+    au FileType tex let b:main_tex_file=Find_main_latex()
 
     " Highlight words I might use to mess up grammar
     au FileType tex highlight whichthat ctermfg=Magenta guifg=#515996
