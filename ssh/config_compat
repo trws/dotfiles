@@ -1,0 +1,168 @@
+Host olympus
+    hostname charon.cs.vt.edu
+    port 17853
+Host olympus.synergy
+    hostname 192.168.254.254
+    port 17853
+
+Host armor1 armor2 dna1 dna2 dna3 athena amdlow1 amdlow2 amdlow3 caterpillar tnsi1 tnsi2 wood1 wood2
+    User njustn
+    Protocol 2
+    HostName %h
+    LocalForward 2022 localhost:22
+    ProxyCommand ssh charon.cs.vt.edu -W %h:22
+
+Host green500
+    Protocol 2
+    User green55
+    HostName green500.org
+    LocalForward 8753 localhost:8753
+    LocalForward 7022 localhost:22
+    ProxyCommand ssh njustn@gale nc -q 0 green500.org 22
+
+Host escaflowne
+    User njustn
+    Protocol 2
+    HostName escaflowne
+    LocalForward 8753 localhost:8753
+    LocalForward 2022 localhost:22
+    ProxyCommand ssh charon.cs.vt.edu -W escaflowne:22
+
+# Home
+Host gale hurricane typhoon
+    User njustn
+
+Host hurricane
+  LocalForward 5903 localhost:5900
+
+Host gale
+  DynamicForward localhost:12346
+  LocalForward 5904 localhost:5900
+
+Host ddwrt
+  User root
+  HostName ssh.scogland.com
+  DynamicForward 12345
+  Port 5022
+
+Host gale
+  HostName ssh.scogland.com
+  Port 4022
+
+Host hurricane
+  HostName ssh.scogland.com
+  Port 3022
+
+Host breath
+  User root
+  ProxyCommand ssh ddwrt -W 192.168.1.3:22
+
+
+
+Host *.cs.vt.edu
+    User njustn
+
+Host charon charon.cs.vt.edu
+    Protocol 2
+    port 2222
+    HostName charon.cs.vt.edu
+    User njustn
+    LocalForward 2022 localhost:22
+
+# LLNL
+
+Host rzmanta rzgw ray
+    Port 22
+
+# this *must* be before the cz/rz catch-all
+Host cz-stash cz-stash.llnl.gov cz-bitbucket cz-bitbucket.llnl.gov
+    HostName cz-bitbucket.llnl.gov
+    User git
+    Port 7999
+    ProxyCommand ssh rzgw -W %h:%p
+
+Host cab ipa hype ray surface vulcan sierra impetus hype2 rzhasgpu rzmanta rzalastor
+    User scogland
+    HostName %h.llnl.gov
+    Port 622 
+    ForwardX11 no
+    ForwardAgent yes
+    ProxyCommand ssh rzgw -W %h:%p
+
+
+
+Host rzgw
+    PubkeyAuthentication no
+    PasswordAuthentication yes
+
+Host github.com
+    User git
+
+# Host rz-stash.llnl.gov rz-stash
+#     HostName rz-stash.llnl.gov
+#     Port 7999
+#     ProxyCommand ssh rzalastor -W %h:%p
+
+
+Host rz-stash rz-stash.llnl.gov rz-bitbucket rz-bitbucket.llnl.gov
+    HostName rz-bitbucket.llnl.gov
+    User git
+    Port 7999
+
+Host lanlgw ihpc-gate
+    HostName ihpc-gate.lanl.gov
+    ForwardX11 no
+    ProxyCommand ssh rzgw -W %h:22
+
+
+Host trinitite
+    HostName tt-fey.lanl.gov
+    ForwardX11 no
+    RemoteForward 19752 localhost:22
+    ProxyCommand ssh lanlgw -W %h:22
+
+Host czvnc
+    HostName czvnc.llnl.gov
+    ForwardX11 no
+    RemoteForward 19752 localhost:5500
+    ProxyCommand ssh rzgw -W %h:622
+
+# Power lab
+Host hayes
+    Protocol 2
+    HostName 192.168.1.104
+    ProxyCommand ssh impetus -W 192.168.1.104:22
+
+Host embarcadero
+    Protocol 2
+    HostName 192.168.1.200
+    ProxyCommand ssh impetus -W 192.168.1.200:22
+
+Host hayes-power
+    Protocol 2
+    HostName 192.168.1.115
+    LocalForward 2022 localhost:22
+    User penguin
+    ProxyCommand ssh impetus -W 192.168.1.115:22
+
+
+#Redirect
+
+Host localhost
+    ControlMaster no
+
+# Host rz-stash.llnl.gov
+#     ControlMaster no
+#     User git
+#     ForwardAgent no
+
+Host *
+    ForwardAgent yes
+    ServerAliveInterval 15
+    ServerAliveCountMax 3
+    ControlPath ~/.ssh/master-%r@%h:%p
+    ControlMaster auto
+    ControlPersist 12h
+    PermitLocalCommand yes
+    SendEnv LC_TERM_PROGRAM LC_ITERM_PROFILE
+

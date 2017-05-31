@@ -1,0 +1,1 @@
+/Users/scogland1/.zsh/.zprezto/runcoms/zlogin
