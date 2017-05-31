@@ -645,7 +645,7 @@ let g:airline#extensions#tagbar#flags = 'f'
 let g:airline#extensions#quickfix#enabled = 1
 let g:airline#extensions#branch#displayed_head_limit = 10
 let g:airline#extensions#csv#enabled = 1
-set ttimeoutlen=100
+set ttimeoutlen=10
 
 map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q $PWD<CR>
 map <A-C-T> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q $PWD<CR>

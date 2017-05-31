@@ -8,3 +8,6 @@
   path = vim/bundle/neobundle.vim
   url = https://github.com/Shougo/neobundle.vim.git
 	branch = master
+[submodule "zsh/.zprezto"]
+	path = zsh/.zprezto
+	url = https://github.com/sorin-ionescu/prezto.git
