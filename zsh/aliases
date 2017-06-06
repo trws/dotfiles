@@ -39,6 +39,13 @@ alias d="cd ~/Dropbox"
 alias dl="cd ~/Downloads"
 alias dt="cd ~/Desktop"
 alias p="cd ~/Projects"
+
+if whence hub >& /dev/null ; then
+    alias git='noglob hub'
+else
+    alias git='noglob git'
+fi
+
 alias g="git"
 alias h="history"
 alias j="jobs"

@@ -75,3 +75,5 @@ for task in aliases; do
   done
 done
 
+# completion
+setopt ALWAYS_TO_END
