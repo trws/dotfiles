@@ -34,7 +34,6 @@ zstyle ':prezto:load' pmodule \
   'python' \
   'rsync' \
   'syntax-highlighting' \
-  'ssh' \
   'tmux' \
   'history' \
   'directory' \

@@ -16,11 +16,11 @@ for task in environment pathsetup; do
 	[[ -f $ZDOTDIR/mine/$i.override ]] && source $ZDOTDIR/$i.override
 done
 
-if [[ ! -r "$SSH_AUTH_SOCK" ]] ; then
-    for AGENT in `ls /tmp/ssh-*/agent* 2> /dev/null`; do
-        if [[ -r $AGENT ]] ; then
-            export SSH_AUTH_SOCK=$AGENT
-            break
-        fi
-    done
-fi
+# if [[ ! -r "$SSH_AUTH_SOCK" ]] ; then
+#     for AGENT in `ls /tmp/ssh-*/agent* 2> /dev/null`; do
+#         if [[ -r $AGENT ]] ; then
+#             export SSH_AUTH_SOCK=$AGENT
+#             break
+#         fi
+#     done
+# fi

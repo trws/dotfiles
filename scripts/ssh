@@ -1,0 +1,10 @@
+#!/usr/bin/env zsh
+# V=$(/usr/bin/ssh -V |& sed -e 's/OpenSSH_\([0-9]\.[0-9]\+\).*/\1/')
+V=$(/usr/bin/ssh -V 2>&1 )
+V=${V#OpenSSH_}
+V=${V[1,3]}
+if [[ "$V" -gt 9.0 ]] ; then
+    exec /usr/bin/ssh "$@"
+else
+    exec /usr/bin/ssh -F ~/.dotfiles/ssh/config_compat "$@"
+fi

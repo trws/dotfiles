@@ -79,7 +79,7 @@ Host cz-stash cz-stash.llnl.gov cz-bitbucket cz-bitbucket.llnl.gov
     HostName cz-bitbucket.llnl.gov
     User git
     Port 7999
-    ProxyCommand ssh rzgw -W %h:%p
+    ProxyCommand ssh scogland@rzgw -W %h:%p
 
 Host cab ipa hype ray surface vulcan sierra impetus hype2 rz* cz*
     User scogland
@@ -91,7 +91,7 @@ Host cab ipa hype ray surface vulcan sierra impetus hype2 rz* cz*
 
 Match exec " ~/.dotfiles/scripts/at-llnl.py " !originalhost rzgw !originalhost vortex !originalhost localhost !originalhost 127.0.0.1
     #this must be overridden above if wrong
-    ProxyCommand ssh rzgw -W %h:%p
+    ProxyCommand ssh scogland@rzgw -W %h:%p
 
 Match originalhost rzgw
     PubkeyAuthentication no
@@ -114,8 +114,7 @@ Host rz-stash rz-stash.llnl.gov rz-bitbucket rz-bitbucket.llnl.gov
 Host lanlgw ihpc-gate
     HostName ihpc-gate.lanl.gov
     ForwardX11 no
-    ProxyCommand ssh rzgw -W %h:22
-
+    ProxyCommand ssh scogland@rzgw -W %h:22
 
 Host trinitite
     HostName tt-fey.lanl.gov
@@ -127,7 +126,7 @@ Host czvnc
     HostName czvnc.llnl.gov
     ForwardX11 no
     RemoteForward 19752 localhost:5500
-    ProxyCommand ssh rzgw -W %h:622
+    ProxyCommand ssh scogland@rzgw -W %h:622
 
 # Power lab
 Host hayes
