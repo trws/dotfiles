@@ -83,7 +83,7 @@ Host cz-stash cz-stash.llnl.gov cz-bitbucket cz-bitbucket.llnl.gov
 
 Host cab ipa hype ray surface vulcan sierra impetus hype2 rz* cz*
     User scogland
-    HostName %h.llnl.gov
+    # HostName %h.llnl.gov
     Port 622 
     ForwardX11 no
     ForwardAgent yes

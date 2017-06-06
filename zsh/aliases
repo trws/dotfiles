@@ -23,6 +23,8 @@ alias cal=ncal
 #alias -g H='|head'
 #alias -g T='|tail'
 
+alias rm=""${${aliases[rm]:-rm -I}:s/-i/-I/}""
+
 
 
 #IMPORTED
