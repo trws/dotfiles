@@ -6,6 +6,7 @@ export GIT_AUTHOR_EMAIL=scogland1@llnl.gov
 export GIT_COMMITTER_NAME='Tom Scogland'
 export GIT_COMMITTER_EMAIL=scogland1@llnl.gov
 export GITHUB_USER=trws
+[[ -e ~/scripts/ssh ]] && export GIT_SSH_COMMAND=~/scripts/ssh
 
 # Give global tags an exuberant ctags backend
 # [[ -e ~/.globalrc ]] && export GTAGSCONF=~/.globalrc

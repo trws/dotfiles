@@ -13,7 +13,9 @@ fi
 # Customize to your needs...
 
 # use the builtin, seriously...
-unset -f '['
+if typeset -f '[' > /dev/null ; then
+    unset -f '['
+fi
 
 export _Z_NO_PROMPT_COMMAND=1
 export _Z_DATA=~/.zsh/z-dirjump-list.txt

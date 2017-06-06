@@ -1,1 +1,1 @@
-/Users/scogland1/.zsh/.zprezto/runcoms/zlogin
+./.zprezto/runcoms/zlogin
