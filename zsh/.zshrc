@@ -16,6 +16,7 @@ if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
 fi
 
 # Customize to your needs...
+fpath=($ZDOTDIR/funcs $fpath)
 
 # use the builtin, seriously...
 if typeset -f '[' > /dev/null ; then
