@@ -42,7 +42,8 @@ if (( $gotroot )) ; then
     path=(/usr/local/sbin /opt/local/sbin $path)
     path=($path /sbin /usr/sbin)
 fi
-path=(/usr/local/opt/coreutils/libexec/gnubin /opt/local/libexec/gnubin $path)
+# path=(/usr/local/opt/coreutils/libexec/gnubin /opt/local/libexec/gnubin $path)
+path=(/opt/local/libexec/gnubin $path)
 add_to_path_front /Developer/usr /opt/local
 
 manpath=( ~/programs/man ~/programs/share/man /opt/local/man /usr/share/man $manpath )

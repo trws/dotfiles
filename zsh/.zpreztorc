@@ -34,6 +34,7 @@ zstyle ':prezto:load' pmodule \
   'python' \
   'rsync' \
   'syntax-highlighting' \
+  'history-substring-search' \
   'tmux' \
   'history' \
   'directory' \
