@@ -22,82 +22,82 @@ call plug#begin(expand(plugged_directory))
 Plug 'Shougo/vimproc.vim' , { 'do' : 'make'}
 
 "split management
-Plug 'wesQ3/vim-windowswap' 
+Plug 'wesQ3/vim-windowswap'
 let g:windowswap_map_keys = 0 "prevent default bindings
 nnoremap <silent> <leader>yw :call WindowSwap#MarkWindowSwap()<CR>
 nnoremap <silent> <leader>pw :call WindowSwap#DoWindowSwap()<CR>
 nnoremap <silent> <leader>ww :call WindowSwap#EasyWindowSwap()<CR>
 
 "Mail search
-"Plug 'daisuzu/unite-notmuch' 
-"Plug 'diefans/notmuch-vim' 
+"Plug 'daisuzu/unite-notmuch'
+"Plug 'diefans/notmuch-vim'
 
 
 "colorschemes
-" Plug 'tomasr/molokai' 
-" Plug 'sjl/badwolf' 
-" Plug 'Solarized' 
-" Plug 'github-theme' 
-Plug 'nanotech/jellybeans.vim' 
-" Plug 'w0ng/vim-hybrid' 
+" Plug 'tomasr/molokai'
+" Plug 'sjl/badwolf'
+" Plug 'Solarized'
+" Plug 'github-theme'
+Plug 'nanotech/jellybeans.vim'
+" Plug 'w0ng/vim-hybrid'
 
 Plug 'vim-utils/vim-man'
 
 "visual
-"Plug 'Powerline' 
+"Plug 'Powerline'
 "powerline not working, light alternative?
-Plug 'bling/vim-airline' 
-" Plug 'tomtom/quickfixsigns_vim' 
-" Plug 'bling/vim-bufferline' 
+Plug 'bling/vim-airline'
+" Plug 'tomtom/quickfixsigns_vim'
+" Plug 'bling/vim-bufferline'
 " Plug 'edkolev/tmuxline.vim'
 
 "filetype handlers, highlighting etc
 Plug 'cespare/vim-toml'
 Plug 'LaTeX-Box-Team/LaTeX-Box', { 'for' : ['latex', 'tex', 'bibtex']}
-" Plug 'vim-latex/vim-latex' 
-Plug 'liquid.vim' 
+" Plug 'vim-latex/vim-latex'
+Plug 'liquid.vim'
 "c++11 highlighting
 Plug 'vim-jp/cpp-vim', { 'for' : 'c++'}
 "doxygen toolkit
 "julia highlighting
 Plug 'JuliaLang/julia-vim'
 Plug 'keith/swift.vim'
-Plug 'mrtazz/DoxygenToolkit.vim' 
+Plug 'mrtazz/DoxygenToolkit.vim'
 "rust highlighting
 Plug 'wting/rust.vim', { 'for' : 'rust' }
-Plug 'wavded/vim-stylus' 
+Plug 'wavded/vim-stylus'
 Plug 'digitaltoad/vim-jade'
 " map <silent> <buffer> <C-A-K> <Plug>VO_FollowLink
-" Plug 'VimOutliner' 
+" Plug 'VimOutliner'
 "link handler
-Plug 'vim-scripts/utl.vim' 
+Plug 'vim-scripts/utl.vim'
 "cool csv highlighting
-Plug 'chrisbra/csv.vim', 
+Plug 'chrisbra/csv.vim',
 " CSupport plugin: XXX: reacts badly with several others
-" Plug 'c.vim' 
+" Plug 'c.vim'
 Plug 'jceb/vim-orgmode', {'for' : 'orgmode'}
 "deps
-Plug 'tpope/vim-speeddating' 
+Plug 'tpope/vim-speeddating'
 
 "tmux integration
-Plug 'vimux' 
+Plug 'vimux'
 
-if $SYSTEM != 'windows'
+if ! has('win32')
     function! BuildYCM(info)
-      " info is a dictionary with 3 fields
-      " - name:   name of the plugin
-      " - status: 'installed', 'updated', or 'unchanged'
-      " - force:  set on PlugInstall! or PlugUpdate!
-      if a:info.status == 'installed' || a:info.force
-        !./install.py
-      endif
+        " info is a dictionary with 3 fields
+        " - name:   name of the plugin
+        " - status: 'installed', 'updated', or 'unchanged'
+        " - force:  set on PlugInstall! or PlugUpdate!
+        if a:info.status == 'installed' || a:info.force
+            !./install.py
+        endif
     endfunction
 
     Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') }
 endif
 
-" Plug 'klen/python-mode' 
-Plug 'davidhalter/jedi-vim' 
+" Plug 'klen/python-mode'
+Plug 'davidhalter/jedi-vim'
 let g:jedi#auto_vim_configuration = 0
 let g:jedi#popup_on_dot = 0
 let g:jedi#popup_select_first = 0
@@ -111,73 +111,73 @@ let g:jedi#documentation_command = "<leader>pk"
 let g:jedi#usages_command = "<leader>pu"
 let g:jedi#rename_command = "<leader>pr"
 
-Plug 'scrooloose/syntastic'
+" Plug 'scrooloose/syntastic'
 
 "project management
-" Plug 'project.tar.gz' 
+" Plug 'project.tar.gz'
 
 "bindings
 
 "shell/terminal emulation
 Plug 'Shougo/vimshell.vim', {'on' : 'VimShell'}
-Plug 'pthrasher/conqueterm-vim', {'on' : 'ConqueTerm'} 
+Plug 'pthrasher/conqueterm-vim', {'on' : 'ConqueTerm'}
 
 "file management
-Plug 'xolox/vim-misc' 
-Plug 'xolox/vim-notes' 
-Plug 'Shougo/unite.vim' 
-Plug 'Shougo/vimfiler.vim' 
-Plug 'Shougo/unite-ssh' 
-Plug 'hewes/unite-gtags' 
-Plug 'tsukkee/unite-tag' 
-Plug 'vim-scripts/gtags.vim' 
+Plug 'xolox/vim-misc'
+Plug 'xolox/vim-notes'
+Plug 'Shougo/unite.vim'
+Plug 'Shougo/vimfiler.vim'
+Plug 'Shougo/unite-ssh'
+Plug 'hewes/unite-gtags'
+Plug 'tsukkee/unite-tag'
+Plug 'vim-scripts/gtags.vim'
 " These are nice, but they are *way* too slow
-" Plug 'xolox/vim-misc' 
-" Plug 'xolox/vim-easytags' 
+" Plug 'xolox/vim-misc'
+" Plug 'xolox/vim-easytags'
 " NeoBundleLazy 'ujihisa/vimshell-ssh', { 'autoload' : {
 "             \ 'filetypes' : 'vimshell',
 "             \ }}
-Plug 'Shougo/neomru.vim' 
-Plug 'kien/ctrlp.vim' 
-Plug 'tpope/vim-fugitive' 
+Plug 'Shougo/neomru.vim'
+Plug 'kien/ctrlp.vim'
+Plug 'tpope/vim-fugitive'
 "
 " cmdline-mode mappings
-Plug 'tpope/vim-rsi' 
-" Plug 'critiqjo/husk-x.vim' 
+Plug 'tpope/vim-rsi'
+" Plug 'critiqjo/husk-x.vim'
 
-Plug 'airblade/vim-gitgutter' 
+Plug 'airblade/vim-gitgutter'
 
-Plug 'terryma/vim-multiple-cursors' 
+Plug 'terryma/vim-multiple-cursors'
 
 
-" Plug 'Raimondi/delimitMate' 
-Plug 'tpope/vim-surround' 
-Plug 'tommcdo/vim-exchange' 
-" Plug 'UltiSnips' 
-Plug 'SirVer/ultisnips' 
+" Plug 'Raimondi/delimitMate'
+Plug 'tpope/vim-surround'
+Plug 'tommcdo/vim-exchange'
+" Plug 'UltiSnips'
+Plug 'SirVer/ultisnips'
 " Snippets are separated from the engine. Add this if you want them:
-Plug 'honza/vim-snippets' 
-Plug 'Lokaltog/vim-easymotion' 
+Plug 'honza/vim-snippets'
+Plug 'Lokaltog/vim-easymotion'
 " map <Leader>e <Plug>(easymotion-prefix)
-" Plug 'The-NERD-Commenter' 
-Plug 'majutsushi/tagbar' 
-Plug 'Chiel92/vim-autoformat' 
-Plug 'Gundo' 
-Plug 'tpope/vim-repeat' 
-Plug 'visualrepeat' 
+" Plug 'The-NERD-Commenter'
+Plug 'majutsushi/tagbar'
+Plug 'Chiel92/vim-autoformat'
+Plug 'Gundo'
+Plug 'tpope/vim-repeat'
+Plug 'visualrepeat'
 "new alignment plugin, CR from visual mode to use
-Plug 'junegunn/vim-easy-align' 
-Plug 'tpope/vim-abolish' 
-Plug 'tpope/vim-pastie' 
+Plug 'junegunn/vim-easy-align'
+Plug 'tpope/vim-abolish'
+Plug 'tpope/vim-pastie'
 "Unix command aliases, Chmod and company
-Plug 'tpope/vim-eunuch' 
-Plug 'tpope/vim-markdown' 
+Plug 'tpope/vim-eunuch'
+Plug 'tpope/vim-markdown'
 let g:markdown_fenced_languages = ['html', 'python', 'bash=sh', "c", "c++=cpp", "latex=tex"]
-Plug 'tpope/vim-unimpaired' 
-Plug 'tpope/vim-dispatch' 
-Plug 'tomtom/tcomment_vim' 
+Plug 'tpope/vim-unimpaired'
+Plug 'tpope/vim-dispatch'
+Plug 'tomtom/tcomment_vim'
 "Word highlighting for possible but uncertain errors
-Plug 'reedes/vim-wordy' 
+Plug 'reedes/vim-wordy'
 
 call plug#end()
 
@@ -215,6 +215,9 @@ vmap <CR> <Plug>(EasyAlign)
 
 " Prompt for a command to run
 map <Leader>vp :VimuxPromptCommand<CR>
+
+" Open pane
+map <Leader>vo :call VimuxOpenPane()<CR>
 
 " Run last command executed by VimuxRunCommand
 map <Leader>vl :VimuxRunLastCommand<CR>
@@ -400,10 +403,10 @@ let g:unite_source_grep_max_candidates = 500
 
 if executable('rg')
     let unite_ignores = ["!CMakeFiles",
-                        \"!*.dSYM",
-                        \"!*.dat",
-                        \"!*.pdf",
-                        \"!*.bib"]
+                \"!*.dSYM",
+                \"!*.dat",
+                \"!*.pdf",
+                \"!*.bib"]
     let unite_globs = []
     for ig in unite_ignores
         call add(unite_globs, "--glob '" . ig . "'")
@@ -602,22 +605,6 @@ let python_highlight_all = 1
 "there is no local value for fp, must set other languages to use cindent
 "manually
 
-"au FileType cpp setlocal fp=astyle\ --pad-oper\ --unpad-paren\ --add-brackets\ --convert-tabs\ --align-pointer=name\ --indent-col1-comments\ --style=k/r\ --quiet
-"au FileType cpp setlocal fp=astyle\ --pad-oper\ --unpad-paren\ --add-brackets\ --convert-tabs\ --align-pointer=name\ --indent-col1-comments\ --style=k/r\ --quiet
-"au FileType c setlocal fp=astyle\ --pad-oper\ --unpad-paren\ --add-brackets\ --convert-tabs\ --align-pointer=name\ --indent-col1-comments\ --style=k/r\ --quiet
-"au FileType cpp setlocal equalprg=astyle\ --indent=spaces=2\ --pad-oper\ --unpad-paren\ --add-brackets\ --convert-tabs\ --align-pointer=name\ --indent-col1-comments\ --style=k/r\ --quiet
-"au FileType c setlocal equalprg=astyle\ --indent=spaces=2\ --pad-oper\ --unpad-paren\ --add-brackets\ --convert-tabs\ --align-pointer=name\ --indent-col1-comments\ --style=k/r\ --quiet
-"endif
-"
-"if filereadable("/Users/njustn/build/clang/llvm/tools/clang/tools/clang-format/clang-format.py")
-"au FileType c,cpp map <buffer> <C-K> :pyf /Users/njustn/build/clang/llvm/tools/clang/tools/clang-format/clang-format.py<CR>
-"au FileType c,cpp imap <buffer> <C-K> <ESC>:pyf /Users/njustn/build/clang/llvm/tools/clang/tools/clang-format/clang-format.py<CR>i
-"endif
-"if filereadable("/Users/njustn/scripts/PythonTidy-1.22.python")
-"au FileType python map <buffer> <C-K> :pyf ~/scripts/PythonTidy-1.22.python<CR>
-"au FileType python imap <buffer> <C-K> <ESC>:pyf ~/scripts/PythonTidy-1.22.python<CR>i
-"endif
-
 map      <C-k>     :Autoformat<CR>
 noremap  <C-k>     :Autoformat<CR>
 nnoremap <C-k>     :Autoformat<CR>
@@ -644,6 +631,7 @@ let g:airline#extensions#tagbar#flags = 'f'
 let g:airline#extensions#quickfix#enabled = 1
 let g:airline#extensions#branch#displayed_head_limit = 10
 let g:airline#extensions#csv#enabled = 1
+set timeoutlen=500
 set ttimeoutlen=10
 
 map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q $PWD<CR>
@@ -766,7 +754,7 @@ nmap gy yygcc
 " yank and paste line before toggle comment and remember position
 " it works both in normal and insert mode
 " Use :t-1 instead of yyP to preserve registers
-nmap gyy mz:t-1<cr>gCc`zmz
+nmap gyy mz:t-1<cr>gcc`zmz
 " imap gyy <esc>:t-1<cr>gCcgi
 vmap gcc gc
 
@@ -873,26 +861,24 @@ let g:LatexBox_latexmk_preview_continuously=0
 let g:tex_flavor='latex'
 let g:Imap_FreezeImap=1
 let g:Tex_FormatDependency_pdf = 'pdf'
-if exists("$SYSTEM")
-    if $SYSTEM == "darwin"
-        let g:Tex_ViewRule_pdf = 'open '
-        let g:Tex_ViewRuleComplete_pdf = 'open $*.pdf'
-    elseif $SYSTEM == "linux"
-        let g:Tex_ViewRule_pdf = 'evince '
-        let g:Tex_ViewRuleComplete_pdf = 'evince $*.pdf'
-    endif
+if has('macunix')
+    let g:Tex_ViewRule_pdf = 'open '
+    let g:Tex_ViewRuleComplete_pdf = 'open $*.pdf'
+elseif has('unix')
+    let g:Tex_ViewRule_pdf = 'evince '
+    let g:Tex_ViewRuleComplete_pdf = 'evince $*.pdf'
 endif
 map <silent> <Leader>ls :silent
-                \ !/Applications/Skim.app/Contents/SharedSupport/displayline
-                \ <C-R>=line('.')<CR> "<C-R>=LatexBox_GetOutputFile()<CR>"
-                \ "%:p" <CR>
+            \ !/Applications/Skim.app/Contents/SharedSupport/displayline
+            \ <C-R>=line('.')<CR> "<C-R>=LatexBox_GetOutputFile()<CR>"
+            \ "%:p" <CR>
 
 let g:Tex_DefaultTargetFormat = 'pdf'
- 
+
 let g:Tex_CompileRule_pdf = 'pdflatex -synctex=1 --interaction=nonstopmode $*'
- 
+
 let g:Tex_ViewRule_pdf = 'Skim'
- 
+
 " let g:Tex_IgnoredWarnings ='
 "       \"Underfull\n".
 "       \"Overfull\n".
@@ -901,7 +887,7 @@ let g:Tex_ViewRule_pdf = 'Skim'
 "       \"Missing number, treated as zero.\n".
 "       \"There were undefined references\n".
 "       \"Citation %.%# undefined\n".
-"       \"\oval, \circle, or \line size unavailable\n"' 
+"       \"\oval, \circle, or \line size unavailable\n"'
 
 function! Find_main_latex()
     let latexmain = findfile("paper.tex", ".;")
@@ -1031,7 +1017,25 @@ if ! has("gui_running")
     "nnoremap <special> <A-c> "*Y
     " cnoremap <special> <A-c> <C-R>+
     "vnoremap <special> <A-c> "*y
-    if $SYSTEM == "darwin"
+    if $ITERM_PROFILE
+        vmap <C-y> y:call system("xclip", getreg("\""))<CR>
+        "attempt to yank through iterm2 termcode
+        function! Yank_proper()
+            "each mode needs different copy, see below mappings
+            " echo system("cat << StringNotLikelyToBeCopied\n" . getreg("p") . "\nStringNotLikelyToBeCopied")
+            python import vim, sys, subprocess
+            python p=subprocess.Popen(["cat"], stdin=subprocess.PIPE)
+            python p.stdin.write('\033]50;CopyToClipboard=')
+            python p.stdin.write(vim.eval('getreg("p")'))
+            python p.stdin.write('\033]50;EndCopy')
+            python p.stdin.close()
+            redraw!
+        endfunction
+        vmap <silent> <A-c>        "py:call Yank_proper()<CR>
+        vmap <silent> <Esc>c       "py:call Yank_proper()<CR>
+        nmap <silent> <A-c>        :yank p<CR>:call Yank_proper()<CR>
+        nmap <silent> <Esc>c       :yank p<CR>:call Yank_proper()<CR>
+    elseif has('macunix')
         let tmux_reattach_prefix=glob("~/Dropbox/config/tmux-MacOSX-pasteboard/reattach-to-user-namespace")
 
         "paste from pbpaste as paste normally works, from the current cursor position
@@ -1054,24 +1058,6 @@ if ! has("gui_running")
         imap <silent> <Esc>v       <Esc>: call Paste_proper()<CR>
         nmap <silent> <A-v>        :call Paste_proper()<CR>
         nmap <silent> <Esc>v       :call Paste_proper()<CR>
-    elseif $SYSTEM == "linux"
-        vmap <C-y> y:call system("xclip", getreg("\""))<CR>
-        "attempt to yank through iterm2 termcode
-        function! Yank_proper()
-            "each mode needs different copy, see below mappings
-            " echo system("cat << StringNotLikelyToBeCopied\n" . getreg("p") . "\nStringNotLikelyToBeCopied")
-            python import vim, sys, subprocess
-            python p=subprocess.Popen(["cat"], stdin=subprocess.PIPE)
-            python p.stdin.write('\033]50;CopyToClipboard=')
-            python p.stdin.write(vim.eval('getreg("p")'))
-            python p.stdin.write('\033]50;EndCopy')
-            python p.stdin.close()
-            redraw!
-        endfunction
-        vmap <silent> <A-c>        "py:call Yank_proper()<CR>
-        vmap <silent> <Esc>c       "py:call Yank_proper()<CR>
-        nmap <silent> <A-c>        :yank p<CR>:call Yank_proper()<CR>
-        nmap <silent> <Esc>c       :yank p<CR>:call Yank_proper()<CR>
     endif
     " execute 'inoremap <script> <special> <A-c>' paste#paste_cmd['i']
     " nnoremap <special> <Esc>c "+gP
@@ -1340,13 +1326,13 @@ if &term =~ ".*256color.*" || has("gui_running")
 endif
 
 let g:jellybeans_overrides = {
-\    'background': { 'ctermbg': 'Black' },
-\}
- if !has("gui_running")
- let g:jellybeans_background_color = "000000"
- let g:jellybeans_use_lowcolor_black = 1
- let g:jellybeans_background_color_256="0"
- endif
+            \    'background': { 'ctermbg': 'Black' },
+            \}
+if !has("gui_running")
+    let g:jellybeans_background_color = "000000"
+    let g:jellybeans_use_lowcolor_black = 1
+    let g:jellybeans_background_color_256="0"
+endif
 
 " set background=dark
 " let g:solarized_contrast = "high"

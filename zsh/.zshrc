@@ -84,3 +84,11 @@ done
 
 # completion
 setopt ALWAYS_TO_END
+
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
+# Set up keybindings
+for file in $ZDOTDIR/{,mine/}bindings $ZDOTDIR/{,mine/}bindings.$TERM \
+  $ZDOTDIR/{,mine/}bindings.${TERM%%-*}
+[[ -f $file  ]] && source $file
+
