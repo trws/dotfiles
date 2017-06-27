@@ -32,6 +32,8 @@ nnoremap <silent> <leader>ww :call WindowSwap#EasyWindowSwap()<CR>
 "Plug 'daisuzu/unite-notmuch'
 "Plug 'diefans/notmuch-vim'
 
+let g:bracketed_paste_tmux_wrap=0
+Plug 'ConradIrwin/vim-bracketed-paste'
 
 "colorschemes
 " Plug 'tomasr/molokai'
@@ -1017,6 +1019,25 @@ if ! has("gui_running")
     "nnoremap <special> <A-c> "*Y
     " cnoremap <special> <A-c> <C-R>+
     "vnoremap <special> <A-c> "*y
+    if has('macunix')
+        let tmux_reattach_prefix=glob("~/Dropbox/config/tmux-MacOSX-pasteboard/reattach-to-user-namespace")
+        if (! filereadable(tmux_reattach_prefix))
+            let tmux_reattach_prefix=glob("~/Projects/config-sync/tmux-MacOSX-pasteboard/reattach-to-user-namespace")
+        endif
+
+        "paste from pbpaste as paste normally works, from the current cursor position
+        function! Paste_proper()
+            let @p=system(g:tmux_reattach_prefix . " pbpaste")
+            execute 'normal "pp'
+        endfunction
+        vmap <silent> <A-v>        dh:call Paste_proper()<CR>
+        vmap <silent> <Esc>v       dh:call Paste_proper()<CR>
+        imap <silent> <A-v>        <Esc>: call Paste_proper()<CR>
+        imap <silent> <Esc>v       <Esc>: call Paste_proper()<CR>
+        nmap <silent> <A-v>        :call Paste_proper()<CR>
+        nmap <silent> <Esc>v       :call Paste_proper()<CR>
+    endif
+
     if $ITERM_PROFILE
         vmap <C-y> y:call system("xclip", getreg("\""))<CR>
         "attempt to yank through iterm2 termcode
@@ -1036,13 +1057,6 @@ if ! has("gui_running")
         nmap <silent> <A-c>        :yank p<CR>:call Yank_proper()<CR>
         nmap <silent> <Esc>c       :yank p<CR>:call Yank_proper()<CR>
     elseif has('macunix')
-        let tmux_reattach_prefix=glob("~/Dropbox/config/tmux-MacOSX-pasteboard/reattach-to-user-namespace")
-
-        "paste from pbpaste as paste normally works, from the current cursor position
-        function! Paste_proper()
-            let @p=system(g:tmux_reattach_prefix . " pbpaste")
-            execute 'normal "pp'
-        endfunction
         function! Yank_proper()
             "each mode needs different copy, see below mappings
             call system(g:tmux_reattach_prefix . " pbcopy", getreg("p"))
@@ -1052,12 +1066,6 @@ if ! has("gui_running")
         vmap <silent> <Esc>c       "py:call Yank_proper()<CR>
         nmap <silent> <A-c>        :yank p<CR>:call Yank_proper()<CR>
         nmap <silent> <Esc>c       :yank p<CR>:call Yank_proper()<CR>
-        vmap <silent> <A-v>        dh:call Paste_proper()<CR>
-        vmap <silent> <Esc>v       dh:call Paste_proper()<CR>
-        imap <silent> <A-v>        <Esc>: call Paste_proper()<CR>
-        imap <silent> <Esc>v       <Esc>: call Paste_proper()<CR>
-        nmap <silent> <A-v>        :call Paste_proper()<CR>
-        nmap <silent> <Esc>v       :call Paste_proper()<CR>
     endif
     " execute 'inoremap <script> <special> <A-c>' paste#paste_cmd['i']
     " nnoremap <special> <Esc>c "+gP
