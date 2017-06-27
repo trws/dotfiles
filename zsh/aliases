@@ -42,7 +42,7 @@ alias dl="cd ~/Downloads"
 alias dt="cd ~/Desktop"
 alias p="cd ~/Projects"
 
-if whence hub >& /dev/null ; then
+if hub >& /dev/null ; then
     alias git='noglob hub'
 else
     alias git='noglob git'
