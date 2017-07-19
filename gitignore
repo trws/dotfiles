@@ -53,3 +53,8 @@ tags
 #other source control, don't ask...
 .svn
 
+CMakeFiles
+*.dSYM
+
+build/
+build-*/

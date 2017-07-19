@@ -440,10 +440,6 @@ elseif executable('pt')
     " https://github.com/monochromegane/the_platinum_searcher
     let g:unite_source_grep_command = 'pt'
     let g:unite_source_grep_default_opts = ' --smart-case --nogroup --nocolor ' .
-                \ '--ignore ''.hg'' ' .
-                \ '--ignore ''CMakeFiles'' ' .
-                \ '--ignore ''*.dSYM'' ' .
-                \ '--ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr'' ' .
                 \ '--ignore ''*.dat'' --ignore ''*.pdf'' --ignore ''*.bib'' -e '
     let g:unite_source_grep_recursive_opt = ''
     " The empty perens set the pattern, all files should match
