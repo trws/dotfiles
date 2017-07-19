@@ -61,7 +61,7 @@ add_to_path_back /usr/local/cuda  /usr/local/opt/go/libexec
 [[ -d ~/build/clang ]] && path=( ~/build/clang/install/bin $path )
 [[ -d ~/build/depot_tools/ ]] && path=( $path ~/build/depot_tools )
 
-add_to_path_front ~/go /usr/local ~/spack
+add_to_path_front ~/go /usr/local ~/spack ~/.linuxbrew
 if [[ -n "$SYS_TYPE" ]] ; then
     add_to_path_front  ~/programs/${SYS_TYPE}
 else

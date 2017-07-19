@@ -40,6 +40,7 @@ Plug 'ConradIrwin/vim-bracketed-paste'
 " Plug 'sjl/badwolf'
 " Plug 'Solarized'
 " Plug 'github-theme'
+Plug 'crusoexia/vim-monokai'
 Plug 'nanotech/jellybeans.vim'
 " Plug 'w0ng/vim-hybrid'
 
@@ -53,7 +54,10 @@ Plug 'bling/vim-airline'
 " Plug 'bling/vim-bufferline'
 " Plug 'edkolev/tmuxline.vim'
 
+
 "filetype handlers, highlighting etc
+Plug 'jaxbot/semantic-highlight.vim'
+Plug 'bfrg/vim-cpp-modern'
 Plug 'cespare/vim-toml'
 Plug 'LaTeX-Box-Team/LaTeX-Box', { 'for' : ['latex', 'tex', 'bibtex']}
 " Plug 'vim-latex/vim-latex'
@@ -127,11 +131,14 @@ Plug 'pthrasher/conqueterm-vim', {'on' : 'ConqueTerm'}
 "file management
 Plug 'xolox/vim-misc'
 Plug 'xolox/vim-notes'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
 Plug 'Shougo/unite.vim'
 Plug 'Shougo/vimfiler.vim'
 Plug 'Shougo/unite-ssh'
 Plug 'hewes/unite-gtags'
 Plug 'tsukkee/unite-tag'
+Plug 'Shougo/neoyank.vim' " provides history/yank unite source
 Plug 'vim-scripts/gtags.vim'
 " These are nice, but they are *way* too slow
 " Plug 'xolox/vim-misc'
@@ -259,9 +266,11 @@ let g:unite_data_directory = '~/.vim/unite'
 " let g:unite_source_bookmark_directory = '~/.vim/unite-bookmarks'
 let g:unite_source_history_yank_enable = 1
 let g:unite_source_vimshell_external_history_path="~/.zsh-history:~/.zsh-history-$HOST"
-call unite#filters#matcher_default#use(['matcher_fuzzy'])
+call unite#filters#matcher_default#use(['converter_relative_word', 'matcher_fuzzy'])
 call unite#filters#sorter_default#use(['sorter_rank'])
 call unite#custom#profile('files', 'filters', 'sorter_rank')
+call unite#custom#source('buffer,file,file_rec,file_rec/async', 'sorters', 'sorter_selecta')
+call unite#custom#source('buffer,file,file_rec,file_rec/async', 'matchers',['converter_relative_word', 'matcher_fuzzy'])
 nnoremap <leader>uB :<C-u>Unite bookmark<CR>
 nnoremap <leader>uY :<C-u>Unite history/yank<CR>
 " nnoremap <leader>uf :<C-u>Unite file<CR>
@@ -807,8 +816,8 @@ endif
 set exrc
 set secure
 " Highlight current line
-set cursorline
-set cursorcolumn
+" set cursorline
+" set cursorcolumn
 augroup cursorhighlight
     au!
     autocmd BufEnter *
@@ -1044,12 +1053,21 @@ if ! has("gui_running")
         function! Yank_proper()
             "each mode needs different copy, see below mappings
             " echo system("cat << StringNotLikelyToBeCopied\n" . getreg("p") . "\nStringNotLikelyToBeCopied")
-            python import vim, sys, subprocess
-            python p=subprocess.Popen(["cat"], stdin=subprocess.PIPE)
-            python p.stdin.write('\033]50;CopyToClipboard=')
-            python p.stdin.write(vim.eval('getreg("p")'))
-            python p.stdin.write('\033]50;EndCopy')
-            python p.stdin.close()
+            if has("python")
+                python import vim, sys, subprocess
+                python p=subprocess.Popen(["cat"], stdin=subprocess.PIPE)
+                python p.stdin.write('\033]50;CopyToClipboard=')
+                python p.stdin.write(vim.eval('getreg("p")'))
+                python p.stdin.write('\033]50;EndCopy')
+                python p.stdin.close()
+            elseif has("python3")
+                python3 import vim, sys, subprocess
+                python3 p=subprocess.Popen(["cat"], stdin=subprocess.PIPE)
+                python3 p.stdin.write('\033]50;CopyToClipboard=')
+                python3 p.stdin.write(vim.eval('getreg("p")'))
+                python3 p.stdin.write('\033]50;EndCopy')
+                python3 p.stdin.close()
+            endif
             redraw!
         endfunction
         vmap <silent> <A-c>        "py:call Yank_proper()<CR>
@@ -1333,9 +1351,9 @@ if &term =~ ".*256color.*" || has("gui_running")
     " colorscheme inkpot
 endif
 
-let g:jellybeans_overrides = {
-            \    'background': { 'ctermbg': 'Black' },
-            \}
+" let g:jellybeans_overrides = {
+"             \    'background': { 'ctermbg': 'Black' },
+"             \}
 if !has("gui_running")
     let g:jellybeans_background_color = "000000"
     let g:jellybeans_use_lowcolor_black = 1
