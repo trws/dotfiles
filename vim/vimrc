@@ -102,6 +102,8 @@ if ! has('win32')
     Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') }
 endif
 
+" Plug 'jeaye/color_coded'
+
 " Plug 'klen/python-mode'
 Plug 'davidhalter/jedi-vim'
 let g:jedi#auto_vim_configuration = 0
