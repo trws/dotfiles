@@ -15,7 +15,7 @@ endif
 if version < 600
   source <sfile>:p:h/c.vim
 else
-  runtime! syntax/c.vim
+  runtime! syntax/cpp.vim
 endif
 
 " CUDA extentions

@@ -8,6 +8,19 @@ local grid = hs.grid
 local tiling = hs.window.tiling
 local hints = hs.hints
 
+-- set up your windowfilter
+switcher = hs.window.switcher.new() -- default windowfilter: only visible windows, all Spaces
+switcher_space = hs.window.switcher.new(hs.window.filter.new():setCurrentSpace(true):setDefaultFilter{}) -- include minimized/hidden windows, current Space only
+switcher_browsers = hs.window.switcher.new{'Safari','Google Chrome'} -- specialized switcher for your dozens of browser windows :)
+
+-- bind to hotkeys; WARNING: at least one modifier key is required!
+hotkey.bind('alt','tab','Next window',function()switcher:next()end)
+hotkey.bind('alt-shift','tab','Prev window',function()switcher:previous()end)
+
+-- alternatively, call .nextWindow() or .previousWindow() directly (same as hs.window.switcher.new():next())
+-- hs.hotkey.bind('alt','tab','Next window',hs.window.switcher.nextWindow)
+-- you can also bind to `repeatFn` for faster traversing
+-- hs.hotkey.bind('alt-shift','tab','Prev window',hs.window.switcher.previousWindow,nil,hs.window.switcher.previousWindow)
 -- set up your instance(s)
 -- expose = hs.expose.new(nil,{showThumbnails=false}) -- default windowfilter, no thumbnails
 -- expose_app = hs.expose.new(nil,{onlyActiveApplication=true}) -- show windows for the current application
@@ -48,10 +61,10 @@ grid.MARGINY    = 0
 -- Grid key expariments
 hotkey.bind(mash, ';', function() grid.snap(window.focusedWindow()) end)
 hotkey.bind(mash, "'", function() fnutils.map(window.visiblewindows(), grid.snap) end)
-hotkey.bind(mash,      '=', function() grid.adjustwidth(1) end)
-hotkey.bind(mash,      '-', function() grid.adjustwidth(-1) end)
-hotkey.bind(mashshift, '=', function() grid.adjustheight(1) end)
-hotkey.bind(mashshift, '-', function() grid.adjustheight(-1) end)
+hotkey.bind(mash,      '=', function() grid.resizeWindowWider() end)
+hotkey.bind(mash,      '-', function() grid.resizeWindowThinner() end)
+hotkey.bind(mashshift, '=', function() grid.resizeWindowTaller() end)
+hotkey.bind(mashshift, '-', function() grid.resizeWindowShorter() end)
 
 -- hotkey.bind(mash, 'N', grid.pushwindow_nextscreen)
 -- hotkey.bind(mash, 'P', grid.pushwindow_prevscreen)

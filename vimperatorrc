@@ -3,3 +3,5 @@ noremap K :tabprevious<CR>
 
 noremap d :javascript BrowserCloseTabOrWindow()<CR>
 noremap D :javascript window.openDialog("chrome://browser/content/browser.xul","_blank","chrome,dialog=no,all",gBrowser.mCurrentTab)<CR>
+
+set focuscontent

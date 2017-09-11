@@ -1,19 +1,19 @@
 function! FindOrCreate(dir)
-    if !isdirectory(expand(a:dir))
-        call mkdir(expand(a:dir), "p")
-    endif
+  if !isdirectory(expand(a:dir))
+    call mkdir(expand(a:dir), "p")
+  endif
 endfunction
 
 " Deal with single home/multi-arch systems
 let plugged_directory = substitute(system("uname -m"), '[ \n]\+$', '', '')
 if plugged_directory == "x86_64"
-    let plugged_directory = ""
+  let plugged_directory = ""
 endif
 let plugged_directory = "~/.vim/plugged/" . plugged_directory
 if !isdirectory(expand(plugged_directory))
-    echo('fetching plug for initial install')
-    call system('curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
-    call system('mkdir -p ' . plugged_directory)
+  echo('fetching plug for initial install')
+  call system('curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
+  call system('mkdir -p ' . plugged_directory)
 endif
 
 call plug#begin(expand(plugged_directory))
@@ -54,6 +54,7 @@ Plug 'bling/vim-airline'
 " Plug 'bling/vim-bufferline'
 " Plug 'edkolev/tmuxline.vim'
 
+Plug 'blindFS/vim-taskwarrior'
 
 "filetype handlers, highlighting etc
 Plug 'jaxbot/semantic-highlight.vim'
@@ -61,7 +62,7 @@ Plug 'bfrg/vim-cpp-modern'
 Plug 'cespare/vim-toml'
 Plug 'LaTeX-Box-Team/LaTeX-Box', { 'for' : ['latex', 'tex', 'bibtex']}
 " Plug 'vim-latex/vim-latex'
-Plug 'liquid.vim'
+Plug 'tpope/vim-liquid'
 "c++11 highlighting
 Plug 'vim-jp/cpp-vim', { 'for' : 'c++'}
 "doxygen toolkit
@@ -86,26 +87,26 @@ Plug 'jceb/vim-orgmode', {'for' : 'orgmode'}
 Plug 'tpope/vim-speeddating'
 
 "tmux integration
-Plug 'vimux'
+Plug 'vim-scripts/vimux'
 
 if ! has('win32')
-    function! BuildYCM(info)
-        " info is a dictionary with 3 fields
-        " - name:   name of the plugin
-        " - status: 'installed', 'updated', or 'unchanged'
-        " - force:  set on PlugInstall! or PlugUpdate!
-        if a:info.status == 'installed' || a:info.force
-            !./install.py
-        endif
-    endfunction
+  function! BuildYCM(info)
+    " info is a dictionary with 3 fields
+    " - name:   name of the plugin
+    " - status: 'installed', 'updated', or 'unchanged'
+    " - force:  set on PlugInstall! or PlugUpdate!
+    if a:info.status == 'installed' || a:info.status = 'updated' || a:info.force
+      !./install.py
+    endif
+  endfunction
 
-    Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') }
+  Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') }
 endif
 
 " Plug 'jeaye/color_coded'
 
 " Plug 'klen/python-mode'
-Plug 'davidhalter/jedi-vim'
+" Plug 'davidhalter/jedi-vim'
 let g:jedi#auto_vim_configuration = 0
 let g:jedi#popup_on_dot = 0
 let g:jedi#popup_select_first = 0
@@ -127,14 +128,19 @@ let g:jedi#rename_command = "<leader>pr"
 "bindings
 
 "shell/terminal emulation
-Plug 'Shougo/vimshell.vim', {'on' : 'VimShell'}
-Plug 'pthrasher/conqueterm-vim', {'on' : 'ConqueTerm'}
+" Plug 'Shougo/vimshell.vim', {'on' : 'VimShell'}
+" Plug 'pthrasher/conqueterm-vim', {'on' : 'ConqueTerm'}
 
 "file management
 Plug 'xolox/vim-misc'
 Plug 'xolox/vim-notes'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+if(has("python3"))
+  Plug 'Shougo/denite.nvim'
+  Plug 'ozelentok/denite-gtags'
+  Plug 'nixprime/cpsm'
+endif
 Plug 'Shougo/unite.vim'
 Plug 'Shougo/vimfiler.vim'
 Plug 'Shougo/unite-ssh'
@@ -156,7 +162,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rsi'
 " Plug 'critiqjo/husk-x.vim'
 
-Plug 'airblade/vim-gitgutter'
+" Plug 'airblade/vim-gitgutter'
 
 Plug 'terryma/vim-multiple-cursors'
 
@@ -173,9 +179,9 @@ Plug 'Lokaltog/vim-easymotion'
 " Plug 'The-NERD-Commenter'
 Plug 'majutsushi/tagbar'
 Plug 'Chiel92/vim-autoformat'
-Plug 'Gundo'
+Plug 'sjl/gundo.vim'
 Plug 'tpope/vim-repeat'
-Plug 'visualrepeat'
+Plug 'vim-scripts/visualrepeat'
 "new alignment plugin, CR from visual mode to use
 Plug 'junegunn/vim-easy-align'
 Plug 'tpope/vim-abolish'
@@ -268,138 +274,330 @@ let g:unite_data_directory = '~/.vim/unite'
 " let g:unite_source_bookmark_directory = '~/.vim/unite-bookmarks'
 let g:unite_source_history_yank_enable = 1
 let g:unite_source_vimshell_external_history_path="~/.zsh-history:~/.zsh-history-$HOST"
+let g:unite_source_grep_max_candidates = 500
 call unite#filters#matcher_default#use(['converter_relative_word', 'matcher_fuzzy'])
 call unite#filters#sorter_default#use(['sorter_rank'])
 call unite#custom#profile('files', 'filters', 'sorter_rank')
 call unite#custom#source('buffer,file,file_rec,file_rec/async', 'sorters', 'sorter_selecta')
 call unite#custom#source('buffer,file,file_rec,file_rec/async', 'matchers',['converter_relative_word', 'matcher_fuzzy'])
-nnoremap <leader>uB :<C-u>Unite bookmark<CR>
-nnoremap <leader>uY :<C-u>Unite history/yank<CR>
-" nnoremap <leader>uf :<C-u>Unite file<CR>
-nnoremap <leader>uf :<C-u>Unite -start-insert file<CR>
-let g:notes_directories =  ['~/Projects/notes']
-nnoremap <leader>un :<C-u>Unite -start-insert file_rec:~/Projects/notes/<CR>
-nnoremap <leader>ug :<C-u>Unite grep:.<CR>
-nnoremap <leader>uG :<C-u>Unite grep:.:-i<CR>
-nnoremap <leader>utc :<C-u>Unite gtags/context<CR>
-nnoremap <leader>utr :<C-u>Unite gtags/ref<CR>
-nnoremap <leader>utd :<C-u>Unite gtags/def<CR>
-nnoremap <leader>utg :<C-u>Unite gtags/grep<CR>
-nnoremap <leader>utf :<C-u>Unite gtags/file<CR>
-nnoremap <leader>utC :<C-u>Unite gtags/completion<CR>
+let  g:notes_directories = ['~/Projects/notes']
+if( ! has("python3")) " using unite
+  nnoremap <leader>ur  :<C-u>Unite -start-insert file_rec/async:!<CR>
+  nnoremap <leader>ub  :<C-u>Unite buffer        file_mru bookmark<CR>
+  nnoremap <leader>uB  :<C-u>Unite bookmark<CR>
+  nnoremap <leader>uY  :<C-u>Unite history/yank<CR>
+  nnoremap <leader>uf  :<C-u>Unite -start-insert file<CR>
+  nnoremap <leader>un  :<C-u>Unite -start-insert file_rec:~/Projects/notes/<CR>
+  nnoremap <leader>ug  :<C-u>Unite grep:.<CR>
+  nnoremap <leader>uG  :<C-u>Unite grep:.:-i<CR>
+  nnoremap <leader>utc :<C-u>Unite gtags/context<CR>
+  nnoremap <leader>utr :<C-u>Unite gtags/ref<CR>
+  nnoremap <leader>utd :<C-u>Unite gtags/def<CR>
+  nnoremap <leader>utg :<C-u>Unite gtags/grep<CR>
+  nnoremap <leader>utf :<C-u>Unite gtags/file<CR>
+  nnoremap <leader>utC :<C-u>Unite gtags/completion<CR>
+else
+  call denite#custom#alias('source', 'file_rec/git', 'file_rec')
+  call denite#custom#var('file_rec/git', 'command',
+        \ ['git', 'ls-files', '-co', '--exclude-standard'])
+  nnoremap <silent> <leader>ur :<C-u>Denite
+        \ `finddir('.git', ';') != '' ? 'file_rec/git' : 'file_rec'`<CR>
+
+  nnoremap <leader>ub  :Denite -mode=normal buffer file_mru<CR>
+
+  nnoremap <leader>uY  :Denite -mode=normal neoyank<CR>
+  nnoremap <leader>uf  :Denite file<CR>
+  nnoremap <leader>un  :Denite file_rec:~/Projects/notes/<CR>
+  nnoremap <leader>ug  :Denite -mode=normal grep:.<CR>
+  nnoremap <leader>uG  :Denite -mode=normal grep:.:-i<CR>
+  nnoremap <leader>ul  :Denite line<CR>
+  nnoremap <leader>uT  :Denite outline<CR>
+  nnoremap <leader>utc :DeniteCursorWord -buffer-name=gtags_context -immediately-1 -mode=normal gtags_context<CR>
+  nnoremap <leader>utr :DeniteCursorWord -buffer-name=gtags_ref -immediately-1 -mode=normal gtags_ref<CR>
+  nnoremap <leader>utd :DeniteCursorWord -buffer-name=gtags_def -immediately-1 -mode=normal gtags_def<CR>
+  nnoremap <leader>utg :DeniteCursorWord -buffer-name=gtags_grep -mode=normal gtags_grep<CR>
+  nnoremap <leader>utf :Denite           -buffer-name=gtags_file -mode=normal gtags_file<CR>
+  nnoremap <leader>utC :Denite           -buffer-name=gtags_completion -mode=normal gtags_completion<CR>
+
+  if executable('ag')
+    " Change file_rec command.
+    call denite#custom#var('file_rec', 'command',
+          \ ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
+
+    " Ag command on grep source
+    call denite#custom#var('grep', 'command', ['ag'])
+    call denite#custom#var('grep', 'default_opts',
+          \ ['-i', '--vimgrep'])
+    call denite#custom#var('grep', 'recursive_opts', [])
+    call denite#custom#var('grep', 'pattern_opt', [])
+    call denite#custom#var('grep', 'separator', ['--'])
+    call denite#custom#var('grep', 'final_opts', [])
+  elseif executable('rg')
+    " For ripgrep
+    " Note: It is slower than ag
+    call denite#custom#var('file_rec', 'command',
+          \ ['rg', '--files', '--glob', '!.git', ''])
+
+    " Ripgrep command on grep source
+    call denite#custom#var('grep', 'command', ['rg'])
+    call denite#custom#var('grep', 'default_opts',
+          \ ['--vimgrep', '--no-heading'])
+    call denite#custom#var('grep', 'recursive_opts', [])
+    call denite#custom#var('grep', 'pattern_opt', ['--regexp'])
+    call denite#custom#var('grep', 'separator', ['--'])
+    call denite#custom#var('grep', 'final_opts', [])
+
+    " For Pt(the platinum searcher)
+    " NOTE: It also supports windows.
+  elseif executable('pt')
+    call denite#custom#var('file_rec', 'command',
+          \ ['pt', '--follow', '--nocolor', '--nogroup',
+          \  (has('win32') ? '-g:' : '-g='), ''])
+
+    " Pt command on grep source
+    call denite#custom#var('grep', 'command', ['pt'])
+    call denite#custom#var('grep', 'default_opts',
+          \ ['--nogroup', '--nocolor', '--smart-case'])
+    call denite#custom#var('grep', 'recursive_opts', [])
+    call denite#custom#var('grep', 'pattern_opt', [])
+    call denite#custom#var('grep', 'separator', ['--'])
+    call denite#custom#var('grep', 'final_opts', [])
+  endif
+
+  " Change mappings.
+  call denite#custom#map(
+        \ 'insert',
+        \ '<C-j>',
+        \ '<denite:move_to_next_line>',
+        \ 'noremap'
+        \)
+  call denite#custom#map(
+        \ 'insert',
+        \ '<C-k>',
+        \ '<denite:move_to_previous_line>',
+        \ 'noremap'
+        \)
+  call denite#custom#map(
+        \ 'insert',
+        \ '<C-a>',
+        \ '<denite:move_caret_to_head>',
+        \ 'noremap'
+        \)
+  call denite#custom#map(
+        \ 'insert',
+        \ '<C-e>',
+        \ '<denite:move_caret_to_tail>',
+        \ 'noremap'
+        \)
+  call denite#custom#map(
+        \ 'insert',
+        \ '<A-b>',
+        \ '<denite:move_caret_to_one_word_left>',
+        \ 'noremap'
+        \)
+  call denite#custom#map(
+        \ 'insert',
+        \ '<A-f>',
+        \ '<denite:move_caret_to_one_word_right>',
+        \ 'noremap'
+        \)
+  call denite#custom#map(
+        \ 'insert',
+        \ '<A-BS>',
+        \ '<denite:delete_word_before_caret>',
+        \ 'noremap'
+        \)
+  call denite#custom#map(
+        \ 'insert',
+        \ '<A-d>',
+        \ '<denite:delete_word_under_caret>',
+        \ 'noremap'
+        \)
+  call denite#custom#map(
+        \ 'insert',
+        \ '<Up>',
+        \ '<denite:move_to_previous_line>',
+        \ 'noremap'
+        \)
+  call denite#custom#map(
+        \ 'insert',
+        \ '<Down>',
+        \ '<denite:move_to_next_line>',
+        \ 'noremap'
+        \)
+  call denite#custom#map(
+        \ 'insert',
+        \ '<S-Up>',
+        \ '<denite:assign_previous_matched_text>',
+        \ 'noremap'
+        \)
+  call denite#custom#map(
+        \ 'insert',
+        \ '<S-Down>',
+        \ '<denite:assign_next_matched_text>',
+        \ 'noremap'
+        \)
+
+  " Change matchers.
+  call denite#custom#source(
+        \ 'file_mru', 'matchers', ['matcher_fuzzy', 'matcher_project_files'])
+  call denite#custom#source(
+        \ 'file_rec', 'matchers', ['matcher_cpsm'])
+
+  " Change sorters.
+  call denite#custom#source(
+        \ 'file_rec', 'sorters', ['sorter_sublime'])
+
+
+  " Define alias
+  call denite#custom#alias('source', 'file_rec/git', 'file_rec')
+  call denite#custom#var('file_rec/git', 'command',
+        \ ['git', 'ls-files', '-co', '--exclude-standard'])
+
+  " Change default prompt
+  " call denite#custom#option('default', 'prompt', '>')
+
+  " Change ignore_globs
+  call denite#custom#filter('matcher_ignore_globs', 'ignore_globs',
+        \ [ '.git/', '.ropeproject/', '__pycache__/',
+        \   'venv/', 'images/', '*.min.*', 'img/', 'fonts/'])
+endif
+
+command! -bang -nargs=* Ag
+      \ call fzf#vim#ag(<q-args>,
+      \                 <bang>0 ? fzf#vim#with_preview('up:60%')
+      \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
+      \                 <bang>0)
+
+function! FilesOrGfiles()
+  if finddir('.git', ';') != ''
+    :GFiles
+  else
+    :Files
+  endif
+endfunction
+
+function! AgWithParam()
+  call inputsave()
+  let pattern = input('Enter pattern: ')
+  call inputrestore()
+  execute "Ag " . pattern
+endfunction
+
+" fzf version of the mappings, experimental
+nnoremap <silent> <leader>fr  :call FilesOrGfiles()<CR>
+nnoremap <silent> <leader>fb  :History<CR>
+nnoremap <silent> <leader>fs  :GFiles?<CR>
+nnoremap <silent> <leader>fn  :Files ~/Projects/notes/<CR>
+nnoremap <silent> <leader>fg  :call AgWithParam()<CR>
+nnoremap <silent> <leader>fl  :BLines<CR>
+nnoremap <silent> <leader>fL  :Lines<CR>
+nnoremap <silent> <leader>fT  :BTags<CR>
 
 let include_paths = ['/opt/local/include','/usr/local/include','/usr/include','/Developer/Headers',fnamemodify('~/programs/include',':p')]
 let g:unite_source_gtags_project_config = {
-            \ '_':                   { 'gtags_libpath': include_paths }
-            \ }
+      \ '_':                   { 'gtags_libpath': include_paths }
+      \ }
 
+
+
+let g:global_objdir = $HOME . "/.dotfiles/global-obj"
+call FindOrCreate(g:global_objdir)
 " For regular tags
 set tags+=~/.dotfiles/global-obj/tags
 function! UpdateTagDir(dir)
-    if isdirectory(a:dir)
-        exe 'cd ' . a:dir
-        if (! filereadable(g:global_objdir . '/' . a:dir . '/GTAGS') )
-            call system('gtags -O')
-        else
-            call system('global -u')
-        endif
-        cd -
+  if isdirectory(a:dir)
+    exe 'cd ' . a:dir
+    if (! filereadable(g:global_objdir . '/' . a:dir . '/GTAGS') )
+      call system('gtags -O')
+    else
+      call system('global -u')
     endif
+    cd -
+  endif
 endfunction
 let ctags_command = 'ctags -R --c++-kinds=+p --fields=+liaS --extra=+q --tag-relative=yes --exclude=.git --exclude=.svn --exclude=.hg '
 function! UpdateLocalCTags()
-    call system(g:ctags_command . ' -f ./tags ' . getcwd())
+  call system(g:ctags_command . ' -f ./tags ' . getcwd())
 endfunction
 function! UpdateCTags()
-    call system(g:ctags_command . ' -f ~/.dotfiles/global-obj/tags ' . join(g:include_paths))
-    call UpdateLocalCTags()
+  call system(g:ctags_command . ' -f ~/.dotfiles/global-obj/tags ' . join(g:include_paths))
+  call UpdateLocalCTags()
 endfunction
 set csprg=gtags-cscope
-let g:global_objdir = $HOME . "/.dotfiles/global-obj"
 " add all databases in objdir
 function! LoadCscopeDir(dir)
-    echo a:dir
-    let db = findfile("GTAGS", g:global_objdir . a:dir . "/;")
-    if (!empty(db))
-        let path = strpart(db, 0, match(db, "/GTAGS$"))
-        exe 'cd ' . path
-        set nocscopeverbose " suppress 'duplicate connection' error
-        exe "cs add " . db . " " . path
-        set cscopeverbose
-        cd -
-    endif
+  echo a:dir
+  let db = findfile("GTAGS", g:global_objdir . a:dir . "/;")
+  if (!empty(db))
+    let path = strpart(db, 0, match(db, "/GTAGS$"))
+    exe 'cd ' . path
+    set nocscopeverbose " suppress 'duplicate connection' error
+    exe "cs add " . db . " " . path
+    set cscopeverbose
+    cd -
+  endif
 endfunction
 function! LoadCscope()
-    echo 'here'
-    " let dbs = findfile("GTAGS", g:global_objdir . "/**", -1)
-    call LoadCscopeDir(fnamemodify('.', ':p:h'))
-    call LoadCscopeDir(expand('%:p:h'))
-    for dir in g:include_paths
-        echo dir
-        " let path = substitute(db, g:global_objdir, '', '')
-        " let path = strpart(path, 0, match(path, "/GTAGS$"))
-        call LoadCscopeDir(dir)
-    endfor
+  echo 'here'
+  " let dbs = findfile("GTAGS", g:global_objdir . "/**", -1)
+  call LoadCscopeDir(fnamemodify('.', ':p:h'))
+  call LoadCscopeDir(expand('%:p:h'))
+  for dir in g:include_paths
+    echo dir
+    " let path = substitute(db, g:global_objdir, '', '')
+    " let path = strpart(path, 0, match(path, "/GTAGS$"))
+    call LoadCscopeDir(dir)
+  endfor
 endfunction
 
-function! UpdateTagDir(dir)
-    if isdirectory(a:dir)
-        exe 'cd ' . a:dir
-        if (! filereadable(g:global_objdir . '/' . a:dir . '/GTAGS') )
-            call system('gtags -O')
-        else
-            call system('global -u')
-        endif
-        cd -
-    endif
-endfunction
 function! UpdateGTags()
-    call UpdateTagDir('.')
-    for dir in g:include_paths
-        call UpdateTagDir(dir)
-    endfor
-    call LoadCscope()
+  call UpdateTagDir('.')
+  for dir in g:include_paths
+    call UpdateTagDir(dir)
+  endfor
+  call LoadCscope()
 endfunction
 function! UpdateAllTags()
-    call UpdateGTags()
-    call UpdateCTags()
+  call UpdateGTags()
+  call UpdateCTags()
 endfunction
 function! UpdateLocalTags()
-    call UpdateTagDir('.')
-    call UpdateLocalCTags()
+  call UpdateTagDir('.')
+  call UpdateLocalCTags()
 endfunction
 augroup UniteTagsRemap
-    autocmd BufEnter *
-                \   if empty(&buftype)
-                \|      nnoremap <buffer> <C-]> :<C-u>UniteWithCursorWord -immediately tag<CR>
-                \|  endif
+  autocmd BufEnter *
+        \   if empty(&buftype)
+        \|      nnoremap <buffer> <C-]> :<C-u>UniteWithCursorWord -immediately tag<CR>
+        \|  endif
 augroup END
 
 if 0
-    " For global tags
-    if has("cscope")
-        set csto=0
-        set cst
-        set nocsverb
+  " For global tags
+  if has("cscope")
+    set csto=0
+    set cst
+    set nocsverb
 
 
-        " add any database in or above the current directory
-        " function! LoadCscope()
-        "     let db = findfile("GTAGS", $HOME . "/.dotfiles/global-obj" . getcwd() . ";")
-        "     if (!empty(db))
-        "         let path = strpart(db, 0, match(db, "/GTAGS$"))
-        "         set nocscopeverbose " suppress 'duplicate connection' error
-        "         exe "cs add " . db . " " . getcwd()
-        "         set cscopeverbose
-        "     endif
-        " endfunction
-        " augroup cscopeloader
-        "     au!
-        "     au BufEnter /* call LoadCscope()
-        " augroup END
-        call LoadCscope()
-        set csverb
-    endif
+    " add any database in or above the current directory
+    " function! LoadCscope()
+    "     let db = findfile("GTAGS", $HOME . "/.dotfiles/global-obj" . getcwd() . ";")
+    "     if (!empty(db))
+    "         let path = strpart(db, 0, match(db, "/GTAGS$"))
+    "         set nocscopeverbose " suppress 'duplicate connection' error
+    "         exe "cs add " . db . " " . getcwd()
+    "         set cscopeverbose
+    "     endif
+    " endfunction
+    " augroup cscopeloader
+    "     au!
+    "     au BufEnter /* call LoadCscope()
+    " augroup END
+    call LoadCscope()
+    set csverb
+  endif
 endif
 " augroup unite_gtags_binding
 "     au!
@@ -409,54 +607,50 @@ endif
 "                 \|  endif
 " augroup END
 " nnoremap <leader>ur :<C-u>Unite -start-insert file_rec<CR>
-nnoremap <leader>ur :<C-u>Unite -start-insert file_rec/async:!<CR>
-nnoremap <leader>uvr :<C-u>Unite -start-insert file_rec/async:!<CR>
-nnoremap <silent> <leader>ub :<C-u>Unite buffer file_mru bookmark<CR>
-let g:unite_source_grep_max_candidates = 500
 
 if executable('rg')
-    let unite_ignores = ["!CMakeFiles",
-                \"!*.dSYM",
-                \"!*.dat",
-                \"!*.pdf",
-                \"!*.bib"]
-    let unite_globs = []
-    for ig in unite_ignores
-        call add(unite_globs, "--glob '" . ig . "'")
-    endfor
-    " Use rg in unite grep source.
-    let g:unite_source_grep_command = 'rg'
-    let g:unite_source_grep_default_opts = ' --smart-case -n --no-heading --color never --no-messages ' .
-                \ join(unite_globs) . ' -e '
-    let g:unite_source_grep_separator = "" "avoid having unite add '--' where it doesn't go
-    let g:unite_source_grep_recursive_opt = ''
-    " The empty perens set the pattern, all files should match
-    let unite_globs2 = []
-    for ig in unite_ignores
-        call add(unite_globs2, '--glob')
-        call add(unite_globs2, ig)
-    endfor
-    let g:unite_source_rec_async_command = ['rg', '--color', 'never', '--no-heading', '--files'] + unite_globs2
+  let unite_ignores = ["!CMakeFiles",
+        \"!*.dSYM",
+        \"!*.dat",
+        \"!*.pdf",
+        \"!*.bib"]
+  let unite_globs = []
+  for ig in unite_ignores
+    call add(unite_globs, "--glob '" . ig . "'")
+  endfor
+  " Use rg in unite grep source.
+  let g:unite_source_grep_command = 'rg'
+  let g:unite_source_grep_default_opts = ' --smart-case -n --no-heading --color never --no-messages ' .
+        \ join(unite_globs) . ' -e '
+  let g:unite_source_grep_separator = "" "avoid having unite add '--' where it doesn't go
+  let g:unite_source_grep_recursive_opt = ''
+  " The empty perens set the pattern, all files should match
+  let unite_globs2 = []
+  for ig in unite_ignores
+    call add(unite_globs2, '--glob')
+    call add(unite_globs2, ig)
+  endfor
+  let g:unite_source_rec_async_command = ['rg', '--color', 'never', '--no-heading', '--files'] + unite_globs2
 elseif executable('pt')
-    " Use pt in unite grep source.
-    " https://github.com/monochromegane/the_platinum_searcher
-    let g:unite_source_grep_command = 'pt'
-    let g:unite_source_grep_default_opts = ' --smart-case --nogroup --nocolor ' .
-                \ '--ignore ''*.dat'' --ignore ''*.pdf'' --ignore ''*.bib'' -e '
-    let g:unite_source_grep_recursive_opt = ''
-    " The empty perens set the pattern, all files should match
-    let g:unite_source_rec_async_command = ['pt', '--nocolor', '--nogroup', '-g', ".", ""]
+  " Use pt in unite grep source.
+  " https://github.com/monochromegane/the_platinum_searcher
+  let g:unite_source_grep_command = 'pt'
+  let g:unite_source_grep_default_opts = ' --smart-case --nogroup --nocolor ' .
+        \ '--ignore ''*.dat'' --ignore ''*.pdf'' --ignore ''*.bib'' -e '
+  let g:unite_source_grep_recursive_opt = ''
+  " The empty perens set the pattern, all files should match
+  let g:unite_source_rec_async_command = ['pt', '--nocolor', '--nogroup', '-g', ".", ""]
 elseif executable('ag')
-    " Use ag in unite grep source.
-    let g:unite_source_grep_command = 'ag'
-    let g:unite_source_grep_default_opts =
-                \ '--line-numbers --nocolor --nogroup --hidden ' .
-                \ '--ignore ''CMakeFiles'' ' .
-                \ '--ignore ''*.dat'' --ignore ''*.pdf'' --ignore ''build*''  '
-    let g:unite_source_grep_recursive_opt = ''
-    let g:unite_source_rec_async_command = ['ag', '-i', '--nocolor', '--nogroup', '--ignore', 'build*', '--ignore', '.git', '--ignore', '.bzr', '--ignore', 'node_modules', '--hidden', '-g', ""]
+  " Use ag in unite grep source.
+  let g:unite_source_grep_command = 'ag'
+  let g:unite_source_grep_default_opts =
+        \ '--line-numbers --nocolor --nogroup --hidden ' .
+        \ '--ignore ''CMakeFiles'' ' .
+        \ '--ignore ''*.dat'' --ignore ''*.pdf'' --ignore ''build*''  '
+  let g:unite_source_grep_recursive_opt = ''
+  let g:unite_source_rec_async_command = ['ag', '-i', '--nocolor', '--nogroup', '--ignore', 'build*', '--ignore', '.git', '--ignore', '.bzr', '--ignore', 'node_modules', '--hidden', '-g', ""]
 else
-    let g:unite_source_rec_find_args = ['-path', '*/.git/*', '-prune', '-o', '-path', '*/build*/*', '-prune', '-o', '-print']
+  let g:unite_source_rec_find_args = ['-path', '*/.git/*', '-prune', '-o', '-path', '*/build*/*', '-prune', '-o', '-print']
 endif
 
 "ctrlp
@@ -476,7 +670,7 @@ nnoremap <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<CR>
 let g:ycm_complete_in_strings = 1
 let g:ycm_extra_conf_vim_data=['&filetype']
 let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
-let g:ycm_extra_conf_globlist = ['~/Dropbox/*','~/projects/*']
+let g:ycm_extra_conf_globlist = ['~/Dropbox/*','~/projects/*','~/Projects/*']
 let g:ycm_autoclose_preview_window_after_insertion = 1
 let g:ycm_key_invoke_completion = '<C-S-Space>'
 
@@ -500,26 +694,27 @@ set suffixes+=".DS_Store,.DS_Store?,._*,.Spotlight-V100,ehthumbs.db,Thumbs.db"
 set suffixes+=*.swp,*~
 set suffixes+=*.aux,*.lot,*.lof,*.pyg,*.toc
 set suffixes+=*.pdf,*.eps,*.epsi,*.png,*.jpg,*.svg
-set suffixes+=*.xls,*.xlsx,*.ppt,*.pptx,*.doc,*.docx,*.graffle
+" set suffixes+=*.xls,*.xlsx,*.ppt,*.pptx,*.doc,*.docx,*.graffle
 
 "outliner checkboxes
 augroup filetype_otl
-    autocmd!
-    au FileType otl source ~/.vim/plugin/vo_checkbox.vim
-    au FileType otl setlocal spell spelllang=en_us
+  autocmd!
+  au FileType otl source ~/.vim/plugin/vo_checkbox.vim
+  au FileType otl setlocal spell spelllang=en_us
 augroup END
 
 "additional buffer types
 augroup extra_filetypes
-    autocmd!
-    au BufNewFile,BufRead *.cu           set      ft=cuda
-    au BufNewFile,BufRead *.cl           set      ft=opencl
-    au BufNewFile,BufRead *.br           set      ft=brook
-    au BufNewFile,BufRead *.go           set      ft=go
-    au FileType           go             setlocal formatprg=gofmt
-    au BufRead            COMMIT_EDITMSG set      backupcopy=no
-    au BufNewFile,BufRead *.txt          set      ft=txt
-    au BufNewFile,BufRead CMakeLists.txt set      ft=cmake
+  autocmd!
+  au BufNewFile,BufRead *.cu           set      ft=cuda
+  au BufNewFile,BufRead *.cuh          set      ft=cuda
+  au BufNewFile,BufRead *.cl           set      ft=opencl
+  au BufNewFile,BufRead *.br           set      ft=brook
+  au BufNewFile,BufRead *.go           set      ft=go
+  au FileType           go             setlocal formatprg=gofmt
+  au BufRead            COMMIT_EDITMSG set      backupcopy=no
+  au BufNewFile,BufRead *.txt          set      ft=txt
+  au BufNewFile,BufRead CMakeLists.txt set      ft=cmake
 augroup END
 
 "for plugins, etc.
@@ -529,11 +724,11 @@ set encoding=utf-8
 
 "remove ending whitespace on file write
 fun! <SID>StripTrailingWhitespaces()
-    let save_cursor = getpos(".")
-    let old_query = getreg('/')
-    :%s/\s\+$//e
-    call setpos('.', save_cursor)
-    call setreg('/', old_query)
+  let save_cursor = getpos(".")
+  let old_query = getreg('/')
+  :%s/\s\+$//e
+  call setpos('.', save_cursor)
+  call setreg('/', old_query)
 endfun
 " Save a file as root (,W)
 noremap <leader>W :w !sudo tee % > /dev/null<CR>
@@ -546,27 +741,27 @@ noremap <leader>W :w !sudo tee % > /dev/null<CR>
 " Disable spell checking in comments
 let g:tex_comment_nospell= 1
 fun! TeX_fmt()
-    if (getline(".") != "")
-        let save_cursor = getpos(".")
-        let op_wrapscan = &wrapscan
-        set nowrapscan
-        let par_begin = '^\(%D\)\=\s*\($\|\\begin\|\\end\|\\Start\|\\Stop\|\\\(sub\)*section\>\|\\item\>\|\\NC\>\|\\blank\>\|\\noindent\>\)'
-        let par_end   = '^\(%D\)\=\s*\($\|\\begin\|\\end\|\\Start\|\\Stop\|\\place\|\\\(sub\)*section\>\|\\item\>\|\\NC\>\|\\blank\>\)'
-        try
-            exe '?'.par_begin.'?+'
-        catch /E384/
-            1
-        endtry
-        norm V
-        try
-            exe '/'.par_end.'/-'
-        catch /E385/
-            $
-        endtry
-        norm gq
-        let &wrapscan = op_wrapscan
-        call setpos('.', save_cursor)
-    endif
+  if (getline(".") != "")
+    let save_cursor = getpos(".")
+    let op_wrapscan = &wrapscan
+    set nowrapscan
+    let par_begin = '^\(%D\)\=\s*\($\|\\begin\|\\end\|\\Start\|\\Stop\|\\\(sub\)*section\>\|\\item\>\|\\NC\>\|\\blank\>\|\\noindent\>\)'
+    let par_end   = '^\(%D\)\=\s*\($\|\\begin\|\\end\|\\Start\|\\Stop\|\\place\|\\\(sub\)*section\>\|\\item\>\|\\NC\>\|\\blank\>\)'
+    try
+      exe '?'.par_begin.'?+'
+    catch /E384/
+      1
+    endtry
+    norm V
+    try
+      exe '/'.par_end.'/-'
+    catch /E385/
+      $
+    endtry
+    norm gq
+    let &wrapscan = op_wrapscan
+    call setpos('.', save_cursor)
+  endif
 endfun
 
 "CODE LINTING
@@ -579,9 +774,9 @@ let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 0
 let g:syntastic_mode_map = {
-            \ "mode": "passive",
-            \ "active_filetypes": [],
-            \ "passive_filetypes": [] }
+      \ "mode": "passive",
+      \ "active_filetypes": [],
+      \ "passive_filetypes": [] }
 
 " if executable("astyle")
 "     "astyle args for C and C++
@@ -592,20 +787,20 @@ let g:syntastic_mode_map = {
 " endif
 
 "automatic formatting options
-set textwidth=78
+set textwidth=80
 augroup git_messages
-    autocmd!
-    au FileType gitcommit setlocal textwidth=72
+  autocmd!
+  au FileType gitcommit setlocal textwidth=72
 augroup END
 set formatoptions=crq
 " set fo-=t
 " au FileType tex set formatoptions+=a
 augroup text_formatting
-    autocmd!
-    au FileType tex setlocal formatoptions+=t
-    au FileType tex setlocal formatexpr=cindent
-    au FileType txt setlocal formatoptions+=t
-    au FileType txt setlocal formatexpr=cindent
+  autocmd!
+  au FileType tex setlocal formatoptions+=t
+  au FileType tex setlocal formatexpr=cindent
+  au FileType txt setlocal formatoptions+=t
+  au FileType txt setlocal formatexpr=cindent
 augroup END
 "set formatoptions+=a
 
@@ -632,6 +827,8 @@ let g:ConqueTerm_CWInsert = 1
 
 let g:tmuxline_preset = 'full'
 let g:tmuxline_powerline_separators = 0
+" use ascii symbols instead of unicode, expariment
+" let g:airline_symbols_ascii = 1
 let g:airline#extensions#tmuxline#enabled = 1
 let g:airline#extensions#bufferline#enabled = 1
 let g:airline#extensions#branch#enabled = 1
@@ -649,109 +846,109 @@ map <Esc><C-T> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q $PWD<CR>
 " execute 'map <C-S-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q -f - ' . include_paths . ' > ~/.vim-systags'
 
 if has("gui_running")
-    set guioptions=egmt
-    if has("gui_macvim")
-        "CRITICAL option, allows alt-based key-bindings to work in macvim
-        set macmeta
-        set transparency=10
-        " set gfn=Courier\ New:h11.00
-        set gfn=ProFont:h9.00
-        set noantialias
-        set fuopt=maxvert,maxhorz
-    elseif has("gui_gtk2")
-        set guifont=Terminus\ 8
-    elseif has("x11")
-        " Also for GTK 1
-        set guifont=-misc-fixed-medium-r-normal-*-10-*-*-*-c-*-iso8859-15
-    endif
+  set guioptions=egmt
+  if has("gui_macvim")
+    "CRITICAL option, allows alt-based key-bindings to work in macvim
+    set macmeta
+    set transparency=10
+    " set gfn=Courier\ New:h11.00
+    set gfn=ProFont:h9.00
+    set noantialias
+    set fuopt=maxvert,maxhorz
+  elseif has("gui_gtk2")
+    set guifont=Terminus\ 8
+  elseif has("x11")
+    " Also for GTK 1
+    set guifont=-misc-fixed-medium-r-normal-*-10-*-*-*-c-*-iso8859-15
+  endif
 endif
 
+if exists("neovim_dot_app") || has("gui_vimr") " VimR thinks it isn't a gui..?
+  let g:terminal_color_0 = '#2e3436'
+  let g:terminal_color_1 = '#cc0000'
+  let g:terminal_color_2 = '#4e9a06'
+  let g:terminal_color_3 = '#c4a000'
+  let g:terminal_color_4 = '#3465a4'
+  let g:terminal_color_5 = '#75507b'
+  let g:terminal_color_6 = '#0b939b'
+  let g:terminal_color_7 = '#d3d7cf'
+  let g:terminal_color_8 = '#555753'
+  let g:terminal_color_9 = '#ef2929'
+  let g:terminal_color_10 = '#8ae234'
+  let g:terminal_color_11 = '#fce94f'
+  let g:terminal_color_12 = '#729fcf'
+  let g:terminal_color_13 = '#ad7fa8'
+  let g:terminal_color_14 = '#00f5e9'
+  let g:terminal_color_15 = '#eeeeec'
+endif
+
+
+function! Map_for_all(mapping, target, ...)
+  let for_input = (a:0 >= 1) ? a:1 : 1
+  let for_cmd = (a:0 >= 2) ? a:2 : 0
+  let for_terminal = (a:0 >= 3) ? a:3 : 0
+
+  for item in ['nnoremap', 'vmap', 'omap']
+    execute item . ' ' . a:mapping . ' ' . a:target
+  endfor
+
+  if has("nvim")
+    if for_terminal != 0
+      execute 'tnoremap '.a:mapping.' <C-\><C-n>'.a:target
+    endif
+  endif
+
+  if for_cmd != 0
+    execute 'cmap '.a:mapping.' '.a:target
+  endif
+
+  if for_input > 1
+    execute 'imap ' . a:mapping . ' <Esc>' . a:target
+  else
+    execute 'imap ' . a:mapping . ' ' . a:target
+  endif
+endfunction
+
+function! Map_for_all_meta(mapping, target, ...)
+  let for_input = (a:0 >= 1) ? a:1 : 2
+  let for_cmd = (a:0 >= 2) ? a:2 : 1
+  let for_terminal = (a:0 >= 3) ? a:3 : 1
+
+  call Map_for_all('<A-'.a:mapping.'>', a:target, for_cmd, for_input, for_terminal)
+  call Map_for_all('<Esc>'.a:mapping, a:target, for_cmd, for_input, for_terminal)
+endfunction
 
 
 "Normalize backspace
 set t_kb=
-nnoremap    <BS>
-vmap        <BS>
-imap        <BS>
-cmap        <BS>
-omap        <BS>
+call Map_for_all("", "<BS>", 1, 1)
 
 if &term =~ "screen.*" "screen configurations
-    if &term =~ "screen.*-bce"
-        set term=screen-256color
-    endif
-    "set ttymouse=xterm "falls back to xterm for unsupported terminal type
-    set t_ku=OA
-    set t_kd=OB
-    set t_kr=OC
-    set t_kl=OD
-    set t_@7=OF
-    set t_kh=[1~
+  if &term =~ "screen.*-bce"
+    set term=screen-256color
+  endif
+  "set ttymouse=xterm "falls back to xterm for unsupported terminal type
+  set t_ku=OA
+  set t_kd=OB
+  set t_kr=OC
+  set t_kl=OD
+  set t_@7=OF
+  set t_kh=[1~
 
-    nnoremap <Esc>[C     <Right>
-    vmap     <Esc>[C     <Right>
-    imap     <Esc>[C     <Right>
-    cmap     <Esc>[C     <Right>
-    omap     <Esc>[C     <Right>
-    nnoremap <Esc>[D     <Left>
-    vmap     <Esc>[D     <Left>
-    imap     <Esc>[D     <Left>
-    cmap     <Esc>[D     <Left>
-    omap     <Esc>[D     <Left>
-    nnoremap <Esc>[A     <Up>
-    vmap     <Esc>[A     <Up>
-    imap     <Esc>[A     <Up>
-    cmap     <Esc>[A     <Up>
-    omap     <Esc>[A     <Up>
-    nnoremap <Esc>[B     <Down>
-    vmap     <Esc>[B     <Down>
-    imap     <Esc>[B     <Down>
-    cmap     <Esc>[B     <Down>
-    omap     <Esc>[B     <Down>
-    " map OB <Down>
-    " map OA <Up>
-    " map OD <Left>
-    " map OC <Right>
+  call Map_for_all("<Esc>[C", "<Right>", 1, 1)
+  call Map_for_all("<Esc>[D", "<Left>", 1, 1)
+  call Map_for_all("<Esc>[A", "<Up>", 1, 1)
+  call Map_for_all("<Esc>[B", "<Down>", 1, 1)
 
+  call Map_for_all("<Esc>[4~", "<End>", 1, 1)
+  call Map_for_all("<Esc>[1~", "<Home>", 1, 1)
 
-    nnoremap  <Esc>[4~ <End>
-    vmap      <Esc>[4~ <End>
-    imap      <Esc>[4~ <End>
-    cmap      <Esc>[4~ <End>
-    omap      <Esc>[4~ <End>
-    nnoremap  <Esc>[1~  <Home>
-    vmap      <Esc>[1~  <Home>
-    imap      <Esc>[1~  <Home>
-    cmap      <Esc>[1~  <Home>
-    omap      <Esc>[1~  <Home>
-
-    nnoremap  <Esc>0F <End>
-    vmap      <Esc>0F <End>
-    imap      <Esc>0F <End>
-    cmap      <Esc>0F <End>
-    omap      <Esc>0F <End>
-    nnoremap  <Esc>OH  <Home>
-    vmap      <Esc>OH  <Home>
-    imap      <Esc>OH  <Home>
-    cmap      <Esc>OH  <Home>
-    omap      <Esc>OH  <Home>
-    nnoremap  <Esc>[F <End>
-    vmap      <Esc>[F <End>
-    imap      <Esc>[F <End>
-    cmap      <Esc>[F <End>
-    omap      <Esc>[F <End>
-    nnoremap  <Esc>[H  <Home>
-    vmap      <Esc>[H  <Home>
-    imap      <Esc>[H  <Home>
-    cmap      <Esc>[H  <Home>
-    omap      <Esc>[H  <Home>
+  call Map_for_all("<Esc>0F", "<End>", 1, 1)
+  call Map_for_all("<Esc>OH", "<Home>", 1, 1)
+  call Map_for_all("<Esc>[F", "<End>", 1, 1)
+  call Map_for_all("<Esc>[H", "<Home>", 1, 1)
 endif
 
-
-"let g:NERDCustomDelimiters = {
-"\ 'opencl': { 'left': '#', 'leftAlt': 'FOO', 'rightAlt': 'BAR' },
-"\ 'grondle': { 'left': '{{', 'right': '}}' }
-"\ }
 
 " tComment extra mappings:
 " yank visual before toggle comment
@@ -788,8 +985,8 @@ set history=10000
 set backspace=2
 " set softtabstop=2 "used to favor the gnu style, getting used to K&R @ 4 spaces
 " set shiftwidth=2
-set softtabstop=4
-set shiftwidth=4
+set softtabstop=2
+set shiftwidth=2
 set expandtab
 set hlsearch
 set incsearch
@@ -807,8 +1004,8 @@ set backupdir=~/.vim-backups
 call FindOrCreate("~/.vim-swaps")
 set directory=~/.vim-swaps//
 if exists("&undodir")
-    call FindOrCreate("~/.vim-undo")
-    set undodir=~/.vim-undo
+  call FindOrCreate("~/.vim-undo")
+  set undodir=~/.vim-undo
 endif
 " Enable per-directory .vimrc files and disable unsafe commands in them
 set exrc
@@ -817,12 +1014,12 @@ set secure
 " set cursorline
 " set cursorcolumn
 augroup cursorhighlight
-    au!
-    autocmd BufEnter *
-                \   if (&buftype == 'nofile')
-                \|      set nocursorline
-                \|      set nocursorcolumn
-                \|  endif
+  au!
+  autocmd BufEnter *
+        \   if (&buftype == 'nofile')
+        \|      set nocursorline
+        \|      set nocursorcolumn
+        \|  endif
 augroup END
 " Show “invisible” characters
 " set lcs=tab:▸\ ,trail:·,eol:¬,nbsp:_
@@ -848,6 +1045,17 @@ set scrolloff=3
 " Start scrolling three lines before the horizontal window border
 set sidescrolloff=3
 
+" Append modeline after last line in buffer.
+" Use substitute() instead of printf() to handle '%%s' modeline in LaTeX
+" files.
+function! AppendModeline()
+  let l:modeline = printf(" vim: set ts=%d sw=%d tw=%d %set :",
+        \ &tabstop, &shiftwidth, &textwidth, &expandtab ? '' : 'no')
+  let l:modeline = substitute(&commentstring, "%s", l:modeline, "")
+  call append(line("$"), l:modeline)
+endfunction
+nnoremap <silent> <Leader>ml :call AppendModeline()<CR>
+
 
 "diff behavior
 set diffopt+=iwhite
@@ -858,8 +1066,8 @@ set smartindent
 
 "c/c++ options
 augroup c_setup
-    autocmd!
-    au FileType c set foldmethod=syntax
+  autocmd!
+  au FileType c set foldmethod=syntax
 augroup END
 
 "latex options
@@ -871,16 +1079,16 @@ let g:tex_flavor='latex'
 let g:Imap_FreezeImap=1
 let g:Tex_FormatDependency_pdf = 'pdf'
 if has('macunix')
-    let g:Tex_ViewRule_pdf = 'open '
-    let g:Tex_ViewRuleComplete_pdf = 'open $*.pdf'
+  let g:Tex_ViewRule_pdf = 'open '
+  let g:Tex_ViewRuleComplete_pdf = 'open $*.pdf'
 elseif has('unix')
-    let g:Tex_ViewRule_pdf = 'evince '
-    let g:Tex_ViewRuleComplete_pdf = 'evince $*.pdf'
+  let g:Tex_ViewRule_pdf = 'evince '
+  let g:Tex_ViewRuleComplete_pdf = 'evince $*.pdf'
 endif
 map <silent> <Leader>ls :silent
-            \ !/Applications/Skim.app/Contents/SharedSupport/displayline
-            \ <C-R>=line('.')<CR> "<C-R>=LatexBox_GetOutputFile()<CR>"
-            \ "%:p" <CR>
+      \ !/Applications/Skim.app/Contents/SharedSupport/displayline
+      \ <C-R>=line('.')<CR> "<C-R>=LatexBox_GetOutputFile()<CR>"
+      \ "%:p" <CR>
 
 let g:Tex_DefaultTargetFormat = 'pdf'
 
@@ -899,43 +1107,45 @@ let g:Tex_ViewRule_pdf = 'Skim'
 "       \"\oval, \circle, or \line size unavailable\n"'
 
 function! Find_main_latex()
-    let latexmain = findfile("paper.tex", ".;")
-    if (!empty(latexmain))
-        return latexmain
+  let latexmain = findfile("paper.tex", ".;")
+  if (!empty(latexmain))
+    return latexmain
+  endif
+  let latexmain = findfile("header.tex", ".;")
+  if (!empty(latexmain))
+    return latexmain
+  endif
+  let basedir = finddir(".git", ".;")
+  if (isdirectory(basedir))
+    let latexmain = glob(basedir . "/*.latexmain")
+    if (filereadable(latexmain))
+      return substitute(latexmain, ".latexmain", "", "")
     endif
-    let latexmain = findfile("header.tex", ".;")
-    if (!empty(latexmain))
-        return latexmain
-    endif
-    let basedir = finddir(".git", ".;")
-    if (isdirectory(basedir))
-        let latexmain = glob(basedir . "/*.latexmain")
-        if (filereadable(latexmain))
-            return substitute(latexmain, ".latexmain", "", "")
-        endif
-    endif
-    return ""
+  endif
+  return ""
 endfunction
 
 augroup text_setup
-    autocmd!
-    au FileType tex let g:Tex_DefaultTargetFormat='pdf'
-    au FileType tex setlocal spell spelllang=en_us
-    " au FileType tex imap <C-x><C-p> <Plug>Tex_Completion
-    au FileType tex imap <buffer> <C-b> <Plug>Tex_MathBF
-    au FileType tex imap <buffer> <C-l> <Plug>Tex_LeftRight
-    au FileType tex imap <buffer> <C-p> <Plug>Tex_InsertItemOnThisLine
-    au FileType tex imap <buffer> <A-i> <Plug>Tex_InsertItemOnThisLine
-    au FileType tex imap <buffer> <Esc>i <Plug>Tex_InsertItemOnThisLine
-    au FileType tex let b:main_tex_file=Find_main_latex()
+  autocmd!
+  au FileType tex let g:Tex_DefaultTargetFormat='pdf'
+  au FileType tex setlocal spell spelllang=en_us
+  " au FileType tex imap <C-x><C-p> <Plug>Tex_Completion
+  au FileType tex imap <buffer> <C-b> <Plug>Tex_MathBF
+  au FileType tex imap <buffer> <C-l> <Plug>Tex_LeftRight
+  " conflict with ctrl-p
+  " au FileType tex imap <buffer> <C-p> <Plug>Tex_InsertItemOnThisLine
+  au FileType tex imap <buffer> <A-i> <Plug>Tex_InsertItemOnThisLine
+  au FileType tex imap <buffer> <Esc>i <Plug>Tex_InsertItemOnThisLine
+  au FileType tex let b:main_tex_file=Find_main_latex()
 
-    " Highlight words I might use to mess up grammar
-    au FileType tex highlight whichthat ctermfg=Magenta guifg=#515996
-    "ctermfg=black
-    au FileType tex match whichthat /\(\swhich\s\|\sthat\s\)/
+  " Highlight words I might use to mess up grammar
+  au FileType tex highlight whichthat ctermfg=Magenta guifg=#515996
+  "ctermfg=black
+  au FileType tex match whichthat /\(\swhich\s\|\sthat\s\)/
 
-    au FileType txt set textwidth=80
-    au FileType txt setlocal spell spelllang=en_us
+  au FileType txt set textwidth=80
+  au FileType txt setlocal spell spelllang=en_us
+  au FileType help setlocal nospell spelllang=en_us
 augroup END
 
 "build system options
@@ -947,167 +1157,137 @@ command! -nargs=* Scons scons <args> | cwindow 3
 nnoremap <Leader>m :Make<cr>
 
 augroup build_autos
-    autocmd!
-    au BufRead,BufNewFile SConstruct set filetype=python
+  autocmd!
+  au BufRead,BufNewFile SConstruct set filetype=python
 
-    au FileType make inoremap <buffer> <tab> <tab>
-    au FileType make setlocal softtabstop=0
-    au FileType make setlocal shiftwidth=8
-    au FileType make setlocal noexpandtab
-    au FileType make setlocal noautoindent
-    au FileType make setlocal nosmartindent
+  au FileType make inoremap <buffer> <tab> <tab>
+  au FileType make setlocal softtabstop=0
+  au FileType make setlocal shiftwidth=8
+  au FileType make setlocal noexpandtab
+  au FileType make setlocal noautoindent
+  au FileType make setlocal nosmartindent
 augroup END
 
 function! Clang_rename_string(new_name)
-    "Save window state
-    let winview=winsaveview()
+  "Save window state
+  let winview=winsaveview()
 
-    "Rename symbol
-    exe "1,$!clang-rename -offset " . (line2byte( line('.'))+col('.')) . " -new-name='" . a:new_name . "' %"
-    "clang-rename -offset 4156 -new-name=do_other_stuff_for_some_reason -pl -pn
+  "Rename symbol
+  exe "1,$!clang-rename -offset " . (line2byte( line('.'))+col('.')) . " -new-name='" . a:new_name . "' %"
+  "clang-rename -offset 4156 -new-name=do_other_stuff_for_some_reason -pl -pn
 
-    "Recall window state
-    call winrestview(winview)
+  "Recall window state
+  call winrestview(winview)
 endfunction
 
 function! Clang_rename()
-    call inputsave()
-    let name = input('Enter name: ')
-    call inputrestore()
-    call Clang_rename_string(name)
+  call inputsave()
+  let name = input('Enter name: ')
+  call inputrestore()
+  call Clang_rename_string(name)
 endfunction
 
 
 
 "general key remappings
 nmap Y y$
-function! Map_for_all(mapping, target, for_cmd, for_input, esc_input)
-    for item in ['nnoremap', 'vmap', 'omap']
-        execute item . ' ' . a:mapping . ' ' . a:target
-    endfor
 
-    if a:for_cmd != 0
-        execute 'cmap '.a:mapping.' '.a:target
-    endif
-
-    if a:for_input != 0
-        if a:esc_input != 0
-            execute 'imap ' . a:mapping . ' <Esc>' . a:target
-        else
-            execute 'imap ' . a:mapping . ' ' . a:target
-        endif
-    endif
-endfunction
-
-function! Map_for_all_meta(mapping, target, for_cmd, for_input, esc_input)
-    call Map_for_all('<A-'.mapping.'>', target, for_cmd, for_input, esc_input)
-    call Map_for_all('<Esc>'.mapping, target, for_cmd, for_input, esc_input)
-endfunction
-
-call Map_for_all("<C-c>","<Esc>", 1, 1, 0)
+call Map_for_all("<C-c>","<Esc>", 1, 1)
 
 map <S-Z><S-S> :up<CR>
 
 
 if ! has("gui_running")
-    "if $TMUX "TODO: get copy support for tmux, need to figure out what mappings
-    "make sense...
-    "vmap <silent> <A-C>        "py:call eval('system("tmux set-buffer \'" . @p . "\'")')<CR>
-    "vmap <silent> <Esc>C       "py:call eval('system("tmux set-buffer \'" . @p . "\'")')<CR>
-    "vmap <silent> <A-V>        dh:call Paste_proper()<CR>
-    "vmap <silent> <Esc>V       dh:call Paste_proper()<CR>
-    "imap <silent> <A-V>        <Esc>: call Paste_proper()<CR>
-    "imap <silent> <Esc>V       <Esc>: call Paste_proper()<CR>
-    "nmap <silent> <A-C>        :yank p<CR>:call Yank_proper()<CR>
-    "nmap <silent> <Esc>C       :yank p<CR>:call Yank_proper()<CR>
-    "nmap <silent> <A-V>        :call Paste_proper()<CR>
-    "nmap <silent> <Esc>V       :call Paste_proper()<CR>
-    "endif
-    "nnoremap <special> <A-c> "*Y
-    " cnoremap <special> <A-c> <C-R>+
-    "vnoremap <special> <A-c> "*y
-    if has('macunix')
-        let tmux_reattach_prefix=glob("~/Dropbox/config/tmux-MacOSX-pasteboard/reattach-to-user-namespace")
-        if (! filereadable(tmux_reattach_prefix))
-            let tmux_reattach_prefix=glob("~/Projects/config-sync/tmux-MacOSX-pasteboard/reattach-to-user-namespace")
-        endif
-
-        "paste from pbpaste as paste normally works, from the current cursor position
-        function! Paste_proper()
-            let @p=system(g:tmux_reattach_prefix . " pbpaste")
-            execute 'normal "pp'
-        endfunction
-        vmap <silent> <A-v>        dh:call Paste_proper()<CR>
-        vmap <silent> <Esc>v       dh:call Paste_proper()<CR>
-        imap <silent> <A-v>        <Esc>: call Paste_proper()<CR>
-        imap <silent> <Esc>v       <Esc>: call Paste_proper()<CR>
-        nmap <silent> <A-v>        :call Paste_proper()<CR>
-        nmap <silent> <Esc>v       :call Paste_proper()<CR>
+  "if $TMUX "TODO: get copy support for tmux, need to figure out what mappings
+  "make sense...
+  "vmap <silent> <A-C>        "py:call eval('system("tmux set-buffer \'" . @p . "\'")')<CR>
+  "vmap <silent> <Esc>C       "py:call eval('system("tmux set-buffer \'" . @p . "\'")')<CR>
+  "vmap <silent> <A-V>        dh:call Paste_proper()<CR>
+  "vmap <silent> <Esc>V       dh:call Paste_proper()<CR>
+  "imap <silent> <A-V>        <Esc>: call Paste_proper()<CR>
+  "imap <silent> <Esc>V       <Esc>: call Paste_proper()<CR>
+  "nmap <silent> <A-C>        :yank p<CR>:call Yank_proper()<CR>
+  "nmap <silent> <Esc>C       :yank p<CR>:call Yank_proper()<CR>
+  "nmap <silent> <A-V>        :call Paste_proper()<CR>
+  "nmap <silent> <Esc>V       :call Paste_proper()<CR>
+  "endif
+  "nnoremap <special> <A-c> "*Y
+  " cnoremap <special> <A-c> <C-R>+
+  "vnoremap <special> <A-c> "*y
+  if has('macunix')
+    let tmux_reattach_prefix=glob("~/Dropbox/config/tmux-MacOSX-pasteboard/reattach-to-user-namespace")
+    if (! filereadable(tmux_reattach_prefix))
+      let tmux_reattach_prefix=glob("~/Projects/config-sync/tmux-MacOSX-pasteboard/reattach-to-user-namespace")
     endif
 
-    if $ITERM_PROFILE
-        vmap <C-y> y:call system("xclip", getreg("\""))<CR>
-        "attempt to yank through iterm2 termcode
-        function! Yank_proper()
-            "each mode needs different copy, see below mappings
-            " echo system("cat << StringNotLikelyToBeCopied\n" . getreg("p") . "\nStringNotLikelyToBeCopied")
-            if has("python")
-                python import vim, sys, subprocess
-                python p=subprocess.Popen(["cat"], stdin=subprocess.PIPE)
-                python p.stdin.write('\033]50;CopyToClipboard=')
-                python p.stdin.write(vim.eval('getreg("p")'))
-                python p.stdin.write('\033]50;EndCopy')
-                python p.stdin.close()
-            elseif has("python3")
-                python3 import vim, sys, subprocess
-                python3 p=subprocess.Popen(["cat"], stdin=subprocess.PIPE)
-                python3 p.stdin.write('\033]50;CopyToClipboard=')
-                python3 p.stdin.write(vim.eval('getreg("p")'))
-                python3 p.stdin.write('\033]50;EndCopy')
-                python3 p.stdin.close()
-            endif
-            redraw!
-        endfunction
-        vmap <silent> <A-c>        "py:call Yank_proper()<CR>
-        vmap <silent> <Esc>c       "py:call Yank_proper()<CR>
-        nmap <silent> <A-c>        :yank p<CR>:call Yank_proper()<CR>
-        nmap <silent> <Esc>c       :yank p<CR>:call Yank_proper()<CR>
-    elseif has('macunix')
-        function! Yank_proper()
-            "each mode needs different copy, see below mappings
-            call system(g:tmux_reattach_prefix . " pbcopy", getreg("p"))
-        endfunction
+    "paste from pbpaste as paste normally works, from the current cursor position
+    function! Paste_proper()
+      let @p=system(g:tmux_reattach_prefix . " pbpaste")
+      execute 'normal "pp'
+    endfunction
+    vmap <silent> <A-v>        dh:call Paste_proper()<CR>
+    vmap <silent> <Esc>v       dh:call Paste_proper()<CR>
+    imap <silent> <A-v>        <Esc>: call Paste_proper()<CR>
+    imap <silent> <Esc>v       <Esc>: call Paste_proper()<CR>
+    nmap <silent> <A-v>        :call Paste_proper()<CR>
+    nmap <silent> <Esc>v       :call Paste_proper()<CR>
+  endif
 
-        vmap <silent> <A-c>        "py:call Yank_proper()<CR>
-        vmap <silent> <Esc>c       "py:call Yank_proper()<CR>
-        nmap <silent> <A-c>        :yank p<CR>:call Yank_proper()<CR>
-        nmap <silent> <Esc>c       :yank p<CR>:call Yank_proper()<CR>
-    endif
-    " execute 'inoremap <script> <special> <A-c>' paste#paste_cmd['i']
-    " nnoremap <special> <Esc>c "+gP
-    " cnoremap <special> <Esc>c <C-R>+
-    " execute 'cnoremap <script> <special> <Esc>c' paste#paste_cmd['c']
-    " execute 'inoremap <script> <special> <Esc>c' paste#paste_cmd['i']
-    "nnoremap <special> <A-v> "+gP
-    "cnoremap <special> <A-v> <C-R>+
-    "execute 'vnoremap <script> <special> <A-v>' paste#paste_cmd['v']
-    "execute 'inoremap <script> <special> <A-v>' paste#paste_cmd['i']
-    "nnoremap <special> <Esc>v "+gP
-    "cnoremap <special> <Esc>v <C-R>+
-    "execute 'vnoremap <script> <special> <Esc>v' paste#paste_cmd['v']
-    "execute 'inoremap <script> <special> <Esc>v' paste#paste_cmd['i']
-    call Map_for_all("<Esc>[1;3C", "<End>", 1, 1, 0)
-    call Map_for_all("<Esc>[1;3D", "<Home>", 1, 1, 0)
-    nnoremap  <Esc>[1;9D <C-Left>
-    vmap      <Esc>[1;9D <C-Left>
-    imap      <Esc>[1;9D <C-Left>
-    cmap      <Esc>[1;9D <C-Left>
-    omap      <Esc>[1;9D <C-Left>
-    nnoremap  <Esc>[1;9C <C-Right>
-    vmap      <Esc>[1;9C <C-Right>
-    imap      <Esc>[1;9C <C-Right>
-    cmap      <Esc>[1;9C <C-Right>
-    omap      <Esc>[1;9C <C-Right>
+  if $ITERM_PROFILE
+    vmap <C-y> y:call system("xclip", getreg("\""))<CR>
+    "attempt to yank through iterm2 termcode
+    function! Yank_proper()
+      "each mode needs different copy, see below mappings
+      " echo system("cat << StringNotLikelyToBeCopied\n" . getreg("p") . "\nStringNotLikelyToBeCopied")
+      if has("python")
+        python import vim, sys, subprocess
+        python p=subprocess.Popen(["cat"], stdin=subprocess.PIPE)
+        python p.stdin.write('\033]50;CopyToClipboard=')
+        python p.stdin.write(vim.eval('getreg("p")'))
+        python p.stdin.write('\033]50;EndCopy')
+        python p.stdin.close()
+      elseif has("python3")
+        python3 import vim, sys, subprocess
+        python3 p=subprocess.Popen(["cat"], stdin=subprocess.PIPE)
+        python3 p.stdin.write('\033]50;CopyToClipboard=')
+        python3 p.stdin.write(vim.eval('getreg("p")'))
+        python3 p.stdin.write('\033]50;EndCopy')
+        python3 p.stdin.close()
+      endif
+      redraw!
+    endfunction
+    vmap <silent> <A-c>        "py:call Yank_proper()<CR>
+    vmap <silent> <Esc>c       "py:call Yank_proper()<CR>
+    nmap <silent> <A-c>        :yank p<CR>:call Yank_proper()<CR>
+    nmap <silent> <Esc>c       :yank p<CR>:call Yank_proper()<CR>
+  elseif has('macunix')
+    function! Yank_proper()
+      "each mode needs different copy, see below mappings
+      call system(g:tmux_reattach_prefix . " pbcopy", getreg("p"))
+    endfunction
+
+    vmap <silent> <A-c>        "py:call Yank_proper()<CR>
+    vmap <silent> <Esc>c       "py:call Yank_proper()<CR>
+    nmap <silent> <A-c>        :yank p<CR>:call Yank_proper()<CR>
+    nmap <silent> <Esc>c       :yank p<CR>:call Yank_proper()<CR>
+  endif
+  " execute 'inoremap <script> <special> <A-c>' paste#paste_cmd['i']
+  " nnoremap <special> <Esc>c "+gP
+  " cnoremap <special> <Esc>c <C-R>+
+  " execute 'cnoremap <script> <special> <Esc>c' paste#paste_cmd['c']
+  " execute 'inoremap <script> <special> <Esc>c' paste#paste_cmd['i']
+  "nnoremap <special> <A-v> "+gP
+  "cnoremap <special> <A-v> <C-R>+
+  "execute 'vnoremap <script> <special> <A-v>' paste#paste_cmd['v']
+  "execute 'inoremap <script> <special> <A-v>' paste#paste_cmd['i']
+  "nnoremap <special> <Esc>v "+gP
+  "cnoremap <special> <Esc>v <C-R>+
+  "execute 'vnoremap <script> <special> <Esc>v' paste#paste_cmd['v']
+  "execute 'inoremap <script> <special> <Esc>v' paste#paste_cmd['i']
+  call Map_for_all("<Esc>[1;3C", "<End>", 1, 1)
+  call Map_for_all("<Esc>[1;3D", "<Home>", 1, 1)
+  call Map_for_all("<Esc>[1;9D", "<C-Left>", 1, 1)
+  call Map_for_all("<Esc>[1;9C", "<C-Right>", 1, 1)
 
 endif
 
@@ -1122,67 +1302,21 @@ endif
 " imap  <C-]>  <Esc>g<C-]>
 " cmap  <C-]>  g<C-]>
 
-map <silent> <A-]>  :call Vertical_tag_jump()<CR>
-imap <silent> <A-]>  <Esc>:call Vertical_tag_jump()<CR>
-map <silent> <Esc>]  :call Vertical_tag_jump()<CR>
-imap <silent> <Esc>]  <Esc>:call Vertical_tag_jump()<CR>
+" map <silent> <A-]>  :call Vertical_tag_jump()<CR>
+" imap <silent> <A-]>  <Esc>:call Vertical_tag_jump()<CR>
+" map <silent> <Esc>]  :call Vertical_tag_jump()<CR>
+" imap <silent> <Esc>]  <Esc>:call Vertical_tag_jump()<CR>
 
+if exists("neovim_dot_app")
+  call MacSetOptionAsMeta(1)
+endif
 " if ! has("gui_running")
 "alt
 "tab management
-nnoremap  <A-t>  :tabnew<CR>
-vmap      <A-t>  :tabnew<CR>
-imap      <A-t>  <Esc>:tabnew<CR>
-cmap      <A-t>  <Esc>:tabnew<CR>
-omap      <A-t>  :tabnew<CR>
-nnoremap  <A-}>  :tabnext<CR>
-vmap      <A-}>  :tabnext<CR>
-imap      <A-}>  <Esc>:tabnext<CR>
-cmap      <A-}>  <Esc>:tabnext<CR>
-omap      <A-}>  :tabnext<CR>
-nnoremap  <A-{>  :tabprevious<CR>
-vmap      <A-{>  :tabprevious<CR>
-imap      <A-{>  <Esc>:tabprevious<CR>
-cmap      <A-{>  <Esc>:tabprevious<CR>
-omap      <A-{>  :tabprevious<CR>
-nnoremap  <Esc>t  :tabnew<CR>
-vmap      <Esc>t  :tabnew<CR>
-imap      <Esc>t  <Esc>:tabnew<CR>
-cmap      <Esc>t  <Esc>:tabnew<CR>
-omap      <Esc>t  :tabnew<CR>
-nnoremap  <Esc>}  :tabnext<CR>
-vmap      <Esc>}  :tabnext<CR>
-imap      <Esc>}  <Esc>:tabnext<CR>
-cmap      <Esc>}  <Esc>:tabnext<CR>
-omap      <Esc>}  :tabnext<CR>
-nnoremap  <Esc>{  :tabprevious<CR>
-vmap      <Esc>{  :tabprevious<CR>
-imap      <Esc>{  <Esc>:tabprevious<CR>
-cmap      <Esc>{  <Esc>:tabprevious<CR>
-omap      <Esc>{  :tabprevious<CR>
-
-"movement through splits
-nnoremap  <Esc><S-L>  :wincmd l<CR>
-vmap      <Esc><S-L>  :wincmd l<CR>
-imap      <Esc><S-L>  <Esc>:wincmd l<CR>
-cmap      <Esc><S-L>  <Esc>:wincmd l<CR>
-omap      <Esc><S-L>  :wincmd l<CR>
-nnoremap  <Esc><S-H>  :wincmd h<CR>
-vmap      <Esc><S-H>  :wincmd h<CR>
-imap      <Esc><S-H>  <Esc>:wincmd h<CR>
-cmap      <Esc><S-H>  <Esc>:wincmd h<CR>
-omap      <Esc><S-H>  :wincmd h<CR>
-nnoremap  <Esc><S-J>  :wincmd j<CR>
-vnoremap  <Esc><S-J>  :wincmd j<CR>
-inoremap  <Esc><S-J>  <Esc>:wincmd j<CR>
-cnoremap  <Esc><S-J>  <Esc>:wincmd j<CR>
-onoremap  <Esc><S-J>  :wincmd j<CR>
-nnoremap  <Esc><S-K>  :wincmd k<CR>
-vmap      <Esc><S-K>  :wincmd k<CR>
-imap      <Esc><S-K>  <Esc>:wincmd k<CR>
-cmap      <Esc><S-K>  <Esc>:wincmd k<CR>
-omap      <Esc><S-K>  :wincmd k<CR>
-" endif
+call Map_for_all_meta('t', ":tabnew<CR>", 2, 1, 1)
+call Map_for_all_meta('}', ":tabnext<CR>", 2, 1, 1)
+call Map_for_all_meta('{', ":tabprevious<CR>", 2, 1, 1)
+call Map_for_all_meta('w', ":tabclose<CR>", 2, 1, 1)
 
 "Powerline
 "source ~/.vim/included/powerline/powerline/ext/vim/source_plugin.vim " back in
@@ -1190,9 +1324,9 @@ omap      <Esc><S-K>  :wincmd k<CR>
 set laststatus=2 "keeps the statusbar on
 let g:Powerline_symbols = 'unicode'
 if exists("$HOST")
-    if $HOST == "typhoon"
-        let g:Powerline_symbols = 'fancy'
-    endif
+  if $HOST == "typhoon"
+    let g:Powerline_symbols = 'fancy'
+  endif
 endif
 "let g:Powerline_theme = 'default'
 let g:Powerline_colorscheme = 'solarized256'
@@ -1207,7 +1341,8 @@ set grepprg=grep\ -nH\ $*
 " Enhance command-line completion
 set wildmenu
 set wildmode=longest:list,full
-"set foldmethod=syntax
+set foldmethod=syntax
+set foldcolumn=1
 filetype indent on
 filetype plugin on
 
@@ -1215,41 +1350,38 @@ filetype plugin on
 let g:winManagerWindowLayout = "Project|TagList"
 
 "window switching
+call Map_for_all_meta("S-h", "<C-w>h", 2, 0, 1)
+call Map_for_all_meta("S-j", "<C-w>j", 2, 0, 1)
+call Map_for_all_meta("S-k", "<C-w>k", 2, 0, 1)
+call Map_for_all_meta("S-l", "<C-w>l", 2, 0, 1)
 
 if has("nvim")
-    tnoremap <A-h> <C-\><C-n><C-w>h
-    tnoremap <A-j> <C-\><C-n><C-w>j
-    tnoremap <A-k> <C-\><C-n><C-w>k
-    tnoremap <A-l> <C-\><C-n><C-w>l
+  tnoremap <C-w> <C-\><C-n><C-w>
 endif
-nnoremap <A-h> <C-w>h
-nnoremap <A-j> <C-w>j
-nnoremap <A-k> <C-w>k
-nnoremap <A-l> <C-w>l
 
 let g:vimfiler_as_default_explorer = 1
 function! ToggleVExplorer()
-    if g:vimfiler_as_default_explorer
-        VimFilerExplorer
+  if g:vimfiler_as_default_explorer
+    VimFilerExplorer
+  else
+    if exists("t:expl_buf_num")
+      let expl_win_num = bufwinnr(t:expl_buf_num)
+      if expl_win_num != -1
+        let cur_win_nr = winnr()
+        exec expl_win_num . 'wincmd w'
+        close
+        exec cur_win_nr . 'wincmd w'
+        unlet t:expl_buf_num
+      else
+        unlet t:expl_buf_num
+      endif
     else
-        if exists("t:expl_buf_num")
-            let expl_win_num = bufwinnr(t:expl_buf_num)
-            if expl_win_num != -1
-                let cur_win_nr = winnr()
-                exec expl_win_num . 'wincmd w'
-                close
-                exec cur_win_nr . 'wincmd w'
-                unlet t:expl_buf_num
-            else
-                unlet t:expl_buf_num
-            endif
-        else
-            exec '1wincmd w'
-            Vexplore
-            exec 'wincmd H'
-            let t:expl_buf_num = bufnr("%")
-        endif
+      exec '1wincmd w'
+      Vexplore
+      exec 'wincmd H'
+      let t:expl_buf_num = bufnr("%")
     endif
+  endif
 endfunction
 
 nnoremap <silent> <M-f>      :call ToggleVExplorer()<CR>
@@ -1294,12 +1426,12 @@ let g:tagbar_autoclose = 1
 set mouse=a
 "enable wide mouse support for iTerm2 and urxvt, should also work in new xterms
 if !has("nvim")
-    if has('mouse_sgr')
-        set t_RV=
-        set ttymouse=sgr
-    else
-        set ttymouse=xterm2
-    endif
+  if has('mouse_sgr')
+    set t_RV=
+    set ttymouse=sgr
+  else
+    set ttymouse=xterm2
+  endif
 endif
 
 
@@ -1344,18 +1476,18 @@ inoremap <S-tab> <Esc>:call UltiSnips_ListSnippets()<CR>
 
 " colorscheme solarized
 if &term =~ ".*256color.*" || has("gui_running")
-    set t_Co=256
-    " let g:inkpot_black_background=1
-    " colorscheme inkpot
+  set t_Co=256
+  " let g:inkpot_black_background=1
+  " colorscheme inkpot
 endif
 
 " let g:jellybeans_overrides = {
 "             \    'background': { 'ctermbg': 'Black' },
 "             \}
 if !has("gui_running")
-    let g:jellybeans_background_color = "000000"
-    let g:jellybeans_use_lowcolor_black = 1
-    let g:jellybeans_background_color_256="0"
+  let g:jellybeans_background_color = "000000"
+  let g:jellybeans_use_lowcolor_black = 1
+  let g:jellybeans_background_color_256="0"
 endif
 
 " set background=dark
@@ -1369,13 +1501,13 @@ let g:solarized_termtrans = 1
 
 colorscheme jellybeans
 if exists("$TERM_PROGRAM") && $TERM_PROGRAM == 'iTerm.app'
-    if exists("$ITERM_PROFILE")
-        if $ITERM_PROFILE == 'Monokai'
-            colorscheme monokai
-        elseif $ITERM_PROFILE == 'Default'
-            " colorscheme inkpot
-            " colorscheme badwolf
-        endif
+  if exists("$ITERM_PROFILE")
+    if $ITERM_PROFILE == 'Monokai'
+      colorscheme monokai
+    elseif $ITERM_PROFILE == 'Default'
+      " colorscheme inkpot
+      " colorscheme badwolf
     endif
+  endif
 endif
 
