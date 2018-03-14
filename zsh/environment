@@ -10,7 +10,7 @@ export GITHUB_USER=trws
 
 # Give global tags an exuberant ctags backend
 # [[ -e ~/.globalrc ]] && export GTAGSCONF=~/.globalrc
-export MAKEOBJDIRPREFIX=~/.dotfiles/global-obj
+export MAKEOBJDIRPREFIX=~/.cache/global-obj
 export GTAGS_OPTIONS='-O --gtagslabel ctags'
 export GTAGSLIBPATH=/opt/local/include:/usr/local/include:/usr/include:/Developer/Headers:~/programs/include
 
@@ -44,6 +44,7 @@ typeset -x LESS ENTOMB PAGER FIREFOX_OPEN_IN IRCNICK DATE_FMT
 
 export NNTPSERVER="snews://news.purdue.edu"
 export EDITOR=vim
+export VISUAL=vim
 export CVS_RSH=ssh
 export LC_ALL=en_US.UTF-8
 #[[ $TERM = "screen-256color-bce" ]] && infocmp screen-256color >& /dev/null && export TERM=screen-256color || echo screen-256color unavailable, fix it!

@@ -53,7 +53,7 @@ if [[ $system = solaris ]] ; then
     add_to_path_back /usr/ucb
 fi
 
-add_to_path_back /usr/local/cuda  /usr/local/opt/go/libexec
+add_to_path_back /usr/local/cuda  /usr/local/opt/go/libexec ~/.cargo
 
 [[ -d /opt/pgi/linux86-64/2014/bin/ ]] && path=( $path /opt/pgi/linux86-64/2014/bin ) && manpath=($manpath /opt/pgi/linux86-64/2013/man)
 [[ -d /opt/pgi/osx86-64/2014/bin/ ]] && path=( $path /opt/pgi/osx86-64/2014/bin ) && manpath=($manpath /opt/pgi/osx86-64/2013/man)

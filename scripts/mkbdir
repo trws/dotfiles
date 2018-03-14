@@ -24,8 +24,8 @@ parser.add_argument("args", nargs='*')
 args = parser.parse_args()
 
 home = os.path.expanduser("~")
-projects = os.path.join(home, "Projects")
-builds = os.path.join(home, "Builds")
+projects = os.path.join(home, "projects")
+builds = os.path.realpath(os.path.join(home, "Builds"))
 
 if args.reverse:
     if args.changedir:

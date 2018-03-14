@@ -17,6 +17,12 @@ fi
 
 # Customize to your needs...
 fpath=($ZDOTDIR/funcs $fpath)
+for func in ${^fpath}/*(N-.x:t); do
+  autoload $func
+done
+compdef bmake=make
+compdef bcmake=cmake
+export gotroot=1
 
 # use the builtin, seriously...
 if typeset -f '[' > /dev/null ; then

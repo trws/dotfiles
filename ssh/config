@@ -1,17 +1,3 @@
-Host olympus
-    hostname charon.cs.vt.edu
-    port 17853
-Host olympus.synergy
-    hostname 192.168.254.254
-    port 17853
-
-Host armor1 armor2 dna1 dna2 dna3 athena amdlow1 amdlow2 amdlow3 caterpillar tnsi1 tnsi2 wood1 wood2
-    User njustn
-    Protocol 2
-    HostName %h
-    LocalForward 2022 localhost:22
-    ProxyCommand ssh charon.cs.vt.edu -W %h:22
-
 Host green500
     Protocol 2
     User green55
@@ -19,14 +5,6 @@ Host green500
     LocalForward 8753 localhost:8753
     LocalForward 7022 localhost:22
     ProxyCommand ssh njustn@gale nc -q 0 green500.org 22
-
-Host escaflowne
-    User njustn
-    Protocol 2
-    HostName escaflowne
-    LocalForward 8753 localhost:8753
-    LocalForward 2022 localhost:22
-    ProxyCommand ssh charon.cs.vt.edu -W escaflowne:22
 
 # Home
 Host gale hurricane typhoon
@@ -39,11 +17,25 @@ Host gale
   DynamicForward localhost:12346
   LocalForward 5904 localhost:5900
 
-Match originalhost ddwrt exec "[ !~/.dotfiles/scripts/at-home.py ]"
+Host ddwrt
+  User root
+  DynamicForward 12345
+  hostname ssh.scogland.com
+  port 5022
+
+Host ddwrt-ssl
+  User root
+  DynamicForward 12345
+  # hostname localhost
+  # port 9022
+  ProxyCommand socat -ly -  OPENSSL:ssh.scogland.com:443,verify=0
+  # ProxyCommand openssl s_client -connect ssh.scogland.com:443 -quiet -CAfile ~/projects/certs/ca.llnl.gov.pem
+
+Host ddwrt-lab
   User root
   HostName ssh.scogland.com
   DynamicForward 12345
-  Port 5022
+  ProxyCommand ssh scogland@cab -W ssh.scogland.com:5022
 
 Match originalhost gale exec "[ !~/.dotfiles/scripts/at-home.py ]"
   HostName ssh.scogland.com
@@ -53,7 +45,7 @@ Match originalhost hurricane exec "[ !~/.dotfiles/scripts/at-home.py ]"
   HostName ssh.scogland.com
   Port 3022
 
-Match originalhost breath exec "[ !~/.dotfiles/scripts/at-home.py ]"
+Match originalhost breath
   User root
   ProxyCommand ssh ddwrt -W 192.168.1.3:22
 
@@ -76,45 +68,51 @@ Host rzmanta rzgw ray
     ForwardAgent yes
     ForwardX11 yes
 
+# if on laptop, on vpn, hop through vortex to rzgw to get everywhere
+Match exec "~/.dotfiles/scripts/laptop-to-lab.sh %L" originalhost rzgw
+  ProxyCommand ssh -tt vortex ssh rzgw -W localhost:22 
+
 # this *must* be before the cz/rz catch-all
-Host cz-stash cz-stash.llnl.gov cz-bitbucket cz-bitbucket.llnl.gov
+Host *z-stash* *z-bitbucket*
     HostName cz-bitbucket.llnl.gov
     User git
     Port 7999
-    ProxyCommand ssh scogland@rzgw -W %h:7999
+    ProxyJump rzgw
+
+Host github.com
+    User git
 
 Host *.llnl.gov
     HostName %h
 
-Host cab ipa hype ray surface vulcan sierra impetus hype2 rz* cz*
+Host cab ipa hype ray surface vulcan sierra impetus hype2 rz*
     User scogland
     HostName %h.llnl.gov
-    Port 622 
     ForwardX11 yes
-    ForwardAgent yes
+
+# Match exec " ~/.dotfiles/scripts/at-llnl.py " !originalhost github.com
+#   ProxyCommand ssh ddwrt -W github.com:22
+
+Host vortex
+  LocalForward 5901 localhost:5900
+  LocalForward 22001 localhost:22000
+  DynamicForward localhost:12347
+
+Match exec "~/.dotfiles/scripts/hop-vpn.sh" originalhost vortex
+    ProxyCommand nc -X 5 -x 127.0.0.1:9052 %h %p
 
 
-Match exec " ~/.dotfiles/scripts/at-llnl.py " !originalhost rzgw !originalhost vortex !originalhost localhost !originalhost 127.0.0.1
+Match exec " ~/.dotfiles/scripts/at-llnl.py" !host cz-bit* !originalhost github.com !originalhost rzgw !originalhost vortex !originalhost localhost !originalhost 127.0.0.1
     #this must be overridden above if wrong
-    ProxyCommand ssh scogland@rzgw -W %h:%p
+    Port 622
+    ProxyJump rzgw
 
 Match originalhost rzgw
     PubkeyAuthentication no
     PasswordAuthentication yes
 
-Host github.com
-    User git
-
-# Host rz-stash.llnl.gov rz-stash
-#     HostName rz-stash.llnl.gov
-#     Port 7999
-#     ProxyCommand ssh rzalastor -W %h:%p
-
-
-Host rz-stash rz-stash.llnl.gov rz-bitbucket rz-bitbucket.llnl.gov
-    HostName rz-bitbucket.llnl.gov
-    User git
-    Port 7999
+Match exec " ~/.dotfiles/scripts/at-llnl.py " originalhost github.com
+    ProxyCommand ssh ddwrt -W github.com:22
 
 Host lanlgw ihpc-gate
     HostName ihpc-gate.lanl.gov
@@ -154,7 +152,7 @@ Host hayes-power
 
 #Redirect
 
-Host localhost
+Host localhost 127.0.0.1
     ControlMaster no
 
 # Host rz-stash.llnl.gov
@@ -162,7 +160,7 @@ Host localhost
 #     User git
 #     ForwardAgent no
 
-match !originalhost *stash*
+Host !cz-* *
     ForwardAgent yes
     ServerAliveInterval 15
     ServerAliveCountMax 3

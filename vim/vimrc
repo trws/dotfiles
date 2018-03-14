@@ -9,7 +9,7 @@ let plugged_directory = substitute(system("uname -m"), '[ \n]\+$', '', '')
 if plugged_directory == "x86_64"
   let plugged_directory = ""
 endif
-let plugged_directory = "~/.vim/plugged/" . plugged_directory
+let plugged_directory = "~/.cache/vim-plugged/" . plugged_directory
 if !isdirectory(expand(plugged_directory))
   echo('fetching plug for initial install')
   call system('curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
@@ -24,16 +24,16 @@ Plug 'Shougo/vimproc.vim' , { 'do' : 'make'}
 "split management
 Plug 'wesQ3/vim-windowswap'
 let g:windowswap_map_keys = 0 "prevent default bindings
-nnoremap <silent> <leader>yw :call WindowSwap#MarkWindowSwap()<CR>
-nnoremap <silent> <leader>pw :call WindowSwap#DoWindowSwap()<CR>
-nnoremap <silent> <leader>ww :call WindowSwap#EasyWindowSwap()<CR>
+nnoremap <silent> <leader>wy :call WindowSwap#MarkWindowSwap()<CR>
+nnoremap <silent> <leader>wp :call WindowSwap#DoWindowSwap()<CR>
+nnoremap <silent> <leader>ws :call WindowSwap#EasyWindowSwap()<CR>
 
 "Mail search
-"Plug 'daisuzu/unite-notmuch'
-"Plug 'diefans/notmuch-vim'
+" Plug 'daisuzu/unite-notmuch'
+" Plug 'diefans/notmuch-vim'
 
-let g:bracketed_paste_tmux_wrap=0
-Plug 'ConradIrwin/vim-bracketed-paste'
+" let g:bracketed_paste_tmux_wrap=0
+" Plug 'ConradIrwin/vim-bracketed-paste'
 
 "colorschemes
 " Plug 'tomasr/molokai'
@@ -42,9 +42,15 @@ Plug 'ConradIrwin/vim-bracketed-paste'
 " Plug 'github-theme'
 Plug 'crusoexia/vim-monokai'
 Plug 'nanotech/jellybeans.vim'
-" Plug 'w0ng/vim-hybrid'
 
+Plug 'greymd/oscyank.vim'  " clipboard support for xterm-type terms
+
+Plug 'luochen1990/rainbow' " rainbow parens and braces etc.
+
+" Render man pages in vim
 Plug 'vim-utils/vim-man'
+
+Plug 'dhruvasagar/vim-table-mode'
 
 "visual
 "Plug 'Powerline'
@@ -54,36 +60,73 @@ Plug 'bling/vim-airline'
 " Plug 'bling/vim-bufferline'
 " Plug 'edkolev/tmuxline.vim'
 
-Plug 'blindFS/vim-taskwarrior'
+if executable('task')
+  Plug 'blindFS/vim-taskwarrior'
+endif
+" support for live wrapping
+Plug 'reedes/vim-pencil'
 
-"filetype handlers, highlighting etc
-Plug 'jaxbot/semantic-highlight.vim'
-Plug 'bfrg/vim-cpp-modern'
-Plug 'cespare/vim-toml'
-Plug 'LaTeX-Box-Team/LaTeX-Box', { 'for' : ['latex', 'tex', 'bibtex']}
+" ==== filetype handlers, highlighting etc ====
+Plug 'sheerun/vim-polyglot' " pulls in syntax for almost everything
+let g:polyglot_disabled = ['latex', 'markdown']
+Plug 'chrisbra/vim-zsh'
+let g:zsh_fold_enable = 1
+Plug 'lervag/vimtex'
+let g:vimtex_view_method='skim'
+let g:vimtex_syntax_minted = [
+      \ {
+      \   'lang' : 'c',
+      \ },
+      \ {
+      \   'lang' : 'cpp',
+      \   'environments' : ['cppcode', 'cppcode_test'],
+      \ },
+      \ {
+      \   'lang' : 'python',
+      \   'ignore' : [
+      \     'pythonEscape',
+      \     'pythonBEscape',
+      \     ],
+      \ }
+      \]
+Plug 'tpope/vim-markdown'
+let g:markdown_fenced_languages = ['html', 'python', 'bash=sh', "c", "c++=cpp", "latex=tex"]
+
+function! RemovedForPolyglot()
+" Plug 'jaxbot/semantic-highlight.vim'
+" in polyglot - trying something new though Plug 'LaTeX-Box-Team/LaTeX-Box', { 'for' : ['latex', 'tex', 'bibtex']}
+" Plug 'vim-latex'
 " Plug 'vim-latex/vim-latex'
-Plug 'tpope/vim-liquid'
+" Plug 'tpope/vim-liquid'
 "c++11 highlighting
-Plug 'vim-jp/cpp-vim', { 'for' : 'c++'}
-"doxygen toolkit
-"julia highlighting
-Plug 'JuliaLang/julia-vim'
-Plug 'keith/swift.vim'
-Plug 'mrtazz/DoxygenToolkit.vim'
+" Plug 'vim-jp/cpp-vim'
+" Plug 'JuliaLang/julia-vim'
+" Plug 'keith/swift.vim'
 "rust highlighting
-Plug 'wting/rust.vim', { 'for' : 'rust' }
-Plug 'wavded/vim-stylus'
-Plug 'digitaltoad/vim-jade'
+" Plug 'wting/rust.vim'
+" Plug 'wavded/vim-stylus'
+" Plug 'digitaltoad/vim-jade'
 " map <silent> <buffer> <C-A-K> <Plug>VO_FollowLink
 " Plug 'VimOutliner'
+endfunction
+
+function! InGui()
+    return has("gui_running") || exists("g:gui_oni") || exists("neovim_dot_app") || has("gui_vimr")
+endfunction
+
+
+Plug 'mrtazz/DoxygenToolkit.vim'
 "link handler
 Plug 'vim-scripts/utl.vim'
-"cool csv highlighting
-Plug 'chrisbra/csv.vim',
+" not in polyglot - cool csv highlighting
+Plug 'chrisbra/csv.vim'
 " CSupport plugin: XXX: reacts badly with several others
 " Plug 'c.vim'
-Plug 'jceb/vim-orgmode', {'for' : 'orgmode'}
-"deps
+" org-mode
+" Plug 'jceb/vim-orgmode'
+" Plug 'dhruvasagar/vim-dotoo' " not really working...
+
+" date incrementing with ^a and so-forth
 Plug 'tpope/vim-speeddating'
 
 "tmux integration
@@ -95,8 +138,8 @@ if ! has('win32')
     " - name:   name of the plugin
     " - status: 'installed', 'updated', or 'unchanged'
     " - force:  set on PlugInstall! or PlugUpdate!
-    if a:info.status == 'installed' || a:info.status = 'updated' || a:info.force
-      !./install.py
+    if a:info.status != 'unchanged'
+      !./install.py --clang-completer
     endif
   endfunction
 
@@ -106,6 +149,8 @@ endif
 " Plug 'jeaye/color_coded'
 
 " Plug 'klen/python-mode'
+
+function! JediDisabled()
 " Plug 'davidhalter/jedi-vim'
 let g:jedi#auto_vim_configuration = 0
 let g:jedi#popup_on_dot = 0
@@ -119,6 +164,7 @@ let g:jedi#goto_definitions_command = "<leader>pd"
 let g:jedi#documentation_command = "<leader>pk"
 let g:jedi#usages_command = "<leader>pu"
 let g:jedi#rename_command = "<leader>pr"
+endfunction
 
 " Plug 'scrooloose/syntastic'
 
@@ -134,6 +180,32 @@ let g:jedi#rename_command = "<leader>pr"
 "file management
 Plug 'xolox/vim-misc'
 Plug 'xolox/vim-notes'
+Plug 'vimwiki/vimwiki'
+let wiki = {}
+let wiki.path = expand('~/projects/vimwiki/')
+let wiki.syntax = 'markdown'
+let wiki.ext = '.md'
+let wiki.nested_syntaxes = {'python': 'python', 'c++': 'cpp', 'c': 'c'}
+let tasks = {}
+let tasks.path = expand('~/projects/todo/')
+let tasks.syntax = 'vimwiki'
+let tasks.ext = '.wiki'
+let tasks.nested_syntaxes = {'python': 'python', 'c++': 'cpp', 'c': 'c'}
+let g:vimwiki_list = [wiki, tasks]
+let g:vimwiki_global_ext=0
+let g:vimwiki_folding=1
+"outliner checkboxes
+augroup filetype_vimwiki
+  autocmd!
+  au FileType vimwiki nmap <Leader>we <Plug>VimwikiSplitLink
+  au FileType vimwiki nmap <Leader>wf <Plug>VimwikiFollowLink
+  au FileType vimwiki nmap <Leader>wq <Plug>VimwikiVSplitLink
+augroup END
+
+" nasty deps, only works with vimwiki syntax not markdown for now,
+" cool, but currently not quite what I want I think
+" Plug 'tbabej/taskwiki'
+
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 if(has("python3"))
@@ -148,6 +220,7 @@ Plug 'hewes/unite-gtags'
 Plug 'tsukkee/unite-tag'
 Plug 'Shougo/neoyank.vim' " provides history/yank unite source
 Plug 'vim-scripts/gtags.vim'
+Plug 'ludovicchabant/vim-gutentags'
 " These are nice, but they are *way* too slow
 " Plug 'xolox/vim-misc'
 " Plug 'xolox/vim-easytags'
@@ -155,7 +228,16 @@ Plug 'vim-scripts/gtags.vim'
 "             \ 'filetypes' : 'vimshell',
 "             \ }}
 Plug 'Shougo/neomru.vim'
-Plug 'kien/ctrlp.vim'
+
+if (! exists("g:gui_oni"))
+  "ctrlp
+  Plug 'kien/ctrlp.vim'
+  let g:ctrlp_working_path_mode = 'ra'
+  let g:ctrlp_extensions = ['tag', 'buffertag', 'quickfix', 'dir', 'rtscript',
+        \ 'undo', 'line', 'changes', 'mixed', 'bookmarkdir']
+  " let g:ctrlp_extensions = ['tag', 'buffertag', 'quickfix', 'changes', 'mixed', 'bookmarkdir']
+endif
+
 Plug 'tpope/vim-fugitive'
 "
 " cmdline-mode mappings
@@ -164,13 +246,17 @@ Plug 'tpope/vim-rsi'
 
 " Plug 'airblade/vim-gitgutter'
 
+Plug 'nathanaelkane/vim-indent-guides'
+let g:indent_guides_start_level = 2
+let g:indent_guides_guide_size = 1
+let g:indent_guides_enable_on_vim_startup = 1
+
 Plug 'terryma/vim-multiple-cursors'
 
 
 " Plug 'Raimondi/delimitMate'
 Plug 'tpope/vim-surround'
 Plug 'tommcdo/vim-exchange'
-" Plug 'UltiSnips'
 Plug 'SirVer/ultisnips'
 " Snippets are separated from the engine. Add this if you want them:
 Plug 'honza/vim-snippets'
@@ -185,13 +271,12 @@ Plug 'vim-scripts/visualrepeat'
 "new alignment plugin, CR from visual mode to use
 Plug 'junegunn/vim-easy-align'
 Plug 'tpope/vim-abolish'
-Plug 'tpope/vim-pastie'
+" Plug 'tpope/vim-pastie'
 "Unix command aliases, Chmod and company
 Plug 'tpope/vim-eunuch'
-Plug 'tpope/vim-markdown'
-let g:markdown_fenced_languages = ['html', 'python', 'bash=sh', "c", "c++=cpp", "latex=tex"]
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-dispatch'
+Plug 'radenling/vim-dispatch-neovim'
 Plug 'tomtom/tcomment_vim'
 "Word highlighting for possible but uncertain errors
 Plug 'reedes/vim-wordy'
@@ -269,7 +354,7 @@ map <Leader>vx :VimuxInterruptRunner<CR>
 "set conceallevel=2 concealcursor=i
 "endif
 
-"Unite
+"Unite and denite
 let g:unite_data_directory = '~/.vim/unite'
 " let g:unite_source_bookmark_directory = '~/.vim/unite-bookmarks'
 let g:unite_source_history_yank_enable = 1
@@ -501,10 +586,11 @@ let g:unite_source_gtags_project_config = {
 
 
 
-let g:global_objdir = $HOME . "/.dotfiles/global-obj"
+let g:global_objdir=$HOME . "/.cache/global-obj"
 call FindOrCreate(g:global_objdir)
 " For regular tags
-set tags+=~/.dotfiles/global-obj/tags
+let tag_file = g:global_objdir . "/tags"
+set tags=./tags,$HOME/.cache/global-obj
 function! UpdateTagDir(dir)
   if isdirectory(a:dir)
     exe 'cd ' . a:dir
@@ -521,7 +607,7 @@ function! UpdateLocalCTags()
   call system(g:ctags_command . ' -f ./tags ' . getcwd())
 endfunction
 function! UpdateCTags()
-  call system(g:ctags_command . ' -f ~/.dotfiles/global-obj/tags ' . join(g:include_paths))
+  call system(g:ctags_command . ' -f ' . g:global_objdir . join(g:include_paths))
   call UpdateLocalCTags()
 endfunction
 set csprg=gtags-cscope
@@ -653,10 +739,6 @@ else
   let g:unite_source_rec_find_args = ['-path', '*/.git/*', '-prune', '-o', '-path', '*/build*/*', '-prune', '-o', '-print']
 endif
 
-"ctrlp
-let g:ctrlp_working_path_mode = 'ra'
-let g:ctrlp_extensions = ['tag', 'buffertag', 'quickfix', 'changes', 'mixed', 'bookmarkdir']
-
 "YouCompleteMe
 nnoremap <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<CR>
 "attempt to fix the awful latex input behavior
@@ -673,12 +755,16 @@ let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
 let g:ycm_extra_conf_globlist = ['~/Dropbox/*','~/projects/*','~/Projects/*']
 let g:ycm_autoclose_preview_window_after_insertion = 1
 let g:ycm_key_invoke_completion = '<C-S-Space>'
+let g:ycm_key_list_select_completion = ['<C-n>', '<Down>', '<Tab>']
+let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>', '<S-Tab>']
 
-let g:SuperTabDefaultCompletionType="context"
-let g:SuperTabContextDefaultCompletionType="<c-x><c-u>"
+let g:UltiSnipsExpandTrigger="<c-j>"
+inoremap <S-tab> <Esc>:call UltiSnips_ListSnippets()<CR>
 
 "syntax/visual options
-let g:vimsyn_folding = 'af'
+let g:vimsyn_folding = 'aflP'
+let g:vimsyn_embed = 'lP'
+let g:sh_fold_enabled= 7 "    (enable all folding)
 set vb
 set t_vb=
 syn on
@@ -715,6 +801,7 @@ augroup extra_filetypes
   au BufRead            COMMIT_EDITMSG set      backupcopy=no
   au BufNewFile,BufRead *.txt          set      ft=txt
   au BufNewFile,BufRead CMakeLists.txt set      ft=cmake
+  au BufNewFile,BufRead CMakeCache.txt set      ft=cmake
 augroup END
 
 "for plugins, etc.
@@ -837,7 +924,7 @@ let g:airline#extensions#tagbar#flags = 'f'
 let g:airline#extensions#quickfix#enabled = 1
 let g:airline#extensions#branch#displayed_head_limit = 10
 let g:airline#extensions#csv#enabled = 1
-set timeoutlen=500
+set timeoutlen=300
 set ttimeoutlen=10
 
 map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q $PWD<CR>
@@ -852,7 +939,7 @@ if has("gui_running")
     set macmeta
     set transparency=10
     " set gfn=Courier\ New:h11.00
-    set gfn=ProFont:h9.00
+    set gfn=ProFontX:h9.00
     set noantialias
     set fuopt=maxvert,maxhorz
   elseif has("gui_gtk2")
@@ -884,38 +971,38 @@ endif
 
 
 function! Map_for_all(mapping, target, ...)
-  let for_input = (a:0 >= 1) ? a:1 : 1
-  let for_cmd = (a:0 >= 2) ? a:2 : 0
-  let for_terminal = (a:0 >= 3) ? a:3 : 0
+  let l:for_input = (a:0 >= 1) ? a:1 : 0
+  let l:for_cmd = (a:0 >= 2) ? a:2 : 0
+  let l:for_terminal = (a:0 >= 3) ? a:3 : 0
 
   for item in ['nnoremap', 'vmap', 'omap']
     execute item . ' ' . a:mapping . ' ' . a:target
   endfor
 
   if has("nvim")
-    if for_terminal != 0
+    if l:for_terminal != 0
       execute 'tnoremap '.a:mapping.' <C-\><C-n>'.a:target
     endif
   endif
 
-  if for_cmd != 0
+  if l:for_cmd != 0
     execute 'cmap '.a:mapping.' '.a:target
   endif
 
-  if for_input > 1
-    execute 'imap ' . a:mapping . ' <Esc>' . a:target
+  if l:for_input > 1
+    execute 'imap ' . a:mapping . ' <esc>' . a:target
   else
     execute 'imap ' . a:mapping . ' ' . a:target
   endif
 endfunction
 
 function! Map_for_all_meta(mapping, target, ...)
-  let for_input = (a:0 >= 1) ? a:1 : 2
-  let for_cmd = (a:0 >= 2) ? a:2 : 1
-  let for_terminal = (a:0 >= 3) ? a:3 : 1
+  let l:for_input = (a:0 >= 1) ? a:1 : 2
+  let l:for_cmd = (a:0 >= 2) ? a:2 : 1
+  let l:for_terminal = (a:0 >= 3) ? a:3 : 1
 
-  call Map_for_all('<A-'.a:mapping.'>', a:target, for_cmd, for_input, for_terminal)
-  call Map_for_all('<Esc>'.a:mapping, a:target, for_cmd, for_input, for_terminal)
+  call Map_for_all('<A-'.a:mapping.'>', a:target, l:for_input, l:for_cmd, l:for_terminal)
+  call Map_for_all('<Esc>'.a:mapping, a:target, l:for_input, l:for_cmd, l:for_terminal)
 endfunction
 
 
@@ -973,6 +1060,9 @@ vmap gcc gc
 "map <Leader>x <plug>NERDCommenterToggleComment
 " Follow links with ,o
 nnoremap <Leader>o :Utl ol<CR>
+let g:utl_cfg_hdl_scm_http_system = 'silent !open "%u"'
+let g:utl_cfg_hdl_scm_http = 'silent !open "%u"'
+let g:utl_cfg_hdl_mt_generic = 'silent !open "%p"'
 
 imap <A-x> <Esc><Plug>Traditionala
 imap <Esc>x <Esc><Plug>Traditionala
@@ -1071,7 +1161,7 @@ augroup c_setup
 augroup END
 
 "latex options
-let g:LatexBox_viewer = 'open'
+let g:LatexBox_viewer = 'open -a Skim'
 let g:LatexBox_quickfix = 0
 let g:LatexBox_latexmk_options = '-pdf -shell-escape' "latter is needed for pygments
 let g:LatexBox_latexmk_preview_continuously=0
@@ -1089,6 +1179,8 @@ map <silent> <Leader>ls :silent
       \ !/Applications/Skim.app/Contents/SharedSupport/displayline
       \ <C-R>=line('.')<CR> "<C-R>=LatexBox_GetOutputFile()<CR>"
       \ "%:p" <CR>
+nmap <silent> <Leader>wc bi\code{<esc>ea}<esc>
+vmap <silent> <Leader>wc di\code{}<esc>P
 
 let g:Tex_DefaultTargetFormat = 'pdf'
 
@@ -1192,12 +1284,20 @@ endfunction
 "general key remappings
 nmap Y y$
 
-call Map_for_all("<C-c>","<Esc>", 1, 1)
+" call Map_for_all("<C-c>","<Esc>", 1, 1)
 
 map <S-Z><S-S> :up<CR>
 
 
-if ! has("gui_running")
+if ! InGui()
+  "new experiment, using xterm clipboard escapes for copy portability, no paste
+  "(I think..?)
+
+  vmap <silent> <A-c>        :Oscyank<CR>
+  vmap <silent> <Esc>c       :Oscyank<CR>
+  nmap <silent> <A-c>        :Oscyank<CR>
+  nmap <silent> <Esc>c       :Oscyank<CR>
+
   "if $TMUX "TODO: get copy support for tmux, need to figure out what mappings
   "make sense...
   "vmap <silent> <A-C>        "py:call eval('system("tmux set-buffer \'" . @p . "\'")')<CR>
@@ -1215,8 +1315,10 @@ if ! has("gui_running")
   " cnoremap <special> <A-c> <C-R>+
   "vnoremap <special> <A-c> "*y
   if has('macunix')
-    let tmux_reattach_prefix=glob("~/Dropbox/config/tmux-MacOSX-pasteboard/reattach-to-user-namespace")
-    if (! filereadable(tmux_reattach_prefix))
+    let tmux_reattach_prefix="reattach-to-user-namespace"
+    if (! executable(tmux_reattach_prefix))
+      let tmux_reattach_prefix=glob("~/Dropbox/config/tmux-MacOSX-pasteboard/reattach-to-user-namespace")
+    elseif (! filereadable(tmux_reattach_prefix))
       let tmux_reattach_prefix=glob("~/Projects/config-sync/tmux-MacOSX-pasteboard/reattach-to-user-namespace")
     endif
 
@@ -1233,44 +1335,46 @@ if ! has("gui_running")
     nmap <silent> <Esc>v       :call Paste_proper()<CR>
   endif
 
-  if $ITERM_PROFILE
-    vmap <C-y> y:call system("xclip", getreg("\""))<CR>
-    "attempt to yank through iterm2 termcode
-    function! Yank_proper()
-      "each mode needs different copy, see below mappings
-      " echo system("cat << StringNotLikelyToBeCopied\n" . getreg("p") . "\nStringNotLikelyToBeCopied")
-      if has("python")
-        python import vim, sys, subprocess
-        python p=subprocess.Popen(["cat"], stdin=subprocess.PIPE)
-        python p.stdin.write('\033]50;CopyToClipboard=')
-        python p.stdin.write(vim.eval('getreg("p")'))
-        python p.stdin.write('\033]50;EndCopy')
-        python p.stdin.close()
-      elseif has("python3")
-        python3 import vim, sys, subprocess
-        python3 p=subprocess.Popen(["cat"], stdin=subprocess.PIPE)
-        python3 p.stdin.write('\033]50;CopyToClipboard=')
-        python3 p.stdin.write(vim.eval('getreg("p")'))
-        python3 p.stdin.write('\033]50;EndCopy')
-        python3 p.stdin.close()
-      endif
-      redraw!
-    endfunction
-    vmap <silent> <A-c>        "py:call Yank_proper()<CR>
-    vmap <silent> <Esc>c       "py:call Yank_proper()<CR>
-    nmap <silent> <A-c>        :yank p<CR>:call Yank_proper()<CR>
-    nmap <silent> <Esc>c       :yank p<CR>:call Yank_proper()<CR>
-  elseif has('macunix')
-    function! Yank_proper()
-      "each mode needs different copy, see below mappings
-      call system(g:tmux_reattach_prefix . " pbcopy", getreg("p"))
-    endfunction
+  function! Old_yank_support()
+    if $ITERM_PROFILE
+      vmap <C-y> y:call system("xclip", getreg("\""))<CR>
+      "attempt to yank through iterm2 termcode
+      function! Yank_proper()
+        "each mode needs different copy, see below mappings
+        " echo system("cat << StringNotLikelyToBeCopied\n" . getreg("p") . "\nStringNotLikelyToBeCopied")
+        if has("python")
+          python import vim, sys, subprocess
+          python p=subprocess.Popen(["cat"], stdin=subprocess.PIPE)
+          python p.stdin.write('\033]50;CopyToClipboard=')
+          python p.stdin.write(vim.eval('getreg("p")'))
+          python p.stdin.write('\033]50;EndCopy')
+          python p.stdin.close()
+        elseif has("python3")
+          python3 import vim, sys, subprocess
+          python3 p=subprocess.Popen(["cat"], stdin=subprocess.PIPE)
+          python3 p.stdin.write('\033]50;CopyToClipboard=')
+          python3 p.stdin.write(vim.eval('getreg("p")'))
+          python3 p.stdin.write('\033]50;EndCopy')
+          python3 p.stdin.close()
+        endif
+        redraw!
+      endfunction
+      vmap <silent> <A-c>        "py:call Yank_proper()<CR>
+      vmap <silent> <Esc>c       "py:call Yank_proper()<CR>
+      nmap <silent> <A-c>        :yank p<CR>:call Yank_proper()<CR>
+      nmap <silent> <Esc>c       :yank p<CR>:call Yank_proper()<CR>
+    elseif has('macunix')
+      function! Yank_proper()
+        "each mode needs different copy, see below mappings
+        call system(g:tmux_reattach_prefix . " pbcopy", getreg("p"))
+      endfunction
 
-    vmap <silent> <A-c>        "py:call Yank_proper()<CR>
-    vmap <silent> <Esc>c       "py:call Yank_proper()<CR>
-    nmap <silent> <A-c>        :yank p<CR>:call Yank_proper()<CR>
-    nmap <silent> <Esc>c       :yank p<CR>:call Yank_proper()<CR>
-  endif
+      vmap <silent> <A-c>        "py:call Yank_proper()<CR>
+      vmap <silent> <Esc>c       "py:call Yank_proper()<CR>
+      nmap <silent> <A-c>        :yank p<CR>:call Yank_proper()<CR>
+      nmap <silent> <Esc>c       :yank p<CR>:call Yank_proper()<CR>
+    endif
+  endfunction
   " execute 'inoremap <script> <special> <A-c>' paste#paste_cmd['i']
   " nnoremap <special> <Esc>c "+gP
   " cnoremap <special> <Esc>c <C-R>+
@@ -1302,11 +1406,6 @@ endif
 " imap  <C-]>  <Esc>g<C-]>
 " cmap  <C-]>  g<C-]>
 
-" map <silent> <A-]>  :call Vertical_tag_jump()<CR>
-" imap <silent> <A-]>  <Esc>:call Vertical_tag_jump()<CR>
-" map <silent> <Esc>]  :call Vertical_tag_jump()<CR>
-" imap <silent> <Esc>]  <Esc>:call Vertical_tag_jump()<CR>
-
 if exists("neovim_dot_app")
   call MacSetOptionAsMeta(1)
 endif
@@ -1319,8 +1418,6 @@ call Map_for_all_meta('{', ":tabprevious<CR>", 2, 1, 1)
 call Map_for_all_meta('w', ":tabclose<CR>", 2, 1, 1)
 
 "Powerline
-"source ~/.vim/included/powerline/powerline/ext/vim/source_plugin.vim " back in
-"if they fix it
 set laststatus=2 "keeps the statusbar on
 let g:Powerline_symbols = 'unicode'
 if exists("$HOST")
@@ -1342,7 +1439,7 @@ set grepprg=grep\ -nH\ $*
 set wildmenu
 set wildmode=longest:list,full
 set foldmethod=syntax
-set foldcolumn=1
+" set foldcolumn=1 " show fold depth in the gutter
 filetype indent on
 filetype plugin on
 
@@ -1471,12 +1568,14 @@ au FileType tex highlight whichthat ctermfg=Magenta guifg=#515996
 "ctermfg=black
 au FileType tex match whichthat /\(\swhich\s\|\sthat\s\)/
 
-let g:UltiSnipsExpandTrigger="<c-j>"
-inoremap <S-tab> <Esc>:call UltiSnips_ListSnippets()<CR>
 
 " colorscheme solarized
 if &term =~ ".*256color.*" || has("gui_running")
+  if $COLORTERM == "truecolor"
+    set termguicolors
+  else
   set t_Co=256
+  endif
   " let g:inkpot_black_background=1
   " colorscheme inkpot
 endif
@@ -1485,9 +1584,9 @@ endif
 "             \    'background': { 'ctermbg': 'Black' },
 "             \}
 if !has("gui_running")
-  let g:jellybeans_background_color = "000000"
-  let g:jellybeans_use_lowcolor_black = 1
-  let g:jellybeans_background_color_256="0"
+  " let g:jellybeans_background_color = "000000"
+  " let g:jellybeans_use_lowcolor_black = 1
+  " let g:jellybeans_background_color_256="0"
 endif
 
 " set background=dark

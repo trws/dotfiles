@@ -1,5 +1,5 @@
-syn region texZone	start="\\begin{[^}]\+code}"		end="\\end{[^}]\+code}\|%stopzone\>"
-syn region texZone	start="\\begin{minted}"		end="\\end{minted}\|%stopzone\>"
+" syn region texZone	start="\\begin{[^}]\+code}"		end="\\end{[^}]\+code}\|%stopzone\>"
+" syn region texZone	start="\\begin{minted}"		end="\\end{minted}\|%stopzone\>"
 " syn region texZone	start="|"		end="|"
 
 " let s:current_syntax=b:current_syntax
@@ -13,7 +13,7 @@ syn region texZone	start="\\begin{minted}"		end="\\end{minted}\|%stopzone\>"
 " syntax include @CPP syntax/cpp.vim
 " syn region texZone	start="\\begin{minted}{cpp}"		end="\\end{minted}\|%stopzone\>" contains=@CPP
 " let b:current_syntax=s:current_syntax
-"
+
 " let s:current_syntax=b:current_syntax
 " unlet b:current_syntax
 " syntax include @F syntax/fortran.vim

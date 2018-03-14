@@ -5,6 +5,7 @@ import sys
 import os
 import string
 import argparse
+import shutil
 
 parser = argparse.ArgumentParser(description='Update and prepare dotfiles distribution')
 parser.add_argument('-f', '--force', action='store_true', help='Replace existing links, will *NOT* delete files or directories, and *WILL* error out if you ask it to')
@@ -25,6 +26,7 @@ link_files = {
         "vim/vimrc" : "~/.vimrc",
         "zsh" : "~/.zsh",
         "zsh/zshenv-link" : "~/.zshenv",
+        "hammerspoon" : "~/.hammerspoon",
         # "mjolnir" : "~/.mjolnir",
         "tmux.conf" : "~/.tmux.conf",
         "gitignore" : "~/.gitignore",
@@ -34,6 +36,8 @@ link_files = {
         "vim" : "~/.config/nvim",
         "pip" : "~/.config/pip",
         "ptconfig.toml" : "~/.ptconfig.toml",
+        "mailmate/Gmail.plist" : "~/Library/Application Support/MailMate/Resources/KeyBindings/Gmail.plist",
+        "mailmate/Liteetc.mmBundle" : "~/Library/Application Support/MailMate/Bundles/Liteetc.mmBundle",
         }
 if os.path.exists("~/Library"):
     link_files["pip"] = "~/Library/Application Support/pip",
@@ -54,6 +58,10 @@ for target, link in link_files.items():
                     continue
         except OSError as e:
             print "samefile check failed, probably means a dead symlink:", e
+    try:
+        os.makedirs(os.path.dirname(l_path))
+    except OSError:
+        pass
     try:
         os.symlink(os.path.join(script_dir, t_path), l_path)
     except OSError as e:
