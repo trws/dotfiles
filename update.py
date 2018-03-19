@@ -25,18 +25,18 @@ link_files = {
         "vim/vimrc" : "~/.vimrc",
         "zsh" : "~/.zsh",
         "zsh/zshenv-link" : "~/.zshenv",
-        "mjolnir" : "~/.mjolnir",
+        # "mjolnir" : "~/.mjolnir",
         "tmux.conf" : "~/.tmux.conf",
-        "inspiration/mathias/.wgetrc" : "~/.wgetrc",
-        "inspiration/mathias/.curlrc" : "~/.curlrc",
         "gitignore" : "~/.gitignore",
         "gitconfig" : "~/.gitconfig",
         "scripts" : "~/scripts",
         "Xresources" : "~/.Xresources",
         "vim" : "~/.config/nvim",
         "pip" : "~/.config/pip",
-        "pip" : "~/Library/Application Support/pip",
+        "ptconfig.toml" : "~/.ptconfig.toml",
         }
+if os.path.exists("~/Library"):
+    link_files["pip"] = "~/Library/Application Support/pip",
 
 
 for target, link in link_files.items():

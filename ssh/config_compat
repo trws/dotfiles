@@ -79,7 +79,6 @@ Host cz-stash cz-stash.llnl.gov cz-bitbucket cz-bitbucket.llnl.gov
     HostName cz-bitbucket.llnl.gov
     User git
     Port 7999
-    ProxyCommand ssh rzgw -W %h:%p
 
 Host cab ipa hype ray surface vulcan sierra impetus hype2 rzhasgpu rzmanta rzalastor
     User scogland

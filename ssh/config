@@ -73,13 +73,15 @@ Host charon charon.cs.vt.edu
 
 Host rzmanta rzgw ray
     Port 22
+    ForwardAgent yes
+    ForwardX11 yes
 
 # this *must* be before the cz/rz catch-all
 Host cz-stash cz-stash.llnl.gov cz-bitbucket cz-bitbucket.llnl.gov
     HostName cz-bitbucket.llnl.gov
     User git
     Port 7999
-    ProxyCommand ssh scogland@rzgw -W %h:%p
+    ProxyCommand ssh scogland@rzgw -W %h:7999
 
 Host *.llnl.gov
     HostName %h
@@ -88,7 +90,7 @@ Host cab ipa hype ray surface vulcan sierra impetus hype2 rz* cz*
     User scogland
     HostName %h.llnl.gov
     Port 622 
-    ForwardX11 no
+    ForwardX11 yes
     ForwardAgent yes
 
 

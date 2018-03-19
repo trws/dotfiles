@@ -94,8 +94,11 @@ for file in $ZDOTDIR/{,mine/}bindings $ZDOTDIR/{,mine/}bindings.$TERM \
   $ZDOTDIR/{,mine/}bindings.${TERM%%-*}
 [[ -f $file  ]] && source $file
 
-
 # make tmux behave with bracketed paste supporting terminals
 if [ ${TMUX} ]; then
     unset zle_bracketed_paste
+fi
+
+if [[ -x fzf && -f ~/.fzf.zsh ]] ; then
+    . ~/.fzf.zsh
 fi

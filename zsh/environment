@@ -55,7 +55,6 @@ export LC_ALL=en_US.UTF-8
 # fi
 # export GOARCH=amd64
 # export GOBIN=/usr/local/go/bin
-export GOPATH=~/go
 [[ -d /usr/local/cuda ]] && export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64:/usr/local/cuda/lib
 export PATH
 [[ -e ~/.ssh/github_oauth ]] && export HOMEBREW_GITHUB_API_TOKEN=$(cat ~/.ssh/github_oauth)
