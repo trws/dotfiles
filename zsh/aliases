@@ -4,7 +4,7 @@ alias cdb='cd $(mkbdir -p)'
 alias cdp='cd $(mkbdir -pr)'
 alias makeb='make -C $(mkbdir -p)'
 
-if which srun > /dev/null  ; then
+if which srun >& /dev/null  ; then
     alias sr1='srun -N 1 --exclusive --pty'
     alias sr4='srun -N 4 --exclusive --pty'
 fi
