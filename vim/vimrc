@@ -10,13 +10,14 @@ if plugged_directory == "x86_64"
   let plugged_directory = ""
 endif
 let plugged_directory = "~/.vim/plugged/" . plugged_directory
-if !isdirectory(expand(plugged_directory))
+let plugged_directory = expand(plugged_directory)
+if !isdirectory(plugged_directory)
   echo('fetching plug for initial install')
   call system('curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
   call system('mkdir -p ' . plugged_directory)
 endif
 
-call plug#begin(expand(plugged_directory))
+call plug#begin(plugged_directory)
 
 " Bundle 'Shougo/vimproc.vim'
 Plug 'Shougo/vimproc.vim' , { 'do' : 'make'}
@@ -40,7 +41,7 @@ Plug 'ConradIrwin/vim-bracketed-paste'
 " Plug 'sjl/badwolf'
 " Plug 'Solarized'
 " Plug 'github-theme'
-Plug 'crusoexia/vim-monokai'
+" Plug 'crusoexia/vim-monokai'
 Plug 'nanotech/jellybeans.vim'
 " Plug 'w0ng/vim-hybrid'
 
@@ -54,20 +55,21 @@ Plug 'bling/vim-airline'
 " Plug 'bling/vim-bufferline'
 " Plug 'edkolev/tmuxline.vim'
 
-Plug 'blindFS/vim-taskwarrior'
+" Plug 'blindFS/vim-taskwarrior'
+
+"c++11 highlighting
+Plug 'bfrg/vim-cpp-modern', { 'for' : 'c++'}
+" Plug 'vim-jp/cpp-vim', { 'for' : 'c++'}
 
 "filetype handlers, highlighting etc
-Plug 'jaxbot/semantic-highlight.vim'
-Plug 'bfrg/vim-cpp-modern'
+" Plug 'jaxbot/semantic-highlight.vim'
 Plug 'cespare/vim-toml'
 Plug 'LaTeX-Box-Team/LaTeX-Box', { 'for' : ['latex', 'tex', 'bibtex']}
 " Plug 'vim-latex/vim-latex'
 Plug 'tpope/vim-liquid'
-"c++11 highlighting
-Plug 'vim-jp/cpp-vim', { 'for' : 'c++'}
 "doxygen toolkit
 "julia highlighting
-Plug 'JuliaLang/julia-vim'
+" Plug 'JuliaLang/julia-vim'
 Plug 'keith/swift.vim'
 Plug 'mrtazz/DoxygenToolkit.vim'
 "rust highlighting
@@ -77,12 +79,12 @@ Plug 'digitaltoad/vim-jade'
 " map <silent> <buffer> <C-A-K> <Plug>VO_FollowLink
 " Plug 'VimOutliner'
 "link handler
-Plug 'vim-scripts/utl.vim'
+Plug 'vim-scripts/utl.vim' " execute URLs
 "cool csv highlighting
 Plug 'chrisbra/csv.vim',
 " CSupport plugin: XXX: reacts badly with several others
 " Plug 'c.vim'
-Plug 'jceb/vim-orgmode', {'for' : 'orgmode'}
+" Plug 'jceb/vim-orgmode', {'for' : 'orgmode'}
 "deps
 Plug 'tpope/vim-speeddating'
 
@@ -132,22 +134,24 @@ let g:jedi#rename_command = "<leader>pr"
 " Plug 'pthrasher/conqueterm-vim', {'on' : 'ConqueTerm'}
 
 "file management
-Plug 'xolox/vim-misc'
-Plug 'xolox/vim-notes'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+" Plug 'xolox/vim-misc'
+" Plug 'xolox/vim-notes'
+Plug 'junegunn/fzf', { 'dir': plugged_directory . 'fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 if(has("python3"))
   Plug 'Shougo/denite.nvim'
   Plug 'ozelentok/denite-gtags'
   Plug 'nixprime/cpsm'
+else
+  Plug 'Shougo/unite.vim'
 endif
-Plug 'Shougo/unite.vim'
-Plug 'Shougo/vimfiler.vim'
+" Plug 'Shougo/vimfiler.vim'
 Plug 'Shougo/unite-ssh'
 Plug 'hewes/unite-gtags'
 Plug 'tsukkee/unite-tag'
 Plug 'Shougo/neoyank.vim' " provides history/yank unite source
 Plug 'vim-scripts/gtags.vim'
+Plug 'ludovicchabant/vim-gutentags'
 " These are nice, but they are *way* too slow
 " Plug 'xolox/vim-misc'
 " Plug 'xolox/vim-easytags'
@@ -155,8 +159,9 @@ Plug 'vim-scripts/gtags.vim'
 "             \ 'filetypes' : 'vimshell',
 "             \ }}
 Plug 'Shougo/neomru.vim'
-Plug 'kien/ctrlp.vim'
+" Plug 'kien/ctrlp.vim'
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-vinegar'
 "
 " cmdline-mode mappings
 Plug 'tpope/vim-rsi'
