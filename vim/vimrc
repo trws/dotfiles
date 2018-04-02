@@ -1002,7 +1002,13 @@ function! Map_for_all_meta(mapping, target, ...)
   let l:for_terminal = (a:0 >= 3) ? a:3 : 1
 
   call Map_for_all('<A-'.a:mapping.'>', a:target, l:for_input, l:for_cmd, l:for_terminal)
-  call Map_for_all('<Esc>'.a:mapping, a:target, l:for_input, l:for_cmd, l:for_terminal)
+  let l:mapping = split(a:mapping, '-')
+  if len(l:mapping) == 2 && l:mapping[0] == "S"
+    let l:mapping = toupper(l:mapping[1])
+  else
+    let l:mapping = a:mapping
+  endif
+  call Map_for_all('<Esc>'.l:mapping, a:target, l:for_input, l:for_cmd, l:for_terminal)
 endfunction
 
 
@@ -1197,6 +1203,9 @@ let g:Tex_ViewRule_pdf = 'Skim'
 "       \"There were undefined references\n".
 "       \"Citation %.%# undefined\n".
 "       \"\oval, \circle, or \line size unavailable\n"'
+
+nmap wip diwi\plc{}<Esc>P
+nmap wic diwi\code{}<Esc>P
 
 function! Find_main_latex()
   let latexmain = findfile("paper.tex", ".;")

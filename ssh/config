@@ -74,7 +74,6 @@ Match exec "~/.dotfiles/scripts/laptop-to-lab.sh %L" originalhost rzgw
 
 # this *must* be before the cz/rz catch-all
 Host *z-stash* *z-bitbucket*
-    HostName cz-bitbucket.llnl.gov
     User git
     Port 7999
     ProxyJump rzgw

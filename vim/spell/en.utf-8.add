@@ -345,3 +345,4 @@ threadprivate
 lastprivate
 ASC
 OpenGL
+strided
