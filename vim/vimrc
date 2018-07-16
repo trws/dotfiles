@@ -174,8 +174,6 @@ endfunction
 "bindings
 
 "shell/terminal emulation
-" Plug 'Shougo/vimshell.vim', {'on' : 'VimShell'}
-" Plug 'pthrasher/conqueterm-vim', {'on' : 'ConqueTerm'}
 
 "file management
 Plug 'xolox/vim-misc'
@@ -224,9 +222,6 @@ Plug 'ludovicchabant/vim-gutentags'
 " These are nice, but they are *way* too slow
 " Plug 'xolox/vim-misc'
 " Plug 'xolox/vim-easytags'
-" NeoBundleLazy 'ujihisa/vimshell-ssh', { 'autoload' : {
-"             \ 'filetypes' : 'vimshell',
-"             \ }}
 Plug 'Shougo/neomru.vim'
 
 if (! exists("g:gui_oni"))
@@ -358,7 +353,6 @@ map <Leader>vx :VimuxInterruptRunner<CR>
 let g:unite_data_directory = '~/.vim/unite'
 " let g:unite_source_bookmark_directory = '~/.vim/unite-bookmarks'
 let g:unite_source_history_yank_enable = 1
-let g:unite_source_vimshell_external_history_path="~/.zsh-history:~/.zsh-history-$HOST"
 let g:unite_source_grep_max_candidates = 500
 call unite#filters#matcher_default#use(['converter_relative_word', 'matcher_fuzzy'])
 call unite#filters#sorter_default#use(['sorter_rank'])
@@ -904,13 +898,6 @@ imap     <C-k>     <Esc>:Autoformat<CR>
 omap     <C-k>     <Esc>:Autoformat<CR>
 
 
-
-"Conque
-nmap <C-w><S-v> :ConqueTermVSplit zsh<CR>
-nmap <C-w><S-s> :ConqueTermSplit zsh<CR>
-let g:ConqqueTerm_Color = 2
-let g:ConqueTerm_ReadUnfocused = 1
-let g:ConqueTerm_CWInsert = 1
 
 let g:tmuxline_preset = 'full'
 let g:tmuxline_powerline_separators = 0
