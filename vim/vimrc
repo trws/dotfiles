@@ -1,3 +1,6 @@
+if has('python3')
+  silent! python3 1
+endif
 function! FindOrCreate(dir)
   if !isdirectory(expand(a:dir))
     call mkdir(expand(a:dir), "p")
@@ -92,26 +95,8 @@ let g:vimtex_syntax_minted = [
 Plug 'tpope/vim-markdown'
 let g:markdown_fenced_languages = ['html', 'python', 'bash=sh', "c", "c++=cpp", "latex=tex"]
 
-function! RemovedForPolyglot()
-" Plug 'jaxbot/semantic-highlight.vim'
-" in polyglot - trying something new though Plug 'LaTeX-Box-Team/LaTeX-Box', { 'for' : ['latex', 'tex', 'bibtex']}
-" Plug 'vim-latex'
-" Plug 'vim-latex/vim-latex'
-" Plug 'tpope/vim-liquid'
-"c++11 highlighting
-" Plug 'vim-jp/cpp-vim'
-" Plug 'JuliaLang/julia-vim'
-" Plug 'keith/swift.vim'
-"rust highlighting
-" Plug 'wting/rust.vim'
-" Plug 'wavded/vim-stylus'
-" Plug 'digitaltoad/vim-jade'
-" map <silent> <buffer> <C-A-K> <Plug>VO_FollowLink
-" Plug 'VimOutliner'
-endfunction
-
 function! InGui()
-    return has("gui_running") || exists("g:gui_oni") || exists("neovim_dot_app") || has("gui_vimr")
+  return has("gui_running") || exists("g:gui_oni") || exists("neovim_dot_app") || has("gui_vimr")
 endfunction
 
 
@@ -132,38 +117,51 @@ Plug 'tpope/vim-speeddating'
 "tmux integration
 Plug 'vim-scripts/vimux'
 
-if ! has('win32')
-  function! BuildYCM(info)
-    " info is a dictionary with 3 fields
-    " - name:   name of the plugin
-    " - status: 'installed', 'updated', or 'unchanged'
-    " - force:  set on PlugInstall! or PlugUpdate!
-    if a:info.status != 'unchanged'
-      !./install.py --clang-completer
-    endif
-  endfunction
+" if ! has('win32')
+"   function! BuildYCM(info)
+"     " info is a dictionary with 3 fields
+"     " - name:   name of the plugin
+"     " - status: 'installed', 'updated', or 'unchanged'
+"     " - force:  set on PlugInstall! or PlugUpdate!
+"     if a:info.status != 'unchanged'
+"       !./install.py --clang-completer
+"     endif
+"   endfunction
+"   Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') }
+" endif
 
-  Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') }
+if has('nvim')
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+  Plug 'Shougo/deoplete.nvim'
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
 endif
+let g:deoplete#enable_at_startup = 1
+Plug 'Shougo/neco-vim'
+Plug 'zchee/deoplete-clang'
+let g:deoplete#sources#clang#libclang_path = '/usr/local//Cellar/llvm/6.0.0/lib/libclang.dylib'
+Plug 'zchee/deoplete-jedi'
+Plug 'zchee/deoplete-zsh'
 
 " Plug 'jeaye/color_coded'
 
 " Plug 'klen/python-mode'
 
 function! JediDisabled()
-" Plug 'davidhalter/jedi-vim'
-let g:jedi#auto_vim_configuration = 0
-let g:jedi#popup_on_dot = 0
-let g:jedi#popup_select_first = 0
-let g:jedi#completions_enabled = 0
-let g:jedi#completions_command = ""
-let g:jedi#show_call_signatures = "1"
+  " Plug 'davidhalter/jedi-vim'
+  let g:jedi#auto_vim_configuration = 0
+  let g:jedi#popup_on_dot = 0
+  let g:jedi#popup_select_first = 0
+  let g:jedi#completions_enabled = 0
+  let g:jedi#completions_command = ""
+  let g:jedi#show_call_signatures = "1"
 
-let g:jedi#goto_assignments_command = "<leader>pa"
-let g:jedi#goto_definitions_command = "<leader>pd"
-let g:jedi#documentation_command = "<leader>pk"
-let g:jedi#usages_command = "<leader>pu"
-let g:jedi#rename_command = "<leader>pr"
+  let g:jedi#goto_assignments_command = "<leader>pa"
+  let g:jedi#goto_definitions_command = "<leader>pd"
+  let g:jedi#documentation_command = "<leader>pk"
+  let g:jedi#usages_command = "<leader>pu"
+  let g:jedi#rename_command = "<leader>pr"
 endfunction
 
 " Plug 'scrooloose/syntastic'
@@ -208,17 +206,18 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 if(has("python3"))
   Plug 'Shougo/denite.nvim'
-  Plug 'ozelentok/denite-gtags'
+  " Plug 'ozelentok/denite-gtags'
   Plug 'nixprime/cpsm'
 endif
 Plug 'Shougo/unite.vim'
 Plug 'Shougo/vimfiler.vim'
 Plug 'Shougo/unite-ssh'
-Plug 'hewes/unite-gtags'
+" Plug 'hewes/unite-gtags'
 Plug 'tsukkee/unite-tag'
 Plug 'Shougo/neoyank.vim' " provides history/yank unite source
-Plug 'vim-scripts/gtags.vim'
+" Plug 'vim-scripts/gtags.vim'
 Plug 'ludovicchabant/vim-gutentags'
+let g:gutentags_ctags_tagfile = ".git/tags"
 " These are nice, but they are *way* too slow
 " Plug 'xolox/vim-misc'
 " Plug 'xolox/vim-easytags'
@@ -290,26 +289,6 @@ vmap <CR> <Plug>(EasyAlign)
 " let $PYTHONPATH .= ":~/.vim/included/ropevim"
 " source ~/.vim/included/ropevim/ropevim.vim
 
-"make command mode suck less, mimic a shell
-" start of line
-:cnoremap <C-A>         <Home>
-" back one character
-:cnoremap <C-B>         <Left>
-" delete character under cursor
-:cnoremap <C-D>         <Del>
-" end of line
-:cnoremap <C-E>         <End>
-" forward one character
-:cnoremap <C-F>         <Right>
-" recall newer command-line
-" :cnoremap <C-N>               <Down>
-" recall previous (older) command-line
-" :cnoremap <C-P>               <Up>
-" back one word
-" :cnoremap <Esc><B>    <S-Left>
-" forward one word
-" :cnoremap <Esc><F>    <S-Right>
-
 " Prompt for a command to run
 map <Leader>vp :VimuxPromptCommand<CR>
 
@@ -350,17 +329,17 @@ map <Leader>vx :VimuxInterruptRunner<CR>
 "endif
 
 "Unite and denite
-let g:unite_data_directory = '~/.vim/unite'
-" let g:unite_source_bookmark_directory = '~/.vim/unite-bookmarks'
-let g:unite_source_history_yank_enable = 1
-let g:unite_source_grep_max_candidates = 500
-call unite#filters#matcher_default#use(['converter_relative_word', 'matcher_fuzzy'])
-call unite#filters#sorter_default#use(['sorter_rank'])
-call unite#custom#profile('files', 'filters', 'sorter_rank')
-call unite#custom#source('buffer,file,file_rec,file_rec/async', 'sorters', 'sorter_selecta')
-call unite#custom#source('buffer,file,file_rec,file_rec/async', 'matchers',['converter_relative_word', 'matcher_fuzzy'])
 let  g:notes_directories = ['~/Projects/notes']
 if( ! has("python3")) " using unite
+  let g:unite_data_directory = '~/.vim/unite'
+  " let g:unite_source_bookmark_directory = '~/.vim/unite-bookmarks'
+  let g:unite_source_history_yank_enable = 1
+  let g:unite_source_grep_max_candidates = 500
+  call unite#filters#matcher_default#use(['converter_relative_word', 'matcher_fuzzy'])
+  call unite#filters#sorter_default#use(['sorter_rank'])
+  call unite#custom#profile('files', 'filters', 'sorter_rank')
+  call unite#custom#source('buffer,file,file_rec,file_rec/async', 'sorters', 'sorter_selecta')
+  call unite#custom#source('buffer,file,file_rec,file_rec/async', 'matchers',['converter_relative_word', 'matcher_fuzzy'])
   nnoremap <leader>ur  :<C-u>Unite -start-insert file_rec/async:!<CR>
   nnoremap <leader>ub  :<C-u>Unite buffer        file_mru bookmark<CR>
   nnoremap <leader>uB  :<C-u>Unite bookmark<CR>
@@ -375,6 +354,12 @@ if( ! has("python3")) " using unite
   nnoremap <leader>utg :<C-u>Unite gtags/grep<CR>
   nnoremap <leader>utf :<C-u>Unite gtags/file<CR>
   nnoremap <leader>utC :<C-u>Unite gtags/completion<CR>
+  augroup UniteTagsRemap
+    autocmd BufEnter *
+          \   if empty(&buftype)
+          \|      nnoremap <buffer> <C-]> :<C-u>UniteWithCursorWord -immediately tag<CR>
+          \|  endif
+  augroup END
 else
   call denite#custom#alias('source', 'file_rec/git', 'file_rec')
   call denite#custom#var('file_rec/git', 'command',
@@ -391,12 +376,21 @@ else
   nnoremap <leader>uG  :Denite -mode=normal grep:.:-i<CR>
   nnoremap <leader>ul  :Denite line<CR>
   nnoremap <leader>uT  :Denite outline<CR>
-  nnoremap <leader>utc :DeniteCursorWord -buffer-name=gtags_context -immediately-1 -mode=normal gtags_context<CR>
-  nnoremap <leader>utr :DeniteCursorWord -buffer-name=gtags_ref -immediately-1 -mode=normal gtags_ref<CR>
-  nnoremap <leader>utd :DeniteCursorWord -buffer-name=gtags_def -immediately-1 -mode=normal gtags_def<CR>
-  nnoremap <leader>utg :DeniteCursorWord -buffer-name=gtags_grep -mode=normal gtags_grep<CR>
-  nnoremap <leader>utf :Denite           -buffer-name=gtags_file -mode=normal gtags_file<CR>
-  nnoremap <leader>utC :Denite           -buffer-name=gtags_completion -mode=normal gtags_completion<CR>
+  nnoremap <leader>ut  :Denite tag<CR>
+  nnoremap <leader>u]  :DeniteCursorWord -immediately-1 -mode=normal tag<CR>
+  " nnoremap <leader>utc :DeniteCursorWord -buffer-name=gtags_context -immediately-1 -mode=normal gtags_context<CR>
+  " nnoremap <leader>utr :DeniteCursorWord -buffer-name=gtags_ref -immediately-1 -mode=normal gtags_ref<CR>
+  " nnoremap <leader>utd :DeniteCursorWord -buffer-name=gtags_def -immediately-1 -mode=normal gtags_def<CR>
+  " nnoremap <leader>utg :DeniteCursorWord -buffer-name=gtags_grep -mode=normal gtags_grep<CR>
+  " nnoremap <leader>utf :Denite           -buffer-name=gtags_file -mode=normal gtags_file<CR>
+  " nnoremap <leader>utC :Denite           -buffer-name=gtags_completion -mode=normal gtags_completion<CR>
+  augroup DeniteTagsRemap
+    autocmd BufEnter *
+          \   if empty(&buftype)
+          \|      nnoremap <buffer> <C-]> :<C-u>DeniteCursorWord -immediately-1 tag<CR>
+          \|  endif
+  augroup END
+  call denite#custom#map('normal', 'v', '<denite:do_action:vsplit>')
 
   if executable('ag')
     " Change file_rec command.
@@ -572,6 +566,8 @@ nnoremap <silent> <leader>fg  :call AgWithParam()<CR>
 nnoremap <silent> <leader>fl  :BLines<CR>
 nnoremap <silent> <leader>fL  :Lines<CR>
 nnoremap <silent> <leader>fT  :BTags<CR>
+nnoremap <silent> <leader>ft  :Tags<CR>
+nnoremap <silent> <leader>f]  :<C-u>Tags expand('<cword>')<CR>
 
 let include_paths = ['/opt/local/include','/usr/local/include','/usr/include','/Developer/Headers',fnamemodify('~/programs/include',':p')]
 let g:unite_source_gtags_project_config = {
@@ -584,109 +580,8 @@ let g:global_objdir=$HOME . "/.cache/global-obj"
 call FindOrCreate(g:global_objdir)
 " For regular tags
 let tag_file = g:global_objdir . "/tags"
-set tags=./tags,$HOME/.cache/global-obj
-function! UpdateTagDir(dir)
-  if isdirectory(a:dir)
-    exe 'cd ' . a:dir
-    if (! filereadable(g:global_objdir . '/' . a:dir . '/GTAGS') )
-      call system('gtags -O')
-    else
-      call system('global -u')
-    endif
-    cd -
-  endif
-endfunction
-let ctags_command = 'ctags -R --c++-kinds=+p --fields=+liaS --extra=+q --tag-relative=yes --exclude=.git --exclude=.svn --exclude=.hg '
-function! UpdateLocalCTags()
-  call system(g:ctags_command . ' -f ./tags ' . getcwd())
-endfunction
-function! UpdateCTags()
-  call system(g:ctags_command . ' -f ' . g:global_objdir . join(g:include_paths))
-  call UpdateLocalCTags()
-endfunction
-set csprg=gtags-cscope
-" add all databases in objdir
-function! LoadCscopeDir(dir)
-  echo a:dir
-  let db = findfile("GTAGS", g:global_objdir . a:dir . "/;")
-  if (!empty(db))
-    let path = strpart(db, 0, match(db, "/GTAGS$"))
-    exe 'cd ' . path
-    set nocscopeverbose " suppress 'duplicate connection' error
-    exe "cs add " . db . " " . path
-    set cscopeverbose
-    cd -
-  endif
-endfunction
-function! LoadCscope()
-  echo 'here'
-  " let dbs = findfile("GTAGS", g:global_objdir . "/**", -1)
-  call LoadCscopeDir(fnamemodify('.', ':p:h'))
-  call LoadCscopeDir(expand('%:p:h'))
-  for dir in g:include_paths
-    echo dir
-    " let path = substitute(db, g:global_objdir, '', '')
-    " let path = strpart(path, 0, match(path, "/GTAGS$"))
-    call LoadCscopeDir(dir)
-  endfor
-endfunction
+set tags=./tags;.git/tags;,tags
 
-function! UpdateGTags()
-  call UpdateTagDir('.')
-  for dir in g:include_paths
-    call UpdateTagDir(dir)
-  endfor
-  call LoadCscope()
-endfunction
-function! UpdateAllTags()
-  call UpdateGTags()
-  call UpdateCTags()
-endfunction
-function! UpdateLocalTags()
-  call UpdateTagDir('.')
-  call UpdateLocalCTags()
-endfunction
-augroup UniteTagsRemap
-  autocmd BufEnter *
-        \   if empty(&buftype)
-        \|      nnoremap <buffer> <C-]> :<C-u>UniteWithCursorWord -immediately tag<CR>
-        \|  endif
-augroup END
-
-if 0
-  " For global tags
-  if has("cscope")
-    set csto=0
-    set cst
-    set nocsverb
-
-
-    " add any database in or above the current directory
-    " function! LoadCscope()
-    "     let db = findfile("GTAGS", $HOME . "/.dotfiles/global-obj" . getcwd() . ";")
-    "     if (!empty(db))
-    "         let path = strpart(db, 0, match(db, "/GTAGS$"))
-    "         set nocscopeverbose " suppress 'duplicate connection' error
-    "         exe "cs add " . db . " " . getcwd()
-    "         set cscopeverbose
-    "     endif
-    " endfunction
-    " augroup cscopeloader
-    "     au!
-    "     au BufEnter /* call LoadCscope()
-    " augroup END
-    call LoadCscope()
-    set csverb
-  endif
-endif
-" augroup unite_gtags_binding
-"     au!
-"     autocmd BufEnter *
-"                 \   if empty(&buftype)
-"                 \|      nnoremap <buffer> <C-]> :<C-u>Unite -immediately gtags/context<CR>
-"                 \|  endif
-" augroup END
-" nnoremap <leader>ur :<C-u>Unite -start-insert file_rec<CR>
 
 if executable('rg')
   let unite_ignores = ["!CMakeFiles",
@@ -1570,7 +1465,7 @@ if &term =~ ".*256color.*" || has("gui_running")
   if $COLORTERM == "truecolor"
     set termguicolors
   else
-  set t_Co=256
+    set t_Co=256
   endif
   " let g:inkpot_black_background=1
   " colorscheme inkpot
