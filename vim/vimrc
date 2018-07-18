@@ -31,6 +31,8 @@ nnoremap <silent> <leader>wy :call WindowSwap#MarkWindowSwap()<CR>
 nnoremap <silent> <leader>wp :call WindowSwap#DoWindowSwap()<CR>
 nnoremap <silent> <leader>ws :call WindowSwap#EasyWindowSwap()<CR>
 
+
+
 "Mail search
 " Plug 'daisuzu/unite-notmuch'
 " Plug 'diefans/notmuch-vim'
@@ -117,32 +119,33 @@ Plug 'tpope/vim-speeddating'
 "tmux integration
 Plug 'vim-scripts/vimux'
 
-" if ! has('win32')
-"   function! BuildYCM(info)
-"     " info is a dictionary with 3 fields
-"     " - name:   name of the plugin
-"     " - status: 'installed', 'updated', or 'unchanged'
-"     " - force:  set on PlugInstall! or PlugUpdate!
-"     if a:info.status != 'unchanged'
-"       !./install.py --clang-completer
-"     endif
-"   endfunction
-"   Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') }
-" endif
-
-if has('nvim')
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-  Plug 'Shougo/deoplete.nvim'
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
+if ! has('win32')
+  function! BuildYCM(info)
+    " info is a dictionary with 3 fields
+    " - name:   name of the plugin
+    " - status: 'installed', 'updated', or 'unchanged'
+    " - force:  set on PlugInstall! or PlugUpdate!
+    if a:info.status != 'unchanged'
+      !./install.py --clang-completer
+    endif
+  endfunction
+  Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') }
 endif
-let g:deoplete#enable_at_startup = 1
-Plug 'Shougo/neco-vim'
-Plug 'zchee/deoplete-clang'
-let g:deoplete#sources#clang#libclang_path = '/usr/local//Cellar/llvm/6.0.0/lib/libclang.dylib'
-Plug 'zchee/deoplete-jedi'
-Plug 'zchee/deoplete-zsh'
+
+" if has('nvim')
+"   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+" else
+"   Plug 'Shougo/deoplete.nvim'
+"   Plug 'roxma/nvim-yarp'
+"   Plug 'roxma/vim-hug-neovim-rpc'
+" endif
+" let g:deoplete#enable_at_startup = 1
+" Plug 'zchee/deoplete-clang'
+" let g:deoplete#sources#clang#libclang_path = '/usr/local//Cellar/llvm/6.0.0/lib/libclang.dylib'
+" Plug 'zchee/deoplete-jedi'
+" Plug 'zchee/deoplete-zsh'
+
+Plug 'Shougo/neco-vim' " add vim completion to ycm or deoplete
 
 " Plug 'jeaye/color_coded'
 
@@ -217,7 +220,7 @@ Plug 'tsukkee/unite-tag'
 Plug 'Shougo/neoyank.vim' " provides history/yank unite source
 " Plug 'vim-scripts/gtags.vim'
 Plug 'ludovicchabant/vim-gutentags'
-let g:gutentags_ctags_tagfile = ".git/tags"
+" let g:gutentags_ctags_tagfile = ".git/tags" " causes relative oddness
 " These are nice, but they are *way* too slow
 " Plug 'xolox/vim-misc'
 " Plug 'xolox/vim-easytags'
@@ -233,7 +236,8 @@ if (! exists("g:gui_oni"))
 endif
 
 Plug 'tpope/vim-fugitive'
-"
+Plug 'tpope/vim-rhubarb'
+
 " cmdline-mode mappings
 Plug 'tpope/vim-rsi'
 " Plug 'critiqjo/husk-x.vim'
@@ -256,7 +260,6 @@ Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'Lokaltog/vim-easymotion'
 " map <Leader>e <Plug>(easymotion-prefix)
-" Plug 'The-NERD-Commenter'
 Plug 'majutsushi/tagbar'
 Plug 'Chiel92/vim-autoformat'
 Plug 'sjl/gundo.vim'
@@ -272,18 +275,51 @@ Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-dispatch'
 Plug 'radenling/vim-dispatch-neovim'
 Plug 'tomtom/tcomment_vim'
+
 "Word highlighting for possible but uncertain errors
 Plug 'reedes/vim-wordy'
+
+Plug 'tpope/vim-vinegar'
 
 call plug#end()
 
 let mapleader      = ','
 let maplocalleader = ','
 
-
 runtime! macros/matchit.vim
 
-"Alignment mapping to enter in visual mode
+autocmd FileType vim setlocal omnifunc=Vim_complete
+
+function! s:get_input() abort
+  let col = col( '.' )
+  let line = getline( '.' )
+  if col - 1 < len( line )
+    return matchstr( line, '^.*\%' . col . 'c' )
+  endif
+  return line
+endfunction
+
+function! Vim_complete(findstart, base) abort
+  let line_prefix = s:get_input()
+  if a:findstart
+    let ret = necovim#get_complete_position(line_prefix)
+    if ret < 0
+      return col( '.' ) " default to current
+    endif
+    return ret
+  else
+    let candidates = necovim#gather_candidates(line_prefix . a:base, a:base)
+    let filtered_candidates = []
+    for candidate in candidates
+      if candidate.word =~? '^' . a:base
+        call add(filtered_candidates, candidate)
+      endif
+    endfor
+    return filtered_candidates
+  endif
+endfunctio
+
+" Alignment mapping to enter in visual mode
 vmap <CR> <Plug>(EasyAlign)
 
 " let $PYTHONPATH .= ":~/.vim/included/ropevim"
@@ -368,7 +404,6 @@ else
         \ `finddir('.git', ';') != '' ? 'file_rec/git' : 'file_rec'`<CR>
 
   nnoremap <leader>ub  :Denite -mode=normal buffer file_mru<CR>
-
   nnoremap <leader>uY  :Denite -mode=normal neoyank<CR>
   nnoremap <leader>uf  :Denite file<CR>
   nnoremap <leader>un  :Denite file_rec:~/Projects/notes/<CR>
@@ -557,6 +592,10 @@ function! AgWithParam()
   execute "Ag " . pattern
 endfunction
 
+function! TagsWithCword()
+  execute "Tags " . expand('<cword>')
+endfunction
+
 " fzf version of the mappings, experimental
 nnoremap <silent> <leader>fr  :call FilesOrGfiles()<CR>
 nnoremap <silent> <leader>fb  :History<CR>
@@ -567,7 +606,7 @@ nnoremap <silent> <leader>fl  :BLines<CR>
 nnoremap <silent> <leader>fL  :Lines<CR>
 nnoremap <silent> <leader>fT  :BTags<CR>
 nnoremap <silent> <leader>ft  :Tags<CR>
-nnoremap <silent> <leader>f]  :<C-u>Tags expand('<cword>')<CR>
+nnoremap <silent> <leader>f]  :call TagsWithCword()<CR>
 
 let include_paths = ['/opt/local/include','/usr/local/include','/usr/include','/Developer/Headers',fnamemodify('~/programs/include',':p')]
 let g:unite_source_gtags_project_config = {
@@ -629,7 +668,12 @@ else
 endif
 
 "YouCompleteMe
-nnoremap <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<CR>
+nnoremap <leader>yg :YcmCompleter GoTo<CR>
+nnoremap <leader>yG :YcmCompleter GoToImprecise<CR>
+nnoremap <leader>yf :YcmCompleter FixIt<CR>
+nnoremap <leader>yt :YcmCompleter GetType<CR>
+nnoremap <leader>yp :YcmCompleter GetParent<CR>
+nnoremap <leader>yd :YcmCompleter GetDoc<CR>
 "attempt to fix the awful latex input behavior
 " set omnifunc=syntaxcomplete#Complete
 " let g:ycm_semantic_triggers = {
@@ -638,14 +682,23 @@ nnoremap <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<CR>
 " let g:ycm_filetype_blacklist = {
 "       \ 'tex' : 1
 "       \}
+
+let g:ycm_semantic_triggers =  {
+      \ 'c' : ['_'],
+      \ 'vim' : ['_'],
+      \}
 let g:ycm_complete_in_strings = 1
 let g:ycm_extra_conf_vim_data=['&filetype']
 let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
 let g:ycm_extra_conf_globlist = ['~/Dropbox/*','~/projects/*','~/Projects/*']
 let g:ycm_autoclose_preview_window_after_insertion = 1
-let g:ycm_key_invoke_completion = '<C-S-Space>'
+" let g:ycm_key_invoke_completion = '<C-S-Space>'
+let g:ycm_key_invoke_completion = '<C-Space>'
+" let g:ycm_key_invoke_completion = '<Tab>'
 let g:ycm_key_list_select_completion = ['<C-n>', '<Down>', '<Tab>']
 let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>', '<S-Tab>']
+let g:ycm_min_num_of_chars_for_completion = 99
+let g:ycm_min_num_identifier_candidate_chars = 99
 
 let g:UltiSnipsExpandTrigger="<c-j>"
 inoremap <S-tab> <Esc>:call UltiSnips_ListSnippets()<CR>
@@ -663,12 +716,13 @@ set nowrap
 set winaltkeys=no
 set virtualedit=block,insert
 
-set suffixes+=*.com,*.class,*.dll,*.exe,*.o,*.so
-set suffixes+=*.dmg,*.iso,*.jar,*.rar,*.tar,*.zip
-set suffixes+=".DS_Store,.DS_Store?,._*,.Spotlight-V100,ehthumbs.db,Thumbs.db"
-set suffixes+=*.swp,*~
-set suffixes+=*.aux,*.lot,*.lof,*.pyg,*.toc
-set suffixes+=*.pdf,*.eps,*.epsi,*.png,*.jpg,*.svg
+set suffixes+=.com,.class,.dll,.exe,.o,.so
+set suffixes+=.dmg,.iso,.jar,.rar,.tar,.zip
+set suffixes+=.DS_Store,.DS_Store?,._*,.Spotlight-V100,ehthumbs.db,Thumbs.db
+set suffixes+=.swp,~
+set suffixes+=.aux,.lot,.lof,.pyg,.toc
+set suffixes+=.pdf,.eps,.epsi,.png,.jpg,.svg
+set suffixes+=.log,.out,.bbl,.blg,.fls,.fdb_latexmk,.synctex.gz,.aux,.latexmain
 " set suffixes+=*.xls,*.xlsx,*.ppt,*.pptx,*.doc,*.docx,*.graffle
 
 "outliner checkboxes
@@ -809,12 +863,7 @@ let g:airline#extensions#csv#enabled = 1
 set timeoutlen=300
 set ttimeoutlen=10
 
-map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q $PWD<CR>
-map <A-C-T> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q $PWD<CR>
-map <Esc><C-T> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q $PWD<CR>
-" execute 'map <C-S-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q -f - ' . include_paths . ' > ~/.vim-systags'
-
-if has("gui_running")
+if InGui()
   set guioptions=egmt
   if has("gui_macvim")
     "CRITICAL option, allows alt-based key-bindings to work in macvim
@@ -830,27 +879,26 @@ if has("gui_running")
     " Also for GTK 1
     set guifont=-misc-fixed-medium-r-normal-*-10-*-*-*-c-*-iso8859-15
   endif
-endif
 
-if exists("neovim_dot_app") || has("gui_vimr") " VimR thinks it isn't a gui..?
-  let g:terminal_color_0 = '#2e3436'
-  let g:terminal_color_1 = '#cc0000'
-  let g:terminal_color_2 = '#4e9a06'
-  let g:terminal_color_3 = '#c4a000'
-  let g:terminal_color_4 = '#3465a4'
-  let g:terminal_color_5 = '#75507b'
-  let g:terminal_color_6 = '#0b939b'
-  let g:terminal_color_7 = '#d3d7cf'
-  let g:terminal_color_8 = '#555753'
-  let g:terminal_color_9 = '#ef2929'
-  let g:terminal_color_10 = '#8ae234'
-  let g:terminal_color_11 = '#fce94f'
-  let g:terminal_color_12 = '#729fcf'
-  let g:terminal_color_13 = '#ad7fa8'
-  let g:terminal_color_14 = '#00f5e9'
-  let g:terminal_color_15 = '#eeeeec'
+  if exists("neovim_dot_app") || has("gui_vimr") " VimR thinks it isn't a gui..?
+    let g:terminal_color_0 = '#2e3436'
+    let g:terminal_color_1 = '#cc0000'
+    let g:terminal_color_2 = '#4e9a06'
+    let g:terminal_color_3 = '#c4a000'
+    let g:terminal_color_4 = '#3465a4'
+    let g:terminal_color_5 = '#75507b'
+    let g:terminal_color_6 = '#0b939b'
+    let g:terminal_color_7 = '#d3d7cf'
+    let g:terminal_color_8 = '#555753'
+    let g:terminal_color_9 = '#ef2929'
+    let g:terminal_color_10 = '#8ae234'
+    let g:terminal_color_11 = '#fce94f'
+    let g:terminal_color_12 = '#729fcf'
+    let g:terminal_color_13 = '#ad7fa8'
+    let g:terminal_color_14 = '#00f5e9'
+    let g:terminal_color_15 = '#eeeeec'
+  endif
 endif
-
 
 function! Map_for_all(mapping, target, ...)
   let l:for_input = (a:0 >= 1) ? a:1 : 0
@@ -1347,7 +1395,8 @@ if has("nvim")
   tnoremap <C-w> <C-\><C-n><C-w>
 endif
 
-let g:vimfiler_as_default_explorer = 1
+" let g:vimfiler_as_default_explorer = 1
+let g:vimfiler_as_default_explorer = 0
 function! ToggleVExplorer()
   if g:vimfiler_as_default_explorer
     VimFilerExplorer
@@ -1380,7 +1429,8 @@ nmap     <silent> <F3>       :call ToggleVExplorer()<CR>
 let g:netrw_liststyle = 4
 " let g:netrw_home      = '~/.vim'
 
-nnoremap <silent> <C-L> :noh<CR><C-L>
+" clear search, close preview, redraw
+nnoremap <silent> <C-L> :pc<CR>:noh<CR><C-L>
 "project plugin options
 " map           <A-S-o> :Project<CR>:redraw<CR>
 " map           <Esc><S-o> :Project<CR>:redraw<CR>
