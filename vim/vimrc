@@ -207,7 +207,7 @@ augroup END
 " cool, but currently not quite what I want I think
 " Plug 'tbabej/taskwiki'
 
-Plug 'junegunn/fzf', { 'dir': plugged_directory . 'fzf', 'do': './install --all' }
+Plug 'junegunn/fzf', { 'dir': plugged_directory . '/fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 if(has("python3"))
   Plug 'Shougo/denite.nvim'
@@ -215,11 +215,11 @@ if(has("python3"))
   Plug 'nixprime/cpsm'
 else
   Plug 'Shougo/unite.vim'
-endif
-" Plug 'Shougo/vimfiler.vim'
 Plug 'Shougo/unite-ssh'
 Plug 'hewes/unite-gtags'
 Plug 'tsukkee/unite-tag'
+endif
+" Plug 'Shougo/vimfiler.vim'
 Plug 'Shougo/neoyank.vim' " provides history/yank unite source
 Plug 'vim-scripts/gtags.vim'
 Plug 'ludovicchabant/vim-gutentags'
@@ -241,6 +241,7 @@ endif
 
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-vinegar'
+nnoremap <silent> _ :Rexplore<cr>
 "
 " cmdline-mode mappings
 Plug 'tpope/vim-rsi'
@@ -253,7 +254,7 @@ let g:indent_guides_start_level = 2
 let g:indent_guides_guide_size = 1
 let g:indent_guides_enable_on_vim_startup = 1
 
-Plug 'terryma/vim-multiple-cursors'
+" Plug 'terryma/vim-multiple-cursors'
 
 
 " Plug 'Raimondi/delimitMate'
@@ -356,6 +357,8 @@ map <Leader>vx :VimuxInterruptRunner<CR>
 "set conceallevel=2 concealcursor=i
 "endif
 
+let  g:notes_directories = ['~/Projects/notes']
+if( ! has("python3")) " using unite
 "Unite and denite
 let g:unite_data_directory = '~/.vim/unite'
 " let g:unite_source_bookmark_directory = '~/.vim/unite-bookmarks'
@@ -367,8 +370,6 @@ call unite#filters#sorter_default#use(['sorter_rank'])
 call unite#custom#profile('files', 'filters', 'sorter_rank')
 call unite#custom#source('buffer,file,file_rec,file_rec/async', 'sorters', 'sorter_selecta')
 call unite#custom#source('buffer,file,file_rec,file_rec/async', 'matchers',['converter_relative_word', 'matcher_fuzzy'])
-let  g:notes_directories = ['~/Projects/notes']
-if( ! has("python3")) " using unite
   nnoremap <leader>ur  :<C-u>Unite -start-insert file_rec/async:!<CR>
   nnoremap <leader>ub  :<C-u>Unite buffer        file_mru bookmark<CR>
   nnoremap <leader>uB  :<C-u>Unite bookmark<CR>
@@ -580,6 +581,7 @@ nnoremap <silent> <leader>fg  :call AgWithParam()<CR>
 nnoremap <silent> <leader>fl  :BLines<CR>
 nnoremap <silent> <leader>fL  :Lines<CR>
 nnoremap <silent> <leader>fT  :BTags<CR>
+nnoremap <silent> <leader>ft  :Tags<CR>
 
 let include_paths = ['/opt/local/include','/usr/local/include','/usr/include','/Developer/Headers',fnamemodify('~/programs/include',':p')]
 let g:unite_source_gtags_project_config = {
