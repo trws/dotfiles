@@ -7,7 +7,7 @@ host = check_output("hostname", shell=True)
 
 if 'vortex' in host:
     sys.exit(0)
-if "bolt" in host:
+if "storm" in host:
     try:
         # output = check_output('networksetup -getairportnetwork en0 2>&1 | grep LLNL', shell=True)
         output = check_output('grep -i LLNL /etc/resolv.conf', shell=True)
