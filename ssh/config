@@ -70,7 +70,7 @@ Host rzmanta rzgw ray
 
 # if on laptop, on vpn, hop through vortex to rzgw to get everywhere
 Match exec "~/.dotfiles/scripts/laptop-to-lab.sh %L" originalhost rzgw
-  ProxyCommand ssh -tt vortex ssh rzgw -W localhost:22 
+  ProxyCommand ssh -W rzgw:22 vortex
 
 # this *must* be before the cz/rz catch-all
 Host *z-stash* *z-bitbucket*
@@ -92,7 +92,7 @@ Host cab ipa hype ray surface vulcan sierra impetus hype2 rz*
 # Match exec " ~/.dotfiles/scripts/at-llnl.py " !originalhost github.com
 #   ProxyCommand ssh ddwrt -W github.com:22
 
-Host vortex
+Host vortex vortex.llnl.gov
   LocalForward 5901 localhost:5900
   LocalForward 22001 localhost:22000
   DynamicForward localhost:12347
