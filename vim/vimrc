@@ -12,14 +12,14 @@ let plugged_directory = substitute(system("uname -m"), '[ \n]\+$', '', '')
 if plugged_directory == "x86_64"
   let plugged_directory = ""
 endif
-let plugged_directory = "~/.cache/vim-plugged/" . plugged_directory
-if !isdirectory(expand(plugged_directory))
+let plugged_directory = expand("~/.cache/vim-plugged/" . plugged_directory)
+if !isdirectory(plugged_directory)
   echo('fetching plug for initial install')
   call system('curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
   call system('mkdir -p ' . plugged_directory)
 endif
 
-call plug#begin(expand(plugged_directory))
+call plug#begin(plugged_directory)
 
 " Bundle 'Shougo/vimproc.vim'
 Plug 'Shougo/vimproc.vim' , { 'do' : 'make'}
@@ -45,7 +45,7 @@ nnoremap <silent> <leader>ws :call WindowSwap#EasyWindowSwap()<CR>
 " Plug 'sjl/badwolf'
 " Plug 'Solarized'
 " Plug 'github-theme'
-Plug 'crusoexia/vim-monokai'
+" Plug 'crusoexia/vim-monokai'
 Plug 'nanotech/jellybeans.vim'
 
 Plug 'greymd/oscyank.vim'  " clipboard support for xterm-type terms
@@ -64,6 +64,7 @@ Plug 'bling/vim-airline'
 " Plug 'tomtom/quickfixsigns_vim'
 " Plug 'bling/vim-bufferline'
 " Plug 'edkolev/tmuxline.vim'
+
 
 if executable('task')
   Plug 'blindFS/vim-taskwarrior'
@@ -104,7 +105,7 @@ endfunction
 
 Plug 'mrtazz/DoxygenToolkit.vim'
 "link handler
-Plug 'vim-scripts/utl.vim'
+Plug 'vim-scripts/utl.vim' " execute URLs
 " not in polyglot - cool csv highlighting
 Plug 'chrisbra/csv.vim'
 " CSupport plugin: XXX: reacts badly with several others
@@ -177,8 +178,8 @@ endfunction
 "shell/terminal emulation
 
 "file management
-Plug 'xolox/vim-misc'
-Plug 'xolox/vim-notes'
+" Plug 'xolox/vim-misc'
+" Plug 'xolox/vim-notes'
 Plug 'vimwiki/vimwiki'
 let wiki = {}
 let wiki.path = expand('~/projects/vimwiki/')
@@ -205,18 +206,19 @@ augroup END
 " cool, but currently not quite what I want I think
 " Plug 'tbabej/taskwiki'
 
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf', { 'dir': plugged_directory . '/fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 if(has("python3"))
   Plug 'Shougo/denite.nvim'
   " Plug 'ozelentok/denite-gtags'
   Plug 'nixprime/cpsm'
-endif
-Plug 'Shougo/unite.vim'
-Plug 'Shougo/vimfiler.vim'
+else
+  Plug 'Shougo/unite.vim'
 Plug 'Shougo/unite-ssh'
 " Plug 'hewes/unite-gtags'
 Plug 'tsukkee/unite-tag'
+endif
+" Plug 'Shougo/vimfiler.vim'
 Plug 'Shougo/neoyank.vim' " provides history/yank unite source
 " Plug 'vim-scripts/gtags.vim'
 Plug 'ludovicchabant/vim-gutentags'
@@ -225,7 +227,6 @@ Plug 'ludovicchabant/vim-gutentags'
 " Plug 'xolox/vim-misc'
 " Plug 'xolox/vim-easytags'
 Plug 'Shougo/neomru.vim'
-
 if (! exists("g:gui_oni"))
   "ctrlp
   Plug 'kien/ctrlp.vim'
@@ -236,6 +237,7 @@ if (! exists("g:gui_oni"))
 endif
 
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-vinegar'
 Plug 'tpope/vim-rhubarb'
 
 " cmdline-mode mappings
@@ -249,7 +251,7 @@ let g:indent_guides_start_level = 2
 let g:indent_guides_guide_size = 1
 let g:indent_guides_enable_on_vim_startup = 1
 
-Plug 'terryma/vim-multiple-cursors'
+" Plug 'terryma/vim-multiple-cursors'
 
 
 " Plug 'Raimondi/delimitMate'
@@ -280,6 +282,7 @@ Plug 'tomtom/tcomment_vim'
 Plug 'reedes/vim-wordy'
 
 Plug 'tpope/vim-vinegar'
+nnoremap <silent> _ :Rexplore<cr>
 
 call plug#end()
 

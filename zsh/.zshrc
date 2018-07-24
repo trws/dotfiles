@@ -59,7 +59,8 @@ if [ -x "$(which spack)" ] ; then
   SPACKDIR=$(dirname $(dirname $(which spack )))
   export MODULEPATH=${SPACKDIR}/share/spack/modules:${MODULEPATH}
 
-  source ${SPACKDIR}/share/spack/setup-env.sh
+  #TODO: takes WAY too long
+  # source ${SPACKDIR}/share/spack/setup-env.sh
 
   # using links in programs dir
   # for PKG in git python tmux vim task taskd ruby tmuxinator the_silver_searcher; do

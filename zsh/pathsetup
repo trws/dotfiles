@@ -61,14 +61,27 @@ add_to_path_back /usr/local/cuda  /usr/local/opt/go/libexec ~/.cargo
 [[ -d ~/build/clang ]] && path=( ~/build/clang/install/bin $path )
 [[ -d ~/build/depot_tools/ ]] && path=( $path ~/build/depot_tools )
 
-add_to_path_front ~/go /usr/local ~/spack ~/.linuxbrew
+add_to_path_front /usr/local ~/spack 
+if ~/.linuxbrew/bin/vim --version >& /dev/null ; then
+  add_to_path_front ~/.linuxbrew
+fi
+
 if [[ -n "$SYS_TYPE" ]] ; then
-    PRGPATH=~/programs/${SYS_TYPE}
+    export PRGPATH=~/programs/${SYS_TYPE}
 else
-    PRGPATH=~/programs/default
+    export PRGPATH=~/programs/default
 fi
 add_to_path_front  "$PRGPATH"
-export GOPATH="$PRGPATH"
+
+mkdir -p $PRGPATH/go/bin
+export GOPATH="$PRGPATH/go"
+add_to_path_front "$PRGPATH/go"
+
+mkdir -p $PRGPATH/cargo/bin
+mkdir -p $PRGPATH/rustup
+export CARGO_HOME="$PRGPATH/cargo"
+export RUSTUP_HOME="$PRGPATH/rustup"
+add_to_path_front "$PRGPATH/cargo"
 
 
 path=(~/scripts $path)
