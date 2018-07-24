@@ -35,7 +35,7 @@ Host ddwrt-lab
   User root
   HostName ssh.scogland.com
   DynamicForward 12345
-  ProxyCommand ssh scogland@cab -W ssh.scogland.com:5022
+  ProxyCommand ssh scogland@quartz -W ssh.scogland.com:5022
 
 Match originalhost gale exec "[ !~/.dotfiles/scripts/at-home.py ]"
   HostName ssh.scogland.com
@@ -84,7 +84,7 @@ Host github.com
 Host *.llnl.gov
     HostName %h
 
-Host cab ipa hype ray surface vulcan sierra impetus hype2 rz*
+Host quartz ipa hype ray surface vulcan sierra impetus hype2 rz*
     User scogland
     HostName %h.llnl.gov
     ForwardX11 yes
@@ -168,4 +168,5 @@ Host !cz-* *
     ControlPersist 12h
     PermitLocalCommand yes
     SendEnv LC_TERM_PROGRAM LC_ITERM_PROFILE
+    PreferredAuthentications publickey,password,keyboard-interactive
 
