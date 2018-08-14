@@ -10,6 +10,7 @@ if [[ $ZSH_VERSION < "5.0.0" ]] ; then
     [[ -x ~/programs/chaos_5_x86_64_ib/bin/zsh ]] && exec ~/programs/chaos_5_x86_64_ib/bin/zsh
 fi
 
+ZSH_CACHE_DIR=~/.cache/zsh
 # Source Prezto.
 if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
@@ -24,13 +25,16 @@ compdef bmake=make
 compdef bcmake=cmake
 export gotroot=1
 
+mkdir -p ~/.cache/zsh
+export HISTFILE=~/.cache/zsh/zhistory
+
 # use the builtin, seriously...
 if typeset -f '[' > /dev/null ; then
     unset -f '['
 fi
 
 export _Z_NO_PROMPT_COMMAND=1
-export _Z_DATA=~/.zsh/z-dirjump-list.txt
+export _Z_DATA=$ZSH_CACHE_DIR/z-dirjump-list.txt
 # export _Z_OWNER=$USER
 . $ZDOTDIR/z.sh
 function precmd () {

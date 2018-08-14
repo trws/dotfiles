@@ -66,11 +66,12 @@ Plug 'bling/vim-airline'
 " Plug 'edkolev/tmuxline.vim'
 
 
-if executable('task')
-  Plug 'blindFS/vim-taskwarrior'
-endif
+" if executable('task')
+"   Plug 'blindFS/vim-taskwarrior'
+" endif
+
 " support for live wrapping
-Plug 'reedes/vim-pencil'
+Plug 'reedes/vim-pencil', { 'for': 'tex'}
 
 " ==== filetype handlers, highlighting etc ====
 Plug 'sheerun/vim-polyglot' " pulls in syntax for almost everything
@@ -180,7 +181,8 @@ endfunction
 "file management
 " Plug 'xolox/vim-misc'
 " Plug 'xolox/vim-notes'
-Plug 'vimwiki/vimwiki'
+Plug 'vimwiki/vimwiki', { 'on': 'VimwikiIndex'}
+nnoremap <Leader>ww <Plug>VimwikiIndex
 let wiki = {}
 let wiki.path = expand('~/projects/vimwiki/')
 let wiki.syntax = 'markdown'
@@ -260,9 +262,9 @@ Plug 'tommcdo/vim-exchange'
 Plug 'SirVer/ultisnips'
 " Snippets are separated from the engine. Add this if you want them:
 Plug 'honza/vim-snippets'
-Plug 'Lokaltog/vim-easymotion'
+" Plug 'Lokaltog/vim-easymotion'
 " map <Leader>e <Plug>(easymotion-prefix)
-Plug 'majutsushi/tagbar'
+Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle'}
 Plug 'Chiel92/vim-autoformat'
 Plug 'sjl/gundo.vim'
 Plug 'tpope/vim-repeat'

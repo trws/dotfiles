@@ -76,7 +76,7 @@ Match exec "~/.dotfiles/scripts/laptop-to-lab.sh %L" originalhost rzgw
 Host *z-stash* *z-bitbucket*
     User git
     Port 7999
-    ProxyJump rzgw
+    ProxyJump quartz
 
 Host github.com
     User git
@@ -101,6 +101,10 @@ Match exec "~/.dotfiles/scripts/hop-vpn.sh" originalhost vortex
     ProxyCommand nc -X 5 -x 127.0.0.1:9052 %h %p
 
 
+Host bitbucket.org
+    Port 22
+    # ProxyCommand ssh ddwrt -W bitbucket.org:22
+
 Match exec " ~/.dotfiles/scripts/at-llnl.py" !host cz-bit* !originalhost github.com !originalhost rzgw !originalhost vortex !originalhost localhost !originalhost 127.0.0.1
     #this must be overridden above if wrong
     Port 622
@@ -112,6 +116,7 @@ Match originalhost rzgw
 
 Match exec " ~/.dotfiles/scripts/at-llnl.py " originalhost github.com
     ProxyCommand ssh ddwrt -W github.com:22
+
 
 Host lanlgw ihpc-gate
     HostName ihpc-gate.lanl.gov
