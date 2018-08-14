@@ -97,6 +97,8 @@ let g:vimtex_syntax_minted = [
       \]
 Plug 'tpope/vim-markdown'
 let g:markdown_fenced_languages = ['html', 'python', 'bash=sh', "c", "c++=cpp", "latex=tex"]
+Plug 'tpope/vim-apathy'
+Plug 'tpope/vim-tbone'
 
 function! InGui()
   return has("gui_running") || exists("g:gui_oni") || exists("neovim_dot_app") || has("gui_vimr")
@@ -283,6 +285,8 @@ Plug 'reedes/vim-wordy'
 
 Plug 'tpope/vim-vinegar'
 nnoremap <silent> _ :Rexplore<cr>
+
+Plug 'tpope/vim-sensible'
 
 call plug#end()
 
@@ -612,6 +616,7 @@ nnoremap <silent> <leader>ft  :Tags<CR>
 nnoremap <silent> <leader>f]  :call TagsWithCword()<CR>
 
 let include_paths = ['/opt/local/include','/usr/local/include','/usr/include','/Developer/Headers',fnamemodify('~/programs/include',':p')]
+let &path= join(['.', '', './include'] + include_paths, ',')
 let g:unite_source_gtags_project_config = {
       \ '_':                   { 'gtags_libpath': include_paths }
       \ }
@@ -749,11 +754,6 @@ augroup extra_filetypes
   au BufNewFile,BufRead CMakeLists.txt set      ft=cmake
   au BufNewFile,BufRead CMakeCache.txt set      ft=cmake
 augroup END
-
-"for plugins, etc.
-set encoding=utf-8
-
-
 
 "remove ending whitespace on file write
 fun! <SID>StripTrailingWhitespaces()
@@ -912,7 +912,7 @@ function! Map_for_all(mapping, target, ...)
     execute item . ' ' . a:mapping . ' ' . a:target
   endfor
 
-  if has("nvim")
+  if has("nvim") || has('terminal')
     if l:for_terminal != 0
       execute 'tnoremap '.a:mapping.' <C-\><C-n>'.a:target
     endif
@@ -1476,36 +1476,6 @@ if !has("nvim")
 endif
 
 
-
-" TagListTagName  - Used for tag names
-highlight MyTagListTagName gui=bold guifg=Black guibg=Green cterm=bold ctermfg=Black ctermbg=Green
-" TagListTagScope - Used for tag scope
-highlight MyTagListTagScope gui=NONE guifg=Blue ctermfg=Blue
-" TagListTitle    - Used for tag titles
-highlight MyTagListTitle gui=bold guifg=DarkRed guibg=LightGray cterm=bold ctermfg=DarkRed ctermbg=LightGray
-" TagListComment  - Used for comments
-highlight MyTagListComment guifg=DarkGreen ctermfg=DarkGreen
-" TagListFileName - Used for filenames
-highlight MyTagListFileName gui=bold guifg=Black guibg=LightBlue cterm=bold ctermfg=Black ctermbg=LightBlue
-
-"let Tlist_Ctags_Cmd = $VIM.'/vimfiles/ctags.exe' " location of ctags tool
-" let Tlist_Show_One_File = 1 " Displaying tags for only one file~
-let Tlist_Exist_OnlyWindow = 1 " if you are the last, kill yourself
-let Tlist_Use_Right_Window = 1 " split to the right side of the screen
-let Tlist_Sort_Type = "order" " sort by order or name
-let Tlist_Display_Prototype = 0 " do not show prototypes and not tags in the taglist window.
-let Tlist_Compart_Format = 1 " Remove extra information and blank lines from the taglist window.
-let Tlist_GainFocus_On_ToggleOpen = 1 " Jump to taglist window on open.
-let Tlist_Display_Tag_Scope = 1 " Show tag scope next to the tag name.
-let Tlist_Close_On_Select = 1 " Close the taglist window when a file or tag is selected.
-let Tlist_Enable_Fold_Column = 0 " Don't Show the fold indicator column in the taglist window.
-let Tlist_WinWidth = 30
-"let Tlist_Ctags_Cmd = 'ctags --c++-kinds=+p --fields=+iaS --extra=+q --languages=c++'
-" very slow, so I disable this
-"let Tlist_Process_File_Always = 1 " To use the :TlistShowTag and the :TlistShowPrototype commands without the taglist window and the taglist menu, you should set this variable to 1.
-":TlistShowPrototype [filename] [linenumber]
-"
-let g:lisp_rainbow=1
 
 " Highlight words I might use to mess up grammar
 au FileType tex highlight whichthat ctermfg=Magenta guifg=#515996
