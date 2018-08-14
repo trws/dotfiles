@@ -66,9 +66,10 @@ if projects not in basedir:
 bdir = os.path.join(builds,
                     os.path.relpath(basedir, start=projects))
 
+if args.extra:
+    bdir = os.path.join(bdir, args.extra)
+
 if not args.pretend:
-    if args.extra:
-        bdir = os.path.join(bdir, args.extra)
 
     if args.clean and os.path.exists(bdir):
         shutil.rmtree(bdir)
