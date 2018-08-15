@@ -19,8 +19,10 @@ export GTAGSLIBPATH=/opt/local/include:/usr/local/include:/usr/include:/Develope
 
 [[ -f ~/perl5/perlbrew/etc/bashrc ]] && source ~/perl5/perlbrew/etc/bashrc
 
-[[ ! -z "$LC_TERM_PROGRAM" ]] && export TERM_PROGRAM=$LC_TERM_PROGRAM && unset LC_TERM_PROGRAM
-[[ ! -z "$LC_ITERM_PROFILE" ]] && export ITERM_PROFILE=$LC_ITERM_PROFILE  && unset LC_ITERM_PROFILE
+[[ ! -z "$LC_TERM_PROGRAM" ]] && export TERM_PROGRAM=$LC_TERM_PROGRAM
+[[ ! -z "$LC_ITERM_PROFILE" ]] && export ITERM_PROFILE=$LC_ITERM_PROFILE
+[[ -z "$LC_TERM_PROGRAM" ]] && export LC_TERM_PROGRAM=$TERM_PROGRAM
+[[ -z "$LC_ITERM_PROFILE" ]] && export LC_ITERM_PROFILE=$ITERM_PROFILE
 [[ -f ~/.units ]] && export UNITSFILE=~/.units
 LESS=-cex3MRs
 ENTOMB=yes

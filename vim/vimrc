@@ -46,7 +46,7 @@ nnoremap <silent> <leader>ws :call WindowSwap#EasyWindowSwap()<CR>
 " Plug 'Solarized'
 " Plug 'github-theme'
 " Plug 'crusoexia/vim-monokai'
-Plug 'nanotech/jellybeans.vim'
+" Plug 'nanotech/jellybeans.vim' " in base repo now
 
 Plug 'greymd/oscyank.vim'  " clipboard support for xterm-type terms
 
@@ -60,7 +60,8 @@ Plug 'dhruvasagar/vim-table-mode'
 "visual
 "Plug 'Powerline'
 "powerline not working, light alternative?
-Plug 'bling/vim-airline'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 " Plug 'tomtom/quickfixsigns_vim'
 " Plug 'bling/vim-bufferline'
 " Plug 'edkolev/tmuxline.vim'
@@ -231,14 +232,15 @@ Plug 'ludovicchabant/vim-gutentags'
 " Plug 'xolox/vim-misc'
 " Plug 'xolox/vim-easytags'
 Plug 'Shougo/neomru.vim'
-if (! exists("g:gui_oni"))
-  "ctrlp
-  Plug 'kien/ctrlp.vim'
-  let g:ctrlp_working_path_mode = 'ra'
-  let g:ctrlp_extensions = ['tag', 'buffertag', 'quickfix', 'dir', 'rtscript',
-        \ 'undo', 'line', 'changes', 'mixed', 'bookmarkdir']
-  " let g:ctrlp_extensions = ['tag', 'buffertag', 'quickfix', 'changes', 'mixed', 'bookmarkdir']
-endif
+
+" if (! exists("g:gui_oni"))
+"   "ctrlp
+"   Plug 'kien/ctrlp.vim'
+"   let g:ctrlp_working_path_mode = 'ra'
+"   let g:ctrlp_extensions = ['tag', 'buffertag', 'quickfix', 'dir', 'rtscript',
+"         \ 'undo', 'line', 'changes', 'mixed', 'bookmarkdir']
+"   " let g:ctrlp_extensions = ['tag', 'buffertag', 'quickfix', 'changes', 'mixed', 'bookmarkdir']
+" endif
 
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-vinegar'
@@ -294,8 +296,6 @@ call plug#end()
 
 let mapleader      = ','
 let maplocalleader = ','
-
-runtime! macros/matchit.vim
 
 autocmd FileType vim setlocal omnifunc=Vim_complete
 
@@ -853,18 +853,18 @@ omap     <C-k>     <Esc>:Autoformat<CR>
 
 
 
-let g:tmuxline_preset = 'full'
-let g:tmuxline_powerline_separators = 0
 " use ascii symbols instead of unicode, expariment
 " let g:airline_symbols_ascii = 1
-let g:airline#extensions#tmuxline#enabled = 1
-let g:airline#extensions#bufferline#enabled = 1
-let g:airline#extensions#branch#enabled = 1
-let g:airline#extensions#tagbar#enabled = 1
-let g:airline#extensions#tagbar#flags = 'f'
-let g:airline#extensions#quickfix#enabled = 1
-let g:airline#extensions#branch#displayed_head_limit = 10
-let g:airline#extensions#csv#enabled = 1
+" let g:airline#extensions#tmuxline#enabled = 1
+" let g:airline#extensions#bufferline#enabled = 1
+" let g:airline#extensions#branch#enabled = 1
+" let g:airline#extensions#tagbar#enabled = 1
+" let g:airline#extensions#tagbar#flags = 'f'
+" let g:airline#extensions#quickfix#enabled = 1
+" let g:airline#extensions#branch#displayed_head_limit = 10
+" let g:airline#extensions#csv#enabled = 1
+let g:airline_highlighting_cache = 1
+let g:airline#extensions#whitespace#enabled=0
 set timeoutlen=300
 set ttimeoutlen=10
 
@@ -1188,8 +1188,8 @@ augroup END
 " Command Make will call make and then cwindow which
 " opens a 3 line error window if any errors are found.
 " if no errors, it closes any open cwindow.
-command! -nargs=* Make make <args> | cwindow 3
-command! -nargs=* Scons scons <args> | cwindow 3
+" command! -nargs=* Make make <args> | cwindow 3
+" command! -nargs=* Scons scons <args> | cwindow 3
 nnoremap <Leader>m :Make<cr>
 
 augroup build_autos
@@ -1363,19 +1363,9 @@ call Map_for_all_meta('w', ":tabclose<CR>", 2, 1, 1)
 
 "Powerline
 set laststatus=2 "keeps the statusbar on
-let g:Powerline_symbols = 'unicode'
-if exists("$HOST")
-  if $HOST == "typhoon"
-    let g:Powerline_symbols = 'fancy'
-  endif
+if exists("$TERM_PROGRAM") && $TERM_PROGRAM == 'iTerm.app'
+  let g:airline_powerline_fonts = 1
 endif
-"let g:Powerline_theme = 'default'
-let g:Powerline_colorscheme = 'solarized256'
-"if
-"let g:Powerline_symbols = 'fancy'
-"let g:Powerline_symbols = 'unicode'
-"let g:Powerline_theme = 'default'
-"let g:Powerline_colorscheme = 'solarized256'
 
 "general options
 set grepprg=grep\ -nH\ $*
