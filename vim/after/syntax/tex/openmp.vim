@@ -16,9 +16,15 @@
 " syn region fBox	matchgroup=texBeginEnd	start="\\begin{boxedcode}"		end="\\end{boxedcode}\|%stopzone\>" contained contains=@F
 " let b:current_syntax=s:current_syntax
 
-syn region texZone	start="\\begin{boxedcode}"		end="\\end{boxedcode}\|%stopzone\>"
+" syn region texZone	start="\\begin{boxedcode}"		end="\\end{boxedcode}\|%stopzone\>"
 syn region texZone	start="\\begin{indentedcodelist}"		end="\\end{indentedcodelist}\|%stopzone\>"
 syn region texZone	start="\\vcode\*\=\z([^\ta-zA-Z]\)"	end="\z1\|%stopzone\>"		
+syntax match texZone "\\code\s*\(\[.*\]\)\={.\{-}}"
+syntax match texZone "\\scode\s*\(\[.*\]\)\={.\{-}}"
+syntax match texZone "\\plc\s*\(\[.*\]\)\={.\{-}}"
+syntax match texZone "\\splc\s*\(\[.*\]\)\={.\{-}}"
+syntax match texZone "\\splc\s*\(\[.*\]\)\={.\{-}}"
+syntax match texRefZone "\\specref\s*\(\[.*\]\)\={.\{-}}"
 " syn region baseBox	matchgroup=texBeginEnd	start="\\begin{boxedcode}"		end="\\end{boxedcode}\|%stopzone\>"
 " syn region texParaZone	matchgroup=texSection	start="\\cspecificstart\>"		end="\\cspecificend\>"	contains=ALLBUT,cppBox,fBox,baseBox
 " syn region texParaZone	matchgroup=texSection	start="\\\(cpp\|ccpp\)specificstart\>"		end="\\\(cpp\|ccpp\)specificend\>"	contains=ALLBUT,cBox,fBox,baseBox

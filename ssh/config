@@ -172,6 +172,6 @@ Host !cz-* *
     ControlMaster auto
     ControlPersist 12h
     PermitLocalCommand yes
-    SendEnv LC_TERM_PROGRAM LC_ITERM_PROFILE
+    SendEnv LC_TERM_PROGRAM LC_ITERM_PROFILE ITERM_PROFILE TERM_PROGRAM
     PreferredAuthentications publickey,password,keyboard-interactive
 

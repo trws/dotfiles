@@ -349,3 +349,10 @@ strided
 toolchain
 RAS
 de facto
+constexpr
+ICV
+OMPT
+OMPD
+lvalue
+metadirective
+namespace

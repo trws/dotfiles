@@ -1,3 +1,6 @@
+" prevent airline loading before my colorscheme
+colorscheme jellybeans-stripped
+let g:airline_theme='jellybeans'
 if has('python3')
   silent! python3 1
 endif
@@ -8,9 +11,14 @@ function! FindOrCreate(dir)
 endfunction
 
 " Deal with single home/multi-arch systems
-let plugged_directory = substitute(system("uname -m"), '[ \n]\+$', '', '')
-if plugged_directory == "x86_64"
-  let plugged_directory = ""
+let plugged_directory = ""
+if exists("$LMOD_arch")
+  let plugged_directory = $LMOD_ARCH
+elseif (!has("macunix")) && (!has("win64"))
+  let plugged_directory = substitute(system("uname -m"), '[ \n]\+$', '', '')
+  if plugged_directory == "x86_64"
+    let plugged_directory = ""
+  endif
 endif
 let plugged_directory = expand("~/.cache/vim-plugged/" . plugged_directory)
 if !isdirectory(plugged_directory)
@@ -22,7 +30,7 @@ endif
 call plug#begin(plugged_directory)
 
 " Bundle 'Shougo/vimproc.vim'
-Plug 'Shougo/vimproc.vim' , { 'do' : 'make'}
+" Plug 'Shougo/vimproc.vim' , { 'do' : 'make'}
 
 "split management
 Plug 'wesQ3/vim-windowswap'
@@ -50,12 +58,12 @@ nnoremap <silent> <leader>ws :call WindowSwap#EasyWindowSwap()<CR>
 
 Plug 'greymd/oscyank.vim'  " clipboard support for xterm-type terms
 
-Plug 'luochen1990/rainbow' " rainbow parens and braces etc.
+" Plug 'luochen1990/rainbow' " rainbow parens and braces etc.
 
 " Render man pages in vim
 Plug 'vim-utils/vim-man'
 
-Plug 'dhruvasagar/vim-table-mode'
+" Plug 'dhruvasagar/vim-table-mode'
 
 "visual
 "Plug 'Powerline'
@@ -86,8 +94,12 @@ let g:vimtex_syntax_minted = [
       \   'lang' : 'c',
       \ },
       \ {
+      \   'lang' : 'fortran',
+      \   'environments' : ['ompfPragma'],
+      \ },
+      \ {
       \   'lang' : 'cpp',
-      \   'environments' : ['cppcode', 'cppcode_test'],
+      \   'environments' : ['ompcPragma', 'boxedcode', 'cppcode', 'cppcode_test'],
       \ },
       \ {
       \   'lang' : 'python',
@@ -98,7 +110,7 @@ let g:vimtex_syntax_minted = [
       \ }
       \]
 Plug 'tpope/vim-markdown'
-let g:markdown_fenced_languages = ['html', 'python', 'bash=sh', "c", "c++=cpp", "latex=tex"]
+let g:markdown_fenced_languages = ['html', 'python', 'bash=sh', "c", "c++=cpp", "latex=tex", "wdiff", "diff"]
 Plug 'tpope/vim-apathy'
 Plug 'tpope/vim-tbone'
 
@@ -152,31 +164,6 @@ endif
 
 Plug 'Shougo/neco-vim' " add vim completion to ycm or deoplete
 
-" Plug 'jeaye/color_coded'
-
-" Plug 'klen/python-mode'
-
-function! JediDisabled()
-  " Plug 'davidhalter/jedi-vim'
-  let g:jedi#auto_vim_configuration = 0
-  let g:jedi#popup_on_dot = 0
-  let g:jedi#popup_select_first = 0
-  let g:jedi#completions_enabled = 0
-  let g:jedi#completions_command = ""
-  let g:jedi#show_call_signatures = "1"
-
-  let g:jedi#goto_assignments_command = "<leader>pa"
-  let g:jedi#goto_definitions_command = "<leader>pd"
-  let g:jedi#documentation_command = "<leader>pk"
-  let g:jedi#usages_command = "<leader>pu"
-  let g:jedi#rename_command = "<leader>pr"
-endfunction
-
-" Plug 'scrooloose/syntastic'
-
-"project management
-" Plug 'project.tar.gz'
-
 "bindings
 
 "shell/terminal emulation
@@ -184,8 +171,7 @@ endfunction
 "file management
 " Plug 'xolox/vim-misc'
 " Plug 'xolox/vim-notes'
-Plug 'vimwiki/vimwiki', { 'on': 'VimwikiIndex'}
-nnoremap <Leader>ww <Plug>VimwikiIndex
+Plug 'vimwiki/vimwiki'
 let wiki = {}
 let wiki.path = expand('~/projects/vimwiki/')
 let wiki.syntax = 'markdown'
@@ -270,7 +256,8 @@ Plug 'honza/vim-snippets'
 " map <Leader>e <Plug>(easymotion-prefix)
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle'}
 Plug 'Chiel92/vim-autoformat'
-Plug 'sjl/gundo.vim'
+" Plug 'sjl/gundo.vim' " replaced with undotree
+Plug 'mbbill/undotree'
 Plug 'tpope/vim-repeat'
 Plug 'vim-scripts/visualrepeat'
 "new alignment plugin, CR from visual mode to use
@@ -297,36 +284,7 @@ call plug#end()
 let mapleader      = ','
 let maplocalleader = ','
 
-autocmd FileType vim setlocal omnifunc=Vim_complete
-
-function! s:get_input() abort
-  let col = col( '.' )
-  let line = getline( '.' )
-  if col - 1 < len( line )
-    return matchstr( line, '^.*\%' . col . 'c' )
-  endif
-  return line
-endfunction
-
-function! Vim_complete(findstart, base) abort
-  let line_prefix = s:get_input()
-  if a:findstart
-    let ret = necovim#get_complete_position(line_prefix)
-    if ret < 0
-      return col( '.' ) " default to current
-    endif
-    return ret
-  else
-    let candidates = necovim#gather_candidates(line_prefix . a:base, a:base)
-    let filtered_candidates = []
-    for candidate in candidates
-      if candidate.word =~? '^' . a:base
-        call add(filtered_candidates, candidate)
-      endif
-    endfor
-    return filtered_candidates
-  endif
-endfunctio
+autocmd FileType vim setlocal omnifunc=helpers#Vim_complete
 
 " Alignment mapping to enter in visual mode
 vmap <CR> <Plug>(EasyAlign)
@@ -352,26 +310,6 @@ map <Leader>vq :VimuxCloseRunner<CR>
 " Interrupt any command running in the runner pane
 map <Leader>vx :VimuxInterruptRunner<CR>
 
-
-"" add neocomplcache option
-"let g:neocomplcache_force_overwrite_completefunc=1
-
-"let g:neocomplcache_enable_at_startup = 1
-"let g:neocomplcache_disable_auto_complete = 1
-"" Plugin key-mappings.
-"imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-"smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-
-"" SuperTab like snippets behavior.
-"imap <expr><TAB> neosnippet#expandable() <Bar><bar> neosnippet#jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? "\<C-n>" : "\<TAB>"
-"smap <expr><TAB> neosnippet#expandable() <Bar><bar> neosnippet#jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-"inoremap <expr><Tab>  neocomplcache#start_manual_complete()
-
-"" For snippet_complete marker.
-"let g:neosnippet#snippets_directory="~/.vim/included-old/snipmate/snippets/"
-"if has('conceal')
-"set conceallevel=2 concealcursor=i
-"endif
 
 "Unite and denite
 let  g:notes_directories = ['~/Projects/notes']
@@ -586,25 +524,6 @@ command! -bang -nargs=* Ag
       \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
       \                 <bang>0)
 
-function! FilesOrGfiles()
-  if finddir('.git', ';') != ''
-    :GFiles
-  else
-    :Files
-  endif
-endfunction
-
-function! AgWithParam()
-  call inputsave()
-  let pattern = input('Enter pattern: ')
-  call inputrestore()
-  execute "Ag " . pattern
-endfunction
-
-function! TagsWithCword()
-  execute "Tags " . expand('<cword>')
-endfunction
-
 " fzf version of the mappings, experimental
 nnoremap <silent> <leader>fr  :call FilesOrGfiles()<CR>
 nnoremap <silent> <leader>fb  :History<CR>
@@ -684,14 +603,6 @@ nnoremap <leader>yf :YcmCompleter FixIt<CR>
 nnoremap <leader>yt :YcmCompleter GetType<CR>
 nnoremap <leader>yp :YcmCompleter GetParent<CR>
 nnoremap <leader>yd :YcmCompleter GetDoc<CR>
-"attempt to fix the awful latex input behavior
-" set omnifunc=syntaxcomplete#Complete
-" let g:ycm_semantic_triggers = {
-"       \  'tex'  : ['{'],
-"       \ }
-" let g:ycm_filetype_blacklist = {
-"       \ 'tex' : 1
-"       \}
 
 let g:ycm_semantic_triggers =  {
       \ 'c' : ['_'],
@@ -719,7 +630,7 @@ let g:vimsyn_embed = 'lP'
 let g:sh_fold_enabled= 7 "    (enable all folding)
 set vb
 set t_vb=
-syn on
+" syn on
 set ruler
 set nowrap
 
@@ -735,20 +646,12 @@ set suffixes+=.pdf,.eps,.epsi,.png,.jpg,.svg
 set suffixes+=.log,.out,.bbl,.blg,.fls,.fdb_latexmk,.synctex.gz,.aux,.latexmain
 " set suffixes+=*.xls,*.xlsx,*.ppt,*.pptx,*.doc,*.docx,*.graffle
 
-"outliner checkboxes
-augroup filetype_otl
-  autocmd!
-  au FileType otl source ~/.vim/plugin/vo_checkbox.vim
-  au FileType otl setlocal spell spelllang=en_us
-augroup END
-
 "additional buffer types
 augroup extra_filetypes
   autocmd!
   au BufNewFile,BufRead *.cu           set      ft=cuda
   au BufNewFile,BufRead *.cuh          set      ft=cuda
   au BufNewFile,BufRead *.cl           set      ft=opencl
-  au BufNewFile,BufRead *.br           set      ft=brook
   au BufNewFile,BufRead *.go           set      ft=go
   au FileType           go             setlocal formatprg=gofmt
   au BufRead            COMMIT_EDITMSG set      backupcopy=no
@@ -757,69 +660,9 @@ augroup extra_filetypes
   au BufNewFile,BufRead CMakeCache.txt set      ft=cmake
 augroup END
 
-"remove ending whitespace on file write
-fun! <SID>StripTrailingWhitespaces()
-  let save_cursor = getpos(".")
-  let old_query = getreg('/')
-  :%s/\s\+$//e
-  call setpos('.', save_cursor)
-  call setreg('/', old_query)
-endfun
 " Save a file as root (,W)
 noremap <leader>W :w !sudo tee % > /dev/null<CR>
 
-" augroup extra_filetypes
-" autocmd!
-" autocmd BufWritePre <buffer> :call <SID>StripTrailingWhitespaces()
-" augroup END
-
-" Disable spell checking in comments
-let g:tex_comment_nospell= 1
-fun! TeX_fmt()
-  if (getline(".") != "")
-    let save_cursor = getpos(".")
-    let op_wrapscan = &wrapscan
-    set nowrapscan
-    let par_begin = '^\(%D\)\=\s*\($\|\\begin\|\\end\|\\Start\|\\Stop\|\\\(sub\)*section\>\|\\item\>\|\\NC\>\|\\blank\>\|\\noindent\>\)'
-    let par_end   = '^\(%D\)\=\s*\($\|\\begin\|\\end\|\\Start\|\\Stop\|\\place\|\\\(sub\)*section\>\|\\item\>\|\\NC\>\|\\blank\>\)'
-    try
-      exe '?'.par_begin.'?+'
-    catch /E384/
-      1
-    endtry
-    norm V
-    try
-      exe '/'.par_end.'/-'
-    catch /E385/
-      $
-    endtry
-    norm gq
-    let &wrapscan = op_wrapscan
-    call setpos('.', save_cursor)
-  endif
-endfun
-
-"CODE LINTING
-let g:syntastic_tex_checkers=[] "do NOT check latex files
-" let g:syntastic_cpp_checkers=['cpplint']
-let g:syntastic_python_checkers=['pylint', 'pep8', 'python']
-let g:syntastic_python_pylint_args=' --indent-string="    "'
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 0
-let g:syntastic_check_on_wq = 0
-let g:syntastic_mode_map = {
-      \ "mode": "passive",
-      \ "active_filetypes": [],
-      \ "passive_filetypes": [] }
-
-" if executable("astyle")
-"     "astyle args for C and C++
-"     let g:formatdef_my_custom_astyle = '"--indent-col1-comments --style=stroustrup -A4 --align-pointer=name --max-code-length=80 --convert-tabs"'
-"     let g:formatters_c = ['my_custom_astyle'] + g:formatters_c
-"     let g:formatters_cpp = ['my_custom_astyle'] + g:formatters_cpp
-"     " let g:formatprg_args_expr_c = '"--mode=c --style=google --add-brackets --indent-preproc-define --keep-one-line-statements -pcH".(&expandtab ? "s".&shiftwidth : "t")'
-" endif
 
 "automatic formatting options
 set textwidth=80
@@ -832,8 +675,6 @@ set formatoptions=crq
 " au FileType tex set formatoptions+=a
 augroup text_formatting
   autocmd!
-  au FileType tex setlocal formatoptions+=t
-  au FileType tex setlocal formatexpr=cindent
   au FileType txt setlocal formatoptions+=t
   au FileType txt setlocal formatexpr=cindent
 augroup END
@@ -844,13 +685,7 @@ let python_highlight_all = 1
 "there is no local value for fp, must set other languages to use cindent
 "manually
 
-map      <C-k>     :Autoformat<CR>
-noremap  <C-k>     :Autoformat<CR>
-nnoremap <C-k>     :Autoformat<CR>
-vmap     <C-k>     <Esc>:Autoformat<CR>
-imap     <C-k>     <Esc>:Autoformat<CR>
-omap     <C-k>     <Esc>:Autoformat<CR>
-
+call helpers#Map_for_all("<C-k>", ":Autoformat<CR>", 1, 0, 0)
 
 
 " use ascii symbols instead of unicode, expariment
@@ -865,6 +700,8 @@ omap     <C-k>     <Esc>:Autoformat<CR>
 " let g:airline#extensions#csv#enabled = 1
 let g:airline_highlighting_cache = 1
 let g:airline#extensions#whitespace#enabled=0
+" let g:airline_extensions = ["tmuxline","branch","tagbar","quickfix","denite","csv","netrw","term","vimtex"]
+let g:airline_extensions = ["branch","tagbar","quickfix","denite","csv","netrw","term","vimtex","undotree","windowswap","gutentags","fugitiveline"]
 set timeoutlen=300
 set ttimeoutlen=10
 
@@ -875,8 +712,10 @@ if InGui()
     set macmeta
     set transparency=10
     " set gfn=Courier\ New:h11.00
-    set gfn=ProFontX:h9.00
-    set noantialias
+    " set gfn=ProFontX:h9.00
+    " expariment to get italic monospace variant with full powerline support
+    set gfn=Hack\ Regular\ Nerd\ Font\ Complete:h10
+    set antialias
     set fuopt=maxvert,maxhorz
   elseif has("gui_gtk2")
     set guifont=Terminus\ 8
@@ -905,51 +744,9 @@ if InGui()
   endif
 endif
 
-function! Map_for_all(mapping, target, ...)
-  let l:for_input = (a:0 >= 1) ? a:1 : 0
-  let l:for_cmd = (a:0 >= 2) ? a:2 : 0
-  let l:for_terminal = (a:0 >= 3) ? a:3 : 0
-
-  for item in ['nnoremap', 'vmap', 'omap']
-    execute item . ' ' . a:mapping . ' ' . a:target
-  endfor
-
-  if has("nvim") || has('terminal')
-    if l:for_terminal != 0
-      execute 'tnoremap '.a:mapping.' <C-\><C-n>'.a:target
-    endif
-  endif
-
-  if l:for_cmd != 0
-    execute 'cmap '.a:mapping.' '.a:target
-  endif
-
-  if l:for_input > 1
-    execute 'imap ' . a:mapping . ' <esc>' . a:target
-  else
-    execute 'imap ' . a:mapping . ' ' . a:target
-  endif
-endfunction
-
-function! Map_for_all_meta(mapping, target, ...)
-  let l:for_input = (a:0 >= 1) ? a:1 : 2
-  let l:for_cmd = (a:0 >= 2) ? a:2 : 1
-  let l:for_terminal = (a:0 >= 3) ? a:3 : 1
-
-  call Map_for_all('<A-'.a:mapping.'>', a:target, l:for_input, l:for_cmd, l:for_terminal)
-  let l:mapping = split(a:mapping, '-')
-  if len(l:mapping) == 2 && l:mapping[0] == "S"
-    let l:mapping = toupper(l:mapping[1])
-  else
-    let l:mapping = a:mapping
-  endif
-  call Map_for_all('<Esc>'.l:mapping, a:target, l:for_input, l:for_cmd, l:for_terminal)
-endfunction
-
-
 "Normalize backspace
 set t_kb=
-call Map_for_all("", "<BS>", 1, 1)
+call helpers#Map_for_all("", "<BS>", 1, 1)
 
 if &term =~ "screen.*" "screen configurations
   if &term =~ "screen.*-bce"
@@ -963,18 +760,18 @@ if &term =~ "screen.*" "screen configurations
   set t_@7=OF
   set t_kh=[1~
 
-  call Map_for_all("<Esc>[C", "<Right>", 1, 1)
-  call Map_for_all("<Esc>[D", "<Left>", 1, 1)
-  call Map_for_all("<Esc>[A", "<Up>", 1, 1)
-  call Map_for_all("<Esc>[B", "<Down>", 1, 1)
+  call helpers#Map_for_all("<Esc>[C", "<Right>", 1, 1)
+  call helpers#Map_for_all("<Esc>[D", "<Left>", 1, 1)
+  call helpers#Map_for_all("<Esc>[A", "<Up>", 1, 1)
+  call helpers#Map_for_all("<Esc>[B", "<Down>", 1, 1)
 
-  call Map_for_all("<Esc>[4~", "<End>", 1, 1)
-  call Map_for_all("<Esc>[1~", "<Home>", 1, 1)
+  call helpers#Map_for_all("<Esc>[4~", "<End>", 1, 1)
+  call helpers#Map_for_all("<Esc>[1~", "<Home>", 1, 1)
 
-  call Map_for_all("<Esc>0F", "<End>", 1, 1)
-  call Map_for_all("<Esc>OH", "<Home>", 1, 1)
-  call Map_for_all("<Esc>[F", "<End>", 1, 1)
-  call Map_for_all("<Esc>[H", "<Home>", 1, 1)
+  call helpers#Map_for_all("<Esc>0F", "<End>", 1, 1)
+  call helpers#Map_for_all("<Esc>OH", "<Home>", 1, 1)
+  call helpers#Map_for_all("<Esc>[F", "<End>", 1, 1)
+  call helpers#Map_for_all("<Esc>[H", "<Home>", 1, 1)
 endif
 
 
@@ -992,24 +789,12 @@ nmap gyy mz:t-1<cr>gcc`zmz
 " imap gyy <esc>:t-1<cr>gCcgi
 vmap gcc gc
 
-" nnoremap <Leader>x :call NERDComment(0,"toggle")<C-m>
-" vmap <Leader>x :call NERDComment(0,"toggle")<C-m>
-" let g:NERDRemoveExtraSpaces=1
-" let g:NERDRemoveExtraSpaces=1
-" let g:NERDSpaceDelims=1
-
 "map <Leader>x <plug>NERDCommenterToggleComment
 " Follow links with ,o
 nnoremap <Leader>o :Utl ol<CR>
 let g:utl_cfg_hdl_scm_http_system = 'silent !open "%u"'
 let g:utl_cfg_hdl_scm_http = 'silent !open "%u"'
 let g:utl_cfg_hdl_mt_generic = 'silent !open "%p"'
-
-imap <A-x> <Esc><Plug>Traditionala
-imap <Esc>x <Esc><Plug>Traditionala
-
-"csupport, but very commentify related...
-let g:C_TypeOfH="c"
 
 "editing behavior
 set history=10000
@@ -1028,7 +813,7 @@ set modelines=5
 " Optimize for fast terminal connections
 set ttyfast
 " Use UTF-8 without BOM
-set encoding=utf-8 nobomb
+" set encoding=utf-8 nobomb " covered by sensible
 " Centralize backups, swapfiles and undo history, make dropbox happy!
 call FindOrCreate("~/.vim-backups")
 set backupdir=~/.vim-backups
@@ -1076,15 +861,6 @@ set scrolloff=3
 " Start scrolling three lines before the horizontal window border
 set sidescrolloff=3
 
-" Append modeline after last line in buffer.
-" Use substitute() instead of printf() to handle '%%s' modeline in LaTeX
-" files.
-function! AppendModeline()
-  let l:modeline = printf(" vim: set ts=%d sw=%d tw=%d %set :",
-        \ &tabstop, &shiftwidth, &textwidth, &expandtab ? '' : 'no')
-  let l:modeline = substitute(&commentstring, "%s", l:modeline, "")
-  call append(line("$"), l:modeline)
-endfunction
 nnoremap <silent> <Leader>ml :call AppendModeline()<CR>
 
 
@@ -1101,83 +877,9 @@ augroup c_setup
   au FileType c set foldmethod=syntax
 augroup END
 
-"latex options
-let g:LatexBox_viewer = 'open -a Skim'
-let g:LatexBox_quickfix = 0
-let g:LatexBox_latexmk_options = '-pdf -shell-escape' "latter is needed for pygments
-let g:LatexBox_latexmk_preview_continuously=0
-let g:tex_flavor='latex'
-let g:Imap_FreezeImap=1
-let g:Tex_FormatDependency_pdf = 'pdf'
-if has('macunix')
-  let g:Tex_ViewRule_pdf = 'open '
-  let g:Tex_ViewRuleComplete_pdf = 'open $*.pdf'
-elseif has('unix')
-  let g:Tex_ViewRule_pdf = 'evince '
-  let g:Tex_ViewRuleComplete_pdf = 'evince $*.pdf'
-endif
-map <silent> <Leader>ls :silent
-      \ !/Applications/Skim.app/Contents/SharedSupport/displayline
-      \ <C-R>=line('.')<CR> "<C-R>=LatexBox_GetOutputFile()<CR>"
-      \ "%:p" <CR>
-nmap <silent> <Leader>wc bi\code{<esc>ea}<esc>
-vmap <silent> <Leader>wc di\code{}<esc>P
-
-let g:Tex_DefaultTargetFormat = 'pdf'
-
-let g:Tex_CompileRule_pdf = 'pdflatex -synctex=1 --interaction=nonstopmode $*'
-
-let g:Tex_ViewRule_pdf = 'Skim'
-
-" let g:Tex_IgnoredWarnings ='
-"       \"Underfull\n".
-"       \"Overfull\n".
-"       \"specifier changed to\n".
-"       \"You have requested\n".
-"       \"Missing number, treated as zero.\n".
-"       \"There were undefined references\n".
-"       \"Citation %.%# undefined\n".
-"       \"\oval, \circle, or \line size unavailable\n"'
-
-nmap wip diwi\plc{}<Esc>P
-nmap wic diwi\code{}<Esc>P
-
-function! Find_main_latex()
-  let latexmain = findfile("paper.tex", ".;")
-  if (!empty(latexmain))
-    return latexmain
-  endif
-  let latexmain = findfile("header.tex", ".;")
-  if (!empty(latexmain))
-    return latexmain
-  endif
-  let basedir = finddir(".git", ".;")
-  if (isdirectory(basedir))
-    let latexmain = glob(basedir . "/*.latexmain")
-    if (filereadable(latexmain))
-      return substitute(latexmain, ".latexmain", "", "")
-    endif
-  endif
-  return ""
-endfunction
 
 augroup text_setup
   autocmd!
-  au FileType tex let g:Tex_DefaultTargetFormat='pdf'
-  au FileType tex setlocal spell spelllang=en_us
-  " au FileType tex imap <C-x><C-p> <Plug>Tex_Completion
-  au FileType tex imap <buffer> <C-b> <Plug>Tex_MathBF
-  au FileType tex imap <buffer> <C-l> <Plug>Tex_LeftRight
-  " conflict with ctrl-p
-  " au FileType tex imap <buffer> <C-p> <Plug>Tex_InsertItemOnThisLine
-  au FileType tex imap <buffer> <A-i> <Plug>Tex_InsertItemOnThisLine
-  au FileType tex imap <buffer> <Esc>i <Plug>Tex_InsertItemOnThisLine
-  au FileType tex let b:main_tex_file=Find_main_latex()
-
-  " Highlight words I might use to mess up grammar
-  au FileType tex highlight whichthat ctermfg=Magenta guifg=#515996
-  "ctermfg=black
-  au FileType tex match whichthat /\(\swhich\s\|\sthat\s\)/
 
   au FileType txt set textwidth=80
   au FileType txt setlocal spell spelllang=en_us
@@ -1228,7 +930,7 @@ endfunction
 "general key remappings
 nmap Y y$
 
-" call Map_for_all("<C-c>","<Esc>", 1, 1)
+" call helpers#Map_for_all("<C-c>","<Esc>", 1, 1)
 
 map <S-Z><S-S> :up<CR>
 
@@ -1237,27 +939,9 @@ if ! InGui()
   "new experiment, using xterm clipboard escapes for copy portability, no paste
   "(I think..?)
 
-  vmap <silent> <A-c>        :Oscyank<CR>
-  vmap <silent> <Esc>c       :Oscyank<CR>
-  nmap <silent> <A-c>        :Oscyank<CR>
-  nmap <silent> <Esc>c       :Oscyank<CR>
+  noremap <silent> <A-c>        :Oscyank<CR>
+  noremap <silent> <Esc>c       :Oscyank<CR>
 
-  "if $TMUX "TODO: get copy support for tmux, need to figure out what mappings
-  "make sense...
-  "vmap <silent> <A-C>        "py:call eval('system("tmux set-buffer \'" . @p . "\'")')<CR>
-  "vmap <silent> <Esc>C       "py:call eval('system("tmux set-buffer \'" . @p . "\'")')<CR>
-  "vmap <silent> <A-V>        dh:call Paste_proper()<CR>
-  "vmap <silent> <Esc>V       dh:call Paste_proper()<CR>
-  "imap <silent> <A-V>        <Esc>: call Paste_proper()<CR>
-  "imap <silent> <Esc>V       <Esc>: call Paste_proper()<CR>
-  "nmap <silent> <A-C>        :yank p<CR>:call Yank_proper()<CR>
-  "nmap <silent> <Esc>C       :yank p<CR>:call Yank_proper()<CR>
-  "nmap <silent> <A-V>        :call Paste_proper()<CR>
-  "nmap <silent> <Esc>V       :call Paste_proper()<CR>
-  "endif
-  "nnoremap <special> <A-c> "*Y
-  " cnoremap <special> <A-c> <C-R>+
-  "vnoremap <special> <A-c> "*y
   if has('macunix')
     let tmux_reattach_prefix="reattach-to-user-namespace"
     if (! executable(tmux_reattach_prefix))
@@ -1279,63 +963,10 @@ if ! InGui()
     nmap <silent> <Esc>v       :call Paste_proper()<CR>
   endif
 
-  function! Old_yank_support()
-    if $ITERM_PROFILE
-      vmap <C-y> y:call system("xclip", getreg("\""))<CR>
-      "attempt to yank through iterm2 termcode
-      function! Yank_proper()
-        "each mode needs different copy, see below mappings
-        " echo system("cat << StringNotLikelyToBeCopied\n" . getreg("p") . "\nStringNotLikelyToBeCopied")
-        if has("python")
-          python import vim, sys, subprocess
-          python p=subprocess.Popen(["cat"], stdin=subprocess.PIPE)
-          python p.stdin.write('\033]50;CopyToClipboard=')
-          python p.stdin.write(vim.eval('getreg("p")'))
-          python p.stdin.write('\033]50;EndCopy')
-          python p.stdin.close()
-        elseif has("python3")
-          python3 import vim, sys, subprocess
-          python3 p=subprocess.Popen(["cat"], stdin=subprocess.PIPE)
-          python3 p.stdin.write('\033]50;CopyToClipboard=')
-          python3 p.stdin.write(vim.eval('getreg("p")'))
-          python3 p.stdin.write('\033]50;EndCopy')
-          python3 p.stdin.close()
-        endif
-        redraw!
-      endfunction
-      vmap <silent> <A-c>        "py:call Yank_proper()<CR>
-      vmap <silent> <Esc>c       "py:call Yank_proper()<CR>
-      nmap <silent> <A-c>        :yank p<CR>:call Yank_proper()<CR>
-      nmap <silent> <Esc>c       :yank p<CR>:call Yank_proper()<CR>
-    elseif has('macunix')
-      function! Yank_proper()
-        "each mode needs different copy, see below mappings
-        call system(g:tmux_reattach_prefix . " pbcopy", getreg("p"))
-      endfunction
-
-      vmap <silent> <A-c>        "py:call Yank_proper()<CR>
-      vmap <silent> <Esc>c       "py:call Yank_proper()<CR>
-      nmap <silent> <A-c>        :yank p<CR>:call Yank_proper()<CR>
-      nmap <silent> <Esc>c       :yank p<CR>:call Yank_proper()<CR>
-    endif
-  endfunction
-  " execute 'inoremap <script> <special> <A-c>' paste#paste_cmd['i']
-  " nnoremap <special> <Esc>c "+gP
-  " cnoremap <special> <Esc>c <C-R>+
-  " execute 'cnoremap <script> <special> <Esc>c' paste#paste_cmd['c']
-  " execute 'inoremap <script> <special> <Esc>c' paste#paste_cmd['i']
-  "nnoremap <special> <A-v> "+gP
-  "cnoremap <special> <A-v> <C-R>+
-  "execute 'vnoremap <script> <special> <A-v>' paste#paste_cmd['v']
-  "execute 'inoremap <script> <special> <A-v>' paste#paste_cmd['i']
-  "nnoremap <special> <Esc>v "+gP
-  "cnoremap <special> <Esc>v <C-R>+
-  "execute 'vnoremap <script> <special> <Esc>v' paste#paste_cmd['v']
-  "execute 'inoremap <script> <special> <Esc>v' paste#paste_cmd['i']
-  call Map_for_all("<Esc>[1;3C", "<End>", 1, 1)
-  call Map_for_all("<Esc>[1;3D", "<Home>", 1, 1)
-  call Map_for_all("<Esc>[1;9D", "<C-Left>", 1, 1)
-  call Map_for_all("<Esc>[1;9C", "<C-Right>", 1, 1)
+  call helpers#Map_for_all("<Esc>[1;3C", "<End>", 1, 1)
+  call helpers#Map_for_all("<Esc>[1;3D", "<Home>", 1, 1)
+  call helpers#Map_for_all("<Esc>[1;9D", "<C-Left>", 1, 1)
+  call helpers#Map_for_all("<Esc>[1;9C", "<C-Right>", 1, 1)
 
 endif
 
@@ -1356,10 +987,10 @@ endif
 " if ! has("gui_running")
 "alt
 "tab management
-call Map_for_all_meta('t', ":tabnew<CR>", 2, 1, 1)
-call Map_for_all_meta('}', ":tabnext<CR>", 2, 1, 1)
-call Map_for_all_meta('{', ":tabprevious<CR>", 2, 1, 1)
-call Map_for_all_meta('w', ":tabclose<CR>", 2, 1, 1)
+call helpers#Map_for_all_meta('t', ":tabnew<CR>", 2, 1, 1)
+call helpers#Map_for_all_meta('}', ":tabnext<CR>", 2, 1, 1)
+call helpers#Map_for_all_meta('{', ":tabprevious<CR>", 2, 1, 1)
+call helpers#Map_for_all_meta('w', ":tabclose<CR>", 2, 1, 1)
 
 "Powerline
 set laststatus=2 "keeps the statusbar on
@@ -1374,17 +1005,17 @@ set wildmenu
 set wildmode=longest:list,full
 set foldmethod=syntax
 " set foldcolumn=1 " show fold depth in the gutter
-filetype indent on
-filetype plugin on
+" filetype indent on " covered by sensible
+" filetype plugin on
 
 "winmanager
 let g:winManagerWindowLayout = "Project|TagList"
 
 "window switching
-call Map_for_all_meta("S-h", "<C-w>h", 2, 0, 1)
-call Map_for_all_meta("S-j", "<C-w>j", 2, 0, 1)
-call Map_for_all_meta("S-k", "<C-w>k", 2, 0, 1)
-call Map_for_all_meta("S-l", "<C-w>l", 2, 0, 1)
+call helpers#Map_for_all_meta("S-h", "<C-w>h", 2, 0, 1)
+call helpers#Map_for_all_meta("S-j", "<C-w>j", 2, 0, 1)
+call helpers#Map_for_all_meta("S-k", "<C-w>k", 2, 0, 1)
+call helpers#Map_for_all_meta("S-l", "<C-w>l", 2, 0, 1)
 
 if has("nvim")
   tnoremap <C-w> <C-\><C-n><C-w>
@@ -1392,57 +1023,17 @@ endif
 
 " let g:vimfiler_as_default_explorer = 1
 let g:vimfiler_as_default_explorer = 0
-function! ToggleVExplorer()
-  if g:vimfiler_as_default_explorer
-    VimFilerExplorer
-  else
-    if exists("t:expl_buf_num")
-      let expl_win_num = bufwinnr(t:expl_buf_num)
-      if expl_win_num != -1
-        let cur_win_nr = winnr()
-        exec expl_win_num . 'wincmd w'
-        close
-        exec cur_win_nr . 'wincmd w'
-        unlet t:expl_buf_num
-      else
-        unlet t:expl_buf_num
-      endif
-    else
-      exec '1wincmd w'
-      Vexplore
-      exec 'wincmd H'
-      let t:expl_buf_num = bufnr("%")
-    endif
-  endif
-endfunction
 
-nnoremap <silent> <M-f>      :call ToggleVExplorer()<CR>
-nnoremap <silent> <A-S-f>    :call ToggleVExplorer()<CR>
-nnoremap <silent> <Esc><S-f> :call ToggleVExplorer()<CR>
-nnoremap <silent> <D-F>      :call ToggleVExplorer()<CR>
-nmap     <silent> <F3>       :call ToggleVExplorer()<CR>
+nnoremap <silent> <M-f>      :call helpers#ToggleVExplorer()<CR>
+nnoremap <silent> <A-S-f>    :call helpers#ToggleVExplorer()<CR>
+nnoremap <silent> <Esc><S-f> :call helpers#ToggleVExplorer()<CR>
+nnoremap <silent> <D-F>      :call helpers#ToggleVExplorer()<CR>
+nmap     <silent> <F3>       :call helpers#ToggleVExplorer()<CR>
 let g:netrw_liststyle = 4
 " let g:netrw_home      = '~/.vim'
 
 " clear search, close preview, redraw
 nnoremap <silent> <C-L> :pc<CR>:noh<CR><C-L>
-"project plugin options
-" map           <A-S-o> :Project<CR>:redraw<CR>
-" map           <Esc><S-o> :Project<CR>:redraw<CR>
-" map           <D-O> :Project<CR>:redraw<CR>
-" replaced with netrw for now
-" nnoremap   <silent>   <A-S-f> :NERDTreeToggle<CR>
-" nnoremap   <silent>   <Esc><S-f> :NERDTreeToggle<CR>
-" nnoremap   <silent>   <D-F> :NERDTreeToggle<CR>
-" map  <silent>         <A-S-p> <Plug>ToggleProject
-" map  <silent>         <Esc><S-p> <Plug>ToggleProject
-" map  <silent>         <D-P> <Plug>ToggleProject
-" nmap <silent> <F3>    <Plug>ToggleProject
-let g:proj_run1 = "!open %f"
-let g:proj_window_width = 30
-let g:proj_window_increment = 50
-let g:proj_run_fold1 = ":!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q -f - %f > %d/tags"
-
 
 " --------------------
 " TagList
@@ -1466,14 +1057,6 @@ if !has("nvim")
     set ttymouse=xterm2
   endif
 endif
-
-
-
-" Highlight words I might use to mess up grammar
-au FileType tex highlight whichthat ctermfg=Magenta guifg=#515996
-"ctermfg=black
-au FileType tex match whichthat /\(\swhich\s\|\sthat\s\)/
-
 
 " colorscheme solarized
 if &term =~ ".*256color.*" || has("gui_running")
@@ -1504,7 +1087,6 @@ let g:solarized_termcolors=256
 let g:solarized_termtrans = 1
 " colorscheme solarized
 
-colorscheme jellybeans
 if exists("$TERM_PROGRAM") && $TERM_PROGRAM == 'iTerm.app'
   if exists("$ITERM_PROFILE")
     if $ITERM_PROFILE == 'Monokai'
