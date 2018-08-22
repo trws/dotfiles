@@ -33,6 +33,14 @@ if typeset -f '[' > /dev/null ; then
     unset -f '['
 fi
 
+export EDITOR='vim'
+export VISUAL='vim'
+if [[ -x "$(command -v vimpager)" ]] ; then
+export PAGER='vimpager'
+else
+export PAGER='less'
+fi
+
 export _Z_NO_PROMPT_COMMAND=1
 export _Z_DATA=$ZSH_CACHE_DIR/z-dirjump-list.txt
 # export _Z_OWNER=$USER
@@ -96,6 +104,8 @@ done
 
 # completion
 setopt ALWAYS_TO_END
+autoload bashcompinit
+bashcompinit
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 

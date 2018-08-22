@@ -1,3 +1,8 @@
+Host deb
+    User scogland
+    HostName localhost
+    Port 3127
+
 Host green500
     Protocol 2
     User green55

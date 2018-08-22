@@ -108,7 +108,8 @@ zstyle ':prezto:module:git:status:ignore' submodules 'all'
 # Auto set to 'off' on dumb terminals.
 # make sure my prompt shows up
 fpath=($ZDOTDIR/funcs $fpath)
-zstyle ':prezto:module:prompt' theme 'mysteeef'
+# zstyle ':prezto:module:prompt' theme 'mysteeef'
+zstyle ':prezto:module:prompt' theme 'mypure'
 
 # Set how themes that use promptpwd function display the pwd, can be 'short', 'long', or 'full'
 # zstyle ':prezto:module:prompt' pwd-length 'short'
