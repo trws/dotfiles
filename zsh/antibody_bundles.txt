@@ -1,0 +1,26 @@
+mafredri/zsh-async
+
+zsh-users/zsh-completions
+
+sorin-ionescu/prezto
+sorin-ionescu/prezto folder:modules/environment
+sorin-ionescu/prezto folder:modules/terminal
+sorin-ionescu/prezto folder:modules/editor
+sorin-ionescu/prezto folder:modules/git
+sorin-ionescu/prezto folder:modules/gnu-utility
+sorin-ionescu/prezto folder:modules/homebrew
+sorin-ionescu/prezto folder:modules/osx
+sorin-ionescu/prezto folder:modules/python
+sorin-ionescu/prezto folder:modules/tmux
+sorin-ionescu/prezto folder:modules/history
+sorin-ionescu/prezto folder:modules/directory
+sorin-ionescu/prezto folder:modules/spectrum
+sorin-ionescu/prezto folder:modules/utility
+# copied to zsh/completions.zsh
+# sorin-ionescu/prezto folder:modules/completion
+sorin-ionescu/prezto folder:modules/docker
+
+sorin-ionescu/prezto folder:modules/autosuggestions
+
+sorin-ionescu/prezto folder:modules/syntax-highlighting
+sorin-ionescu/prezto folder:modules/history-substring-search
