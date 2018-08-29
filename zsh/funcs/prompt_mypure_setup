@@ -444,7 +444,7 @@ prompt_pure_async_callback() {
 	unset prompt_pure_async_render_requested
 }
 
-prompt_pure_setup() {
+prompt_mypure_setup() {
 	# Prevent percentage showing up if output doesn't end with a newline.
 	export PROMPT_EOL_MARK=''
 
@@ -483,4 +483,4 @@ prompt_pure_setup() {
 	PROMPT+='%(?.%F{magenta}.%F{red}$? )${PURE_PROMPT_SYMBOL:-❯}%f '
 }
 
-prompt_pure_setup "$@"
+prompt_mypure_setup "$@"

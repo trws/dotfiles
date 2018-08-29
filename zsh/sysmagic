@@ -15,7 +15,7 @@ solaris*)
 	bintype="`bintype -os`"
 	;;
 linux*)
-	system=Linux
+	system=linux
 	bintype=$MACHTYPE-linux
 	bintype=${bintype/i?86/i386} # is this wanted?
 	  if [[ -e /etc/gentoo-release ]]; then distro=gentoo
@@ -33,9 +33,10 @@ darwin*)
 }
 
 export SYSTEM=$system
-zshuse=($zshuse $system $distro site-$domain site-$host)
+export ARCH="$(uname -m)"
+export SYS_TYPE="${SYS_TYPE:-$system-$ARCH}"
+zshuse=($zshuse $system $distro site-$domain site-$host $ARCH)
 typeset -U zshuse # needed because $domain may== $host
 
 gotroot=0
 
-[[ -f $ZDOTDIR/mine/ihaveroot ]] && source $ZDOTDIR/mine/ihaveroot

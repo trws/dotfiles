@@ -14,20 +14,26 @@ export MAKEOBJDIRPREFIX=~/.cache/global-obj
 export GTAGS_OPTIONS='-O --gtagslabel ctags'
 export GTAGSLIBPATH=/opt/local/include:/usr/local/include:/usr/include:/Developer/Headers:~/programs/include
 
-#Gentoo prefix setup
-[[ -d ~/programs ]] && export EPREFIX=~/programs
-
-[[ -f ~/perl5/perlbrew/etc/bashrc ]] && source ~/perl5/perlbrew/etc/bashrc
-
+# handle sending iterm info across SSH, yay for LC_*
 [[ ! -z "$LC_TERM_PROGRAM" ]] && export TERM_PROGRAM=$LC_TERM_PROGRAM
 [[ ! -z "$LC_ITERM_PROFILE" ]] && export ITERM_PROFILE=$LC_ITERM_PROFILE
 [[ -z "$LC_TERM_PROGRAM" ]] && export LC_TERM_PROGRAM=$TERM_PROGRAM
 [[ -z "$LC_ITERM_PROFILE" ]] && export LC_ITERM_PROFILE=$ITERM_PROFILE
 [[ -f ~/.units ]] && export UNITSFILE=~/.units
-LESS=-cex3MRs
+
+# Set the default Less options.
+# Mouse-wheel scrolling has been disabled by -X (disable screen clearing).
+# Remove -X and -F (exit if the content fits on one screen) to enable it.
+export LESS='-F -g -i -M -R -S -w -X -z-4'
+
 ENTOMB=yes
 
-if [ -x vimpager ] ; then
+export EDITOR=vim
+export VISUAL=vim
+
+if [ -x bat ] ; then
+  PAGER=bat
+elif [[ -x "$(command -v vimpager)" ]] ; then
   PAGER=vimpager
 else
   PAGER=less
@@ -36,30 +42,20 @@ fi
 [[ -e ~/.pystartup ]] && export PYTHONSTARTUP=$HOME/.pystartup
 
 [[ -d ~/.terminfo ]] && export TERMINFO=~/.terminfo
-[[ -d ~/build/clang ]] && export PYTHONPATH=~/build/clang/llvm/tools/clang/bindings/python:$PYTHONPATH
-[[ -d ~/build/clang ]] && export LD_LIBRARY_PATH=$(~/build/clang/install/bin/llvm-config --libdir):$LD_LIBRARY_PATH
-#export TERMINFO_DIRS=~/.terminfo:/opt/local/share/terminfo
-FIREFOX_OPEN_IN=tab
+
 (( $gotroot )) && path=($path /usr/local/sbin /sbin /usr/sbin)
 DATE_FMT="%c"
-typeset -x LESS ENTOMB PAGER FIREFOX_OPEN_IN IRCNICK DATE_FMT
+typeset -x LESS ENTOMB PAGER DATE_FMT
 
-export NNTPSERVER="snews://news.purdue.edu"
-export EDITOR=vim
-export VISUAL=vim
 export CVS_RSH=ssh
-export LC_ALL=en_US.UTF-8
-#[[ $TERM = "screen-256color-bce" ]] && infocmp screen-256color >& /dev/null && export TERM=screen-256color || echo screen-256color unavailable, fix it!
+export LANG=en_US.UTF-8
+
 [[ $COLORTERM = "gnome-terminal" ]] && export TERM=xterm-256color
-# if [ -d ~/go ] ; then
-#   export GOROOT=~/go
-# elif [ -d /usr/local/opt/go/libexec ] ; then
-#   export GOROOT=/usr/local/opt/go/libexec
-# fi
-# export GOARCH=amd64
-# export GOBIN=/usr/local/go/bin
+
 [[ -d /usr/local/cuda ]] && export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64:/usr/local/cuda/lib
+
 export PATH
 [[ -e ~/.ssh/github_oauth ]] && export HOMEBREW_GITHUB_API_TOKEN=$(cat ~/.ssh/github_oauth)
+
 export OMP_NESTED=true
 export OMP_MAX_ACTIVE_LEVELS=5

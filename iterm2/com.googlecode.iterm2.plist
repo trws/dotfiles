@@ -1273,7 +1273,7 @@
 	<key>MinimumContrast</key>
 	<real>0.0</real>
 	<key>NSFontPanelAttributes</key>
-	<string>1, 0</string>
+	<string>1, 4</string>
 	<key>NSNavLastRootDirectory</key>
 	<string>~/Downloads</string>
 	<key>NSNavPanelExpandedSizeForOpenMode</key>
@@ -1364,23 +1364,25 @@
 		</array>
 	</dict>
 	<key>NSWindow Frame NSFontPanel</key>
-	<string>623 371 445 323 0 0 2560 1418 </string>
+	<string>1167 272 680 474 0 0 1920 1200 </string>
 	<key>NSWindow Frame ProfilesPanel</key>
-	<string>984 398 735 382 0 0 1920 1178 </string>
+	<string>984 398 735 382 0 0 1920 1200 </string>
+	<key>NSWindow Frame SUAutomaticUpdateAlert</key>
+	<string>972 933 616 174 0 0 2560 1418 </string>
 	<key>NSWindow Frame SUUpdateAlert</key>
 	<string>650 590 620 392 0 0 1920 1178 </string>
 	<key>NSWindow Frame SharedPreferences</key>
-	<string>159 255 796 473 0 0 1920 1178 </string>
+	<string>354 333 937 492 0 0 1920 1178 </string>
 	<key>NSWindow Frame iTerm Window 0</key>
-	<string>0 27 958 1151 0 0 1920 1178 </string>
+	<string>757 599 570 327 0 0 1920 1178 </string>
 	<key>NSWindow Frame iTerm Window 1</key>
-	<string>960 851 490 327 0 0 1920 1178 </string>
+	<string>0 0 1920 1200 0 0 1920 1178 </string>
 	<key>NSWindow Frame iTerm Window 2</key>
-	<string>-959 15 478 327 -1920 20 1920 1058 </string>
+	<string>531 851 570 327 0 0 1920 1178 </string>
 	<key>NSWindow Frame iTerm Window 3</key>
-	<string>960 4 960 1174 0 0 1920 1178 </string>
+	<string>960 851 570 327 0 0 1920 1178 </string>
 	<key>NSWindow Frame iTerm Window 4</key>
-	<string>0 4 955 1174 0 0 1920 1178 </string>
+	<string>0 851 570 327 0 0 1920 1178 </string>
 	<key>NSWindow Frame iTerm Window 5</key>
 	<string>288 359 410 302 0 0 1920 1178 </string>
 	<key>NSWindow Frame iTerm Window 6</key>
@@ -1391,6 +1393,8 @@
 	<array>
 		<dict>
 			<key>ASCII Anti Aliased</key>
+			<true/>
+			<key>ASCII Ligatures</key>
 			<true/>
 			<key>Allow Title Reporting</key>
 			<false/>
@@ -1825,11 +1829,13 @@
 			<key>Name</key>
 			<string>Default</string>
 			<key>Non Ascii Font</key>
-			<string>ProFontX 11</string>
+			<string>ProFontIIxNerdFontCompleteM- 10</string>
 			<key>Non-ASCII Anti Aliased</key>
 			<true/>
+			<key>Non-ASCII Ligatures</key>
+			<true/>
 			<key>Normal Font</key>
-			<string>ProFontX 9</string>
+			<string>ProFontIIxNerdFontCompleteM- 9</string>
 			<key>Option Key Sends</key>
 			<integer>2</integer>
 			<key>Prompt Before Closing 2</key>
@@ -1987,13 +1993,13 @@
 			<key>Unlimited Scrollback</key>
 			<false/>
 			<key>Use Bold Font</key>
-			<false/>
-			<key>Use Bright Bold</key>
 			<true/>
+			<key>Use Bright Bold</key>
+			<false/>
 			<key>Use Canonical Parser</key>
 			<false/>
 			<key>Use Italic Font</key>
-			<false/>
+			<true/>
 			<key>Vertical Spacing</key>
 			<real>0.99155408143997192</real>
 			<key>Visual Bell</key>
@@ -5760,7 +5766,7 @@
 	<key>SUHasLaunchedBefore</key>
 	<true/>
 	<key>SULastCheckTime</key>
-	<date>2018-01-22T18:58:58Z</date>
+	<date>2018-08-24T22:19:32Z</date>
 	<key>SUSendProfileInfo</key>
 	<false/>
 	<key>SavePasteHistory</key>

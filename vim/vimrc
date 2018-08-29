@@ -72,12 +72,14 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 " Plug 'tomtom/quickfixsigns_vim'
 " Plug 'bling/vim-bufferline'
-" Plug 'edkolev/tmuxline.vim'
+Plug 'edkolev/tmuxline.vim'
 
 
 " if executable('task')
 "   Plug 'blindFS/vim-taskwarrior'
 " endif
+
+Plug 'junegunn/vim-peekaboo'
 
 " support for live wrapping
 Plug 'reedes/vim-pencil', { 'for': 'tex'}
@@ -234,6 +236,12 @@ Plug 'tpope/vim-rhubarb'
 
 " cmdline-mode mappings
 Plug 'tpope/vim-rsi'
+let g:rsi_no_meta=1
+noremap!        <M-b> <S-Left>
+noremap!        <M-d> <C-O>dw
+cnoremap        <M-d> <S-Right><C-W>
+noremap!        <M-BS> <C-W>
+noremap!        <M-f> <S-Right>
 " Plug 'critiqjo/husk-x.vim'
 
 " Plug 'airblade/vim-gitgutter'
@@ -311,6 +319,7 @@ map <Leader>vq :VimuxCloseRunner<CR>
 map <Leader>vx :VimuxInterruptRunner<CR>
 
 
+
 "Unite and denite
 let  g:notes_directories = ['~/Projects/notes']
 if( ! has("python3")) " using unite
@@ -347,15 +356,36 @@ else
   call denite#custom#alias('source', 'file_rec/git', 'file_rec')
   call denite#custom#var('file_rec/git', 'command',
         \ ['git', 'ls-files', '-co', '--exclude-standard'])
-  nnoremap <silent> <leader>ur :<C-u>Denite
-        \ `finddir('.git', ';') != '' ? 'file_rec/git' : 'file_rec'`<CR>
+  " nnoremap <silent> <leader>ur :<C-u>Denite
+  "       \ `finddir('.git', ';') != '' ? 'file_rec/git' : 'file_rec'`<CR>
+  function! Find_ur_dir()
+    let l:target=fnamemodify(resolve(expand('%:p')), ':p:h')
+    let l:git=finddir('.git',l:target . ';')
+    if l:git != ''
+      return fnamemodify(l:git, ':h')
+    else
+      return '.'
+    endif
+  endfunction
 
-  nnoremap <leader>ub  :Denite -mode=normal buffer file_mru<CR>
-  nnoremap <leader>uY  :Denite -mode=normal neoyank<CR>
-  nnoremap <leader>uf  :Denite file<CR>
+  nnoremap <silent> <leader>ur :<C-u>Denite `"file_rec:" . Find_ur_dir()`<CR>
+  " nnoremap <silent> <leader>ur :<C-u>Denite file_rec<CR>
+  " function! Enter_and_open(dirs)
+  "   echo a:dirs
+  "   echo a:dirs[0]
+  "   " cd a:dirs[0]
+  "   " Denite "file/rec:" . a:dirs[0]
+  " endfunction
+  " call denite#custom#action('directory', 'enter_and_open',
+  "       \ {context -> Enter_and_open(context['targets'])})
+
+  nnoremap <leader>ub  :Denite buffer file_mru<CR>
+  nnoremap <leader>uY  :Denite neoyank<CR>
+  nnoremap <leader>uf  :Denite `"file_rec:" . expand("%:p:h")`<CR>
+  nnoremap <leader>up  :Denite `"file::" . expand("~/projects")`<CR>
   nnoremap <leader>un  :Denite file_rec:~/Projects/notes/<CR>
-  nnoremap <leader>ug  :Denite -mode=normal grep:.<CR>
-  nnoremap <leader>uG  :Denite -mode=normal grep:.:-i<CR>
+  nnoremap <leader>ug  :Denite grep:.<CR>
+  nnoremap <leader>uG  :Denite grep:.:-i<CR>
   nnoremap <leader>ul  :Denite line<CR>
   nnoremap <leader>uT  :Denite outline<CR>
   nnoremap <leader>ut  :Denite tag<CR>
@@ -417,6 +447,10 @@ else
     call denite#custom#var('grep', 'pattern_opt', [])
     call denite#custom#var('grep', 'separator', ['--'])
     call denite#custom#var('grep', 'final_opts', [])
+  endif
+  if executable('fd')
+    call denite#custom#var('file_rec', 'command',
+          \ ['fd', '--type', 'f', '--follow', '--color', 'never', ''])
   endif
 
   " Change mappings.
@@ -524,12 +558,30 @@ command! -bang -nargs=* Ag
       \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
       \                 <bang>0)
 
+command! FZFMru call fzf#run({
+\ 'source':  reverse(s:all_files()),
+\ 'sink':    'edit',
+\ 'options': '-m -x +s',
+\ 'down':    '40%' })
+
+function! s:all_files()
+  return extend(
+  \ filter(copy(v:oldfiles),
+  \        "v:val !~ 'fugitive:\\|NERD_tree\\|^/tmp/\\|.git/'"),
+  \ map(filter(range(1, bufnr('$')), 'buflisted(v:val)'), 'bufname(v:val)'))
+endfunction
+
+function! Files_with_ur_dir()
+  let l:dir = Find_ur_dir()
+  echo l:dir
+  :execute 'Files ' . l:dir
+endfunction
 " fzf version of the mappings, experimental
-nnoremap <silent> <leader>fr  :call FilesOrGfiles()<CR>
+nnoremap <silent> <leader>fr  :call Files_with_ur_dir()<CR>
 nnoremap <silent> <leader>fb  :History<CR>
 nnoremap <silent> <leader>fs  :GFiles?<CR>
 nnoremap <silent> <leader>fn  :Files ~/Projects/notes/<CR>
-nnoremap <silent> <leader>fg  :call AgWithParam()<CR>
+nnoremap <silent> <leader>fg  :call helpers#AgWithParam()<CR>
 nnoremap <silent> <leader>fl  :BLines<CR>
 nnoremap <silent> <leader>fL  :Lines<CR>
 nnoremap <silent> <leader>fT  :BTags<CR>
@@ -701,7 +753,7 @@ call helpers#Map_for_all("<C-k>", ":Autoformat<CR>", 1, 0, 0)
 let g:airline_highlighting_cache = 1
 let g:airline#extensions#whitespace#enabled=0
 " let g:airline_extensions = ["tmuxline","branch","tagbar","quickfix","denite","csv","netrw","term","vimtex"]
-let g:airline_extensions = ["branch","tagbar","quickfix","denite","csv","netrw","term","vimtex","undotree","windowswap","gutentags","fugitiveline"]
+let g:airline_extensions = ["tmuxline","branch","tagbar","quickfix","denite","csv","netrw","term","vimtex","undotree","windowswap","gutentags","fugitiveline"]
 set timeoutlen=300
 set ttimeoutlen=10
 
@@ -930,7 +982,8 @@ endfunction
 "general key remappings
 nmap Y y$
 
-" call helpers#Map_for_all("<C-c>","<Esc>", 1, 1)
+call helpers#Map_for_all("<C-c>","<Esc><Esc>", 1, 1)
+inoremap kj <Esc><Esc>
 
 map <S-Z><S-S> :up<CR>
 
@@ -943,15 +996,17 @@ if ! InGui()
   noremap <silent> <Esc>c       :Oscyank<CR>
 
   if has('macunix')
-    let tmux_reattach_prefix="reattach-to-user-namespace"
-    if (! executable(tmux_reattach_prefix))
-      let tmux_reattach_prefix=glob("~/Dropbox/config/tmux-MacOSX-pasteboard/reattach-to-user-namespace")
-    elseif (! filereadable(tmux_reattach_prefix))
-      let tmux_reattach_prefix=glob("~/Projects/config-sync/tmux-MacOSX-pasteboard/reattach-to-user-namespace")
-    endif
+    " should be handled in tmux now...
+    " let tmux_reattach_prefix="reattach-to-user-namespace"
+    " if (! executable(tmux_reattach_prefix))
+    "   let tmux_reattach_prefix=glob("~/Dropbox/config/tmux-MacOSX-pasteboard/reattach-to-user-namespace")
+    " elseif (! filereadable(tmux_reattach_prefix))
+    "   let tmux_reattach_prefix=glob("~/Projects/config-sync/tmux-MacOSX-pasteboard/reattach-to-user-namespace")
+    " endif
 
     "paste from pbpaste as paste normally works, from the current cursor position
     function! Paste_proper()
+      " let @p=system(g:tmux_reattach_prefix . " pbpaste")
       let @p=system(g:tmux_reattach_prefix . " pbpaste")
       execute 'normal "pp'
     endfunction
@@ -1012,6 +1067,10 @@ set foldmethod=syntax
 let g:winManagerWindowLayout = "Project|TagList"
 
 "window switching
+call helpers#Map_for_all_meta("h", "<C-w>h", 2, 0, 1)
+call helpers#Map_for_all_meta("j", "<C-w>j", 2, 0, 1)
+call helpers#Map_for_all_meta("k", "<C-w>k", 2, 0, 1)
+call helpers#Map_for_all_meta("l", "<C-w>l", 2, 0, 1)
 call helpers#Map_for_all_meta("S-h", "<C-w>h", 2, 0, 1)
 call helpers#Map_for_all_meta("S-j", "<C-w>j", 2, 0, 1)
 call helpers#Map_for_all_meta("S-k", "<C-w>k", 2, 0, 1)

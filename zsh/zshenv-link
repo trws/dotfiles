@@ -1,6 +1,9 @@
-# ZDOTDIR=~/.zsh/prezto/runcoms
-ZDOTDIR=~/.zsh
-[[ ! -d ~/.tmp ]] && mkdir ~/.tmp
-[[ "$TERM_PROGRAM" == "DTerm" ]] || source $ZDOTDIR/.zshenv
-[[ "$TERM_PROGRAM" == "DTerm" ]] && export PATH=/opt/local/bin:$PATH
+# Basic universal setup, pull in environment and path
+# Author: Tom Scogland
+
+export ZDOTDIR=~/.zsh
+source $ZDOTDIR/sysmagic
+source $ZDOTDIR/environment
+source $ZDOTDIR/pathsetup
+
 

@@ -1,5 +1,0 @@
-#!zsh
-setopt nozle
-unfunction stty
-ttyctl -u
-stty icanon

@@ -5,6 +5,11 @@
   path = vim/bundle/neobundle.vim
   url = https://github.com/Shougo/neobundle.vim.git
 	branch = master
-[submodule "zsh/.zprezto"]
-	path = zsh/.zprezto
-	url = https://github.com/sorin-ionescu/prezto.git
+[submodule "tmux/tmux-pain-control"]
+	path = tmux/tmux-pain-control
+	url = https://github.com/tmux-plugins/tmux-pain-control/
+	branch = master
+[submodule "tmux/tmux-sensible"]
+	path = tmux/tmux-sensible
+	url = https://github.com/tmux-plugins/tmux-sensible/
+	branch = master

@@ -38,10 +38,12 @@ done
 }
 
 [[ -x /usr/local/bin/defaultpaths ]] && eval `/usr/local/bin/defaultpaths`
+
 if (( $gotroot )) ; then
     path=(/usr/local/sbin /opt/local/sbin $path)
     path=($path /sbin /usr/sbin)
 fi
+
 # path=(/usr/local/opt/coreutils/libexec/gnubin /opt/local/libexec/gnubin $path)
 path=(/opt/local/libexec/gnubin $path)
 add_to_path_front /Developer/usr /opt/local
