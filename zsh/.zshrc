@@ -29,7 +29,7 @@ if (( ! $+commands[antibody] )) ; then
   if (( $+commands[brew] )) ; then
     brew install getantibody/tap/antibody
   elif (( $+commands[go] )) ; then
-    go get https://github.com/getantibody/antibody
+    go get -v github.com/getantibody/antibody
   else
     echo Install go or brew!
   fi

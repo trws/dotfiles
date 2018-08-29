@@ -84,9 +84,9 @@ function helpers#Map_for_all_meta(mapping, target, ...)
   let l:for_terminal = (a:0 >= 3) ? a:3 : 1
 
   call helpers#Map_for_all('<A-'.a:mapping.'>', a:target, l:for_input, l:for_cmd, l:for_terminal)
-  let l:mapping = split(a:mapping, '-')
-  if len(l:mapping) == 2 && l:mapping[0] == "S"
-    let l:mapping = toupper(l:mapping[1])
+  let l:split_mapping = split(a:mapping, '-')
+  if len(l:split_mapping) == 2 && l:split_mapping[0] == "S"
+    let l:mapping = toupper(l:split_mapping[1])
   else
     let l:mapping = a:mapping
   endif

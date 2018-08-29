@@ -12,13 +12,12 @@ endfunction
 
 " Deal with single home/multi-arch systems
 let plugged_directory = ""
-if exists("$LMOD_arch")
-  let plugged_directory = $LMOD_ARCH
+if exists("$ARCH")
+  let plugged_directory = $ARCH
+elseif exists("$LMOD_arch")
+  let plugged_directory = $LMOD_arch
 elseif (!has("macunix")) && (!has("win64"))
   let plugged_directory = substitute(system("uname -m"), '[ \n]\+$', '', '')
-  if plugged_directory == "x86_64"
-    let plugged_directory = ""
-  endif
 endif
 let plugged_directory = expand("~/.cache/vim-plugged/" . plugged_directory)
 if !isdirectory(plugged_directory)
@@ -891,7 +890,7 @@ augroup cursorhighlight
 augroup END
 " Show “invisible” characters
 " set lcs=tab:▸\ ,trail:·,eol:¬,nbsp:_
-set lcs=tab:▸\ ,trail:·,nbsp:_
+" set lcs=tab:▸\ ,trail:·,nbsp:_
 highlight WhitespaceEOL ctermbg=red guibg=red
 match WhitespaceEOL /\s\+$/
 set list
@@ -1018,10 +1017,10 @@ if ! InGui()
     nmap <silent> <Esc>v       :call Paste_proper()<CR>
   endif
 
-  call helpers#Map_for_all("<Esc>[1;3C", "<End>", 1, 1)
-  call helpers#Map_for_all("<Esc>[1;3D", "<Home>", 1, 1)
-  call helpers#Map_for_all("<Esc>[1;9D", "<C-Left>", 1, 1)
-  call helpers#Map_for_all("<Esc>[1;9C", "<C-Right>", 1, 1)
+  call helpers#Map_for_all("<Esc>[1;3C", "<End>", 1, 1, 1)
+  call helpers#Map_for_all("<Esc>[1;3D", "<Home>", 1, 1, 1)
+  call helpers#Map_for_all("<Esc>[1;9D", "<C-Left>", 1, 1, 1)
+  call helpers#Map_for_all("<Esc>[1;9C", "<C-Right>", 1, 1, 1)
 
 endif
 
