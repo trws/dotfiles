@@ -3,7 +3,7 @@
 
 export ZDOTDIR=~/.zsh
 source $ZDOTDIR/sysmagic
-source $ZDOTDIR/environment
 source $ZDOTDIR/pathsetup
+source $ZDOTDIR/environment
 
 

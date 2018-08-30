@@ -31,9 +31,7 @@ ENTOMB=yes
 export EDITOR=vim
 export VISUAL=vim
 
-if [ -x bat ] ; then
-  PAGER=bat
-elif [[ -x "$(command -v vimpager)" ]] ; then
+if (( $+commands[vimpager] )) ; then
   PAGER=vimpager
 else
   PAGER=less

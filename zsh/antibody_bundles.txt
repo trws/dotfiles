@@ -10,7 +10,7 @@ sorin-ionescu/prezto folder:modules/git
 sorin-ionescu/prezto folder:modules/gnu-utility
 sorin-ionescu/prezto folder:modules/homebrew
 sorin-ionescu/prezto folder:modules/osx
-sorin-ionescu/prezto folder:modules/python
+# sorin-ionescu/prezto folder:modules/python
 sorin-ionescu/prezto folder:modules/tmux
 sorin-ionescu/prezto folder:modules/history
 sorin-ionescu/prezto folder:modules/directory
