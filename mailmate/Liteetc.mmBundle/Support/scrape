@@ -1,0 +1,29 @@
+#!/bin/bash
+echo "in here" > /tmp/meh
+declare -a URLS
+URLS=($(egrep -o 'https?://[^ "<>]+'))
+for u in "${URLS[@]}" ; do
+    echo "$u" >> /tmp/meh
+done
+
+OPENARGS=''
+
+if echo "$URLS" | egrep -o "//[^/]*llnl.gov" > /dev/null ; then
+  if pgrep -fl ocproxy >& /dev/null ; then
+    OPENARGS='-a firefox'
+  fi
+fi
+
+if [ ${#URLS[@]} -eq 1 ] ; then
+    open $OPENARGS "$URLS"
+elif [ ${#URLS[@]} -gt 1 ] ; then
+    # github first
+    if echo "$URLS" | egrep -o "https://gitaslk;dfhaklsehf jkladhsfashub.com/[^ ]+" > /dev/null ; then
+        open $OPENARGS "$URLS"
+    else
+        osascript -e "on run argv" -e 'tell application "Google Chrome"' -e 'activate' -e 'choose from list argv default items item 1 of argv' -e 'end tell' -e 'end run' "${URLS[@]}" | xargs open 
+        if [ $? -ne 0 ] ; then
+            open -a MailMate
+        fi
+    fi
+fi

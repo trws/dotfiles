@@ -103,7 +103,11 @@ Host vortex vortex.llnl.gov
   DynamicForward localhost:12347
 
 Match exec "~/.dotfiles/scripts/hop-vpn.sh" originalhost vortex
-    ProxyCommand nc -X 5 -x 127.0.0.1:9052 %h %p
+    HostName localhost
+    Port 9022
+
+    # if using ocproxy socks
+    # ProxyCommand nc -X 5 -x 127.0.0.1:9052 %h %p
 
 
 Host bitbucket.org

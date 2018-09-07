@@ -25,6 +25,7 @@ args = parser.parse_args()
 
 home = os.path.expanduser("~")
 projects = os.path.join(home, "projects") if os.path.exists(os.path.join(home,"projects")) else os.path.join(home, "Projects")
+projects = os.path.realpath(projects)
 builds = os.path.realpath(os.path.join(home, "Builds"))
 
 if args.reverse:

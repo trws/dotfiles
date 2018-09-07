@@ -1,0 +1,7 @@
+{
+input         = "canonical";
+keyEquivalent = "^o";
+uuid          = "7365CB34-301D-11E7-85A1-A78AEC06D16C";
+command       = '#!/bin/bash\n"${MM_BUNDLE_SUPPORT}/scrape"';
+name          = "Try open in Browser";
+}

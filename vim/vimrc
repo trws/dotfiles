@@ -125,6 +125,8 @@ Plug 'mrtazz/DoxygenToolkit.vim'
 Plug 'vim-scripts/utl.vim' " execute URLs
 " not in polyglot - cool csv highlighting
 Plug 'chrisbra/csv.vim'
+Plug 'LucHermitte/lh-vim-lib' " dep for the below
+Plug 'LucHermitte/VimFold4C'
 " CSupport plugin: XXX: reacts badly with several others
 " Plug 'c.vim'
 " org-mode
