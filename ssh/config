@@ -54,6 +54,14 @@ Match originalhost breath
   User root
   ProxyCommand ssh ddwrt -W 192.168.1.3:22
 
+Match originalhost funnel exec  "[ ~/.dotfiles/scripts/at-home.py ]"
+  User scogland1
+  LocalForward 5901 localhost:5900
+  LocalForward 22001 localhost:22000
+  LocalForward 4043 outlook.office365.com:443
+  DynamicForward localhost:12347
+  ProxyCommand ssh hurricane -W localhost:43222
+
 
 
 Host *.cs.vt.edu
@@ -74,8 +82,8 @@ Host rzmanta rzgw ray
     ForwardX11 yes
 
 # if on laptop, on vpn, hop through vortex to rzgw to get everywhere
-Match exec "~/.dotfiles/scripts/laptop-to-lab.sh %L" originalhost rzgw
-  ProxyCommand ssh -W rzgw:22 vortex
+# Match exec "~/.dotfiles/scripts/laptop-to-lab.sh %L" originalhost rzgw
+#   ProxyCommand ssh -W rzgw:22 vortex
 
 # this *must* be before the cz/rz catch-all
 Host *z-stash* *z-bitbucket*
@@ -97,12 +105,20 @@ Host quartz ipa hype ray surface vulcan sierra impetus hype2 rz*
 # Match exec " ~/.dotfiles/scripts/at-llnl.py " !originalhost github.com
 #   ProxyCommand ssh ddwrt -W github.com:22
 
-Host vortex vortex.llnl.gov
+Host vortex vortex.llnl.gov 10.253.134.139
   LocalForward 5901 localhost:5900
   LocalForward 22001 localhost:22000
   DynamicForward localhost:12347
 
-Match exec "~/.dotfiles/scripts/hop-vpn.sh" originalhost vortex
+Host cyclone
+  LocalForward 5901 localhost:5900
+  LocalForward 22001 localhost:22000
+  DynamicForward localhost:12347
+  HostName vortex.llnl.gov
+  Port 22
+  ProxyJump rzmanta
+
+Match exec "~/.dotfiles/scripts/hop-vpn.sh" originalhost vortex !host localhost
     HostName localhost
     Port 9022
 
@@ -114,7 +130,7 @@ Host bitbucket.org
     Port 22
     # ProxyCommand ssh ddwrt -W bitbucket.org:22
 
-Match exec " ~/.dotfiles/scripts/at-llnl.py" !host cz-bit* !originalhost github.com !originalhost rzgw !originalhost vortex !originalhost localhost !originalhost 127.0.0.1
+Match exec " ~/.dotfiles/scripts/at-llnl.py" !host localhost !host cz-bit* !originalhost github.com !originalhost rzgw !originalhost 10.253.134.139 !originalhost vortex !originalhost localhost !originalhost 127.0.0.1
     #this must be overridden above if wrong
     Port 622
     ProxyJump rzgw

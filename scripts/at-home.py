@@ -8,7 +8,7 @@ host = check_output("hostname", shell=True)
 
 if 'hurricane' in host or 'gale' in host:
     sys.exit(0)
-if "typhoon" in host:
+if "typhoon" in host or "storm" in host:
     try:
         output = check_output('networksetup -getairportnetwork en0 2>&1 | grep ether', shell=True)
     except CalledProcessError as e:

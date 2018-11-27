@@ -261,8 +261,8 @@ Plug 'tommcdo/vim-exchange'
 Plug 'SirVer/ultisnips'
 " Snippets are separated from the engine. Add this if you want them:
 Plug 'honza/vim-snippets'
-" Plug 'Lokaltog/vim-easymotion'
-" map <Leader>e <Plug>(easymotion-prefix)
+Plug 'Lokaltog/vim-easymotion'
+map <Leader>e <Plug>(easymotion-prefix)
 Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle'}
 Plug 'Chiel92/vim-autoformat'
 " Plug 'sjl/gundo.vim' " replaced with undotree
@@ -801,32 +801,32 @@ endif
 set t_kb=
 call helpers#Map_for_all("", "<BS>", 1, 1)
 
-if &term =~ "screen.*" "screen configurations
-  if &term =~ "screen.*-bce"
-    set term=screen-256color
-  endif
-  "set ttymouse=xterm "falls back to xterm for unsupported terminal type
-  set t_ku=OA
-  set t_kd=OB
-  set t_kr=OC
-  set t_kl=OD
-  set t_@7=OF
-  set t_kh=[1~
-
-  call helpers#Map_for_all("<Esc>[C", "<Right>", 1, 1)
-  call helpers#Map_for_all("<Esc>[D", "<Left>", 1, 1)
-  call helpers#Map_for_all("<Esc>[A", "<Up>", 1, 1)
-  call helpers#Map_for_all("<Esc>[B", "<Down>", 1, 1)
-
-  call helpers#Map_for_all("<Esc>[4~", "<End>", 1, 1)
-  call helpers#Map_for_all("<Esc>[1~", "<Home>", 1, 1)
-
-  call helpers#Map_for_all("<Esc>0F", "<End>", 1, 1)
-  call helpers#Map_for_all("<Esc>OH", "<Home>", 1, 1)
-  call helpers#Map_for_all("<Esc>[F", "<End>", 1, 1)
-  call helpers#Map_for_all("<Esc>[H", "<Home>", 1, 1)
-endif
-
+" if &term =~ "screen.*" "screen configurations
+"   if &term =~ "screen.*-bce"
+"     set term=screen-256color
+"   endif
+"   "set ttymouse=xterm "falls back to xterm for unsupported terminal type
+"   set t_ku=OA
+"   set t_kd=OB
+"   set t_kr=OC
+"   set t_kl=OD
+"   set t_@7=OF
+"   set t_kh=[1~
+"
+"   call helpers#Map_for_all("<Esc>[C", "<Right>", 1, 1)
+"   call helpers#Map_for_all("<Esc>[D", "<Left>", 1, 1)
+"   call helpers#Map_for_all("<Esc>[A", "<Up>", 1, 1)
+"   call helpers#Map_for_all("<Esc>[B", "<Down>", 1, 1)
+"
+"   call helpers#Map_for_all("<Esc>[4~", "<End>", 1, 1)
+"   call helpers#Map_for_all("<Esc>[1~", "<Home>", 1, 1)
+"
+"   call helpers#Map_for_all("<Esc>0F", "<End>", 1, 1)
+"   call helpers#Map_for_all("<Esc>OH", "<Home>", 1, 1)
+"   call helpers#Map_for_all("<Esc>[F", "<End>", 1, 1)
+"   call helpers#Map_for_all("<Esc>[H", "<Home>", 1, 1)
+" endif
+"
 
 " tComment extra mappings:
 " yank visual before toggle comment
@@ -1121,6 +1121,8 @@ endif
 " colorscheme solarized
 if &term =~ ".*256color.*" || has("gui_running")
   if $COLORTERM == "truecolor"
+    let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
+    let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
     set termguicolors
   else
     set t_Co=256

@@ -12,6 +12,40 @@ switcher = hs.window.switcher.new() -- default windowfilter: only visible window
 switcher_space = hs.window.switcher.new(hs.window.filter.new():setCurrentSpace(true):setDefaultFilter{}) -- include minimized/hidden windows, current Space only
 switcher_browsers = hs.window.switcher.new{'Safari','Google Chrome'} -- specialized switcher for your dozens of browser windows :)
 
+local mash = {'alt', 'ctrl'}
+local mashshift = {'alt', 'ctrl', 'shift'}
+
+bindings = {}
+setmetatable(bindings, { __index = table })
+
+enable_bindings = function()
+  for k,v in pairs(bindings) do
+    v:enable()
+  end
+end
+
+disable_bindings = function()
+  for k,v in pairs(bindings) do
+    v:disable()
+  end
+end
+
+screen_sharing_watcher = application.watcher.new(function(name, event, app)
+  if(name == "Screen Sharing") then
+    if(event == application.watcher.activated) then
+      disable_bindings()
+    elseif(event == application.watcher.deactivated) then
+      enable_bindings()
+    end
+  end
+end)
+
+screen_sharing_watcher:start()
+
+-- pl = require 'pl.pretty'
+-- bindings:insert('a')
+-- pl.dump(bindings)
+
 -- bind to hotkeys; WARNING: at least one modifier key is required!
 hotkey.bind('alt','tab','Next window',function()switcher:next()end)
 hotkey.bind('alt-shift','tab','Prev window',function()switcher:previous()end)
@@ -27,19 +61,18 @@ hotkey.bind('alt-shift','tab','Prev window',function()switcher:previous()end)
 -- expose_browsers = hs.expose.new{'Safari','Google Chrome'} -- specialized expose using a custom windowfilter
 -- for your dozens of browser windows :)
 
+bindings:insert(
 hotkey.bind({"cmd", "alt", "ctrl"}, "D", function()
   local win = window.focusedWindow()
   local f = win:frame()
   f.x = f.x + 10
   win:setFrame(f)
 end)
-
-local mash = {'alt', 'ctrl'}
-local mashshift = {'alt', 'ctrl', 'shift'}
+)
 
 hints.style = 'vimperator'
-hotkey.bind(mash, "g", function() hs.hints.windowHints() end)
-hotkey.bind(mashshift, "g", function() hs.hints.windowHints(hs.window.focusedWindow():application():allWindows()) end)
+bindings:insert(hotkey.bind(mash, "g", function() hs.hints.windowHints() end))
+bindings:insert(hotkey.bind(mashshift, "g", function() hs.hints.windowHints(hs.window.focusedWindow():application():allWindows()) end))
 
 -- Set grid size.
 grid.GRIDWIDTH  = 12
@@ -48,12 +81,12 @@ grid.MARGINX    = 0
 grid.MARGINY    = 0
 
 -- Grid key expariments
-hotkey.bind(mash, ';', function() grid.snap(window.focusedWindow()) end)
-hotkey.bind(mash, "'", function() fnutils.map(window.visiblewindows(), grid.snap) end)
-hotkey.bind(mash,      '=', function() grid.resizeWindowWider() end)
-hotkey.bind(mash,      '-', function() grid.resizeWindowThinner() end)
-hotkey.bind(mashshift, '=', function() grid.resizeWindowTaller() end)
-hotkey.bind(mashshift, '-', function() grid.resizeWindowShorter() end)
+bindings:insert(hotkey.bind(mash, ';', function() grid.snap(window.focusedWindow()) end))
+bindings:insert(hotkey.bind(mash, "'", function() fnutils.map(window.visiblewindows(), grid.snap) end))
+bindings:insert(hotkey.bind(mash,      '=', function() grid.resizeWindowWider() end))
+bindings:insert(hotkey.bind(mash,      '-', function() grid.resizeWindowThinner() end))
+bindings:insert(hotkey.bind(mashshift, '=', function() grid.resizeWindowTaller() end))
+bindings:insert(hotkey.bind(mashshift, '-', function() grid.resizeWindowShorter() end))
 
 -- hotkey.bind(mash, 'N', grid.pushwindow_nextscreen)
 -- hotkey.bind(mash, 'P', grid.pushwindow_prevscreen)
@@ -64,6 +97,7 @@ hotkey.bind(mashshift, '-', function() grid.resizeWindowShorter() end)
 -- hotkey.bind(mash, 'L', grid.pushWindowRight)
 
 
+bindings:insert(
 hotkey.bind({'cmd', 'ctrl'}, 'W', function()
     local all = window.allWindows()
     for _, w in ipairs(all) do
@@ -74,47 +108,61 @@ hotkey.bind({'cmd', 'ctrl'}, 'W', function()
         end
     end
 end)
-
+)
 
 --
 -- Window focus hotkeys
+bindings:insert(
 hotkey.bind(mash, "H", function()
   -- local new_rect = geometry.rect(x=0, y=0, w=0.5, h=1.0)
   window.focusedWindow():focusWindowWest()
 end)
+)
+bindings:insert(
 hotkey.bind(mash, "L", function()
   window.focusedWindow():focusWindowEast()
 end)
+)
+bindings:insert(
 hotkey.bind(mash, "K", function()
   window.focusedWindow():focusWindowNorth()
 end)
+)
+bindings:insert(
 hotkey.bind(mash, "J", function()
   window.focusedWindow():focusWindowSouth()
 end)
-
+)
 -- Window throwing
+bindings:insert(
 hotkey.bind(mashshift, "H", function()
   -- local new_rect = geometry.rect(x=0, y=0, w=0.5, h=1.0)
   window.focusedWindow():moveToUnit(geometry.rect(0.0, 0.0, 0.5, 1.0))
 end)
+)
+bindings:insert(
 hotkey.bind(mashshift, "L", function()
   local w = window.focusedWindow()
   w:moveToUnit(geometry.rect(0.5, 0.0, 0.5, 1.0))
 end)
+)
+bindings:insert(
 hotkey.bind(mashshift, "K", function()
   window.focusedWindow():moveToUnit(geometry.rect(0.0, 0.0, 1.0, 0.5))
 end)
+)
+bindings:insert(
 hotkey.bind(mashshift, "J", function()
   window.focusedWindow():moveToUnit(geometry.rect(0.0, 0.5, 1.0, 0.5))
 end)
+)
+bindings:insert(hotkey.bind(mashshift, "N", function() window.moveToScreen(window.focusedWindow():screen():next()) end))
+bindings:insert(hotkey.bind(mashshift, "P", function() window.moveToScreen(window.focusedWindow():screen():previous()) end))
 
-hotkey.bind(mashshift, "N", function() window.moveToScreen(window.focusedWindow():screen():next()) end)
-hotkey.bind(mashshift, "P", function() window.moveToScreen(window.focusedWindow():screen():previous()) end)
-
-hotkey.bind(mashshift, "Left", function() window.focusedWindow():moveOneScreenWest() end)
-hotkey.bind(mashshift, "Right", function() window.focusedWindow():moveOneScreenEast() end)
-hotkey.bind(mashshift, "Up", function() window.focusedWindow():moveOneScreenNorth() end)
-hotkey.bind(mashshift, "Down", function() window.focusedWindow():moveOneScreenSouth() end)
+bindings:insert(hotkey.bind(mashshift, "Left", function() window.focusedWindow():moveOneScreenWest() end))
+bindings:insert(hotkey.bind(mashshift, "Right", function() window.focusedWindow():moveOneScreenEast() end))
+bindings:insert(hotkey.bind(mashshift, "Up", function() window.focusedWindow():moveOneScreenNorth() end))
+bindings:insert(hotkey.bind(mashshift, "Down", function() window.focusedWindow():moveOneScreenSouth() end))
 
 -- move_to_screen = function(target_screen)
 --   if target_screen ~= nil then
@@ -160,10 +208,11 @@ disable_modal_hotkeys = function()
   end
 end
 
+bindings:insert(
 hotkey.bind(mashshift, "S", function()
   enable_modal_hotkeys(s_modal_hotkeys)
 end)
-
+)
 
 -- modal keys
 

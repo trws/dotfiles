@@ -13,6 +13,42 @@ export ZSH_CACHE_DIR=~/.cache/zsh
 # ensure my funcs, and prompts are there before load
 fpath=($ZDOTDIR/funcs $fpath)
 
+if ssh-add -l >& /dev/null ; then
+  echo ${SSH_AUTH_SOCK} > ~/.cache/current-auth
+else
+  auth_sock="$(cat ~/.cache/current-auth)"
+  if [[ -S $auth_sock ]] ; then
+    export SSH_AUTH_SOCK=$auth_sock
+    if ssh-add -l >& /dev/null ; then
+    else
+      echo warning: no auth
+      unset SSH_AUTH_SOCK
+    fi
+  fi
+fi
+
+if infocmp xterm-256color-italic >& /dev/null ; then
+else
+  cat > /tmp/xterm-256-italic.terminfo <<EOF
+xterm-256color-italic|xterm with 256 colors and italic,
+  sitm=\E[3m, ritm=\E[23m,
+  use=xterm-256color,
+EOF
+  tic -x /tmp/xterm-256-italic.terminfo
+fi
+
+
+if infocmp tmux >& /dev/null ; then
+else
+  cat > /tmp/tmux.terminfo <<EOF
+tmux|tmux with 256 colors,
+  ritm=\E[23m, rmso=\E[27m, sitm=\E[3m, smso=\E[7m, Ms@,
+  khome=\E[1~, kend=\E[4~,
+  use=xterm-256color, use=screen-256color,
+EOF
+  tic -x /tmp/tmux.terminfo
+fi
+
 # prezto style settings
 zstyle ':prezto:*:*' color 'yes'
 zstyle ':prezto:module:editor' key-bindings 'emacs'
