@@ -1,0 +1,71 @@
+#!zsh
+function bd {
+  zparseopts -A opts -D -E -- C:=base_dir_o -change_dir:=base_dir_o e:=extra_o -extra:=extra_o -reverse
+  # echo "${opts}" # echo "${(@k)opts}"
+  # echo "${(@v)opts}"
+  local extra="${extra_o[2]}"
+  local base_dir="${base_dir_o[2]}"
+  local project_path=~/projects
+  project_path=${project_path:A}
+  local build_path=~/Builds
+  build_path=${build_path:A}
+  local tdir=""
+
+  if ((  ${+opts[--reverse]} )) ; then
+    if [[ -z "$base_dir" ]] ; then
+      base_dir=${PWD:A}
+    fi
+    tdir="${base_dir//${~build_path}\//${project_path}/}"
+    if [[ "${tdir}" == "${base_dir}" ]] ; then
+      echo Error: project directory can only be found from a build directory
+      return 1
+    fi
+    if [[ -n "$extra" ]] ; then
+      tdir="${tdir%$extra}"
+    fi
+    if [[ ! -d ${tdir} ]] ; then
+      while [[ "${tdir}" != "/" ]];
+      do
+        if [[ -d "$tdir" ]] ; then
+          break
+        fi
+        tdir="$tdir/.."
+        tdir="${tdir:A}"
+      done
+    fi
+    if [[ ! -d "$tdir" ]] ; then
+      echo Error: project directory does not exist
+      return 1
+    fi
+  else # --reverse
+    local base_dir_in="${base_dir}"
+    for vcs in .git .hg .svn .cvs ; do
+      DIR=$(find_dir_up $vcs)
+      if [[ -n "${DIR}" ]] ; then
+        base_dir="$DIR"
+        break
+      fi
+    done
+    if [[ -z "$base_dir" ]] ; then
+      if [[ -n ${base_dir_in} ]] ; then
+        base_dir=${base_dir_in:P}
+      else
+        # ok... no repo, trust the user...
+        base_dir=${PWD:A}
+      fi
+    fi
+
+    tdir="${base_dir//${~project_path}\//${build_path}/}"
+    if [[ "${tdir}" == "${base_dir}" ]] ; then
+      echo Error: build directory can only be found from a project directory
+      return 1
+    fi
+    if [[ -n "$extra" ]] ; then
+      tdir="$tdir/$extra"
+    fi
+
+    mkdir -p "${tdir}"
+  fi
+  print "${tdir}"
+}
+

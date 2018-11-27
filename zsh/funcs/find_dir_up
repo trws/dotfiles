@@ -1,0 +1,15 @@
+#!zsh
+function find_dir_up {
+  local path=$(pwd)
+  local dir="$1"
+  shift 1
+  while [[ $path != / ]];
+  do
+    if [[ -d "$path/$dir" ]] ; then
+      print $path
+      return 0
+    fi
+    path="$(readlink -f "$path"/..)"
+  done
+}
+

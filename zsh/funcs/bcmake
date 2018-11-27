@@ -1,0 +1,19 @@
+#!zsh
+function bcmake {
+  zparseopts -a myopts -D -E -- C: -change_dir: e: -extra: -reverse
+  # echo "$myopts[0] ${myopts[@]}"
+  # for o in "$myopts[0] $myopts[@]" ; do
+  #   echo $o
+  # done
+  local bdir="$(bd $myopts[0] $myopts[@])"
+  pushd "$bdir"
+  local pdir="$(bd $myopts[0] $myopts[@] --reverse)"
+  echo $bdir
+  echo $pdir
+  pwd
+  echo running: cmake "$pdir" "$@" -DCMAKE_INSTALL_PREFIX="$bdir/install"
+  command cmake "$pdir" "$@" -DCMAKE_INSTALL_PREFIX="$bdir/install"
+  local ret=$?
+  popd
+  return $ret
+}
