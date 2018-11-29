@@ -27,18 +27,18 @@ else
   fi
 fi
 
-if infocmp xterm-256color-italic >& /dev/null ; then
+if /usr/bin/infocmp xterm-256color-italic >& /dev/null ; then
 else
   cat > /tmp/xterm-256-italic.terminfo <<EOF
 xterm-256color-italic|xterm with 256 colors and italic,
   sitm=\E[3m, ritm=\E[23m,
   use=xterm-256color,
 EOF
-  tic -x /tmp/xterm-256-italic.terminfo
+  /usr/bin/tic -x /tmp/xterm-256-italic.terminfo
 fi
 
 
-if infocmp tmux-256color >& /dev/null ; then
+if /usr/bin/infocmp tmux-256color >& /dev/null ; then
 else
   cat > /tmp/tmux.terminfo <<EOF
 tmux-256color|tmux with 256 colors and italics,
@@ -89,7 +89,7 @@ tmux-256color|tmux with 256 colors and italics,
 	smir=\E[4h, smkx=\E[?1h\E=, smso=\E[7m, smul=\E[4m,
 	tbc=\E[3g, tsl=\E]0;, vpa=\E[%i%p1%dd,
 EOF
-  tic -x /tmp/tmux.terminfo
+  /usr/bin/tic -x /tmp/tmux.terminfo
 fi
 
 if infocmp $TERM >& /dev/null ; then
