@@ -1,0 +1,12 @@
+#!zsh
+function bmake {
+  zparseopts -a myopts -D -E -- C: -change_dir: e: -extra: -reverse
+  # echo "$myopts[0] ${myopts[@]}"
+  # for o in "$myopts[0] $myopts[@]" ; do
+  #   echo $o
+  # done
+  echo running: make -C $(bd $myopts[0] $myopts[@]) "$@"
+  command make -C $(bd $myopts[0] $myopts[@]) "$@"
+  local ret=$?
+  return $ret
+}
