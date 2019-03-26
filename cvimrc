@@ -1,0 +1,16 @@
+let mapleader = ","
+" re-map motion
+map <C-d> scrollPageDown
+map <C-u> scrollPageUp
+" clear highlights
+map <C-l> clearSearchHighlight
+map d closeTab
+map u lastClosedTab
+" Use numeric hints, necessary for refinement by link contents
+set numerichints
+" refine hints by typing
+set typelinkhints
+set noautofocus
+
+let configpath = "~/.dotfiles/cvimrc"
+set localconfig

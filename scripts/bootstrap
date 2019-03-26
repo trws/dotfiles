@@ -1,0 +1,6 @@
+#!/bin/sh
+
+SYS="$(uname -s)"
+if test "$SYS" = "Darwin" ; then
+  brew install git macvim --with-override-system-vim reattach-to-user-namespace tmux
+fi

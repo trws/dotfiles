@@ -1,0 +1,15 @@
+Created temporary directory: /private/var/folders/cy/b918_slx4fd3d027twvd67gh00146w/T/pip-ephem-wheel-cache-61gcpx
+Created temporary directory: /private/var/folders/cy/b918_slx4fd3d027twvd67gh00146w/T/pip-install-m0eGs9
+Cleaning up...
+ERROR: You must give at least one requirement to install (see "pip help install")
+Exception information:
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/site-packages/pip/_internal/basecommand.py", line 228, in main
+    status = self.run(options, args)
+  File "/usr/local/lib/python2.7/site-packages/pip/_internal/commands/install.py", line 267, in run
+    self.name, wheel_cache
+  File "/usr/local/lib/python2.7/site-packages/pip/_internal/basecommand.py", line 331, in populate_requirement_set
+    '(see "pip help %(name)s")' % opts)
+CommandError: You must give at least one requirement to install (see "pip help install")
+You are using pip version 10.0.1, however version 18.0 is available.
+You should consider upgrading via the 'pip install --upgrade pip' command.
