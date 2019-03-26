@@ -47,8 +47,18 @@ Match originalhost gale exec "[ !~/.dotfiles/scripts/at-home.py ]"
   Port 4022
 
 Match originalhost hurricane exec "[ !~/.dotfiles/scripts/at-home.py ]"
+  # HostName ssh.scogland.com
+  # Port 3022
+  HostName 192.168.1.144
+  Port 22
+  ProxyJump ddwrt
+
+Match originalhost nano exec "[ !~/.dotfiles/scripts/at-home.py ]"
+  # HostName ssh.scogland.com
+  # Port 3022
   HostName ssh.scogland.com
-  Port 3022
+  Port 7022
+  User scogland
 
 Match originalhost breath
   User root
@@ -59,8 +69,10 @@ Match originalhost funnel exec  "[ ~/.dotfiles/scripts/at-home.py ]"
   LocalForward 5901 localhost:5900
   LocalForward 22001 localhost:22000
   LocalForward 4043 outlook.office365.com:443
+  LocalForward 4993 outlook.office365.com:993
+  LocalForward 4587 smtp.office365.com:587
   DynamicForward localhost:12347
-  ProxyCommand ssh hurricane -W localhost:43222
+  ProxyCommand ssh scogland@nano -W localhost:43222
 
 
 
@@ -91,6 +103,9 @@ Host *z-stash* *z-bitbucket*
     Port 7999
     ProxyJump quartz
 
+Host code.ornl.gov
+    Port 22
+
 Host github.com
     User git
 
@@ -108,6 +123,9 @@ Host quartz ipa hype ray surface vulcan sierra impetus hype2 rz*
 Host vortex vortex.llnl.gov 10.253.134.139
   LocalForward 5901 localhost:5900
   LocalForward 22001 localhost:22000
+  LocalForward 4043 outlook.office365.com:443
+  LocalForward 4993 outlook.office365.com:993
+  LocalForward 4587 smtp.office365.com:587
   DynamicForward localhost:12347
 
 Host cyclone
@@ -130,7 +148,18 @@ Host bitbucket.org
     Port 22
     # ProxyCommand ssh ddwrt -W bitbucket.org:22
 
-Match exec " ~/.dotfiles/scripts/at-llnl.py" !host localhost !host cz-bit* !originalhost github.com !originalhost rzgw !originalhost 10.253.134.139 !originalhost vortex !originalhost localhost !originalhost 127.0.0.1
+Host chimera
+    Port 22
+    HostName 10.5.0.3
+    User scogland
+
+Host chimera-funnel
+    Port 22
+    HostName 10.5.0.3
+    User scogland
+    ProxyJump funnel
+
+Match exec " ~/.dotfiles/scripts/at-llnl.py" !host eris.llnl.gov !host localhost !originalhost chimera !host cz-bit* !originalhost github.com !originalhost rzgw !originalhost 10.253.134.139 !originalhost vortex !originalhost localhost !originalhost 127.0.0.1
     #this must be overridden above if wrong
     Port 622
     ProxyJump rzgw
