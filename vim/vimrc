@@ -20,7 +20,7 @@ elseif (!has("macunix")) && (!has("win64"))
   let plugged_directory = substitute(system("uname -m"), '[ \n]\+$', '', '')
 endif
 let plugged_directory = expand("~/.cache/vim-plugged/" . plugged_directory)
-if !isdirectory(plugged_directory)
+if !filereadable(expand("~/.vim/autoload/plug.vim"))
   echo('fetching plug for initial install')
   call system('curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
   call system('mkdir -p ' . plugged_directory)
@@ -140,25 +140,58 @@ Plug 'tpope/vim-speeddating'
 Plug 'vim-scripts/vimux'
 
 if ! has('win32')
-  function! BuildYCM(info)
-    " info is a dictionary with 3 fields
-    " - name:   name of the plugin
-    " - status: 'installed', 'updated', or 'unchanged'
-    " - force:  set on PlugInstall! or PlugUpdate!
-    if a:info.status != 'unchanged'
-      !./install.py --clang-completer
-    endif
-  endfunction
-  Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') }
+
+  " Plug 'ncm2/ncm2'
+  " Plug 'ncm2/ncm2-path'
+  " let g:ncm2#complete_length=[[1,1],[7,2]]
+  "
+  " " enable ncm2 for all buffers
+  " autocmd BufEnter * call ncm2#enable_for_buffer()
+  " autocmd TextChangedI * call ncm2#auto_trigger()
+  "
+  " inoremap <C-Space> <Plug>(ncm2_manual_trigger)
+  " inoremap <expr> <CR> pumvisible() ? "\<C-y>\<CR>" : "\<CR>"
+  " inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+  " inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<Tab>"
+  "
+  " " IMPORTANT: :help Ncm2PopupOpen for more information
+  " set completeopt=noinsert,menuone,noselect
+  "
+  " set hidden
+  " Plug 'autozimu/LanguageClient-neovim', {
+  "       \ 'branch': 'next',
+  "       \ 'do': 'bash install.sh',
+  "       \ }
+  "
+  " let g:LanguageClient_serverCommands = {
+  "       \ 'rust': [$CARGO_HOME . '/bin/rustup', 'run', 'stable', 'rls'],
+  "       \ 'python': ['/usr/local/bin/pyls'],
+  "       \ }
+  "
+  " nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
+  " nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
+  " nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
+
+    function! BuildYCM(info)
+      " info is a dictionary with 3 fields
+      " - name:   name of the plugin
+      " - status: 'installed', 'updated', or 'unchanged'
+      " - force:  set on PlugInstall! or PlugUpdate!
+      if a:info.status != 'unchanged'
+        !./install.py --clang-completer --rust-completer
+      endif
+    endfunction
+    Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') }
+
 endif
 
-" if has('nvim')
+if has('nvim')
 "   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-" else
+else
 "   Plug 'Shougo/deoplete.nvim'
-"   Plug 'roxma/nvim-yarp'
-"   Plug 'roxma/vim-hug-neovim-rpc'
-" endif
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
+endif
 " let g:deoplete#enable_at_startup = 1
 " Plug 'zchee/deoplete-clang'
 " let g:deoplete#sources#clang#libclang_path = '/usr/local//Cellar/llvm/6.0.0/lib/libclang.dylib'
@@ -208,9 +241,9 @@ if(has("python3"))
   Plug 'nixprime/cpsm'
 else
   Plug 'Shougo/unite.vim'
-Plug 'Shougo/unite-ssh'
-" Plug 'hewes/unite-gtags'
-Plug 'tsukkee/unite-tag'
+  Plug 'Shougo/unite-ssh'
+  " Plug 'hewes/unite-gtags'
+  Plug 'tsukkee/unite-tag'
 endif
 " Plug 'Shougo/vimfiler.vim'
 Plug 'Shougo/neoyank.vim' " provides history/yank unite source
@@ -560,16 +593,16 @@ command! -bang -nargs=* Ag
       \                 <bang>0)
 
 command! FZFMru call fzf#run({
-\ 'source':  reverse(s:all_files()),
-\ 'sink':    'edit',
-\ 'options': '-m -x +s',
-\ 'down':    '40%' })
+      \ 'source':  reverse(s:all_files()),
+      \ 'sink':    'edit',
+      \ 'options': '-m -x +s',
+      \ 'down':    '40%' })
 
 function! s:all_files()
   return extend(
-  \ filter(copy(v:oldfiles),
-  \        "v:val !~ 'fugitive:\\|NERD_tree\\|^/tmp/\\|.git/'"),
-  \ map(filter(range(1, bufnr('$')), 'buflisted(v:val)'), 'bufname(v:val)'))
+        \ filter(copy(v:oldfiles),
+        \        "v:val !~ 'fugitive:\\|NERD_tree\\|^/tmp/\\|.git/'"),
+        \ map(filter(range(1, bufnr('$')), 'buflisted(v:val)'), 'bufname(v:val)'))
 endfunction
 
 function! Files_with_ur_dir()
