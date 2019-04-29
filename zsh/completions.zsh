@@ -63,7 +63,9 @@ autoload -U bashcompinit && bashcompinit
 
 # Use caching to make completion for commands such as dpkg and apt usable.
 zstyle ':completion::complete:*' use-cache on
-zstyle ':completion::complete:*' cache-path "${ZDOTDIR:-$HOME}/.zcompcache"
+compl_cache="${ZDOTDIR:-$HOME}/.cache/zsh/zcompcache"
+mkdir -p $compl_cache
+zstyle ':completion::complete:*' cache-path $compl_cache
 
 # Case-insensitive (all), partial-word, and then substring completion.
 if zstyle -t ':prezto:module:completion:*' case-sensitive; then

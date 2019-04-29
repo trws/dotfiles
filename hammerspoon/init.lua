@@ -78,6 +78,9 @@ bindings:insert(hotkey.bind({"ctrl","cmd"}, "g", function() toggle_application("
 -- expose_browsers = hs.expose.new{'Safari','Google Chrome'} -- specialized expose using a custom windowfilter
 -- for your dozens of browser windows :)
 
+-- convert clipboard contents from markdown to rtf
+bindings:insert(hotkey.bind(mashshift, 'm', function() hs.execute("pbpaste | ~/scripts/md2clip") end))
+
 bindings:insert(
 hotkey.bind({"cmd", "alt", "ctrl"}, "D", function()
   local win = window.focusedWindow()

@@ -8,6 +8,7 @@ function! FindOrCreate(dir)
   if !isdirectory(expand(a:dir))
     call mkdir(expand(a:dir), "p")
   endif
+  return a:dir
 endfunction
 
 " Deal with single home/multi-arch systems
@@ -215,12 +216,12 @@ let wiki.ext = '.md'
 let wiki.nested_syntaxes = {'python': 'python', 'c++': 'cpp', 'c': 'c'}
 let tasks = {}
 let tasks.path = expand('~/projects/todo/')
-let tasks.syntax = 'vimwiki'
+let tasks.syntax = 'default'
 let tasks.ext = '.wiki'
 let tasks.nested_syntaxes = {'python': 'python', 'c++': 'cpp', 'c': 'c'}
 let g:vimwiki_list = [wiki, tasks]
 let g:vimwiki_global_ext=0
-let g:vimwiki_folding=1
+let g:vimwiki_folding='expr'
 "outliner checkboxes
 augroup filetype_vimwiki
   autocmd!
@@ -630,7 +631,7 @@ let g:unite_source_gtags_project_config = {
 
 
 
-let g:global_objdir=$HOME . "/.cache/global-obj"
+let g:global_objdir=$HOME . "/.cache/vim/global-obj"
 call FindOrCreate(g:global_objdir)
 " For regular tags
 let tag_file = g:global_objdir . "/tags"
@@ -901,14 +902,15 @@ set ttyfast
 " Use UTF-8 without BOM
 " set encoding=utf-8 nobomb " covered by sensible
 " Centralize backups, swapfiles and undo history, make dropbox happy!
-call FindOrCreate("~/.vim-backups")
-set backupdir=~/.vim-backups
-call FindOrCreate("~/.vim-swaps")
-set directory=~/.vim-swaps//
+call FindOrCreate("~/.cache/vim/backups")
+set backupdir=~/.cache/vim/backups
+call FindOrCreate("~/.cache/vim/swaps")
+set directory=~/.cache/vim/swaps
 if exists("&undodir")
-  call FindOrCreate("~/.vim-undo")
-  set undodir=~/.vim-undo
+  call FindOrCreate("~/.cache/vim/undo")
+  set undodir=~/.cache/vim/undo
 endif
+let g:netrw_home = FindOrCreate("~/.cache/vim/netrw")
 " Enable per-directory .vimrc files and disable unsafe commands in them
 set exrc
 set secure

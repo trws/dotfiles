@@ -142,9 +142,9 @@ brew "gawk"
 brew "htop"
 
 
-cask "syncthing-app"
+cask "syncthing"
 cask "1password"
-cask "google-chrome"
+# cask "google-chrome"
 
 
 
