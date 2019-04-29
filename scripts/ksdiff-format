@@ -1,0 +1,14 @@
+#!/bin/bash
+MERGED="$1"
+BASE="$2"
+LOCAL="$3"
+REMOTE="$4"
+echo "$BASE"
+clang-format -i "$BASE"
+echo "$LOCAL"
+clang-format -i "$LOCAL"
+echo "$REMOTE"
+clang-format -i "$REMOTE"
+
+ksdiff --merge --output "$MERGED" --base "$BASE" -- "$LOCAL" --snapshot "$REMOTE" --snapshot
+

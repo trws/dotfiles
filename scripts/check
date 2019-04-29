@@ -1,0 +1,19 @@
+#!/usr/bin/env zsh
+
+CMDS=(
+rg
+ag
+pt
+fd
+fzf
+tree
+)
+
+CODE=0
+for C in $CMDS ; do
+  if [[ ! -x "$C" ]] ; then
+    echo Did not find: $C
+    CODE=(($CODE + 1))
+  fi
+done
+exit $CODE
