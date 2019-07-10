@@ -34,6 +34,7 @@ Host ddwrt-lab
 Match originalhost gale exec "[ !~/.dotfiles/scripts/at-home.py ]"
   HostName ssh.scogland.com
   Port 4022
+  DynamicForward localhost:12348
   ProxyJump nano
 
 Match originalhost hurricane exec "[ !~/.dotfiles/scripts/at-home.py ]"
@@ -44,8 +45,6 @@ Match originalhost hurricane exec "[ !~/.dotfiles/scripts/at-home.py ]"
   ProxyJump nano
 
 Match originalhost nano exec "[ !~/.dotfiles/scripts/at-home.py ]"
-  # HostName ssh.scogland.com
-  # Port 3022
   HostName ssh.scogland.com
   Port 7022
   RemoteForward 43222 localhost:22
@@ -61,6 +60,12 @@ Match originalhost funnel exec  "[ ~/.dotfiles/scripts/at-home.py ]"
   User scogland1
   LocalForward 5901 localhost:5900
   LocalForward 22001 localhost:22000
+  LocalForward 22002 10.5.0.3:22000
+  LocalForward 2201 localhost:22
+  LocalForward 2202 10.5.0.3:22
+  LocalForward 9993 outlook.office365.com:993
+  LocalForward 5587 smtp.office365.com:587
+  ExitOnForwardFailure yes
   DynamicForward localhost:12347
   ProxyCommand ssh scogland@nano -W localhost:43222
 
@@ -147,7 +152,8 @@ Host chimera
 Host chimera-funnel
     Port 22
     HostName 10.5.0.3
-    User scogland
+    User scogland1
+    LocalForward 5904 localhost:5900
     ProxyJump funnel
 
 Match exec " ~/.dotfiles/scripts/at-llnl.py" !host eris.llnl.gov !host localhost !originalhost chimera !host cz-bit* !originalhost github.com !originalhost rzgw !originalhost 10.253.134.139 !originalhost vortex !originalhost localhost !originalhost 127.0.0.1
@@ -219,4 +225,3 @@ Host !cz-* *
     PermitLocalCommand yes
     SendEnv LC_TERM_PROGRAM LC_ITERM_PROFILE ITERM_PROFILE TERM_PROGRAM
     PreferredAuthentications publickey,password,keyboard-interactive
-

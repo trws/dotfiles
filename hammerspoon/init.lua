@@ -13,6 +13,7 @@ switcher_space = hs.window.switcher.new(hs.window.filter.new():setCurrentSpace(t
 switcher_browsers = hs.window.switcher.new{'Safari','Google Chrome'} -- specialized switcher for your dozens of browser windows :)
 
 local mash = {'alt', 'ctrl'}
+local mashcmd = {'alt', 'ctrl', 'cmd'}
 local mashshift = {'alt', 'ctrl', 'shift'}
 
 bindings = {}
@@ -78,6 +79,27 @@ bindings:insert(hotkey.bind({"ctrl","cmd"}, "g", function() toggle_application("
 -- expose_browsers = hs.expose.new{'Safari','Google Chrome'} -- specialized expose using a custom windowfilter
 -- for your dozens of browser windows :)
 
+wins = hs.chooser.new(function(tbl)
+  w = hs.window.find(tbl["win"])
+  w:focus()
+end)
+bindings:insert(hotkey.bind(mash, 'c', function()
+  win_choices = {}
+  setmetatable(win_choices, { __index = table })
+  for k,v in pairs(hs.window.allWindows()) do
+    app = v:application()
+    app_title = app and app:title() or "Unknown"
+    if string.len(v:title()) >= 2 then
+      win_choices:insert({
+          ["text"] = hs.utf8.fixUTF8(v:title() .. " " .. app_title),
+          ["win"] = v:id(),
+        })
+    end
+  end
+  wins:choices(win_choices)
+  wins:show()
+end))
+
 -- convert clipboard contents from markdown to rtf
 bindings:insert(hotkey.bind(mashshift, 'm', function() hs.execute("pbpaste | ~/scripts/md2clip") end))
 
@@ -133,23 +155,23 @@ end)
 --
 -- Window focus hotkeys
 bindings:insert(
-hotkey.bind(mash, "H", function()
+hotkey.bind(mashcmd, "H", function()
   -- local new_rect = geometry.rect(x=0, y=0, w=0.5, h=1.0)
   window.focusedWindow():focusWindowWest()
 end)
 )
 bindings:insert(
-hotkey.bind(mash, "L", function()
+hotkey.bind(mashcmd, "L", function()
   window.focusedWindow():focusWindowEast()
 end)
 )
 bindings:insert(
-hotkey.bind(mash, "K", function()
+hotkey.bind(mashcmd, "K", function()
   window.focusedWindow():focusWindowNorth()
 end)
 )
 bindings:insert(
-hotkey.bind(mash, "J", function()
+hotkey.bind(mashcmd, "J", function()
   window.focusedWindow():focusWindowSouth()
 end)
 )
