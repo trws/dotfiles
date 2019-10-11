@@ -36,7 +36,10 @@ config.set('content.javascript.enabled', True, 'qute://*/*')
 c.hints.mode = 'number'
 
 # Bindings for normal mode
-config.bind('<Meta+[>', 'back')
+config.bind('<Cmd+[>', 'back')
+config.bind('<Cmd+]>', 'forward')
+config.bind('<Cmd+{>', 'tab-prev')
+config.bind('<Cmd+}>', 'tab-next')
 config.bind('<Meta+r>', 'reload')
 config.bind('<Meta+w>', 'tab-close')
 config.bind('J', 'tab-prev')
@@ -873,7 +876,8 @@ c.bindings.key_mappings = {
 ## `{line0}`: Same as `{line}`, but starting from index 0. * `{column0}`:
 ## Same as `{column}`, but starting from index 0.
 ## Type: ShellCommand
-# c.editor.command = ['gvim', '-f', '{file}', '-c', 'normal {line}G{column0}l']
+# c.editor.command = ['/usr/local/bin/reattach-to-user-namespace','/usr/local/bin/mvim', '-f', '{file}', '-c', 'normal {line}G{column0}l']
+c.editor.command = ['/usr/local/bin/reattach-to-user-namespace','/Users/scogland1/scripts/vimr', '--wait', '--nvim', '-f', '{file}', '-c', 'normal {line}G{column0}l']
 
 ## Encoding to use for the editor.
 ## Type: Encoding
