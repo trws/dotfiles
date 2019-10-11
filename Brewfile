@@ -1,13 +1,11 @@
 tap "homebrew/core"
-tap "homebrew/boneyard"
 tap "homebrew/bundle"
 tap "homebrew/services"
 tap "koekeishiya/formulae"
-tap "caskroom/drivers"
-tap "caskroom/fonts"
-tap "caskroom/versions"
-tap "caskroom/cask"
-tap "zegervdv/zathura"
+tap "homebrew/cask-drivers"
+tap "homebrew/cask-fonts"
+tap "homebrew/cask-versions"
+tap "homebrew/cask-cask"
 tap "universal-ctags/universal-ctags"
 
 # mac app store installer
@@ -18,7 +16,6 @@ brew "clpbar"
 brew "czmq"
 brew "docker-completion"
 brew "elinks"
-brew "gcc@4.9"
 brew "gcc@6"
 brew "gdb"
 brew "go"
@@ -54,8 +51,6 @@ brew "watch"
 brew "wdiff"
 brew "wiggle"
 brew "yaml-cpp"
-brew "zegervdv/zathura/zathura"
-brew "zegervdv/zathura/zathura-pdf-poppler"
 
 cask "alfred"
 cask "bibdesk"
@@ -144,7 +139,7 @@ brew "htop"
 
 cask "syncthing"
 cask "1password"
-# cask "google-chrome"
+cask "google-chrome"
 
 
 
