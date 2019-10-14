@@ -590,7 +590,7 @@ if InGui()
     set antialias
     set fuopt=maxvert,maxhorz
   elseif has("gui_vimr") 
-    VimRSetFontAndSize "ProFontIIx Nerd Font Mono", 9
+    " VimRSetFontAndSize "ProFontIIx Nerd Font Mono", 9
   elseif has("gui_gtk2")
     set guifont=Terminus\ 8
   elseif has("x11")

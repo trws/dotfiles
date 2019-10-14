@@ -1,6 +1,7 @@
 #!/usr/bin/python2
 
 import subprocess
+import distutils.spawn
 import sys
 import os
 import string
@@ -16,6 +17,8 @@ script_dir =  os.path.dirname(script_path)
 
 os.chdir(script_dir)
 
+#if not distutils.spawn.find_executable("brew"):
+#    subprocess.call(["sh", "-c", '/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"'], stdout=sys.stdout, stderr=sys.stderr)
 # subprocess.call(['git', 'pull'], stdout=sys.stdout, stderr=sys.stderr)
 # subprocess.call(['git', 'submodule', 'update', '--init', '--recursive'], stdout=sys.stdout, stderr=sys.stderr)
 

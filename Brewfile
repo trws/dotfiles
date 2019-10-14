@@ -5,7 +5,7 @@ tap "koekeishiya/formulae"
 tap "homebrew/cask-drivers"
 tap "homebrew/cask-fonts"
 tap "homebrew/cask-versions"
-tap "homebrew/cask-cask"
+tap "homebrew/cask"
 tap "universal-ctags/universal-ctags"
 
 # mac app store installer
@@ -20,7 +20,7 @@ brew "gcc@6"
 brew "gdb"
 brew "go"
 brew "hub", args: ["HEAD"]
-brew "hwloc", args: ["with-cairo"]
+brew "hwloc"
 brew "imagemagick"
 brew "jansson"
 brew "json-c"
@@ -30,7 +30,7 @@ brew "mercurial"
 brew "mosh"
 brew "mpich"
 
-brew "pandoc", args: ["HEAD"]
+brew "pandoc"
 brew "perl"
 brew "qpdf"
 brew "r"
@@ -64,10 +64,10 @@ cask "marked"
 cask "qutebrowser"
 cask "skim"
 cask "the-unarchiver"
-cask "virtualbox"
-cask "virtualbox-extension-pack"
+#cask "virtualbox"
+#cask "virtualbox-extension-pack"
 cask "vnc-viewer"
-cask "caskroom/fonts/font-hack"
+#cask "caskroom/fonts/font-hack"
 cask "font-profont-nerd-font-mono"
 cask "font-firacode-nerd-font-mono"
 
@@ -87,7 +87,7 @@ brew "openconnect"
 
 # vim
 tap "neovim/neovim"
-brew "macvim", args: ["with-override-system-vim"]
+brew "macvim"
 cask "vimr"
 brew "neovim"
 brew "vimpager"
@@ -117,7 +117,7 @@ brew "meson", args: ["HEAD"]
 brew "ninja"
 brew "ccache"
 brew "bear"
-brew "make", args: ["with-guile@2.0"]
+brew "make"
 brew "cmake"
 
 # fundamentals
