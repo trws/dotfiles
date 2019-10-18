@@ -19,5 +19,6 @@ proxied/cache
 
 # suggestion files
 *.sug
+*.spl
 
 
