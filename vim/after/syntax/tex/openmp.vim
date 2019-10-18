@@ -18,9 +18,12 @@
 
 " syn region texZone	start="\\begin{boxedcode}"		end="\\end{boxedcode}\|%stopzone\>"
 syn region texZone	start="\\begin{indentedcodelist}"		end="\\end{indentedcodelist}\|%stopzone\>"
+syn region texZone	start="\\begin{ompcFunction}"		end="\\end{ompcFunction}\|%stopzone\>"
 syn region texZone	start="\\vcode\*\=\z([^\ta-zA-Z]\)"	end="\z1\|%stopzone\>"		
 syntax match texZone "\\code\s*\(\[.*\]\)\={.\{-}}"
 syntax match texZone "\\scode\s*\(\[.*\]\)\={.\{-}}"
+syntax match texZone "\\hcode\s*\(\[.*\]\)\={.\{-}}"
+syntax match texZone "\\index\s*\(\[.*\]\)\={.\{-}}"
 syntax match texZone "\\plc\s*\(\[.*\]\)\={.\{-}}"
 syntax match texZone "\\splc\s*\(\[.*\]\)\={.\{-}}"
 syntax match texZone "\\splc\s*\(\[.*\]\)\={.\{-}}"
