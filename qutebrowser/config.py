@@ -17,15 +17,15 @@ c.auto_save.session = True
 
 # Enable JavaScript.
 # Type: Bool
-config.set('content.javascript.enabled', True, 'file://*')
+config.set("content.javascript.enabled", True, "file://*")
 
 # Enable JavaScript.
 # Type: Bool
-config.set('content.javascript.enabled', True, 'chrome://*/*')
+config.set("content.javascript.enabled", True, "chrome://*/*")
 
 # Enable JavaScript.
 # Type: Bool
-config.set('content.javascript.enabled', True, 'qute://*/*')
+config.set("content.javascript.enabled", True, "qute://*/*")
 
 # Mode to use for hints.
 # Type: String
@@ -33,19 +33,19 @@ config.set('content.javascript.enabled', True, 'qute://*/*')
 #   - number: Use numeric hints. (In this mode you can also type letters from the hinted element to filter and reduce the number of elements that are hinted.)
 #   - letter: Use the characters in the `hints.chars` setting.
 #   - word: Use hints words based on the html elements and the extra words.
-c.hints.mode = 'number'
+c.hints.mode = "number"
 
 # Bindings for normal mode
-config.bind('<Cmd+[>', 'back')
-config.bind('<Cmd+]>', 'forward')
-config.bind('<Cmd+{>', 'tab-prev')
-config.bind('<Cmd+}>', 'tab-next')
-config.bind('<Meta+r>', 'reload')
-config.bind('<Meta+w>', 'tab-close')
-config.bind('J', 'tab-prev')
-config.bind('K', 'tab-next')
-config.bind('T', 'set-cmd-text -s :open -t')
-config.bind('B', 'set-cmd-text -s :buffer')
+config.bind("<Cmd+[>", "back")
+config.bind("<Cmd+]>", "forward")
+config.bind("<Cmd+{>", "tab-prev")
+config.bind("<Cmd+}>", "tab-next")
+config.bind("<Meta+r>", "reload")
+config.bind("<Meta+w>", "tab-close")
+config.bind("J", "tab-prev")
+config.bind("K", "tab-next")
+config.bind("T", "set-cmd-text -s :open -t")
+config.bind("B", "set-cmd-text -s :buffer")
 # config.bind('middle', 'open -t')
 
 ## This is here so configs done via the GUI are still loaded.
@@ -877,7 +877,16 @@ c.bindings.key_mappings = {
 ## Same as `{column}`, but starting from index 0.
 ## Type: ShellCommand
 # c.editor.command = ['/usr/local/bin/reattach-to-user-namespace','/usr/local/bin/mvim', '-f', '{file}', '-c', 'normal {line}G{column0}l']
-c.editor.command = ['/usr/local/bin/reattach-to-user-namespace','/Users/scogland1/scripts/vimr', '--wait', '--nvim', '-f', '{file}', '-c', 'normal {line}G{column0}l']
+c.editor.command = [
+    "/usr/local/bin/reattach-to-user-namespace",
+    "/Users/scogland1/scripts/vimr",
+    "--wait",
+    "--nvim",
+    "-f",
+    "{file}",
+    "-c",
+    "normal {line}G{column0}l",
+]
 
 ## Encoding to use for the editor.
 ## Type: Encoding
@@ -1555,7 +1564,13 @@ c.editor.command = ['/usr/local/bin/reattach-to-user-namespace','/Users/scogland
 ## used by prepending the search engine name to the search term, e.g.
 ## `:open google qutebrowser`.
 ## Type: Dict
-# c.url.searchengines = {'DEFAULT': 'https://duckduckgo.com/?q={}'}
+c.url.searchengines = {
+    "DEFAULT": "https://www.google.com/search?q={}",
+    "google": "https://www.google.com/search?q={}",
+    "g": "https://www.google.com/search?q={}",
+    "ddg": "https://duckduckgo.com/?q={}",
+    "cpp": "https://en.cppreference.com/mwiki/index.php?title=Special%3ASearch&search={}",
+}
 
 ## Page(s) to open at the start.
 ## Type: List of FuzzyUrl, or FuzzyUrl
@@ -1879,4 +1894,3 @@ c.editor.command = ['/usr/local/bin/reattach-to-user-namespace','/Users/scogland
 # config.bind('<Return>', 'prompt-accept', mode='yesno')
 # config.bind('n', 'prompt-accept no', mode='yesno')
 # config.bind('y', 'prompt-accept yes', mode='yesno')
-
