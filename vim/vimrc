@@ -263,16 +263,20 @@ augroup END
 
 Plug 'junegunn/fzf', { 'dir': plugged_directory . '/fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-" if(has("python3"))
-"   Plug 'Shougo/denite.nvim'
-"   " Plug 'ozelentok/denite-gtags'
-"   Plug 'nixprime/cpsm'
-" else
-"   Plug 'Shougo/unite.vim'
-"   Plug 'Shougo/unite-ssh'
-"   " Plug 'hewes/unite-gtags'
-"   Plug 'tsukkee/unite-tag'
-" endif
+
+if(has("python3"))
+  Plug 'Shougo/denite.nvim'
+  " Plug 'ozelentok/denite-gtags'
+  Plug 'nixprime/cpsm'
+else
+  Plug 'Shougo/unite.vim'
+  Plug 'Shougo/unite-ssh'
+  " Plug 'hewes/unite-gtags'
+  Plug 'tsukkee/unite-tag'
+endif
+
+Plug 'Shougo/neomru.vim'
+
 " Plug 'Shougo/vimfiler.vim'
 " Plug 'Shougo/neoyank.vim' " provides history/yank unite source
 " Plug 'vim-scripts/gtags.vim'
@@ -281,7 +285,6 @@ Plug 'junegunn/fzf.vim'
 " These are nice, but they are *way* too slow
 " Plug 'xolox/vim-misc'
 " Plug 'xolox/vim-easytags'
-" Plug 'Shougo/neomru.vim'
 
 " if (! exists("g:gui_oni"))
 "   "ctrlp
@@ -386,7 +389,7 @@ map <Leader>vq :VimuxCloseRunner<CR>
 map <Leader>vx :VimuxInterruptRunner<CR>
 
 
-" source "~/.vim/unite_denite.vim"
+source ~/.vim/unite_denite.vim
 
 
 " enable history
@@ -573,7 +576,7 @@ call helpers#Map_for_all("<C-k>", ":Autoformat<CR>", 1, 0, 0)
 let g:airline_highlighting_cache = 1
 let g:airline#extensions#whitespace#enabled=0
 " let g:airline_extensions = ["tmuxline","branch","tagbar","quickfix","denite","csv","netrw","term","vimtex"]
-let g:airline_extensions = ["branch","tagbar","quickfix","csv","netrw","term","vimtex","undotree","windowswap","fugitiveline"]
+let g:airline_extensions = ["branch","tagbar","quickfix","csv","netrw","term","vimtex","undotree","windowswap","fugitiveline","denite"]
 set timeoutlen=300
 set ttimeoutlen=10
 
@@ -913,9 +916,6 @@ call helpers#Map_for_all_meta('w', ":call CloseWindowOrTab()<CR>", 2, 1, 1)
 if has("nvim")
   tnoremap <C-w> <C-\><C-n><C-w>
 endif
-
-" let g:vimfiler_as_default_explorer = 1
-let g:vimfiler_as_default_explorer = 0
 
 nnoremap <silent> <M-f>      :call helpers#ToggleVExplorer()<CR>
 nnoremap <silent> <A-S-f>    :call helpers#ToggleVExplorer()<CR>

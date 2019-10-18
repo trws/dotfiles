@@ -16,3 +16,8 @@ proxied/cache
 *.tmp
 ~*
 *.swp
+
+# suggestion files
+*.sug
+
+
