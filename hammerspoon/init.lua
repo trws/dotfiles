@@ -62,11 +62,13 @@ hotkey.bind('alt-shift','tab','Prev window',function()switcher:previous()end)
 
 -- application toggles, formerly alfred bindings
 -- bindings:insert(hotkey.bind({"ctrl","cmd"}, "t", function() toggle_application("com.googlecode.iterm2") end))
+bindings:insert(hotkey.bind({"ctrl","cmd"}, "m", function() toggle_application("com.webex.meetingmanager") end))
 bindings:insert(hotkey.bind({"ctrl","cmd"}, "s", function() toggle_application("com.freron.MailMate") end))
 bindings:insert(hotkey.bind({"ctrl","cmd"}, "a", function() toggle_application("com.apple.iCal") end))
 bindings:insert(hotkey.bind({"ctrl","cmd"}, "i", function() toggle_application("com.apple.ActivityMonitor") end))
 bindings:insert(hotkey.bind({"ctrl","cmd"}, "o", function() toggle_application("com.microsoft.Outlook") end))
 bindings:insert(hotkey.bind({"ctrl","cmd"}, "g", function() toggle_application("com.google.Chrome") end))
+bindings:insert(hotkey.bind({"ctrl","cmd"}, "b", function() toggle_application("org.qt-project.Qt.QtWebEngineCore") end))
 
 -- alternatively, call .nextWindow() or .previousWindow() directly (same as hs.window.switcher.new():next())
 -- hs.hotkey.bind('alt','tab','Next window',hs.window.switcher.nextWindow)
