@@ -31,43 +31,44 @@ Host ddwrt-lab
   HostName ssh.scogland.com
   ProxyCommand ssh scogland@quartz -W ssh.scogland.com:5022
 
-Match originalhost gale exec "[ !~/.dotfiles/scripts/at-home.py ]"
+Match originalhost gale exec " ! ~/.dotfiles/scripts/at-home.py "
   HostName ssh.scogland.com
   Port 4022
   DynamicForward localhost:12348
   ProxyJump nano
 
-Match originalhost hurricane exec "[ !~/.dotfiles/scripts/at-home.py ]"
+Match originalhost hurricane exec " ! ~/.dotfiles/scripts/at-home.py "
   # HostName ssh.scogland.com
   # Port 3022
   HostName 192.168.1.144
   Port 22
   ProxyJump nano
 
-Match originalhost nano exec "[ !~/.dotfiles/scripts/at-home.py ]"
-  HostName ssh.scogland.com
-  Port 7022
+#base nano setup
+
+Match originalhost nano
   RemoteForward 43222 localhost:22
   DynamicForward 12345
   LocalForward 4443 sync11.omnigroup.com:443
   User scogland
 
+Match originalhost nano exec " ! ~/.dotfiles/scripts/at-home.py "
+  HostName ssh.scogland.com
+  Port 7022
+
+Match originalhost nano exec " ~/.dotfiles/scripts/at-home.py "
+  HostName nano.local
+  Port 22
+
+
 Match originalhost breath
   User root
   ProxyCommand ssh ddwrt -W 192.168.1.3:22
 
-Match originalhost funnel exec  "[ ~/.dotfiles/scripts/at-home.py ]"
-  User scogland1
-  LocalForward 5901 localhost:5900
-  LocalForward 22001 localhost:22000
-  LocalForward 22002 10.5.0.3:22000
-  LocalForward 2201 localhost:22
-  LocalForward 2202 10.5.0.3:22
-  LocalForward 9993 outlook.office365.com:993
-  LocalForward 5587 smtp.office365.com:587
+Match originalhost funnel
   ExitOnForwardFailure yes
-  DynamicForward localhost:12347
   ProxyCommand ssh scogland@nano -W localhost:43222
+  # ProxyJump rzquartz
 
 
 
@@ -83,7 +84,7 @@ Host charon charon.cs.vt.edu
 
 # LLNL
 
-Host rzmanta rzgw ray
+Host rzmanta rztopaz ray
     Port 22
     ForwardAgent yes
     ForwardX11 yes
@@ -96,13 +97,17 @@ Host rzmanta rzgw ray
 Host *z-stash* *z-bitbucket*
     User git
     Port 7999
-    ProxyJump quartz
+    ProxyJump rztopaz
 
 Host code.ornl.gov
     Port 22
 
 Host github.com
     User git
+
+Host vortex* 10.253.134.139 bolt*
+    User scogland1
+    Port 22
 
 Host *.llnl.gov
     HostName %h
@@ -115,21 +120,19 @@ Host quartz ipa hype ray surface vulcan sierra impetus hype2 rz*
 # Match exec " ~/.dotfiles/scripts/at-llnl.py " !originalhost github.com
 #   ProxyCommand ssh ddwrt -W github.com:22
 
-Host vortex vortex.llnl.gov 10.253.134.139
+Host vortex vortex.llnl.gov 10.253.134.139 cyclone funnel
+  User scogland1
+  # HostName vortex.llnl.gov
   LocalForward 5901 localhost:5900
+  LocalForward 5902 10.5.0.3:5900
   LocalForward 22001 localhost:22000
+  LocalForward 22002 10.5.0.3:22000
   LocalForward 4043 outlook.office365.com:443
-  LocalForward 4993 outlook.office365.com:993
-  LocalForward 4587 smtp.office365.com:587
+  LocalForward 9993 outlook.office365.com:993
+  LocalForward 5587 smtp.office365.com:587
+  LocalForward 2201 localhost:22
+  LocalForward 2202 10.5.0.3:22
   DynamicForward localhost:12347
-
-Host cyclone
-  LocalForward 5901 localhost:5900
-  LocalForward 22001 localhost:22000
-  DynamicForward localhost:12347
-  HostName vortex.llnl.gov
-  Port 22
-  ProxyJump rzmanta
 
 Match exec "~/.dotfiles/scripts/hop-vpn.sh" originalhost vortex !host localhost
     HostName localhost
@@ -156,12 +159,12 @@ Host chimera-funnel
     LocalForward 5904 localhost:5900
     ProxyJump funnel
 
-Match exec " ~/.dotfiles/scripts/at-llnl.py" !host eris.llnl.gov !host localhost !originalhost chimera !host cz-bit* !originalhost github.com !originalhost rzgw !originalhost 10.253.134.139 !originalhost vortex !originalhost localhost !originalhost 127.0.0.1
+Match exec " ~/.dotfiles/scripts/at-llnl.py" !host eris.llnl.gov !host localhost !originalhost chimera !host cz-bit* !originalhost github.com !originalhost rztopaz !originalhost 10.253.134.139 !originalhost vortex !originalhost localhost !originalhost 127.0.0.1
     #this must be overridden above if wrong
     Port 622
-    ProxyJump rzgw
+    ProxyJump rztopaz
 
-Match originalhost rzgw
+Match originalhost rztopaz
     PubkeyAuthentication no
     PasswordAuthentication yes
 
@@ -172,7 +175,7 @@ Match exec " ~/.dotfiles/scripts/at-llnl.py " originalhost github.com
 Host lanlgw ihpc-gate
     HostName ihpc-gate.lanl.gov
     ForwardX11 no
-    ProxyCommand ssh scogland@rzgw -W %h:22
+    ProxyCommand ssh scogland@rztopaz -W %h:22
 
 Host trinitite
     HostName tt-fey.lanl.gov
@@ -184,7 +187,7 @@ Host czvnc
     HostName czvnc.llnl.gov
     ForwardX11 no
     RemoteForward 19752 localhost:5500
-    ProxyCommand ssh scogland@rzgw -W %h:622
+    ProxyCommand ssh scogland@rztopaz -W %h:622
 
 # Power lab
 Host hayes
