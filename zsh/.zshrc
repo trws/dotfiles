@@ -13,7 +13,9 @@ export ZSH_CACHE_DIR=~/.cache/zsh
 # ensure my funcs, and prompts are there before load
 fpath=($ZDOTDIR/funcs $fpath)
 
-if ssh-add -l >& /dev/null ; then
+if [[ -e ~/.ssh/agent.sock ]] ; then
+  export SSH_AUTH_SOCK=~/.ssh/agent.sock
+elif ssh-add -l >& /dev/null ; then
   echo ${SSH_AUTH_SOCK} > ~/.cache/current-auth
 else
   auth_sock="$(cat ~/.cache/current-auth)"

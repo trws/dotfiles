@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>org.homebrew.ssh-agent</string>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/usr/local/bin/ssh-agent</string>
+        <string>-D</string>
+        <string>-a</string>
+        <string>/Users/scogland1/.ssh/agent.sock</string>
+    </array>
+    <key>Sockets</key>
+    <dict>
+        <key>Listeners</key>
+        <dict>
+            <key>SockPathName</key>
+            <string>/Users/scogland1/.ssh/agent.sock</string>
+            <key>SockPathMode</key>
+            <integer>384</integer> <!-- octal 0600 -->
+            <key>SockPathGroup</key>
+            <integer>0</integer>
+        </dict>
+    </dict>
+    <key>EnableTransactions</key>
+    <true/>
+</dict>
+</plist>
