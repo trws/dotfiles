@@ -2,6 +2,9 @@
 
 typeset -U path
 typeset -U manpath
+declare -a pkg_config_path
+typeset -U pkg_config_path
+typeset -T PKG_CONFIG_PATH pkg_config_path
 
 function remove_from_path(){
 for p in $@ ; do
@@ -20,6 +23,15 @@ for p in $@ ; do
     if [ -d $p/share/man ] ; then
         manpath=($p/share/man $manpath)
     fi
+    if [ -d $p/share/pkgconfig ] ; then
+        pkg_config_path=($p/share/pkgconfig $pkg_config_path)
+    fi
+    if [ -d $p/lib/pkgconfig ] ; then
+        pkg_config_path=($p/lib/pkgconfig $pkg_config_path)
+    fi
+    if [ -d $p/lib64/pkgconfig ] ; then
+        pkg_config_path=($p/lib64/pkgconfig $pkg_config_path)
+    fi
 done
 }
 
@@ -34,10 +46,21 @@ for p in $@ ; do
     if [ -d $p/share/man ] ; then
         manpath=($manpath $p/share/man)
     fi
+    if [ -d $p/share/pkgconfig ] ; then
+        pkg_config_path=($pkg_config_path $p/share/pkgconfig )
+    fi
+    if [ -d $p/lib/pkgconfig ] ; then
+        pkg_config_path=($pkg_config_path $p/lib/pkgconfig )
+    fi
+    if [ -d $p/lib64/pkgconfig ] ; then
+        pkg_config_path=($pkg_config_path $p/lib64/pkgconfig )
+    fi
 done
 }
 
 [[ -x /usr/local/bin/defaultpaths ]] && eval `/usr/local/bin/defaultpaths`
+
+add_to_path_back /usr /
 
 if (( $gotroot )) ; then
     path=(/usr/local/sbin /opt/local/sbin $path)
@@ -87,4 +110,7 @@ add_to_path_front "$PRGPATH/cargo"
 
 
 path=(~/scripts $path)
+
+export PKG_CONFIG_PATH
+export pkg_config_path
 

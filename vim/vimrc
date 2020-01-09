@@ -29,8 +29,8 @@ endif
 
 call plug#begin(plugged_directory)
 
-" Bundle 'Shougo/vimproc.vim'
-" Plug 'Shougo/vimproc.vim' , { 'do' : 'make'}
+" P 'Shougo/vimproc.vim'
+Plug 'Shougo/vimproc.vim' , { 'do' : 'make'}
 
 "split management
 Plug 'wesQ3/vim-windowswap'
@@ -787,8 +787,8 @@ call helpers#Map_for_all("<C-k>", ":Autoformat<CR>", 1, 0, 0)
 " let g:airline#extensions#csv#enabled = 1
 let g:airline_highlighting_cache = 1
 let g:airline#extensions#whitespace#enabled=0
-" let g:airline_extensions = ["tmuxline","branch","tagbar","quickfix","denite","csv","netrw","term","vimtex"]
-let g:airline_extensions = ["tmuxline","branch","tagbar","quickfix","denite","csv","netrw","term","vimtex","undotree","windowswap","gutentags","fugitiveline"]
+" let g:airline_extensions = ["tmuxline","branch","tagbar","quickfix","denite","csv","term","vimtex"]
+let g:airline_extensions = ["tmuxline","branch","tagbar","quickfix","denite","csv","term","vimtex","undotree","windowswap","gutentags","fugitiveline"]
 set timeoutlen=300
 set ttimeoutlen=10
 

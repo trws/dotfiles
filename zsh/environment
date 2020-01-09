@@ -8,6 +8,7 @@ export GIT_COMMITTER_EMAIL=scogland1@llnl.gov
 export GITHUB_USER=trws
 [[ -e ~/scripts/ssh ]] && export GIT_SSH_COMMAND=~/scripts/ssh
 
+
 # Give global tags an exuberant ctags backend
 # [[ -e ~/.globalrc ]] && export GTAGSCONF=~/.globalrc
 export MAKEOBJDIRPREFIX=~/.cache/global-obj
@@ -28,8 +29,17 @@ export LESS='-F -g -i -M -R -S -w -X -z-4'
 
 ENTOMB=yes
 
+if (( $+commands[fzf] )) ; then
+  if (( $+commands[fd] )) ; then
+    export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
+  elif (( $+commands[pt] )) ; then
+    export FZF_DEFAULT_COMMAND='pt --follow --nocolor --nogroup -g=.'
+  fi
+fi
+
 export EDITOR=vim
 export VISUAL=vim
+
 
 if (( $+commands[vimpager] )) ; then
   PAGER=vimpager
