@@ -1,6 +1,7 @@
 #!/usr/bin/python2
 
 import subprocess
+import distutils.spawn
 import sys
 import os
 import string
@@ -16,6 +17,8 @@ script_dir =  os.path.dirname(script_path)
 
 os.chdir(script_dir)
 
+#if not distutils.spawn.find_executable("brew"):
+#    subprocess.call(["sh", "-c", '/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"'], stdout=sys.stdout, stderr=sys.stderr)
 # subprocess.call(['git', 'pull'], stdout=sys.stdout, stderr=sys.stderr)
 # subprocess.call(['git', 'submodule', 'update', '--init', '--recursive'], stdout=sys.stdout, stderr=sys.stderr)
 
@@ -42,20 +45,20 @@ link_files = {
 if os.path.exists("~/Library"):
     link_files["pip"] = "~/Library/Application Support/pip",
 
-
-for target, link in link_files.items():
+def try_link(link, target):
+    print("linking {} to {}".format(link, target))
     l_path = os.path.expanduser(link)
     t_path = os.path.expanduser(target)
     if os.path.lexists(l_path):
         try:
             if os.path.samefile(l_path, t_path):
-                continue
+                return
             else:
                 if os.path.islink(l_path) and args.force:
                     os.unlink(l_path)
                 else:
                     print "Possible conflict on {}->{}".format(link,target)
-                    continue
+                    return
         except OSError as e:
             print "samefile check failed, probably means a dead symlink:", e
     try:
@@ -66,4 +69,12 @@ for target, link in link_files.items():
         os.symlink(os.path.join(script_dir, t_path), l_path)
     except OSError as e:
         print "Symlinking failed {}->{}".format(link,target), e
+
+
+for target, link in link_files.items():
+    try_link(link, target)
+
+agents_dir = os.path.join(script_dir, "launch-agents")
+for plist in os.listdir(agents_dir):
+    try_link(os.path.join("~/Library/LaunchAgents/", os.path.basename(plist)), os.path.join(agents_dir,plist))
 

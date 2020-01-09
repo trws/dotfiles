@@ -1,6 +1,8 @@
 " prevent airline loading before my colorscheme
+if 0
 colorscheme jellybeans-stripped
 let g:airline_theme='jellybeans'
+endif
 if has('python3')
   silent! python3 1
 endif
@@ -17,7 +19,8 @@ if exists("$ARCH")
   let plugged_directory = $ARCH
 elseif exists("$LMOD_arch")
   let plugged_directory = $LMOD_arch
-elseif (!has("macunix")) && (!has("win64"))
+elseif (!has("win64"))
+  " (!has("macunix")) && 
   let plugged_directory = substitute(system("uname -m"), '[ \n]\+$', '', '')
 endif
 let plugged_directory = expand("~/.cache/vim-plugged/" . plugged_directory)
@@ -31,6 +34,15 @@ call plug#begin(plugged_directory)
 
 " P 'Shougo/vimproc.vim'
 Plug 'Shougo/vimproc.vim' , { 'do' : 'make'}
+
+" allow swapping of arguments, and i,/a, for selecting swappable component of
+" comma-delimited argument lists
+Plug 'machakann/vim-swap'
+
+omap i, <Plug>(swap-textobject-i)
+xmap i, <Plug>(swap-textobject-i)
+omap a, <Plug>(swap-textobject-a)
+xmap a, <Plug>(swap-textobject-a)
 
 "split management
 Plug 'wesQ3/vim-windowswap'
@@ -55,6 +67,9 @@ nnoremap <silent> <leader>ws :call WindowSwap#EasyWindowSwap()<CR>
 " Plug 'github-theme'
 " Plug 'crusoexia/vim-monokai'
 " Plug 'nanotech/jellybeans.vim' " in base repo now
+Plug 'romainl/Apprentice', { 'branch' : 'fancylines-and-neovim' }
+Plug 'arcticicestudio/nord-vim'
+Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
 
 Plug 'greymd/oscyank.vim'  " clipboard support for xterm-type terms
 
@@ -70,9 +85,15 @@ Plug 'vim-utils/vim-man'
 "powerline not working, light alternative?
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
+" Plug 'itchyny/lightline.vim'
+" let g:lightline = {
+"       \ 'colorscheme': 'nord',
+"       \ }
+
+
 " Plug 'tomtom/quickfixsigns_vim'
 " Plug 'bling/vim-bufferline'
-Plug 'edkolev/tmuxline.vim'
+Plug 'edkolev/tmuxline.vim', { 'on': 'Tmuxline'}
 
 
 " if executable('task')
@@ -86,11 +107,16 @@ Plug 'reedes/vim-pencil', { 'for': 'tex'}
 
 " ==== filetype handlers, highlighting etc ====
 Plug 'sheerun/vim-polyglot' " pulls in syntax for almost everything
-let g:polyglot_disabled = ['latex', 'markdown']
+let g:polyglot_disabled = [ 'markdown']
 Plug 'chrisbra/vim-zsh'
 let g:zsh_fold_enable = 1
-Plug 'lervag/vimtex'
+" Plug 'lervag/vimtex'
+
+let g:vimtex_disable_recursive_main_file_detection = 1
 let g:vimtex_view_method='skim'
+let g:vimtex_fold_manual=1
+" let g:vimtex_view_enabled=0
+" let g:vimtex_include_search_enabled = 0
 let g:vimtex_syntax_minted = [
       \ {
       \   'lang' : 'c',
@@ -126,12 +152,12 @@ Plug 'mrtazz/DoxygenToolkit.vim'
 Plug 'vim-scripts/utl.vim' " execute URLs
 " not in polyglot - cool csv highlighting
 Plug 'chrisbra/csv.vim'
-Plug 'LucHermitte/lh-vim-lib' " dep for the below
-Plug 'LucHermitte/VimFold4C'
+" Plug 'LucHermitte/lh-vim-lib' " dep for the below
+" Plug 'LucHermitte/VimFold4C'
 " CSupport plugin: XXX: reacts badly with several others
 " Plug 'c.vim'
 " org-mode
-" Plug 'jceb/vim-orgmode'
+Plug 'jceb/vim-orgmode'
 " Plug 'dhruvasagar/vim-dotoo' " not really working...
 
 " date incrementing with ^a and so-forth
@@ -173,23 +199,23 @@ if ! has('win32')
   " nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
   " nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
 
-    function! BuildYCM(info)
-      " info is a dictionary with 3 fields
-      " - name:   name of the plugin
-      " - status: 'installed', 'updated', or 'unchanged'
-      " - force:  set on PlugInstall! or PlugUpdate!
-      if a:info.status != 'unchanged'
-        !./install.py --clang-completer --rust-completer
-      endif
-    endfunction
-    Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') }
+  function! BuildYCM(info)
+    " info is a dictionary with 3 fields
+    " - name:   name of the plugin
+    " - status: 'installed', 'updated', or 'unchanged'
+    " - force:  set on PlugInstall! or PlugUpdate!
+    if a:info.status != 'unchanged'
+      !./install.py --clang-completer --rust-completer
+    endif
+  endfunction
+  Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') }
 
 endif
 
 if has('nvim')
-"   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+  "   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 else
-"   Plug 'Shougo/deoplete.nvim'
+  "   Plug 'Shougo/deoplete.nvim'
   Plug 'roxma/nvim-yarp'
   Plug 'roxma/vim-hug-neovim-rpc'
 endif
@@ -208,6 +234,7 @@ Plug 'Shougo/neco-vim' " add vim completion to ycm or deoplete
 "file management
 " Plug 'xolox/vim-misc'
 " Plug 'xolox/vim-notes'
+" Plug 'vim-scripts/VOoM'
 Plug 'vimwiki/vimwiki'
 let wiki = {}
 let wiki.path = expand('~/projects/vimwiki/')
@@ -236,6 +263,7 @@ augroup END
 
 Plug 'junegunn/fzf', { 'dir': plugged_directory . '/fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+
 if(has("python3"))
   Plug 'Shougo/denite.nvim'
   " Plug 'ozelentok/denite-gtags'
@@ -246,15 +274,17 @@ else
   " Plug 'hewes/unite-gtags'
   Plug 'tsukkee/unite-tag'
 endif
+
+Plug 'Shougo/neomru.vim'
+
 " Plug 'Shougo/vimfiler.vim'
-Plug 'Shougo/neoyank.vim' " provides history/yank unite source
+" Plug 'Shougo/neoyank.vim' " provides history/yank unite source
 " Plug 'vim-scripts/gtags.vim'
-Plug 'ludovicchabant/vim-gutentags'
+" Plug 'ludovicchabant/vim-gutentags'
 " let g:gutentags_ctags_tagfile = ".git/tags" " causes relative oddness
 " These are nice, but they are *way* too slow
 " Plug 'xolox/vim-misc'
 " Plug 'xolox/vim-easytags'
-Plug 'Shougo/neomru.vim'
 
 " if (! exists("g:gui_oni"))
 "   "ctrlp
@@ -281,6 +311,8 @@ noremap!        <M-f> <S-Right>
 
 " Plug 'airblade/vim-gitgutter'
 
+" indent objects
+Plug 'michaeljsmith/vim-indent-object'
 Plug 'nathanaelkane/vim-indent-guides'
 let g:indent_guides_start_level = 2
 let g:indent_guides_guide_size = 1
@@ -324,6 +356,9 @@ Plug 'tpope/vim-sensible'
 
 call plug#end()
 
+colorscheme apprentice
+" let g:airline_theme='apprentice'
+
 let mapleader      = ','
 let maplocalleader = ','
 
@@ -354,239 +389,30 @@ map <Leader>vq :VimuxCloseRunner<CR>
 map <Leader>vx :VimuxInterruptRunner<CR>
 
 
-
-"Unite and denite
-let  g:notes_directories = ['~/Projects/notes']
-if( ! has("python3")) " using unite
-  let g:unite_data_directory = '~/.vim/unite'
-  " let g:unite_source_bookmark_directory = '~/.vim/unite-bookmarks'
-  let g:unite_source_history_yank_enable = 1
-  let g:unite_source_grep_max_candidates = 500
-  call unite#filters#matcher_default#use(['converter_relative_word', 'matcher_fuzzy'])
-  call unite#filters#sorter_default#use(['sorter_rank'])
-  call unite#custom#profile('files', 'filters', 'sorter_rank')
-  call unite#custom#source('buffer,file,file_rec,file_rec/async', 'sorters', 'sorter_selecta')
-  call unite#custom#source('buffer,file,file_rec,file_rec/async', 'matchers',['converter_relative_word', 'matcher_fuzzy'])
-  nnoremap <leader>ur  :<C-u>Unite -start-insert file_rec/async:!<CR>
-  nnoremap <leader>ub  :<C-u>Unite buffer        file_mru bookmark<CR>
-  nnoremap <leader>uB  :<C-u>Unite bookmark<CR>
-  nnoremap <leader>uY  :<C-u>Unite history/yank<CR>
-  nnoremap <leader>uf  :<C-u>Unite -start-insert file<CR>
-  nnoremap <leader>un  :<C-u>Unite -start-insert file_rec:~/Projects/notes/<CR>
-  nnoremap <leader>ug  :<C-u>Unite grep:.<CR>
-  nnoremap <leader>uG  :<C-u>Unite grep:.:-i<CR>
-  nnoremap <leader>utc :<C-u>Unite gtags/context<CR>
-  nnoremap <leader>utr :<C-u>Unite gtags/ref<CR>
-  nnoremap <leader>utd :<C-u>Unite gtags/def<CR>
-  nnoremap <leader>utg :<C-u>Unite gtags/grep<CR>
-  nnoremap <leader>utf :<C-u>Unite gtags/file<CR>
-  nnoremap <leader>utC :<C-u>Unite gtags/completion<CR>
-  augroup UniteTagsRemap
-    autocmd BufEnter *
-          \   if empty(&buftype)
-          \|      nnoremap <buffer> <C-]> :<C-u>UniteWithCursorWord -immediately tag<CR>
-          \|  endif
-  augroup END
-else
-  call denite#custom#alias('source', 'file_rec/git', 'file_rec')
-  call denite#custom#var('file_rec/git', 'command',
-        \ ['git', 'ls-files', '-co', '--exclude-standard'])
-  " nnoremap <silent> <leader>ur :<C-u>Denite
-  "       \ `finddir('.git', ';') != '' ? 'file_rec/git' : 'file_rec'`<CR>
-  function! Find_ur_dir()
-    let l:target=fnamemodify(resolve(expand('%:p')), ':p:h')
-    let l:git=finddir('.git',l:target . ';')
-    if l:git != ''
-      return fnamemodify(l:git, ':h')
-    else
-      return '.'
-    endif
-  endfunction
-
-  nnoremap <silent> <leader>ur :<C-u>Denite `"file_rec:" . Find_ur_dir()`<CR>
-  " nnoremap <silent> <leader>ur :<C-u>Denite file_rec<CR>
-  " function! Enter_and_open(dirs)
-  "   echo a:dirs
-  "   echo a:dirs[0]
-  "   " cd a:dirs[0]
-  "   " Denite "file/rec:" . a:dirs[0]
-  " endfunction
-  " call denite#custom#action('directory', 'enter_and_open',
-  "       \ {context -> Enter_and_open(context['targets'])})
-
-  nnoremap <leader>ub  :Denite buffer file_mru<CR>
-  nnoremap <leader>uY  :Denite neoyank<CR>
-  nnoremap <leader>uf  :Denite `"file_rec:" . expand("%:p:h")`<CR>
-  nnoremap <leader>up  :Denite `"file::" . expand("~/projects")`<CR>
-  nnoremap <leader>un  :Denite file_rec:~/Projects/notes/<CR>
-  nnoremap <leader>ug  :Denite grep:.<CR>
-  nnoremap <leader>uG  :Denite grep:.:-i<CR>
-  nnoremap <leader>ul  :Denite line<CR>
-  nnoremap <leader>uT  :Denite outline<CR>
-  nnoremap <leader>ut  :Denite tag<CR>
-  nnoremap <leader>u]  :DeniteCursorWord -immediately-1 -mode=normal tag<CR>
-  " nnoremap <leader>utc :DeniteCursorWord -buffer-name=gtags_context -immediately-1 -mode=normal gtags_context<CR>
-  " nnoremap <leader>utr :DeniteCursorWord -buffer-name=gtags_ref -immediately-1 -mode=normal gtags_ref<CR>
-  " nnoremap <leader>utd :DeniteCursorWord -buffer-name=gtags_def -immediately-1 -mode=normal gtags_def<CR>
-  " nnoremap <leader>utg :DeniteCursorWord -buffer-name=gtags_grep -mode=normal gtags_grep<CR>
-  " nnoremap <leader>utf :Denite           -buffer-name=gtags_file -mode=normal gtags_file<CR>
-  " nnoremap <leader>utC :Denite           -buffer-name=gtags_completion -mode=normal gtags_completion<CR>
-  augroup DeniteTagsRemap
-    autocmd BufEnter *
-          \   if empty(&buftype)
-          \|      nnoremap <buffer> <C-]> :<C-u>DeniteCursorWord -immediately-1 tag<CR>
-          \|  endif
-  augroup END
-  call denite#custom#map('normal', 'v', '<denite:do_action:vsplit>')
-
-  if executable('ag')
-    " Change file_rec command.
-    call denite#custom#var('file_rec', 'command',
-          \ ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
-
-    " Ag command on grep source
-    call denite#custom#var('grep', 'command', ['ag'])
-    call denite#custom#var('grep', 'default_opts',
-          \ ['-i', '--vimgrep'])
-    call denite#custom#var('grep', 'recursive_opts', [])
-    call denite#custom#var('grep', 'pattern_opt', [])
-    call denite#custom#var('grep', 'separator', ['--'])
-    call denite#custom#var('grep', 'final_opts', [])
-  elseif executable('rg')
-    " For ripgrep
-    " Note: It is slower than ag
-    call denite#custom#var('file_rec', 'command',
-          \ ['rg', '--files', '--glob', '!.git', ''])
-
-    " Ripgrep command on grep source
-    call denite#custom#var('grep', 'command', ['rg'])
-    call denite#custom#var('grep', 'default_opts',
-          \ ['--vimgrep', '--no-heading'])
-    call denite#custom#var('grep', 'recursive_opts', [])
-    call denite#custom#var('grep', 'pattern_opt', ['--regexp'])
-    call denite#custom#var('grep', 'separator', ['--'])
-    call denite#custom#var('grep', 'final_opts', [])
-
-    " For Pt(the platinum searcher)
-    " NOTE: It also supports windows.
-  elseif executable('pt')
-    call denite#custom#var('file_rec', 'command',
-          \ ['pt', '--follow', '--nocolor', '--nogroup',
-          \  (has('win32') ? '-g:' : '-g='), ''])
-
-    " Pt command on grep source
-    call denite#custom#var('grep', 'command', ['pt'])
-    call denite#custom#var('grep', 'default_opts',
-          \ ['--nogroup', '--nocolor', '--smart-case'])
-    call denite#custom#var('grep', 'recursive_opts', [])
-    call denite#custom#var('grep', 'pattern_opt', [])
-    call denite#custom#var('grep', 'separator', ['--'])
-    call denite#custom#var('grep', 'final_opts', [])
-  endif
-  if executable('fd')
-    call denite#custom#var('file_rec', 'command',
-          \ ['fd', '--type', 'f', '--follow', '--color', 'never', ''])
-  endif
-
-  " Change mappings.
-  call denite#custom#map(
-        \ 'insert',
-        \ '<C-j>',
-        \ '<denite:move_to_next_line>',
-        \ 'noremap'
-        \)
-  call denite#custom#map(
-        \ 'insert',
-        \ '<C-k>',
-        \ '<denite:move_to_previous_line>',
-        \ 'noremap'
-        \)
-  call denite#custom#map(
-        \ 'insert',
-        \ '<C-a>',
-        \ '<denite:move_caret_to_head>',
-        \ 'noremap'
-        \)
-  call denite#custom#map(
-        \ 'insert',
-        \ '<C-e>',
-        \ '<denite:move_caret_to_tail>',
-        \ 'noremap'
-        \)
-  call denite#custom#map(
-        \ 'insert',
-        \ '<A-b>',
-        \ '<denite:move_caret_to_one_word_left>',
-        \ 'noremap'
-        \)
-  call denite#custom#map(
-        \ 'insert',
-        \ '<A-f>',
-        \ '<denite:move_caret_to_one_word_right>',
-        \ 'noremap'
-        \)
-  call denite#custom#map(
-        \ 'insert',
-        \ '<A-BS>',
-        \ '<denite:delete_word_before_caret>',
-        \ 'noremap'
-        \)
-  call denite#custom#map(
-        \ 'insert',
-        \ '<A-d>',
-        \ '<denite:delete_word_under_caret>',
-        \ 'noremap'
-        \)
-  call denite#custom#map(
-        \ 'insert',
-        \ '<Up>',
-        \ '<denite:move_to_previous_line>',
-        \ 'noremap'
-        \)
-  call denite#custom#map(
-        \ 'insert',
-        \ '<Down>',
-        \ '<denite:move_to_next_line>',
-        \ 'noremap'
-        \)
-  call denite#custom#map(
-        \ 'insert',
-        \ '<S-Up>',
-        \ '<denite:assign_previous_matched_text>',
-        \ 'noremap'
-        \)
-  call denite#custom#map(
-        \ 'insert',
-        \ '<S-Down>',
-        \ '<denite:assign_next_matched_text>',
-        \ 'noremap'
-        \)
-
-  " Change matchers.
-  call denite#custom#source(
-        \ 'file_mru', 'matchers', ['matcher_fuzzy', 'matcher_project_files'])
-  call denite#custom#source(
-        \ 'file_rec', 'matchers', ['matcher_cpsm'])
-
-  " Change sorters.
-  call denite#custom#source(
-        \ 'file_rec', 'sorters', ['sorter_sublime'])
+source ~/.vim/unite_denite.vim
 
 
-  " Define alias
-  call denite#custom#alias('source', 'file_rec/git', 'file_rec')
-  call denite#custom#var('file_rec/git', 'command',
-        \ ['git', 'ls-files', '-co', '--exclude-standard'])
-
-  " Change default prompt
-  " call denite#custom#option('default', 'prompt', '>')
-
-  " Change ignore_globs
-  call denite#custom#filter('matcher_ignore_globs', 'ignore_globs',
-        \ [ '.git/', '.ropeproject/', '__pycache__/',
-        \   'venv/', 'images/', '*.min.*', 'img/', 'fonts/'])
-endif
-
+" enable history
+let g:fzf_buffers_jump = 1
+let g:fzf_history_dir = '~/.cache/fzf-history'
+let g:fzf_action = {
+      \ 'ctrl-t': 'tab split',
+      \ 'ctrl-x': 'split',
+      \ 'ctrl-v': 'vsplit' }
+let g:fzf_colors =
+      \ { 'fg':      ['fg', 'Normal'],
+      \ 'bg':      ['bg', 'Normal'],
+      \ 'hl':      ['fg', 'Comment'],
+      \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+      \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+      \ 'hl+':     ['fg', 'Statement'],
+      \ 'info':    ['fg', 'PreProc'],
+      \ 'border':  ['fg', 'Ignore'],
+      \ 'prompt':  ['fg', 'Conditional'],
+      \ 'pointer': ['fg', 'Exception'],
+      \ 'marker':  ['fg', 'Keyword'],
+      \ 'spinner': ['fg', 'Label'],
+      \ 'header':  ['fg', 'Comment'] }
 command! -bang -nargs=* Ag
       \ call fzf#vim#ag(<q-args>,
       \                 <bang>0 ? fzf#vim#with_preview('up:60%')
@@ -612,11 +438,17 @@ function! Files_with_ur_dir()
   :execute 'Files ' . l:dir
 endfunction
 " fzf version of the mappings, experimental
-nnoremap <silent> <leader>fr  :call Files_with_ur_dir()<CR>
+" nnoremap <silent> <leader>fr  :call Files_with_ur_dir()<CR>
+nnoremap <silent> <leader>fr  :Files<CR>
 nnoremap <silent> <leader>fb  :History<CR>
+nnoremap <silent> <leader>fB  :Buffers<CR>
 nnoremap <silent> <leader>fs  :GFiles?<CR>
 nnoremap <silent> <leader>fn  :Files ~/Projects/notes/<CR>
+if executable('rg')
 nnoremap <silent> <leader>fg  :call helpers#AgWithParam()<CR>
+else
+nnoremap <silent> <leader>fg  :Rg<CR>
+endif
 nnoremap <silent> <leader>fl  :BLines<CR>
 nnoremap <silent> <leader>fL  :Lines<CR>
 nnoremap <silent> <leader>fT  :BTags<CR>
@@ -625,9 +457,10 @@ nnoremap <silent> <leader>f]  :call TagsWithCword()<CR>
 
 let include_paths = ['/opt/local/include','/usr/local/include','/usr/include','/Developer/Headers',fnamemodify('~/programs/include',':p')]
 let &path= join(['.', '', './include'] + include_paths, ',')
-let g:unite_source_gtags_project_config = {
-      \ '_':                   { 'gtags_libpath': include_paths }
-      \ }
+
+" let g:unite_source_gtags_project_config = {
+"       \ '_':                   { 'gtags_libpath': include_paths }
+"       \ }
 
 
 
@@ -637,51 +470,6 @@ call FindOrCreate(g:global_objdir)
 let tag_file = g:global_objdir . "/tags"
 set tags=./tags;.git/tags;,tags
 
-
-if executable('rg')
-  let unite_ignores = ["!CMakeFiles",
-        \"!*.dSYM",
-        \"!*.dat",
-        \"!*.pdf",
-        \"!*.bib"]
-  let unite_globs = []
-  for ig in unite_ignores
-    call add(unite_globs, "--glob '" . ig . "'")
-  endfor
-  " Use rg in unite grep source.
-  let g:unite_source_grep_command = 'rg'
-  let g:unite_source_grep_default_opts = ' --smart-case -n --no-heading --color never --no-messages ' .
-        \ join(unite_globs) . ' -e '
-  let g:unite_source_grep_separator = "" "avoid having unite add '--' where it doesn't go
-  let g:unite_source_grep_recursive_opt = ''
-  " The empty perens set the pattern, all files should match
-  let unite_globs2 = []
-  for ig in unite_ignores
-    call add(unite_globs2, '--glob')
-    call add(unite_globs2, ig)
-  endfor
-  let g:unite_source_rec_async_command = ['rg', '--color', 'never', '--no-heading', '--files'] + unite_globs2
-elseif executable('pt')
-  " Use pt in unite grep source.
-  " https://github.com/monochromegane/the_platinum_searcher
-  let g:unite_source_grep_command = 'pt'
-  let g:unite_source_grep_default_opts = ' --smart-case --nogroup --nocolor ' .
-        \ '--ignore ''*.dat'' --ignore ''*.pdf'' --ignore ''*.bib'' -e '
-  let g:unite_source_grep_recursive_opt = ''
-  " The empty perens set the pattern, all files should match
-  let g:unite_source_rec_async_command = ['pt', '--nocolor', '--nogroup', '-g', ".", ""]
-elseif executable('ag')
-  " Use ag in unite grep source.
-  let g:unite_source_grep_command = 'ag'
-  let g:unite_source_grep_default_opts =
-        \ '--line-numbers --nocolor --nogroup --hidden ' .
-        \ '--ignore ''CMakeFiles'' ' .
-        \ '--ignore ''*.dat'' --ignore ''*.pdf'' --ignore ''build*''  '
-  let g:unite_source_grep_recursive_opt = ''
-  let g:unite_source_rec_async_command = ['ag', '-i', '--nocolor', '--nogroup', '--ignore', 'build*', '--ignore', '.git', '--ignore', '.bzr', '--ignore', 'node_modules', '--hidden', '-g', ""]
-else
-  let g:unite_source_rec_find_args = ['-path', '*/.git/*', '-prune', '-o', '-path', '*/build*/*', '-prune', '-o', '-print']
-endif
 
 "YouCompleteMe
 nnoremap <leader>yg :YcmCompleter GoTo<CR>
@@ -788,7 +576,7 @@ call helpers#Map_for_all("<C-k>", ":Autoformat<CR>", 1, 0, 0)
 let g:airline_highlighting_cache = 1
 let g:airline#extensions#whitespace#enabled=0
 " let g:airline_extensions = ["tmuxline","branch","tagbar","quickfix","denite","csv","term","vimtex"]
-let g:airline_extensions = ["tmuxline","branch","tagbar","quickfix","denite","csv","term","vimtex","undotree","windowswap","gutentags","fugitiveline"]
+let g:airline_extensions = ["branch","tagbar","quickfix","csv","term","vimtex","undotree","windowswap","fugitiveline","denite"]
 set timeoutlen=300
 set ttimeoutlen=10
 
@@ -801,9 +589,11 @@ if InGui()
     " set gfn=Courier\ New:h11.00
     " set gfn=ProFontX:h9.00
     " expariment to get italic monospace variant with full powerline support
-    set gfn=Hack\ Regular\ Nerd\ Font\ Complete:h10
+    set gfn=ProFontIIx\ Nerd\ Font\ Mono:h9
     set antialias
     set fuopt=maxvert,maxhorz
+  elseif has("gui_vimr") 
+    " VimRSetFontAndSize "ProFontIIx Nerd Font Mono", 9
   elseif has("gui_gtk2")
     set guifont=Terminus\ 8
   elseif has("x11")
@@ -900,7 +690,7 @@ set modelines=5
 " Optimize for fast terminal connections
 set ttyfast
 " Use UTF-8 without BOM
-" set encoding=utf-8 nobomb " covered by sensible
+set encoding=utf-8 nobomb " covered by sensible
 " Centralize backups, swapfiles and undo history, make dropbox happy!
 call FindOrCreate("~/.cache/vim/backups")
 set backupdir=~/.cache/vim/backups
@@ -1020,6 +810,7 @@ nmap Y y$
 
 call helpers#Map_for_all("<C-c>","<Esc><Esc>", 1, 1)
 inoremap kj <Esc><Esc>
+inoremap jk <Esc><Esc>
 
 map <S-Z><S-S> :up<CR>
 
@@ -1077,12 +868,6 @@ if exists("neovim_dot_app")
 endif
 " if ! has("gui_running")
 "alt
-"tab management
-call helpers#Map_for_all_meta('t', ":tabnew<CR>", 2, 1, 1)
-call helpers#Map_for_all_meta('}', ":tabnext<CR>", 2, 1, 1)
-call helpers#Map_for_all_meta('{', ":tabprevious<CR>", 2, 1, 1)
-call helpers#Map_for_all_meta('w', ":tabclose<CR>", 2, 1, 1)
-
 "Powerline
 set laststatus=2 "keeps the statusbar on
 if exists("$TERM_PROGRAM") && $TERM_PROGRAM == 'iTerm.app'
@@ -1107,17 +892,30 @@ call helpers#Map_for_all_meta("h", "<C-w>h", 2, 0, 1)
 call helpers#Map_for_all_meta("j", "<C-w>j", 2, 0, 1)
 call helpers#Map_for_all_meta("k", "<C-w>k", 2, 0, 1)
 call helpers#Map_for_all_meta("l", "<C-w>l", 2, 0, 1)
-call helpers#Map_for_all_meta("S-h", "<C-w>h", 2, 0, 1)
-call helpers#Map_for_all_meta("S-j", "<C-w>j", 2, 0, 1)
-call helpers#Map_for_all_meta("S-k", "<C-w>k", 2, 0, 1)
-call helpers#Map_for_all_meta("S-l", "<C-w>l", 2, 0, 1)
+call helpers#Map_for_all_meta("<Left>", "<C-w>h", 2, 0, 1)
+call helpers#Map_for_all_meta("<Down>", "<C-w>j", 2, 0, 1)
+call helpers#Map_for_all_meta("<Up>", "<C-w>k", 2, 0, 1)
+call helpers#Map_for_all_meta("<Right>", "<C-w>l", 2, 0, 1)
+"
+"tab management
+call helpers#Map_for_all_meta('t', ":tabnew<CR>", 2, 1, 1)
+call helpers#Map_for_all_meta('}', ":tabnext<CR>", 2, 1, 1)
+call helpers#Map_for_all_meta('{', ":tabprevious<CR>", 2, 1, 1)
+
+function! CloseWindowOrTab()
+  " if it's a list, thus more than one window, close window
+  if type(winlayout()[1]) == 3
+    :close
+  else
+    :tabclose
+  endif
+endfunction
+call helpers#Map_for_all_meta('w', ":call CloseWindowOrTab()<CR>", 2, 1, 1)
+
 
 if has("nvim")
   tnoremap <C-w> <C-\><C-n><C-w>
 endif
-
-" let g:vimfiler_as_default_explorer = 1
-let g:vimfiler_as_default_explorer = 0
 
 nnoremap <silent> <M-f>      :call helpers#ToggleVExplorer()<CR>
 nnoremap <silent> <A-S-f>    :call helpers#ToggleVExplorer()<CR>
