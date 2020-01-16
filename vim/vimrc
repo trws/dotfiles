@@ -108,6 +108,7 @@ Plug 'reedes/vim-pencil', { 'for': 'tex'}
 " ==== filetype handlers, highlighting etc ====
 Plug 'sheerun/vim-polyglot' " pulls in syntax for almost everything
 let g:polyglot_disabled = [ 'markdown']
+Plug 'gu-fan/riv.vim'
 Plug 'chrisbra/vim-zsh'
 let g:zsh_fold_enable = 1
 " Plug 'lervag/vimtex'
@@ -268,6 +269,8 @@ if(has("python3"))
   Plug 'Shougo/denite.nvim'
   " Plug 'ozelentok/denite-gtags'
   Plug 'nixprime/cpsm'
+  Plug 'raghur/fruzzy', {'do': { -> fruzzy#install()}}
+  let g:fruzzy#usenative = 1
 else
   Plug 'Shougo/unite.vim'
   Plug 'Shougo/unite-ssh'
