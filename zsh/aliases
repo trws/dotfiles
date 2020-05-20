@@ -50,6 +50,10 @@ else
 fi
 
 alias g="git"
+alias gfu="git fetch upstream"
+alias grum="git rebase upstream/master"
+alias gpoc='git push origin $(git rev-parse --abbrev-ref HEAD)'
+alias gpocf='git push origin -f $(git rev-parse --abbrev-ref HEAD)'
 alias h="history"
 alias j="jobs"
 
