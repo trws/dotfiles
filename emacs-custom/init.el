@@ -6,14 +6,18 @@
 (load osc52-file)
 (osc52-set-cut-function)
 
+(setq package-user-dir "~/.cache/emacs/packages")
+(mkdir package-user-dir t)
 
 (require 'package)
 
 (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/"))
+(add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/"))
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
 (add-to-list 'package-archives '("melpa-stable" . "http://stable.melpa.org/packages/"))
 
 (setq package-enable-at-startup nil)
+(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3") ;; work around stupid bug
 (package-initialize)
 
 ;; This is only needed once, near the top of the file
@@ -23,6 +27,10 @@
   (require 'use-package))
 (define-key universal-argument-map (kbd "C-u") nil)
 (define-key global-map (kbd "C-u") 'evil-scroll-up)
+(define-key global-map (kbd "C-@") 'counsel-company)
+(define-key global-map (kbd "C-SPC") 'counsel-company)
+
+
 
 
 ;; ITERM2 MOUSE SUPPORT
@@ -40,6 +48,12 @@
                               (scroll-up 1)))
   (menu-bar-mode -1))
 
+(use-package gnu-elpa-keyring-update :ensure t)
+(use-package paradox :ensure t
+  :init
+  :config
+  (paradox-enable))
+
 (use-package key-chord :ensure t
 					; :defer 1 ; do not load right at startup
   :config
@@ -50,6 +64,11 @@
   :ensure t
   :config
   (general-evil-setup t))
+
+;; (use-package evil-tabs
+;;   :ensure t
+;;   :config
+;;   (global-evil-tabs-mode t))
 
 
 
@@ -64,8 +83,8 @@
   :ensure t
   :after general
   :init
+  ;; (setq evil-want-keybinding nil)
   (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
-  (setq evil-want-keybinding nil)
   :config
   (evil-mode 1)
   (setq evil-intercept-esc 'always)
@@ -80,12 +99,15 @@
   :after evil
   :ensure t
   :init
+  ;; (setq evil-want-keybinding nil)
   (setq evil-collection-company-use-tng t)
   :config
   (evil-collection-init))
 
 (use-package evil-surround ;; surround all the things
-  :ensure t)
+  :ensure t
+  :config
+  (global-evil-surround-mode 1))
 
 (use-package evil-commentary
   :ensure t
@@ -96,10 +118,42 @@
   :ensure t
   :config
   (global-company-mode)
-  :general
-  (:states 'insert
-	   "C-SPC" 'company-complete))
+;;   :general
+;;   (:states 'insert
+;; 	   "C-SPC" 'company-complete
+;; 	   "C-@" 'company-complete)
+)
+;; (use-package company-fuzzy
+;;   :ensure t
+;;   :after flx
+;;   :config
+;;   (setq company-fuzzy-sorting-backend 'flx)
+;;   (global-company-fuzzy-mode))
 
+;; (use-package fuzzy
+;; :ensure t)
+;; (use-package auto-complete
+;; :ensure t
+;; :after fuzzy
+;; :config
+;; (setq ac-fuzzy-enable t)
+;; (setq ac-use-fuzzy t)
+;; :init
+;; (progn
+;; (ac-config-default)
+;; (global-auto-complete-mode t)
+;; ))
+
+;; window movement
+(general-def :states 'normal :keymaps 'override "M-h" 'evil-window-left)
+(general-def :states 'normal :keymaps 'override "M-j" 'evil-window-down)
+(general-def :states 'normal :keymaps 'override "M-k" 'evil-window-up)
+(general-def :states 'normal :keymaps 'override "M-l" 'evil-window-right)
+
+(general-def :states '(insert normal) :keymaps 'override "<home>" 'evil-beginning-of-visual-line)
+(general-def :states '(insert normal) :keymaps 'override "<end>" 'evil-end-of-line-or-visual-line)
+
+;; easy esc
 (general-imap "j"
   (general-key-dispatch 'self-insert-command
     :timeout 0.15
@@ -131,22 +185,49 @@
   )
 (lleader "" nil)
 
-					; (defvar application-map (make-sparse-keymap)
-					;     "Keymap for \"leader key\" shortcuts.")
-
-
 (gleader "/" 'swiper)
 (gleader :wk-full-keys nil
   "a" '(:prefix-map app-prefix-map
 		    :prefix-command app-prefix-command
-		    :which-key "applications prefix"))
+		    :which-key "applications prefix")
+  "o" '(:prefix-map org-prefix-map
+		    :prefix-command org-prefix-command
+		    :which-key "org mode")
+  "b" '(:prefix-map buffer-prefix-map
+		    :prefix-command buffer-prefix-command
+		    :which-key "buffer operations")
+  "f" '(:prefix-map file-prefix-map
+		    :prefix-command file-prefix-command
+		    :which-key "buffer operations")
+  )
+(defun my-open-cfg ()
+  (interactive)
+  (evil-window-vsplit :FILE user-init-file))
+(defun my-open-index ()
+  (interactive)
+  (evil-window-vsplit :FILE my-org-inbox))
+(general-define-key
+ :prefix-command 'org-prefix-command
+ :prefix-map 'org-prefix-map
+ "o" '(lambda () (interactive) (evil-window-vsplit :FILE my-org-inbox))
+ "a" 'org-agenda
+ )
+(general-define-key
+ :prefix-command 'org-ins-prefix-command
+ :prefix-map 'org-ins-prefix-map
+ "o" '(lambda () (interactive) (evil-window-vsplit :FILE my-org-inbox))
+ )
 
 (general-define-key
  :prefix-command 'app-prefix-command
  :prefix-map 'app-prefix-map
  "N" '(:prefix-map nm-app-prefix-map
 		   :prefix-command nm-app-prefix-command
-		   :which-key "applications prefix"))
+		   :which-key "applications prefix")
+ "s" '(:prefix-map slack-app-prefix-map
+		   :prefix-command slack-app-prefix-command
+		   :which-key "applications prefix")
+ )
 
 (general-define-key
  :prefix-command 'nm-app-prefix-command
@@ -156,18 +237,69 @@
  "s" 'my-notmuch-go-to-sent
  )
 
+(general-define-key
+ :prefix-command 'slack-app-prefix-command
+ :prefix-map 'slack-app-prefix-map
+ "r" 'slack-select-rooms
+ "s" 'slack-start
+ "t" 'slack-change-current-team
+ )
+
+(defun my-kill-this-buffer ()
+  "Kill the current buffer"
+  (interactive)
+  (kill-buffer (current-buffer)))
+
+(general-define-key
+ :prefix-command 'buffer-prefix-command
+ :prefix-map 'buffer-prefix-map
+ "x" 'my-kill-this-buffer
+ "k" 'kill-buffer
+ "q" 'kill-buffer-and-window)
+
+(general-define-key
+ :prefix-command 'file-prefix-command
+ :prefix-map 'file-prefix-map
+ "c" 'my-open-cfg)
+
+(define-key global-map "\C-cl" 'org-store-link)
+
+(defun my-org-archive-done-tasks ()
+  (interactive)
+  (org-map-entries 'org-archive-subtree "/DONE" 'file))
+
+(setq my-org-inbox "~/onedrive/org/inbox.org")
 (use-package org
-  :ensure t
+  :ensure org-plus-contrib
+  :init
+  (setq org-return-follows-link t)
+  :general
+  (gleader "c" 'org-capture)
+  (lleader
+    "T" 'counsel-org-tag
+    "t" 'org-set-tags-command
+    "r" 'org-refile
+    "d" 'org-deadline
+    "s" 'org-schedule
+    )
   :config
   (use-package ob-go :ensure t)
   (use-package ob-rust :ensure t)
   (use-package ob-tmux :ensure t)
   (use-package ob-hy :ensure t)
+  (require 'ol-notmuch)
   (org-defkey org-mode-map [(meta return)] 'org-meta-return)  ;; The actual fix
+
+  (setq org-agenda-skip-scheduled-if-deadline-is-shown t)
+  (setq org-agenda-skip-deadline-prewarning-if-scheduled t)
   (setq org-agenda-todo-ignore-scheduled 'future)
   (setq org-agenda-tags-todo-honor-ignore-options t)
+  (setq org-agenda-window-setup 'other-window)
+  (setq org-log-done 'time)
 
-  (setq org-archive-location "~/Box Sync/scogland1/documents/org/archive.org::* From %s" )
+  (setq org-refile-targets
+	`((,my-org-inbox :maxlevel . 2)))
+  (setq org-archive-location "~/onedrive/org/archive.org::* From %s" )
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((emacs-lisp . t)
@@ -180,7 +312,30 @@
      (hy . t)
      (C . t)
      (R . t)))
+  (setq org-agenda-todo-ignore-scheduled 'future)
+  (setq org-agenda-tags-todo-honor-ignore-options t)
+
+  (setq org-archive-location "~/onedrive/org/archive.org::* From %s" )
+  ;; (evil-define-key 'normal evil-org-mode-map
+  ;;   ;;   (kbd "<C-return>") (evil-org-define-eol-command
+  ;;   ;;                       org-insert-heading-respect-content)
+  ;;   (kbd "<M-t>") (evil-org-define-eol-command
+  ;; 		   org-insert-todo-heading-respect-content)
+  ;;   (kbd "<M-left>") 'org-metaleft
+  ;;   )
+  (setq org-capture-templates
+	'(("c" "Todo capture context" entry (file+headline "~/onedrive/org/inbox.org" "Tasks")
+	   "* TODO %?\n  %i\n  %a")
+	  ("t" "Todo" entry (file+headline "~/onedrive/org/inbox.org" "Tasks")
+	   "* TODO %?" :empty-lines 1)
+	  ("n" "Notes" entry (file+headline "~/onedrive/org/inbox.org" "Notes")
+	   "* %?\n  %i\n  %a")
+	  ;; ("j" "Journal" entry (file+datetree "~/org/journal.org")
+	  ;;  "* %?\nEntered on %U\n  %i\n  %a")
+	  ))
+  (setq org-agenda-files '("~/onedrive/org/" ))
   )
+
 (use-package evil-org
   :ensure t
   :after org
@@ -267,12 +422,37 @@
   (setq notmuch-search-oldest-first nil)
   ;; don't keep random message buffers around
   (setq message-kill-buffer-on-exit t)
+  (setq message-bogus-addresses
+  '("noreply.?[^g]?" "nospam" "invalid" "@.*@" "[^[:ascii:]].*@" "[ \t]"))
+  (setq notmuch-poll-script "~/scripts/mail-sync-freq")
   ;; smtp mail setting; these are the same that `gnus' uses.
-  (setq notmuch-wash-wrap-lines-length 88
+  (setq notmuch-message-headers '("Subject" "To" "Cc" "Date" "Mailer")
+	notmuch-wash-wrap-lines-length 88
+	notmuch-wash-original-regexp (concat "^\\("
+					     "\\(> \\)?--+\s?[oO]riginal [mM]essage\s?--+"
+					     "\\|"
+					     "\\("
+						"_______+\n"
+						"From: .*>.*"
+					     "\\)"
+					     "\\|"
+					     "----------+"
+					     "\\|"
+					     "Sent from my iPhone"
+					     "\\|"
+					     "~~~~+"
+					     ;; "\\|"
+					     ;; " *On .*wrote:"
+					     "\\|"
+					     "﻿On.*wrote:"
+					     "\\|"
+					     "From: .*>"
+					     "\\)$")
 	notmuch-message-deleted-tags '("+delete" "-inbox" "-unread")
 	notmuch-tagging-keys '(("a" notmuch-archive-tags "Archive")
 			       ("u" notmuch-show-mark-read-tags "Mark read")
 			       ("f" ("+flagged") "Flag")
+			       ("F" ("-flagged") "Remove Flag")
 			       ("s" ("+spam" "-inbox") "Mark as spam")
 			       ("c" ("+conference" "-inbox" "-unread") "Mark as conf and archive")
 			       ("t" ("+travel" "-inbox" "-unread") "Mark as travel and archive")
@@ -281,12 +461,15 @@
 				("+deleted" "-inbox" "-unread")
 				"Delete")
 			       ("m" ("+killed") "Mute/Kill thread")))
-  (setq message-send-mail-function 'smtpmail-send-it
-	smtpmail-default-smtp-server "smtp.office365.com"
-	smtpmail-smtp-server "smtp.office365.com"
-	smtpmail-local-domain "llnl.gov"
-	smtpmail-stream-type 'starttls
-	smtpmail-smtp-service 587)
+  (setq message-send-mail-function 'message-send-mail-with-sendmail)
+  (setq sendmail-program "msmtp")
+  (setq message-sendmail-extra-arguments '("-t" "-a" "llnl"))
+  ; (setq message-send-mail-function 'smtpmail-send-it
+	; smtpmail-default-smtp-server "smtp.office365.com"
+	; smtpmail-smtp-server "smtp.office365.com"
+	; smtpmail-local-domain "llnl.gov"
+	; smtpmail-stream-type 'starttls
+	; smtpmail-smtp-service 587)
   :general
   (:states 'normal
 	   :keymaps 'notmuch-common-keymap
@@ -358,11 +541,14 @@
 (defun my-notmuch-go-to-sent ()
   (interactive)
   (notmuch-search "tag:sent" nil))
-(defun my-run-sync ()
+(defun my-run-sync-freq ()
   (interactive)
-  (shell-command "~/scripts/mail-tag")
-  (shell-command "mbsync -a")
-  (shell-command "~/scripts/mail-tag"))
+  (shell-command "~/scripts/mail-sync frequent")
+  )
+(defun my-run-sync-occ ()
+  (interactive)
+  (shell-command "~/scripts/mail-sync occasional")
+  )
 
 
 
@@ -383,3 +569,117 @@
 (use-package jbeans-theme
   :ensure t)
 (load-theme 'jbeans t)
+
+;; (use-package el-get
+;;   :ensure t)
+;; (el-get-bundle slack)
+(use-package slack
+  :ensure t
+  :commands (slack-start)
+  :init
+  ;; (setq slack-buffer-emojify t) ;; if you want to enable emoji, default nil
+  (setq slack-prefer-current-team t)
+  :config
+  (slack-register-team
+   :name "llnl-performance"
+   :default t
+   :token (with-temp-buffer
+    (insert-file-contents "~/.config/emacs-slack-token" )
+    (buffer-string))
+   :subscribed-channels '(flux general herbein1)
+   :full-and-display-names t)
+
+  (slack-register-team
+   :name "llnl"
+   :token (with-temp-buffer
+    (insert-file-contents "~/.config/emacs-slack-llnl-token" )
+    (buffer-string))
+   :subscribed-channels '(general))
+
+  (slack-register-team
+   :name "kokkos"
+   :token (with-temp-buffer
+    (insert-file-contents "~/.config/emacs-slack-kokkos-token" )
+    (buffer-string))
+   :subscribed-channels '(general))
+
+  (evil-define-key 'normal slack-info-mode-map
+    ",u" 'slack-room-update-messages)
+  (evil-define-key 'normal slack-mode-map
+    ",c" 'slack-buffer-kill
+    ",ra" 'slack-message-add-reaction
+    ",rr" 'slack-message-remove-reaction
+    ",rs" 'slack-message-show-reaction-users
+    ",pl" 'slack-room-pins-list
+    ",pa" 'slack-message-pins-add
+    ",pr" 'slack-message-pins-remove
+    ",mm" 'slack-message-write-another-buffer
+    ",me" 'slack-message-edit
+    ",md" 'slack-message-delete
+    ",u" 'slack-room-update-messages
+    ",2" 'slack-message-embed-mention
+    ",3" 'slack-message-embed-channel
+    "\C-n" 'slack-buffer-goto-next-message
+    "\C-p" 'slack-buffer-goto-prev-message)
+   (evil-define-key 'normal slack-edit-message-mode-map
+    ",k" 'slack-message-cancel-edit
+    ",s" 'slack-message-send-from-buffer
+    ",2" 'slack-message-embed-mention
+    ",3" 'slack-message-embed-channel))
+
+(use-package centaur-tabs
+  :ensure t
+  :config
+  (centaur-tabs-mode t)
+  (defun centaur-tabs-buffer-groups ()
+     "`centaur-tabs-buffer-groups' control buffers' group rules.
+ Group comms (notmuch and slack) based on name, others together excepting emacs buffers,
+  centaur-tabs with mode if buffer is derived from `eshell-mode'
+ `emacs-lisp-mode' `dired-mode' `org-mode' `magit-mode'.  All buffer
+ name start with * will group to \"Emacs\".
+ Other buffer group by `centaur-tabs-get-group-name' with project name."
+     (list
+      (cond
+	;; ((not (eq (file-remote-p (buffer-file-name)) nil))
+	;; "Remote")
+	((or (string-equal "*not" (substring (buffer-name) 0 4))
+	     )
+	 "Email")
+	((derived-mode-p 'slack-mode)
+	 "Slack")
+	((or (string-equal "*" (substring (buffer-name) 0 1))
+	     (memq major-mode '(magit-process-mode
+				magit-status-mode
+				magit-diff-mode
+				magit-log-mode
+				magit-file-mode
+				magit-blob-mode
+				magit-blame-mode
+				)))
+	 "Emacs")
+	((derived-mode-p 'prog-mode)
+	 "Editing")
+	((derived-mode-p 'dired-mode)
+	 "Dired")
+	((memq major-mode '(helpful-mode
+			    help-mode))
+	 "Help")
+	((memq major-mode '(org-mode
+			    org-agenda-clockreport-mode
+			    org-src-mode
+			    org-agenda-mode
+			    org-beamer-mode
+			    org-indent-mode
+			    org-bullets-mode
+			    org-cdlatex-mode
+			    org-agenda-log-mode
+			    diary-mode))
+	 "OrgMode")
+	(t
+	 (centaur-tabs-get-group-name (current-buffer))))))
+  :bind
+  (:map evil-normal-state-map
+	     ("g t" . centaur-tabs-forward)
+	     ("g T" . centaur-tabs-backward)
+	     ("M-}" . centaur-tabs-forward)
+	     ("M-{" . centaur-tabs-backward)))

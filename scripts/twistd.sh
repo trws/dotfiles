@@ -1,7 +1,7 @@
 #!/bin/sh
-echo hi
-WEBDIR=/Users/scogland1/twistd
+WEBDIR=~/.dotfiles/web-local
 
 cd $WEBDIR
-/usr/local/bin/twistd -n -d $WEBDIR web -p 8080 
+# /usr/local/bin/twistd -n -d $WEBDIR web -p 8080
+python3 -m http.server 8080
 

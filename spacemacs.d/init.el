@@ -499,7 +499,7 @@ you should place your code here."
     (setq org-agenda-todo-ignore-scheduled 'future)
     (setq org-agenda-tags-todo-honor-ignore-options t)
 
-    (setq org-archive-location "~/Box Sync/scogland1/documents/org/archive.org::* From %s" )
+    (setq org-archive-location "~/onedrive/org/archive.org::* From %s" )
     (evil-define-key 'normal evil-org-mode-map
     ;;   (kbd "<C-return>") (evil-org-define-eol-command
     ;;                       org-insert-heading-respect-content)
@@ -508,16 +508,16 @@ you should place your code here."
       (kbd "<M-left>") 'org-metaleft
       )
     (setq org-capture-templates
-          '(("c" "Todo capture context" entry (file+headline "~/Box Sync/scogland1/documents/org/inbox.org" "Tasks")
+          '(("c" "Todo capture context" entry (file+headline "~/onedrive/org/inbox.org" "Tasks")
              "* TODO %?\n  %i\n  %a")
-            ("t" "Todo" entry (file+headline "~/Box Sync/scogland1/documents/org/inbox.org" "Tasks")
+            ("t" "Todo" entry (file+headline "~/onedrive/org/inbox.org" "Tasks")
              "* TODO %?" :empty-lines 1)
-            ("n" "Notes" entry (file+headline "~/Box Sync/scogland1/documents/org/inbox.org" "Notes")
+            ("n" "Notes" entry (file+headline "~/onedrive/org/inbox.org" "Notes")
              "* %?\n  %i\n  %a")
             ;; ("j" "Journal" entry (file+datetree "~/org/journal.org")
             ;;  "* %?\nEntered on %U\n  %i\n  %a")
             ))
-    (setq org-agenda-files '("~/Box Sync/scogland1/documents/org/" ))
+    (setq org-agenda-files '("~/onedrive/org/" ))
     )
   )
 

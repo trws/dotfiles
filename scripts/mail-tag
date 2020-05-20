@@ -2,7 +2,6 @@
 
 notmuch new
 afew -n -t
-afew -m
 
 # remove stupid list tags for broken-ass lists
 notmuch search --output=tags '*' | egrep 'lists/([0-9_a-f]{8,}|.*=)' | xargs -n 1 -I '{}' notmuch tag '-{}' -- 'tag:{}'
@@ -11,5 +10,6 @@ notmuch search --output=tags '*' | egrep 'lists/([0-9_a-f]{8,}|.*=)' | xargs -n 
 notmuch search --output=tags lists.isocpp.org 'tag:lists' | grep 'lists/' | grep -v 'lists/cpp' | sed -e 's|lists/||' | xargs -n 1 -I '{}' notmuch tag -lists/{} '+lists/cpp-{}' -- 'tag:lists/{}'
 
 notmuch tag -inbox -- tag:inbox AND NOT folder:INBOX
+notmuch tag +sent -- folder:sent AND NOT tag:sent
 
-notmuch new
+afew -m

@@ -9,6 +9,7 @@ fi
 
 mkdir -p ~/.cache/zsh
 export ZSH_CACHE_DIR=~/.cache/zsh
+zstyle ':completion:*:default:' cache-path $ZSH_CACHE_DIR/zcompcache
 
 # ensure my funcs, and prompts are there before load
 fpath=($ZDOTDIR/funcs $fpath)

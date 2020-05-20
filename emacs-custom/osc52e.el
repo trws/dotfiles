@@ -120,8 +120,9 @@ hitting screen's max DCS length."
 `display-graphic-p' and the TERM environment variable."
   (interactive)
   (setq osc52-cut-function
-        (if (string-match "^screen" (getenv "TERM"))
-            (if (equal osc52-multiplexer 'tmux)
+        (if (or (string-match "^tmux" (getenv "TERM"))
+		(string-match "^screen" (getenv "TERM")))
+	    (if (equal osc52-multiplexer 'tmux)
                 'osc52-select-text-tmux
               'osc52-select-text-dcs)
           'osc52-select-text))
