@@ -47,10 +47,12 @@ Match originalhost hurricane exec " ! ~/.dotfiles/scripts/at-home.py "
 #base nano setup
 
 Match originalhost nano
-  RemoteForward 43222 localhost:22
   DynamicForward 12345
   LocalForward 4443 sync11.omnigroup.com:443
   User scogland
+
+Match originalhost nano exec "hostname | grep vortex"
+  RemoteForward 43222 localhost:22
 
 Match originalhost nano exec " ! ~/.dotfiles/scripts/at-home.py "
   HostName ssh.scogland.com
@@ -68,6 +70,7 @@ Match originalhost breath
 Match originalhost funnel
   ExitOnForwardFailure yes
   ProxyCommand ssh scogland@nano -W localhost:43222
+  # ProxyCommand ssh scogland@nano.local -W localhost:43222
   # ProxyJump rzquartz
 
 
@@ -105,10 +108,6 @@ Host code.ornl.gov
 Host github.com
     User git
 
-Host vortex* 10.253.134.139 bolt*
-    User scogland1
-    Port 22
-
 Host *.llnl.gov
     HostName %h
 
@@ -123,20 +122,28 @@ Host quartz ipa hype ray surface vulcan sierra impetus hype2 rz*
 Host vortex vortex.llnl.gov 10.253.134.139 cyclone funnel
   User scogland1
   # HostName vortex.llnl.gov
-  LocalForward 5901 localhost:5900
   LocalForward 5902 10.5.0.3:5900
-  LocalForward 22001 localhost:22000
-  LocalForward 22002 10.5.0.3:22000
-  LocalForward 4043 outlook.office365.com:443
-  LocalForward 9993 outlook.office365.com:993
-  LocalForward 5587 smtp.office365.com:587
-  LocalForward 2201 localhost:22
-  LocalForward 2202 10.5.0.3:22
-  DynamicForward localhost:12347
 
 Match exec "~/.dotfiles/scripts/hop-vpn.sh" originalhost vortex !host localhost
     HostName localhost
     Port 9022
+
+# GPVPN script provides these ports
+Match !exec "~/.dotfiles/scripts/hop-gpvpn.sh" originalhost vortex !host localhost
+    DynamicForward localhost:12347
+    LocalForward 5901 localhost:5900
+    LocalForward 4043 outlook.office365.com:443
+    LocalForward 9993 outlook.office365.com:993
+    LocalForward 5587 smtp.office365.com:587
+    LocalForward 22001 localhost:22000
+    LocalForward 2201 localhost:22
+    LocalForward 22002 10.5.0.3:22000
+    LocalForward 2202 10.5.0.3:22
+
+Host vortex* 10.253.134.139 bolt*
+    User scogland1
+    Port 22
+
 
     # if using ocproxy socks
     # ProxyCommand nc -X 5 -x 127.0.0.1:9052 %h %p
@@ -152,12 +159,21 @@ Host chimera
     User scogland1
     LocalForward 5904 localhost:5900
 
+Match host chimera-funnel exec "~/.dotfiles/scripts/hop-vpn.sh"
+    # ProxyJump funnel
+    ProxyCommand ssh vortex -W 10.5.0.3:22
+
 Host chimera-funnel
     Port 22
     HostName 10.5.0.3
     User scogland1
+    # ProxyJump funnel
+    ProxyCommand ssh funnel -W 10.5.0.3:22
+# GPVPN script provides these ports
+Match !exec "~/.dotfiles/scripts/hop-gpvpn.sh" originalhost chimera-funnel !host localhost
     LocalForward 5904 localhost:5900
-    ProxyJump funnel
+    LocalForward 40000 127.0.0.1:4000
+    LocalForward 33890 10.5.0.3:3389
 
 Match exec " ~/.dotfiles/scripts/at-llnl.py" !host eris.llnl.gov !host localhost !originalhost chimera !host cz-bit* !originalhost github.com !originalhost rztopaz !originalhost 10.253.134.139 !originalhost vortex !originalhost localhost !originalhost 127.0.0.1
     #this must be overridden above if wrong
