@@ -5,11 +5,12 @@ if( ! has("python3")) " using unite
   " let g:unite_source_bookmark_directory = '~/.vim/unite-bookmarks'
   let g:unite_source_history_yank_enable = 1
   let g:unite_source_grep_max_candidates = 500
-  call unite#filters#matcher_default#use(['converter_relative_word', 'matcher_fuzzy'])
+  " call unite#filters#matcher_default#use(['converter_relative_word', 'matcher_fuzzy'])
+  call denite#custom#source('_', 'matchers', ['matcher/fruzzy'])
   call unite#filters#sorter_default#use(['sorter_rank'])
   call unite#custom#profile('files', 'filters', 'sorter_rank')
   call unite#custom#source('buffer,file,file/rec,file/rec/async', 'sorters', 'sorter_selecta')
-  call unite#custom#source('buffer,file,file/rec,file/rec/async', 'matchers',['converter_relative_word', 'matcher_fuzzy'])
+  " call unite#custom#source('buffer,file,file/rec,file/rec/async', 'matchers',['converter_relative_word', 'matcher_fuzzy'])
   nnoremap <leader>ur  :<C-u>Unite -start-insert file/rec/async:!<CR>
   nnoremap <leader>ub  :<C-u>Unite buffer        file_mru bookmark<CR>
   nnoremap <leader>uB  :<C-u>Unite bookmark<CR>
