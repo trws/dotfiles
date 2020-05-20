@@ -36,16 +36,18 @@ config.set("content.javascript.enabled", True, "qute://*/*")
 c.hints.mode = "number"
 
 # Bindings for normal mode
-config.bind("<Cmd+[>", "back")
-config.bind("<Cmd+]>", "forward")
-config.bind("<Cmd+{>", "tab-prev")
-config.bind("<Cmd+}>", "tab-next")
-config.bind("<Meta+r>", "reload")
-config.bind("<Meta+w>", "tab-close")
+for m in ("normal", "insert"):
+    config.bind("<Meta+[>", "back", mode=m)
+    config.bind("<Meta+]>", "forward", mode=m)
+    config.bind("<Meta+Shift+[>", "tab-prev", mode=m)
+    config.bind("<Meta+Shift+]>", "tab-next", mode=m)
+    config.bind("<Meta+r>", "reload", mode=m)
+    config.bind("<Meta+w>", "tab-close", mode=m)
 config.bind("J", "tab-prev")
 config.bind("K", "tab-next")
 config.bind("T", "set-cmd-text -s :open -t")
 config.bind("B", "set-cmd-text -s :buffer")
+config.bind("<Ctrl-l>", "download-clear")
 # config.bind('middle', 'open -t')
 
 ## This is here so configs done via the GUI are still loaded.
@@ -1324,7 +1326,7 @@ c.editor.command = [
 ## Valid values:
 ##   - top
 ##   - bottom
-# c.statusbar.position = 'bottom'
+c.statusbar.position = 'top'
 
 ## List of widgets displayed in the statusbar.
 ## Type: List of String

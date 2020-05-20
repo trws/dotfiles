@@ -1,0 +1,7 @@
+https://github.com/OpenMP/spec/pull/2087 add language for min, max and cas atomics by trws · Pull Request #2087 · OpenMP/spec
+https://www.mpi-forum.org/docs/mpi-3.1/mpi31-report/node289.htm#Node289 Semantics and Correctness
+https://github.com/LLNL/RAJA/pull/759 Forall Functional RangeSegment tests by mdavis36 · Pull Request #759 · LLNL/RAJA
+https://github.com/flux-framework/flux-core/pull/2836 Mypy: add static type checking for python to travis by trws · Pull Request #2836 · flux-framework/flux-core
+https://github.com/LLNL/RAJA/pull/738 LoopTypes, Lambdas, and cleanup by ajkunen · Pull Request #738 · LLNL/RAJA
+https://github.com/LLNL/RAJA/pull/801#event-3256767811 RAJA-310-forall-atomic-tests by rchen20 · Pull Request #801 · LLNL/RAJA
+https://github.com/LLNL/RAJA/pull/801 RAJA-310-forall-atomic-tests by rchen20 · Pull Request #801 · LLNL/RAJA
