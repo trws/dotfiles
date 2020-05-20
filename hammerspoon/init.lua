@@ -6,6 +6,9 @@ local screens = hs.screens
 local geometry = hs.geometry
 local grid = hs.grid
 local hints = hs.hints
+local json = hs.json
+local ipc = require("hs.ipc")
+local urle = require("hs.urlevent")
 
 -- set up your windowfilter
 switcher = hs.window.switcher.new() -- default windowfilter: only visible windows, all Spaces
@@ -25,6 +28,14 @@ toggle_application = function(bundleID)
     app:hide()
   else
     hs.application.launchOrFocusByBundleID(bundleID)
+  end
+end
+toggle_application_nolaunch = function(bundleID)
+  local app = hs.application.get(bundleID)
+  if (app and app:isFrontmost()) then
+    app:hide()
+  else
+    hs.application.applicationsForBundleID(bundleID)[1]:activate()
   end
 end
 
@@ -52,23 +63,59 @@ end)
 
 screen_sharing_watcher:start()
 
+urle.httpCallback = function(scheme, host, params, fullURL)
+  print("routing URL: " .. fullURL)
+  if string.match(fullURL, "webex.com") or string.match(fullURL, "meet.intel.com") then
+    print("sending to Safari")
+    urle.openURLWithBundle(fullURL, 'com.apple.Safari')
+    return
+  end
+  if string.match(fullURL, "llnl.gov") or string.match(fullURL, "webex.com") or string.match(fullURL, "bluejeans.com") then
+    print("sending to Wavebox")
+    urle.openURLWithBundle(fullURL, 'com.bookry.wavebox')
+    return
+  end
+  if string.match(fullURL, "nvidia.sharepoint.com") then
+    print("sending to Wavebox")
+    urle.openURLWithBundle(fullURL, 'com.bookry.wavebox')
+    return
+  end
+  print("sending to Qute")
+  urle.openURLWithBundle(fullURL, "org.qt-project.Qt.QtWebEngineCore")
+  end
+
 -- pl = require 'pl.pretty'
 -- bindings:insert('a')
 -- pl.dump(bindings)
 
 -- bind to hotkeys; WARNING: at least one modifier key is required!
-hotkey.bind('alt','tab','Next window',function()switcher:next()end)
-hotkey.bind('alt-shift','tab','Prev window',function()switcher:previous()end)
+-- hotkey.bind('alt','tab','Next window',function()switcher:next()end)
+-- hotkey.bind('alt-shift','tab','Prev window',function()switcher:previous()end)
 
 -- application toggles, formerly alfred bindings
 -- bindings:insert(hotkey.bind({"ctrl","cmd"}, "t", function() toggle_application("com.googlecode.iterm2") end))
-bindings:insert(hotkey.bind({"ctrl","cmd"}, "m", function() toggle_application("com.webex.meetingmanager") end))
+bindings:insert(hotkey.bind({"ctrl","cmd"}, "m", function() toggle_application_nolaunch("com.webex.meetingmanager") end))
+mute_toggle = function()
+  app = hs.window.find("Webex Meetings"):application()
+  if app:findMenuItem("Mute Me")['enabled'] then
+    print("mute me enabled, so mute")
+    app:selectMenuItem("Mute Me") 
+  else
+    print("mute me disabled, so unmute")
+    app:selectMenuItem("Unmute Me") 
+  end
+end
+bindings:insert(hotkey.bind(mash, "m", mute_toggle))
 bindings:insert(hotkey.bind({"ctrl","cmd"}, "s", function() toggle_application("com.freron.MailMate") end))
+bindings:insert(hotkey.bind({"ctrl","cmd","shift"}, "s", function() toggle_application("com.apple.Safari") end))
 bindings:insert(hotkey.bind({"ctrl","cmd"}, "a", function() toggle_application("com.apple.iCal") end))
 bindings:insert(hotkey.bind({"ctrl","cmd"}, "i", function() toggle_application("com.apple.ActivityMonitor") end))
 bindings:insert(hotkey.bind({"ctrl","cmd"}, "o", function() toggle_application("com.microsoft.Outlook") end))
+bindings:insert(hotkey.bind({"ctrl","cmd"}, "f", function() toggle_application("com.omnigroup.Omnifocus3.macappstore") end))
 bindings:insert(hotkey.bind({"ctrl","cmd"}, "g", function() toggle_application("com.google.Chrome") end))
 bindings:insert(hotkey.bind({"ctrl","cmd"}, "b", function() toggle_application("org.qt-project.Qt.QtWebEngineCore") end))
+bindings:insert(hotkey.bind({"ctrl","cmd"}, "t", function() toggle_application("com.googlecode.iterm2") end))
+bindings:insert(hotkey.bind({"ctrl","cmd"}, "v", function() toggle_application("org.vim.macvim") end))
 
 -- alternatively, call .nextWindow() or .previousWindow() directly (same as hs.window.switcher.new():next())
 -- hs.hotkey.bind('alt','tab','Next window',hs.window.switcher.nextWindow)
@@ -81,11 +128,35 @@ bindings:insert(hotkey.bind({"ctrl","cmd"}, "b", function() toggle_application("
 -- expose_browsers = hs.expose.new{'Safari','Google Chrome'} -- specialized expose using a custom windowfilter
 -- for your dozens of browser windows :)
 
+-- set up CLI
+ipc.cliInstall()
+pws = hs.chooser.new(function(tbl)
+  f = io.open(tbl["path"], "w")
+  f:write(json.encode(tbl['obj']))
+  f:close()
+  -- json.write(tbl["obj"], tbl["path"], true, true)
+end)
+function choose_pw(args)
+  choices = {}
+  setmetatable(choices, { __index = table })
+  js = json.read(args[2])
+
+  for objk,obj in pairs(js) do
+    choices:insert({
+      ["text"] = (obj["overview"]["title"] or "unknown") .. ": " .. (obj["overview"]["url"] or "unknown"),
+      ["path"] = args[3],
+      ["obj"] = obj,
+    })
+  end
+  pws:choices(choices)
+  pws:show()
+end
+
 wins = hs.chooser.new(function(tbl)
   w = hs.window.find(tbl["win"])
   w:focus()
 end)
-bindings:insert(hotkey.bind(mash, 'c', function()
+function choose_win()
   win_choices = {}
   setmetatable(win_choices, { __index = table })
   for k,v in pairs(hs.window.allWindows()) do
@@ -100,7 +171,8 @@ bindings:insert(hotkey.bind(mash, 'c', function()
   end
   wins:choices(win_choices)
   wins:show()
-end))
+end
+bindings:insert(hotkey.bind(mash, 'c', choose_win))
 
 -- convert clipboard contents from markdown to rtf
 bindings:insert(hotkey.bind(mashshift, 'm', function() hs.execute("pbpaste | ~/scripts/md2clip") end))
