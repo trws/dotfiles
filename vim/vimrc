@@ -1,7 +1,7 @@
 " prevent airline loading before my colorscheme
 if 0
-colorscheme jellybeans-stripped
-let g:airline_theme='jellybeans'
+  colorscheme jellybeans-stripped
+  let g:airline_theme='jellybeans'
 endif
 if has('python3')
   silent! python3 1
@@ -20,7 +20,7 @@ if exists("$ARCH")
 elseif exists("$LMOD_arch")
   let plugged_directory = $LMOD_arch
 elseif (!has("win64"))
-  " (!has("macunix")) && 
+  " (!has("macunix")) &&
   let plugged_directory = substitute(system("uname -m"), '[ \n]\+$', '', '')
 endif
 let plugged_directory = expand("~/.cache/vim-plugged/" . plugged_directory)
@@ -32,7 +32,6 @@ endif
 
 call plug#begin(plugged_directory)
 
-" P 'Shougo/vimproc.vim'
 Plug 'Shougo/vimproc.vim' , { 'do' : 'make'}
 
 " allow swapping of arguments, and i,/a, for selecting swappable component of
@@ -55,7 +54,7 @@ nnoremap <silent> <leader>ws :call WindowSwap#EasyWindowSwap()<CR>
 
 "Mail search
 " Plug 'daisuzu/unite-notmuch'
-" Plug 'diefans/notmuch-vim'
+" Plug 'felipec/notmuch-vim'
 
 " let g:bracketed_paste_tmux_wrap=0
 " Plug 'ConradIrwin/vim-bracketed-paste'
@@ -75,8 +74,9 @@ Plug 'greymd/oscyank.vim'  " clipboard support for xterm-type terms
 
 " Plug 'luochen1990/rainbow' " rainbow parens and braces etc.
 
-" Render man pages in vim
-Plug 'vim-utils/vim-man'
+" Render man pages in vim, seems to be breaking neovim right now, missing
+" function man#open_file
+" Plug 'vim-utils/vim-man'
 
 " Plug 'dhruvasagar/vim-table-mode'
 
@@ -103,7 +103,8 @@ Plug 'edkolev/tmuxline.vim', { 'on': 'Tmuxline'}
 Plug 'junegunn/vim-peekaboo'
 
 " support for live wrapping
-Plug 'reedes/vim-pencil', { 'for': 'tex'}
+Plug 'reedes/vim-pencil' 
+", { 'for': 'tex'}
 
 " ==== filetype handlers, highlighting etc ====
 Plug 'sheerun/vim-polyglot' " pulls in syntax for almost everything
@@ -160,12 +161,17 @@ Plug 'chrisbra/csv.vim'
 " org-mode
 Plug 'jceb/vim-orgmode'
 " Plug 'dhruvasagar/vim-dotoo' " not really working...
+Plug 'cweagans/vim-taskpaper'
 
 " date incrementing with ^a and so-forth
 Plug 'tpope/vim-speeddating'
 
 "tmux integration
 Plug 'vim-scripts/vimux'
+
+
+Plug 'Shougo/neco-vim' " add vim completion to ycm or deoplete
+
 
 if ! has('win32')
 
@@ -185,7 +191,38 @@ if ! has('win32')
   " " IMPORTANT: :help Ncm2PopupOpen for more information
   " set completeopt=noinsert,menuone,noselect
   "
-  " set hidden
+  set hidden
+  set updatetime=300
+  set shortmess+=c
+  inoremap <silent><expr> <TAB>
+        \ pumvisible() ? "\<C-n>" :
+        \ <SID>check_back_space() ? "\<TAB>" :
+        \ coc#refresh()
+  inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+  " Use `[g` and `]g` to navigate diagnostics
+  nmap <silent> [g <Plug>(coc-diagnostic-prev)
+  nmap <silent> ]g <Plug>(coc-diagnostic-next)
+  function! s:check_back_space() abort
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~# '\s'
+  endfunction
+
+  " Use <c-space> to trigger completion.
+  inoremap <silent><expr> <c-space> coc#refresh()
+  " for some reason C-space is sometimes giving me this...
+  inoremap <silent><expr> <c-@> coc#refresh()
+
+
+
+  " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
+  " position. Coc only does snippet and additional edit on confirm.
+  if has('patch8.1.1068')
+    " Use `complete_info` if your (Neo)Vim version supports it.
+    inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+  else
+    imap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+  endif
+
   " Plug 'autozimu/LanguageClient-neovim', {
   "       \ 'branch': 'next',
   "       \ 'do': 'bash install.sh',
@@ -200,16 +237,28 @@ if ! has('win32')
   " nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
   " nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
 
-  function! BuildYCM(info)
-    " info is a dictionary with 3 fields
-    " - name:   name of the plugin
-    " - status: 'installed', 'updated', or 'unchanged'
-    " - force:  set on PlugInstall! or PlugUpdate!
-    if a:info.status != 'unchanged'
-      !./install.py --clang-completer --rust-completer
-    endif
-  endfunction
-  Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') }
+  " function! BuildYCM(info)
+  "   " info is a dictionary with 3 fields
+  "   " - name:   name of the plugin
+  "   " - status: 'installed', 'updated', or 'unchanged'
+  "   " - force:  set on PlugInstall! or PlugUpdate!
+  "   if a:info.status != 'unchanged'
+  "     !./install.py --clang-completer --rust-completer
+  "   endif
+  " endfunction
+  " Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') }
+
+  Plug 'neoclide/coc-neco'
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}
+  let g:coc_global_extensions = ['coc-highlight', 'coc-json',  'coc-lists', 'coc-python', 'coc-rls', 'coc-snippets', 'coc-vimlsp' ]
+
+  nnoremap <leader>cd <Plug>(coc-definition)
+  nnoremap <leader>cD <Plug>(coc-declaration)
+  " Remap for rename current word
+  nmap <leader>cr <Plug>(coc-rename)
+  vmap <leader>ca <Plug>(coc-codeaction-selected)
+
+
 
 endif
 
@@ -226,8 +275,6 @@ endif
 " Plug 'zchee/deoplete-jedi'
 " Plug 'zchee/deoplete-zsh'
 
-Plug 'Shougo/neco-vim' " add vim completion to ycm or deoplete
-
 "bindings
 
 "shell/terminal emulation
@@ -238,12 +285,12 @@ Plug 'Shougo/neco-vim' " add vim completion to ycm or deoplete
 " Plug 'vim-scripts/VOoM'
 Plug 'vimwiki/vimwiki'
 let wiki = {}
-let wiki.path = expand('~/projects/vimwiki/')
+let wiki.path = expand('~/onedrive/vimwiki/')
 let wiki.syntax = 'markdown'
 let wiki.ext = '.md'
 let wiki.nested_syntaxes = {'python': 'python', 'c++': 'cpp', 'c': 'c'}
 let tasks = {}
-let tasks.path = expand('~/projects/todo/')
+let tasks.path = expand('~/onedrive/todo/')
 let tasks.syntax = 'default'
 let tasks.ext = '.wiki'
 let tasks.nested_syntaxes = {'python': 'python', 'c++': 'cpp', 'c': 'c'}
@@ -264,6 +311,10 @@ augroup END
 
 Plug 'junegunn/fzf', { 'dir': plugged_directory . '/fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+
+" tagbar replacement " Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle'}
+Plug 'liuchengxu/vista.vim'
+Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary' }
 
 if(has("python3"))
   Plug 'Shougo/denite.nvim'
@@ -332,8 +383,10 @@ Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'Lokaltog/vim-easymotion'
 map <Leader>e <Plug>(easymotion-prefix)
-Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle'}
 Plug 'Chiel92/vim-autoformat'
+let g:formatters_python=['black']
+let g:formatters_c=['clangformat']
+let g:formatters_cpp=['clangformat']
 " Plug 'sjl/gundo.vim' " replaced with undotree
 Plug 'mbbill/undotree'
 Plug 'tpope/vim-repeat'
@@ -358,6 +411,7 @@ nnoremap <silent> _ :Rexplore<cr>
 Plug 'tpope/vim-sensible'
 
 call plug#end()
+
 
 colorscheme apprentice
 " let g:airline_theme='apprentice'
@@ -446,17 +500,42 @@ nnoremap <silent> <leader>fr  :Files<CR>
 nnoremap <silent> <leader>fb  :History<CR>
 nnoremap <silent> <leader>fB  :Buffers<CR>
 nnoremap <silent> <leader>fs  :GFiles?<CR>
-nnoremap <silent> <leader>fn  :Files ~/Projects/notes/<CR>
+nnoremap <silent> <leader>fn  :Files ~/onedrive/vimwiki/<CR>
 if executable('rg')
-nnoremap <silent> <leader>fg  :call helpers#AgWithParam()<CR>
+  nnoremap <silent> <leader>fg  :call helpers#AgWithParam()<CR>
 else
-nnoremap <silent> <leader>fg  :Rg<CR>
+  nnoremap <silent> <leader>fg  :Rg<CR>
 endif
 nnoremap <silent> <leader>fl  :BLines<CR>
 nnoremap <silent> <leader>fL  :Lines<CR>
 nnoremap <silent> <leader>fT  :BTags<CR>
 nnoremap <silent> <leader>ft  :Tags<CR>
 nnoremap <silent> <leader>f]  :call TagsWithCword()<CR>
+
+" clap bindings
+let g:clap_provider_dotfiles = {
+      \ 'source': ['~/.vimrc', '~/.dotfiles/emacs-custom/init.el', '~/.zsh/.zshenv', '~/.tmux.conf'],
+      \ 'sink': 'e',
+      \ }
+let g:clap_layout = { 'relative': 'editor' }
+let g:clap_project_root_markers = ['.root', '.git', '.git/', '.latexmkrc', '.travis.yml']
+nnoremap <silent> <leader>sr  :Clap files<CR>
+nnoremap <silent> <leader>sy  :Clap yanks<CR>
+nnoremap <silent> <leader>sb  :Clap history<CR>
+nnoremap <silent> <leader>sq  :Clap history<CR>
+nnoremap <silent> <leader>sd  :Clap dotfiles<CR>
+nnoremap <silent> <leader>sB  :Clap buffers<CR>
+nnoremap <silent> <leader>sw  :Clap windows<CR>
+nnoremap <silent> <leader>ss  :Clap gfiles?<CR>
+nnoremap <silent> <leader>sn  :Clap files ~/onedrive/vimwiki/<CR>
+nnoremap <silent> <leader>sg  :Clap grep<CR>
+nnoremap <silent> <leader>sc  :Clap bcommits<CR>
+nnoremap <silent> <leader>sC  :Clap commits<CR>
+nnoremap <silent> <leader>sl  :Clap blines<CR>
+nnoremap <silent> <leader>sL  :Clap lines<CR>
+nnoremap <silent> <leader>sT  :Clap tags<CR>
+nnoremap <silent> <leader>st  :Clap tags<CR>
+" nnoremap <silent> <leader>l]  :call TagsWithCword()<CR>
 
 let include_paths = ['/opt/local/include','/usr/local/include','/usr/include','/Developer/Headers',fnamemodify('~/programs/include',':p')]
 let &path= join(['.', '', './include'] + include_paths, ',')
@@ -544,9 +623,10 @@ noremap <leader>W :w !sudo tee % > /dev/null<CR>
 
 "automatic formatting options
 set textwidth=80
-augroup git_messages
+augroup tw_changes
   autocmd!
   au FileType gitcommit setlocal textwidth=72
+  au FileType python setlocal textwidth=88
 augroup END
 set formatoptions=crq
 " set fo-=t
@@ -557,6 +637,11 @@ augroup text_formatting
   au FileType txt setlocal formatexpr=cindent
 augroup END
 "set formatoptions+=a
+
+augroup folding_open_fugitive
+  autocmd!
+  au FileType fugitiveblame,git normal zR
+augroup END
 
 "hilighting
 let python_highlight_all = 1
@@ -578,8 +663,10 @@ call helpers#Map_for_all("<C-k>", ":Autoformat<CR>", 1, 0, 0)
 " let g:airline#extensions#csv#enabled = 1
 let g:airline_highlighting_cache = 1
 let g:airline#extensions#whitespace#enabled=0
+"" let g:airline_extensions = ["tmuxline","branch","tagbar","quickfix","denite","csv","netrw","term","vimtex"]
+"let g:airline_extensions = ["branch","tagbar","quickfix","csv","netrw","term","vimtex","undotree","windowswap","fugitiveline"]
 " let g:airline_extensions = ["tmuxline","branch","tagbar","quickfix","denite","csv","term","vimtex"]
-let g:airline_extensions = ["branch","tagbar","quickfix","csv","term","vimtex","undotree","windowswap","fugitiveline","denite"]
+let g:airline_extensions = ["branch","vista","quickfix","csv","term","vimtex","undotree","windowswap","fugitiveline","denite"]
 set timeoutlen=300
 set ttimeoutlen=10
 
@@ -595,13 +682,14 @@ if InGui()
     set gfn=ProFontIIx\ Nerd\ Font\ Mono:h9
     set antialias
     set fuopt=maxvert,maxhorz
-  elseif has("gui_vimr") 
+  elseif has("gui_vimr")
     " VimRSetFontAndSize "ProFontIIx Nerd Font Mono", 9
   elseif has("gui_gtk2")
     set guifont=Terminus\ 8
   elseif has("x11")
     " Also for GTK 1
-    set guifont=-misc-fixed-medium-r-normal-*-10-*-*-*-c-*-iso8859-15
+    set guifont=ProFontIIx\ Nerd\ Font\ Mono\ 10
+    " set guifont=-misc-fixed-medium-r-normal-*-10-*-*-*-c-*-iso8859-15
   endif
 
   if exists("neovim_dot_app") || has("gui_vimr") " VimR thinks it isn't a gui..?
@@ -905,6 +993,11 @@ call helpers#Map_for_all_meta('t', ":tabnew<CR>", 2, 1, 1)
 call helpers#Map_for_all_meta('}', ":tabnext<CR>", 2, 1, 1)
 call helpers#Map_for_all_meta('{', ":tabprevious<CR>", 2, 1, 1)
 
+if has("gui_vimr")
+  call helpers#Map_for_all_meta('S-}', ":tabnext<CR>", 2, 1, 1)
+  call helpers#Map_for_all_meta('S-{', ":tabprevious<CR>", 2, 1, 1)
+endif
+
 function! CloseWindowOrTab()
   " if it's a list, thus more than one window, close window
   if type(winlayout()[1]) == 3
@@ -919,6 +1012,9 @@ call helpers#Map_for_all_meta('w', ":call CloseWindowOrTab()<CR>", 2, 1, 1)
 if has("nvim")
   tnoremap <C-w> <C-\><C-n><C-w>
 endif
+
+" let g:vimfiler_as_default_explorer = 1
+let g:vimfiler_as_default_explorer = 0
 
 nnoremap <silent> <M-f>      :call helpers#ToggleVExplorer()<CR>
 nnoremap <silent> <A-S-f>    :call helpers#ToggleVExplorer()<CR>
@@ -935,10 +1031,10 @@ nnoremap <silent> <C-L> :pc<CR>:noh<CR><C-L>
 " TagList
 " --------------------
 " F4:  Switch on/off TagList
-nnoremap <silent> <F4> :TagbarToggle<CR>
-nnoremap <silent> <A-S-t> :TagbarToggle<CR>
-nnoremap <silent> <Esc><S-t> :TagbarToggle<CR>
-nnoremap <silent> <D-T> :TagbarToggle<CR>
+nnoremap <silent> <F4> :Vista!!<CR>
+nnoremap <silent> <A-S-t> :Vista!!<CR>
+nnoremap <silent> <Esc><S-t> :Vista!!<CR>
+nnoremap <silent> <D-T> :Vista!!<CR>
 
 let g:tagbar_autoclose = 1
 
@@ -955,7 +1051,7 @@ if !has("nvim")
 endif
 
 " colorscheme solarized
-if &term =~ ".*256color.*" || has("gui_running")
+if &term =~ ".*256color.*" || InGui()
   if $COLORTERM == "truecolor"
     let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
     let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
