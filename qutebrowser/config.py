@@ -43,6 +43,8 @@ for m in ("normal", "insert"):
     config.bind("<Meta+Shift+]>", "tab-next", mode=m)
     config.bind("<Meta+r>", "reload", mode=m)
     config.bind("<Meta+w>", "tab-close", mode=m)
+config.bind("<Shift+Escape>", "enter-mode passthrough")
+config.bind("I", "enter-mode passthrough")
 config.bind("J", "tab-prev")
 config.bind("K", "tab-next")
 config.bind("T", "set-cmd-text -s :open -t")
