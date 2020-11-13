@@ -1,0 +1,1 @@
+{"web":"https://github.com/mailmate/omnifocus.mmbundle.git/commit/","name":"OmniFocus","commits":[{"commit":"7e861ab5e5ea1f5b4b6a234a82799e7e7a202a29","date":"2017-02-19T11:47:25+01:00","author":"not-specified","summary":"Fixed focus behavior of the Quick Entry window - focus now goes to task subject (mimics the behavior of the official OmniFocus Clip-o-Tron)"}]}

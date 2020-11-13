@@ -1,0 +1,8 @@
+#!/bin/bash
+echo "in archive scrape" | tee /tmp/meh
+
+echo ${MM_MESSAGE_ID} | tee -a /tmp/meh
+
+echo INPUT: | tee -a /tmp/meh
+cat | tee -a /tmp/meh
+echo END: | tee -a /tmp/meh
