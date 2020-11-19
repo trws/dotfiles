@@ -1,5 +1,13 @@
+*.a
+*.so
+*.tmp
+~*
 *.swp
 *.o
 vim/swaps
+vim/sessions
 .DS_Store
 
+.cache
+
+alfred/alfred.alfredpreferences/preferences/local
