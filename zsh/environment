@@ -69,6 +69,7 @@ if (( $+commands[bat] )) ; then
   export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 elif (( $+commands[vimpager] )) ; then
   export MANPAGER=vimpager
+
 fi
 
 PAGER=less

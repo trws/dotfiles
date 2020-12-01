@@ -90,9 +90,19 @@ add_to_path_back /usr/local/cuda  /usr/local/opt/go/libexec ~/.cargo
 [[ -d ~/build/depot_tools/ ]] && path=( $path ~/build/depot_tools )
 
 add_to_path_front /usr/local ~/spack 
-if ~/.linuxbrew/bin/vim --version >& /dev/null ; then
-  add_to_path_front ~/.linuxbrew
-fi
+
+function load_vim() {
+  if [[ -d /usr/tce/packages/vim/ ]] ; then
+    local vimdirs
+    vimdirs=(/usr/tce/packages/vim/*)
+    if [[ $#vimdirs -gt 0 ]] ; then
+      local highest_version=${vimdirs[-1]}
+      add_to_path_front "$highest_version"
+    fi
+  fi
+}
+load_vim
+
 
 add_to_path_back ~/.dotfiles/doom-emacs
 
