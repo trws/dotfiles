@@ -40,7 +40,6 @@ fi
 export EDITOR=vim
 export VISUAL=vim
 
-
 if (( $+commands[vimpager] )) ; then
   PAGER=vimpager
 else
