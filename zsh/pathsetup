@@ -60,7 +60,7 @@ done
 
 [[ -x /usr/local/bin/defaultpaths ]] && eval `/usr/local/bin/defaultpaths`
 
-add_to_path_back /usr /
+add_to_path_back /usr ""
 
 if (( $gotroot )) ; then
     path=(/usr/local/sbin /opt/local/sbin $path)
@@ -68,8 +68,11 @@ if (( $gotroot )) ; then
 fi
 
 # path=(/usr/local/opt/coreutils/libexec/gnubin /opt/local/libexec/gnubin $path)
-path=(/opt/local/libexec/gnubin $path)
+[[ -d /opt/local/libexec/gnubin ]] && path=(/opt/local/libexec/gnubin $path)
 add_to_path_front /Developer/usr /opt/local
+
+# for pipx
+add_to_path_front ~/.local
 
 manpath=( ~/programs/man ~/programs/share/man /opt/local/man /usr/share/man $manpath )
 
@@ -91,6 +94,8 @@ if ~/.linuxbrew/bin/vim --version >& /dev/null ; then
   add_to_path_front ~/.linuxbrew
 fi
 
+add_to_path_back ~/.dotfiles/doom-emacs
+
 if [[ -n "$SYS_TYPE" ]] ; then
     export PRGPATH=~/programs/${SYS_TYPE}
 else
@@ -108,7 +113,7 @@ export CARGO_HOME="$PRGPATH/cargo"
 export RUSTUP_HOME="$PRGPATH/rustup"
 add_to_path_front "$PRGPATH/cargo"
 
-
+remove_from_path ~/scripts
 path=(~/scripts $path)
 
 export PKG_CONFIG_PATH

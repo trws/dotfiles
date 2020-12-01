@@ -22,11 +22,6 @@ export GTAGSLIBPATH=/opt/local/include:/usr/local/include:/usr/include:/Develope
 [[ -z "$LC_ITERM_PROFILE" ]] && export LC_ITERM_PROFILE=$ITERM_PROFILE
 [[ -f ~/.units ]] && export UNITSFILE=~/.units
 
-# Set the default Less options.
-# Mouse-wheel scrolling has been disabled by -X (disable screen clearing).
-# Remove -X and -F (exit if the content fits on one screen) to enable it.
-export LESS='-F -g -i -M -R -S -w -X -z-4'
-
 ENTOMB=yes
 
 if (( $+commands[fzf] )) ; then
@@ -37,15 +32,46 @@ if (( $+commands[fzf] )) ; then
   fi
 fi
 
-export EDITOR=vim
-export VISUAL=vim
+export DOOMLOCALDIR="~/.cache/doom-local/"
+export DOOMDIR="~/.dotfiles/doom/"
 
-
-if (( $+commands[vimpager] )) ; then
-  PAGER=vimpager
-else
-  PAGER=less
+VIM=vim
+GIVM=vim
+if (( $+commands[nvim] )) ; then
+  VIM=nvim
 fi
+if (( $+commands[vimr] )) ; then
+  GVIM=vimr
+elif (( $+commands[mvim] )) ; then
+  GVIM=mvim
+elif (( $+commands[gvim] )) ; then
+  GVIM=gvim
+fi
+
+export EDITOR="$VIM"
+export VISUAL="$VIM"
+export VIMPAGER_VIM="$VIM"
+
+# set up homebrew nvm
+export NVM_DIR="$HOME/.nvm"
+[ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
+[ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && . "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+
+# Set the default Less options.
+# Mouse-wheel scrolling has been disabled by -X (disable screen clearing).
+# Remove -X and -F (exit if the content fits on one screen) to enable it.
+export LESS='-i -M -R -w -z-4' # maybe restore -F -X
+export LESSOPEN="lessopen-bat %s"
+export BAT_PAGER="less -L $LESS" # -L avoids LESSOPEN being interpreted, no loops
+
+alias vman="env -u MANPAGER man"
+if (( $+commands[bat] )) ; then
+  export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+elif (( $+commands[vimpager] )) ; then
+  export MANPAGER=vimpager
+fi
+
+PAGER=less
 
 if (( $+commands[rg] )) ; then
   export FZF_DEFAULT_COMMAND='rg --files'

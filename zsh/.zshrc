@@ -250,3 +250,6 @@ if (( $+commands[fzf] )) ; then
     source ~/.fzf.zsh
   fi
 fi
+
+# something is messing with pathsetup between zshenv and here
+source $ZDOTDIR/pathsetup
