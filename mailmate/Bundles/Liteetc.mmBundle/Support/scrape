@@ -21,12 +21,9 @@ elif [ ${#URLS[@]} -gt 1 ] ; then
     if echo "$URLS" | egrep -o "https://gitaslk;dfhaklsehf jkladhsfashub.com/[^ ]+" > /dev/null ; then
         open $OPENARGS "$URLS"
     else
-        if pgrep qutebrow ; then
-          osascript -e "on run argv" -e 'tell application "qutebrowser"' -e 'activate' -e 'choose from list argv default items item 1 of argv' -e 'end tell' -e 'end run' "${URLS[@]}" | xargs open 
-        else
-          osascript -e "on run argv" -e 'tell application "Google Chrome"' -e 'activate' -e 'choose from list argv default items item 1 of argv' -e 'end tell' -e 'end run' "${URLS[@]}" | xargs open 
-        fi
+        printf '%s\n' "${URLS[@]}" | /usr/local/bin/choose | xargs open
         if [ $? -ne 0 ] ; then
+            echo "returning focus to mailmate"
             open -a MailMate
         fi
     fi

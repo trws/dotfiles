@@ -1,0 +1,79 @@
+#!/usr/local/bin/python3
+
+from urllib.parse import quote
+import os
+import fileinput
+import subprocess as sp
+import re
+
+with open("/tmp/mmorg.err", "w") as errf:
+    # First line is used as the name of the task
+    messageID = quote(os.environ["MM_MESSAGE_ID"])
+    messageURI = f"message://%3c{messageID}%3e"
+    subjectLine = os.environ["MM_SUBJECT"]
+
+    sel_range = os.environ.get("MM_SELECTED_RANGE", None)
+    print(messageID, file=errf)
+    print(messageURI, file=errf)
+    print(subjectLine, file=errf)
+    print(sel_range, file=errf)
+
+    body = []
+    for line in fileinput.input():
+        body.append(line)
+    body = "".join(body)
+    if sel_range is not None:
+        m = re.match(r"([0-9]+):([0-9]+)", sel_range)
+        body = body[int(m.group(1)):int(m.group(2))]
+    body = quote(body)
+
+    tchar = "M"
+    url = f"org-protocol:///capture?template={tchar}&url={messageURI}&title={subjectLine}&body={body}"
+
+    sp.check_call(["/usr/local/bin/emacsclient", "-n", url])
+    sp.call(
+        [
+            "osascript",
+            "-e",
+            'tell application "Emacs"',
+            "-e",
+            "activate",
+            "-e",
+            "end tell",
+        ]
+    )
+
+# require 'cgi'
+# require 'tempfile'
+#
+# tmpfile = Tempfile.new('add_input')
+# begin
+#
+#   # Create temporary file (don't use this execution style if user input is involved)
+#   tmpfilename = tmpfile.path
+#
+#   # First line is used as the name of the task
+#   tmpfile.puts(ENV['MM_SUBJECT'])
+#
+#   # The rest is the note
+#   tmpfile.puts("Email: message://%3c" + CGI::escape(ENV['MM_MESSAGE_ID']) + "%3e")
+#
+#   canonical = $stdin.read
+#   if !canonical.empty?
+#     tmpfile.puts("")
+#     tmpfile.puts("From: " + ENV['MM_FROM'])
+#     tmpfile.puts("Subject: " + ENV['MM_SUBJECT'])
+#     tmpfile.puts("")
+#     tmpfile.write(canonical)
+#   end
+#
+#   tmpfile.close
+#
+#   # Use AppleScript to communicate with the application
+#   system("osascript", ENV['MM_BUNDLE_SUPPORT'] + "/bin/create_task.scpt", tmpfilename)
+#   # system(ENV['MM_BUNDLE_SUPPORT'] + "/bin/create_task", tmpfilename)
+#
+# ensure
+#    tmpfile.close
+#    tmpfile.unlink   # deletes the temp file
+# end
