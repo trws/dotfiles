@@ -1,0 +1,2 @@
+#!/bin/bash -x
+/usr/local/bin/pandoc -s -t html -T title -f markdown --highlight-style=pandoc -T meh | textutil -convert rtf -stdin -stdout | /usr/bin/pbcopy -Prefer rtf

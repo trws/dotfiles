@@ -1,0 +1,9 @@
+#!/bin/sh
+
+# receives filename as only argument, writes replacement, echos new filename to
+# stdout
+
+export BAT_STYLE=plain
+bat --pager never --color always --decorations always "$1" > /tmp/lessopen-bat.$$
+echo /tmp/lessopen-bat.$$
+

@@ -1,0 +1,36 @@
+#!/bin/sh
+#|-*- mode:lisp -*-|#
+#| The following line *MUST* exist for some crazy ass reason
+#exec ros -Q -- $0 "$@"
+if [ "$0" -ot "$0.$ARCH.dump" ]; then
+  exec "$0.$ARCH.dump" "$@"
+else
+  ros dump executable "$0" -o "$0.$ARCH.dump"
+  exec "$0.$ARCH.dump" "$@"
+fi
+#if sha1sum -c "$0.$ARCH.sum" ; then
+#  exec "$0.$ARCH.dump" "$@"
+#else
+#  ros dump executable "$0" -o "$0.$ARCH.dump"
+#  sha1sum "$0" | tee "$0.$ARCH.sum"
+#  exec "$0.$ARCH.dump" "$@"
+#fi
+|#
+
+(progn ;;init forms
+  (ros:ensure-asdf)
+  #+quicklisp(ql:quickload '(trivia) :silent t)
+  )
+
+(defpackage :ros.script.lisp-test.3775220331
+  (:use :cl :trivia))
+(in-package :ros.script.lisp-test.3775220331)
+
+(defun main (&rest argv)
+  (declare (ignorable argv))
+  (format t "~a" (match '(something #(0 1 2))
+                          ((list a (vector 0 _ b))
+                              (values a b))))
+  (format t "meh ~a" argv))
+; (apply #'main sb-ext:*posix-argv*)
+;;; vim: set ft=lisp lisp:

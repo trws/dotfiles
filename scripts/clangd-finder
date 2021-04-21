@@ -1,0 +1,19 @@
+#!/bin/bash
+
+if ! CMD="$(type -p clangd-10)" ; then
+  if ! CMD="$(type -p clangd)" ; then
+    BASE=/usr/local/Cellar/llvm/
+    for D in $(ls $BASE) ; do
+      CMD=$BASE/$D/bin/clangd
+      if [[ -x $CMD ]] ; then
+        break
+      fi
+    done
+  fi
+fi
+
+if [[ -x $CMD ]] ; then
+  $CMD "$@"
+else
+  exit -1
+fi

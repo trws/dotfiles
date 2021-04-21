@@ -1,0 +1,14 @@
+#!/usr/bin/env zsh
+
+
+# if (( $+commands[snap] )) ; then
+#   if snap run nvim --version &> /dev/null ; then
+#     exec snap run nvim "$@"
+#   fi
+# fi
+
+if (( $+commands[nvim] )) ; then
+  exec nvim "$@"
+fi
+
+exec vim "$@"

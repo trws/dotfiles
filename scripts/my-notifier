@@ -1,0 +1,10 @@
+#!/bin/bash
+set -euo pipefail
+# if pgrep -x i3 >/dev/null; then
+#     /usr/bin/dunst
+# else
+#     /usr/lib/x86_64-linux-gnu/notify-osd
+# fi
+
+# /usr/lib/x86_64-linux-gnu/notify-osd
+/usr/lib/mate-notification-daemon/mate-notification-daemon

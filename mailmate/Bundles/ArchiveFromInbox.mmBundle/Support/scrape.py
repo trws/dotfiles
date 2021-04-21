@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 import json
 import sys
-# import logging
+import logging
 import argparse
 
 p = argparse.ArgumentParser("scrape", description="translate ID/mailbox into actions")
@@ -10,15 +10,15 @@ p.add_argument("-r", "--remove-flag", help="remove flag")
 p.add_argument("-a", "--archive", help="archive emails", action="store_true")
 args = p.parse_args(sys.argv[1:])
 
-#logging.basicConfig(filename="/tmp/mmfilter", level=logging.ERROR, filemode="w")
-#log = logging.getLogger("filter")
+logging.basicConfig(filename="/tmp/mmfilter", level=logging.INFO, filemode="w")
+log = logging.getLogger("filter")
 
 
-#log.info("starting filter")
+log.info("starting filter")
 ids = []
 for l in sys.stdin:
     message_id, box = l.split(":^:")
-    #log.info("got: %s and %s", message_id, box)
+    log.info("got: %s and %s", message_id, box)
     box = box.strip(' \n"')
     message_id = message_id.strip(' \n"')
     if box == "INBOX":

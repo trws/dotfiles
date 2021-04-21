@@ -1,0 +1,8 @@
+#!/bin/sh
+
+exec /usr/local/bin/cpulimit \
+  --lazy \
+  --include-children \
+  --pid=$(pgrep "$2") \
+  --limit="$1"
+

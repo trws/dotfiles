@@ -1,0 +1,7 @@
+#!/usr/bin/env zsh
+
+if (( $+commands[delta] )) ; then
+  exec delta --theme Dracula "$@"
+else
+  $PAGER "$@"
+fi

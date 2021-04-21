@@ -1,0 +1,13 @@
+#!/bin/bash
+BRANCH_NAME="$1"
+shift
+US=origin
+if git remote | grep upstream > /dev/null ; then
+  US=upstream
+fi
+
+DEF_BRANCH="$(git remote show origin | awk '/HEAD branch/ {print $3}')"
+
+echo git checkout -b "$BRANCH_NAME" -u "$US/$DEF_BRANCH" "$@"
+echo git config "branch.$BRANCH_NAME.pushRemote" "origin/$BRANCH_NAME"
+
