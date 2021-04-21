@@ -1,4 +1,4 @@
-(setq user-init-file (or load-file-name (buffer-file-name)))
+(setq user-init-file (file-truename (or load-file-name (buffer-file-name))))
 (setq user-emacs-directory (file-name-directory user-init-file))
 (setq custom-file (replace-regexp-in-string "init.el$" "custom.el" user-init-file))
 (load custom-file)
@@ -29,6 +29,7 @@
 (define-key global-map (kbd "C-u") 'evil-scroll-up)
 (define-key global-map (kbd "C-@") 'counsel-company)
 (define-key global-map (kbd "C-SPC") 'counsel-company)
+(define-key global-map (kbd "C-<escape>") 'evil-normal-state)
 
 
 
@@ -354,6 +355,11 @@
   (projectile-mode +1)
   :general
   (gleader "p" '(:prefix-map projectile-command-map)))
+
+(use-package counsel-projectile
+  :ensure t
+  :config
+  (counsel-projectile-mode))
 
 (defun lmc ()
   (interactive)
