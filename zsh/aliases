@@ -66,8 +66,9 @@ alias la="ls -laF "
 # List only directories
 alias lsd="ls -lF | grep --color=never '^d'"
 
-# Enable aliases to be sudo’ed
-alias sudo='sudo '
+# Enable aliases to be sudo’ed, removed, prefer having nocorrect etc. and
+# completion work to having aliases expand and break on them
+# alias sudo='sudo '
 
 # Get week number
 alias week='date +%V'

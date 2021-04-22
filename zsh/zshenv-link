@@ -2,6 +2,9 @@
 # Author: Tom Scogland
 
 export ZDOTDIR=~/.zsh
+# ensure my funcs, and prompts are there before load
+fpath=($ZDOTDIR/funcs $fpath)
+autoload -Uz $ZDOTDIR/funcs/*(.:t)
 source $ZDOTDIR/sysmagic
 source $ZDOTDIR/pathsetup
 source $ZDOTDIR/environment

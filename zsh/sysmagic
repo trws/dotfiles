@@ -40,3 +40,24 @@ typeset -U zshuse # needed because $domain may== $host
 
 gotroot=0
 
+
+# IMPORT from prezto's helper module, fantastic idea
+# is true on MacOS Darwin
+function is-darwin {
+  [[ "$OSTYPE" == darwin* ]]
+}
+
+# is true on Linux's
+function is-linux {
+  [[ "$OSTYPE" == linux* ]]
+}
+
+# is true on BSD's
+function is-bsd {
+  [[ "$OSTYPE" == *bsd* ]]
+}
+
+# is true on Cygwin (Windows)
+function is-cygwin {
+  [[ "$OSTYPE" == cygwin* ]]
+}
