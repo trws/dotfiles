@@ -52,10 +52,6 @@ nnoremap <silent> <leader>ws :call WindowSwap#EasyWindowSwap()<CR>
 
 
 
-"Mail search
-" Plug 'daisuzu/unite-notmuch'
-" Plug 'felipec/notmuch-vim'
-
 " let g:bracketed_paste_tmux_wrap=0
 " Plug 'ConradIrwin/vim-bracketed-paste'
 
@@ -69,6 +65,7 @@ nnoremap <silent> <leader>ws :call WindowSwap#EasyWindowSwap()<CR>
 Plug 'romainl/Apprentice', { 'branch' : 'fancylines-and-neovim' }
 Plug 'arcticicestudio/nord-vim'
 Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
+Plug 'dracula/vim'
 
 Plug 'greymd/oscyank.vim'  " clipboard support for xterm-type terms
 
@@ -95,6 +92,8 @@ Plug 'vim-airline/vim-airline-themes'
 " Plug 'bling/vim-bufferline'
 Plug 'edkolev/tmuxline.vim', { 'on': 'Tmuxline'}
 
+Plug 'hylang/vim-hy'
+
 
 " if executable('task')
 "   Plug 'blindFS/vim-taskwarrior'
@@ -103,16 +102,18 @@ Plug 'edkolev/tmuxline.vim', { 'on': 'Tmuxline'}
 Plug 'junegunn/vim-peekaboo'
 
 " support for live wrapping
-Plug 'reedes/vim-pencil' 
+Plug 'reedes/vim-pencil'
 ", { 'for': 'tex'}
 
 " ==== filetype handlers, highlighting etc ====
 Plug 'sheerun/vim-polyglot' " pulls in syntax for almost everything
 let g:polyglot_disabled = [ 'markdown']
+" Plug 'darfink/vim-plist'
+" let g:plist_display_format='xml'
 Plug 'gu-fan/riv.vim'
 Plug 'chrisbra/vim-zsh'
 let g:zsh_fold_enable = 1
-" Plug 'lervag/vimtex'
+Plug 'lervag/vimtex'
 
 let g:vimtex_disable_recursive_main_file_detection = 1
 let g:vimtex_view_method='skim'
@@ -124,12 +125,12 @@ let g:vimtex_syntax_minted = [
       \   'lang' : 'c',
       \ },
       \ {
-      \   'lang' : 'fortran',
-      \   'environments' : ['ompfPragma'],
-      \ },
-      \ {
       \   'lang' : 'cpp',
       \   'environments' : ['ompcPragma', 'boxedcode', 'cppcode', 'cppcode_test'],
+      \ },
+      \ {
+      \   'lang' : 'lua',
+      \   'environments' : ['directivespec'],
       \ },
       \ {
       \   'lang' : 'python',
@@ -139,10 +140,24 @@ let g:vimtex_syntax_minted = [
       \     ],
       \ }
       \]
-Plug 'tpope/vim-markdown'
+" Remove fortran highlighting due to syntax bug
+"      \ {
+"      \   'lang' : 'fortran',
+"      \   'environments' : ['ompfPragma'],
+"      \ },
+Plug 'godlygeek/tabular'
+" Plug 'plasticboy/vim-markdown' " this one did some strange things, not fond
+" testing pandoc markdown plugins, since that's usually my preference
+Plug 'vim-pandoc/vim-pandoc'
+Plug 'vim-pandoc/vim-pandoc-syntax'
+let g:pandoc#syntax#conceal#use=v:false
+nnoremap <Leader>pc :let g:pandoc#syntax#conceal#use=v:true<CR>
+" Plug 'tpope/vim-markdown'
 let g:markdown_fenced_languages = ['html', 'python', 'bash=sh', "c", "c++=cpp", "latex=tex", "wdiff", "diff"]
+let g:pandoc#syntax#codeblocks#embeds#langs = ['html', 'python', 'bash=sh', "c", "cpp", "latex=tex", "wdiff", "diff"]
 Plug 'tpope/vim-apathy'
 Plug 'tpope/vim-tbone'
+Plug 'rkaminsk/vim-syntax-clingo'
 
 function! InGui()
   return has("gui_running") || exists("g:gui_oni") || exists("neovim_dot_app") || has("gui_vimr")
@@ -194,48 +209,47 @@ if ! has('win32')
   set hidden
   set updatetime=300
   set shortmess+=c
-  inoremap <silent><expr> <TAB>
-        \ pumvisible() ? "\<C-n>" :
-        \ <SID>check_back_space() ? "\<TAB>" :
-        \ coc#refresh()
-  inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-  " Use `[g` and `]g` to navigate diagnostics
-  nmap <silent> [g <Plug>(coc-diagnostic-prev)
-  nmap <silent> ]g <Plug>(coc-diagnostic-next)
-  function! s:check_back_space() abort
-    let col = col('.') - 1
-    return !col || getline('.')[col - 1]  =~# '\s'
-  endfunction
-
-  " Use <c-space> to trigger completion.
-  inoremap <silent><expr> <c-space> coc#refresh()
-  " for some reason C-space is sometimes giving me this...
-  inoremap <silent><expr> <c-@> coc#refresh()
-
-
-
-  " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
-  " position. Coc only does snippet and additional edit on confirm.
-  if has('patch8.1.1068')
-    " Use `complete_info` if your (Neo)Vim version supports it.
-    inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
-  else
-    imap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-  endif
-
-  " Plug 'autozimu/LanguageClient-neovim', {
-  "       \ 'branch': 'next',
-  "       \ 'do': 'bash install.sh',
-  "       \ }
+  " inoremap <silent><expr> <TAB>
+  "       \ pumvisible() ? "\<C-n>" :
+  "       \ <SID>check_back_space() ? "\<TAB>" :
+  "       \ coc#refresh()
+  " inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+  " " Use `[g` and `]g` to navigate diagnostics
+  " nmap <silent> [g <Plug>(coc-diagnostic-prev)
+  " nmap <silent> ]g <Plug>(coc-diagnostic-next)
+  " function! s:check_back_space() abort
+  "   let col = col('.') - 1
+  "   return !col || getline('.')[col - 1]  =~# '\s'
+  " endfunction
   "
-  " let g:LanguageClient_serverCommands = {
-  "       \ 'rust': [$CARGO_HOME . '/bin/rustup', 'run', 'stable', 'rls'],
-  "       \ 'python': ['/usr/local/bin/pyls'],
-  "       \ }
+  " " Use <c-space> to trigger completion.
+  " inoremap <silent><expr> <c-space> coc#refresh()
+  " " for some reason C-space is sometimes giving me this...
+  " inoremap <silent><expr> <c-@> coc#refresh()
   "
-  " nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
-  " nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
-  " nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
+  "
+  "
+  " " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
+  " " position. Coc only does snippet and additional edit on confirm.
+  " if has('patch8.1.1068')
+  "   " Use `complete_info` if your (Neo)Vim version supports it.
+  "   inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+  " else
+  "   imap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+  " endif
+  "
+  "
+  "
+  " Plug 'neoclide/coc-neco'
+  " Plug 'neoclide/coc.nvim', {'branch': 'release'}
+  " let g:coc_global_extensions = ['coc-highlight', 'coc-json',  'coc-lists', 'coc-python', 'coc-rls', 'coc-snippets', 'coc-vimlsp' ]
+  "
+  " nnoremap <leader>cd <Plug>(coc-definition)
+  " nnoremap <leader>cD <Plug>(coc-declaration)
+  " " Remap for rename current word
+  " nmap <leader>cr <Plug>(coc-rename)
+  " vmap <leader>ca <Plug>(coc-codeaction-selected)
+
 
   " function! BuildYCM(info)
   "   " info is a dictionary with 3 fields
@@ -248,21 +262,105 @@ if ! has('win32')
   " endfunction
   " Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') }
 
-  Plug 'neoclide/coc-neco'
-  Plug 'neoclide/coc.nvim', {'branch': 'release'}
-  let g:coc_global_extensions = ['coc-highlight', 'coc-json',  'coc-lists', 'coc-python', 'coc-rls', 'coc-snippets', 'coc-vimlsp' ]
+  " Plug 'autozimu/LanguageClient-neovim', {
+  "       \ 'branch': 'next',
+  "       \ 'do': 'bash install.sh',
+  "       \ }
+  "
+  " let g:LanguageClient_serverCommands = {
+  "       \ 'rust': [$CARGO_HOME . '/bin/rustup', 'run', 'stable', 'rls'],
+  "       \ 'python': ['~/.local/bin/pipx', 'run', '--spec=python-language-server[all]', 'pyls'],
+  "       \ }
+  "
+  " nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
+  " nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
+  " nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
+  " nmap <F5> <Plug>(lcn-menu)
 
-  nnoremap <leader>cd <Plug>(coc-definition)
-  nnoremap <leader>cD <Plug>(coc-declaration)
-  " Remap for rename current word
-  nmap <leader>cr <Plug>(coc-rename)
-  vmap <leader>ca <Plug>(coc-codeaction-selected)
+  Plug 'prabirshrestha/asyncomplete.vim'
+  Plug 'prabirshrestha/vim-lsp'
+  Plug 'prabirshrestha/asyncomplete-lsp.vim'
+  Plug 'mattn/vim-lsp-settings'
+  Plug 'thomasfaingnaert/vim-lsp-snippets'
+  Plug 'thomasfaingnaert/vim-lsp-ultisnips'
 
+  Plug 'dense-analysis/ale'
+  let g:ale_linters = {
+  \   'python': ['mypy'],
+  \}
 
+  function! s:on_lsp_buffer_enabled() abort
+    setlocal omnifunc=lsp#complete
+    setlocal signcolumn=yes
+    if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
 
+    imap <c-space> <Plug>(asyncomplete_force_refresh)
+    function! s:check_back_space() abort
+      let col = col('.') - 1
+      return !col || getline('.')[col - 1]  =~ '\s'
+    endfunction
+
+    inoremap <silent><expr> <TAB>
+          \ pumvisible() ? "\<C-n>" :
+          \ <SID>check_back_space() ? "\<TAB>" :
+          \ asyncomplete#force_refresh()
+    inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+    inoremap <expr> <cr>    pumvisible() ? asyncomplete#close_popup() : "\<cr>"
+
+    nmap <buffer> gd <plug>(lsp-definition)
+    nmap <buffer> gr <plug>(lsp-references)
+    nmap <buffer> gi <plug>(lsp-implementation)
+    nmap <buffer> gt <plug>(lsp-type-definition)
+    nmap <buffer> <leader>rn <plug>(lsp-rename)
+    nmap <buffer> [g <Plug>(lsp-previous-diagnostic)
+    nmap <buffer> ]g <Plug>(lsp-next-diagnostic)
+    nmap <buffer> K <plug>(lsp-hover)
+
+    " refer to doc to add more commands
+  endfunction
+
+  augroup lsp_install
+    au!
+    " call s:on_lsp_buffer_enabled only for languages that has the server registered.
+    autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+  augroup END
+
+  " if executable('pyls')
+  "   au User lsp_setup call lsp#register_server({
+  "         \ 'name': 'pyls-all',
+  "         \ 'cmd': {server_info->['pyls']},
+  "         \ 'whitelist': ['python'],
+  "         \ })
+  " endif
+  let g:lsp_log_verbose = 1
+  let g:lsp_log_file = expand('./lsp.log')
+  let g:lsp_settings = {
+        \   'pyls': {
+        \     'workspace_config': {
+        \       'pyls': {
+        \         'plugins': {
+        \           'pyflakes': {'enabled': v:false},
+        \           'flake8': {'enabled': v:true},
+        \           'black': {'enabled': v:true},
+        \           'pycodestyle': {'enabled': v:false},
+        \           'mypy': {'enabled': v:true},
+        \           'mccabe': {'enabled': v:false},
+        \           'jedi': {
+        \             'extra_paths': [
+        \               './bin',
+        \               './lib/spack',
+        \               './lib/spack/external'
+        \             ]
+        \           }
+        \         }
+        \       }
+        \     }
+        \   },
+        \}
 endif
 
 if has('nvim')
+  " Plug 'neovim/nvim-lspconfig'
   "   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 else
   "   Plug 'Shougo/deoplete.nvim'
@@ -278,6 +376,7 @@ endif
 "bindings
 
 "shell/terminal emulation
+Plug 'kassio/neoterm'
 
 "file management
 " Plug 'xolox/vim-misc'
@@ -316,18 +415,20 @@ Plug 'junegunn/fzf.vim'
 Plug 'liuchengxu/vista.vim'
 Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary' }
 
-if(has("python3"))
-  Plug 'Shougo/denite.nvim'
-  " Plug 'ozelentok/denite-gtags'
-  Plug 'nixprime/cpsm'
-  Plug 'raghur/fruzzy', {'do': { -> fruzzy#install()}}
-  let g:fruzzy#usenative = 1
-else
-  Plug 'Shougo/unite.vim'
-  Plug 'Shougo/unite-ssh'
-  " Plug 'hewes/unite-gtags'
-  Plug 'tsukkee/unite-tag'
-endif
+
+"" NOTE: replaced with CLAP, not sure if I care to bring these back
+" if(has("python3"))
+"   Plug 'Shougo/denite.nvim'
+"   " Plug 'ozelentok/denite-gtags'
+"   Plug 'nixprime/cpsm'
+"   Plug 'raghur/fruzzy', {'do': { -> fruzzy#install()}}
+"   let g:fruzzy#usenative = 1
+" else
+"   Plug 'Shougo/unite.vim'
+"   Plug 'Shougo/unite-ssh'
+"   " Plug 'hewes/unite-gtags'
+"   Plug 'tsukkee/unite-tag'
+" endif
 
 Plug 'Shougo/neomru.vim'
 
@@ -364,6 +465,9 @@ noremap!        <M-f> <S-Right>
 " Plug 'critiqjo/husk-x.vim'
 
 " Plug 'airblade/vim-gitgutter'
+"
+" Python poetry and pipenv
+Plug 'petobens/poet-v'
 
 " indent objects
 Plug 'michaeljsmith/vim-indent-object'
@@ -387,6 +491,9 @@ Plug 'Chiel92/vim-autoformat'
 let g:formatters_python=['black']
 let g:formatters_c=['clangformat']
 let g:formatters_cpp=['clangformat']
+" Ensure we have black, add Black command
+Plug 'psf/black', { 'branch': 'stable' }
+
 " Plug 'sjl/gundo.vim' " replaced with undotree
 Plug 'mbbill/undotree'
 Plug 'tpope/vim-repeat'
@@ -412,6 +519,16 @@ Plug 'tpope/vim-sensible'
 
 call plug#end()
 
+" neovim ruby setup
+
+" let g:ruby_host_prog = '/usr/local/opt/ruby/bin/ruby'
+
+" if has('nvim')
+"   lua <<EOF
+"   require 'lspconfig'.clangd.setup{name="clangd", settings = {}}
+"   require 'lspconfig'.pyls.setup{name="pyls", settings = {},  cmd = {"pipx", "run", "pyls"}}
+" EOF
+" endif
 
 colorscheme apprentice
 " let g:airline_theme='apprentice'
@@ -446,8 +563,8 @@ map <Leader>vq :VimuxCloseRunner<CR>
 map <Leader>vx :VimuxInterruptRunner<CR>
 
 
-source ~/.vim/unite_denite.vim
-
+" source ~/.vim/unite_denite.vim
+"
 
 " enable history
 let g:fzf_buffers_jump = 1
@@ -519,26 +636,53 @@ let g:clap_provider_dotfiles = {
       \ }
 let g:clap_layout = { 'relative': 'editor' }
 let g:clap_project_root_markers = ['.root', '.git', '.git/', '.latexmkrc', '.travis.yml']
-nnoremap <silent> <leader>sr  :Clap files<CR>
-nnoremap <silent> <leader>sy  :Clap yanks<CR>
-nnoremap <silent> <leader>sb  :Clap history<CR>
-nnoremap <silent> <leader>sq  :Clap history<CR>
-nnoremap <silent> <leader>sd  :Clap dotfiles<CR>
-nnoremap <silent> <leader>sB  :Clap buffers<CR>
-nnoremap <silent> <leader>sw  :Clap windows<CR>
-nnoremap <silent> <leader>ss  :Clap gfiles?<CR>
-nnoremap <silent> <leader>sn  :Clap files ~/onedrive/vimwiki/<CR>
-nnoremap <silent> <leader>sg  :Clap grep<CR>
+" add provider that always uses cwd rather than root of target file
+let g:clap_provider_files_cwd = deepcopy(g:clap#provider#files#)
+let g:clap_provider_files_cwd.enable_rooter = v:false
+
+let g:clap_disable_run_rooter = v:false
+function! Run_clap_cmd_noroot(cmd)
+  let l:tmp = g:clap_disable_run_rooter
+  let g:clap_disable_run_rooter = v:true
+  :execute ':Clap ' . a:cmd
+  let g:clap_disable_run_rooter = l:tmp
+endfunction
+
+function! Decl_clap_map_condroot(key, cmd)
+  " regular rooting enabled version
+  execute 'nnoremap <silent> <leader>s' . a:key . '  :Clap ' . a:cmd . '<CR>'
+  execute 'nnoremap <silent> <leader>s' . toupper(a:key) . "  :call  Run_clap_cmd_noroot('" . a:cmd . "')<CR>"
+endfunction
+
+call Decl_clap_map_condroot('r', 'files')
+call Decl_clap_map_condroot('s', 'gfiles')
+call Decl_clap_map_condroot('g', 'grep')
+
 nnoremap <silent> <leader>sc  :Clap bcommits<CR>
 nnoremap <silent> <leader>sC  :Clap commits<CR>
+nnoremap <silent> <leader>sd  :Clap files ~/.dotfiles<CR>
+nnoremap <silent> <leader>sb  :Clap history<CR>
+nnoremap <silent> <leader>sq  :Clap history<CR>
+nnoremap <silent> <leader>sm  :Clap maps<CR>
+nnoremap <silent> <leader>sB  :Clap buffers<CR>
+nnoremap <silent> <leader>sw  :Clap windows<CR>
+nnoremap <silent> <leader>sn  :Clap files ~/onedrive/vimwiki/<CR>
 nnoremap <silent> <leader>sl  :Clap blines<CR>
 nnoremap <silent> <leader>sL  :Clap lines<CR>
+nnoremap <silent> <leader>sy  :Clap yanks<CR>
 nnoremap <silent> <leader>sT  :Clap tags<CR>
 nnoremap <silent> <leader>st  :Clap tags<CR>
 " nnoremap <silent> <leader>l]  :call TagsWithCword()<CR>
 
 let include_paths = ['/opt/local/include','/usr/local/include','/usr/include','/Developer/Headers',fnamemodify('~/programs/include',':p')]
 let &path= join(['.', '', './include'] + include_paths, ',')
+
+" source the current file
+nmap <leader>vs :source %<CR>
+" source the current line
+nmap <leader>vl yy:@"<CR>
+" source a visual range
+vmap <leader>vs y:@"<CR>
 
 " let g:unite_source_gtags_project_config = {
 "       \ '_':                   { 'gtags_libpath': include_paths }
@@ -666,7 +810,7 @@ let g:airline#extensions#whitespace#enabled=0
 "" let g:airline_extensions = ["tmuxline","branch","tagbar","quickfix","denite","csv","netrw","term","vimtex"]
 "let g:airline_extensions = ["branch","tagbar","quickfix","csv","netrw","term","vimtex","undotree","windowswap","fugitiveline"]
 " let g:airline_extensions = ["tmuxline","branch","tagbar","quickfix","denite","csv","term","vimtex"]
-let g:airline_extensions = ["branch","vista","quickfix","csv","term","vimtex","undotree","windowswap","fugitiveline","denite"]
+let g:airline_extensions = ["branch","vista","quickfix","csv","term","vimtex","undotree","windowswap","fugitiveline"]
 set timeoutlen=300
 set ttimeoutlen=10
 
@@ -675,7 +819,7 @@ if InGui()
   if has("gui_macvim")
     "CRITICAL option, allows alt-based key-bindings to work in macvim
     set macmeta
-    set transparency=10
+    " set transparency=10
     " set gfn=Courier\ New:h11.00
     " set gfn=ProFontX:h9.00
     " expariment to get italic monospace variant with full powerline support
@@ -1050,17 +1194,12 @@ if !has("nvim")
   endif
 endif
 
-" colorscheme solarized
-if &term =~ ".*256color.*" || InGui()
-  if $COLORTERM == "truecolor"
-    let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
-    let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
-    set termguicolors
-  else
-    set t_Co=256
-  endif
-  " let g:inkpot_black_background=1
-  " colorscheme inkpot
+if $COLORTERM == "truecolor"
+  let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
+  let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
+  set termguicolors
+else
+  set t_Co=256
 endif
 
 " let g:jellybeans_overrides = {
