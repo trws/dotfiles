@@ -32,17 +32,6 @@ endif
 
 call plug#begin(plugged_directory)
 
-Plug 'Shougo/vimproc.vim' , { 'do' : 'make'}
-
-" allow swapping of arguments, and i,/a, for selecting swappable component of
-" comma-delimited argument lists
-Plug 'machakann/vim-swap'
-
-omap i, <Plug>(swap-textobject-i)
-xmap i, <Plug>(swap-textobject-i)
-omap a, <Plug>(swap-textobject-a)
-xmap a, <Plug>(swap-textobject-a)
-
 "split management
 Plug 'wesQ3/vim-windowswap'
 let g:windowswap_map_keys = 0 "prevent default bindings
@@ -67,13 +56,10 @@ Plug 'arcticicestudio/nord-vim'
 Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
 Plug 'dracula/vim'
 
-Plug 'greymd/oscyank.vim'  " clipboard support for xterm-type terms
+Plug 'ojroques/vim-oscyank'  " clipboard support for xterm-type terms
 
-" Plug 'luochen1990/rainbow' " rainbow parens and braces etc.
-
-" Render man pages in vim, seems to be breaking neovim right now, missing
-" function man#open_file
-" Plug 'vim-utils/vim-man'
+" Render man pages in vim
+Plug 'vim-utils/vim-man'
 
 " Plug 'dhruvasagar/vim-table-mode'
 
@@ -82,35 +68,26 @@ Plug 'greymd/oscyank.vim'  " clipboard support for xterm-type terms
 "powerline not working, light alternative?
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-" Plug 'itchyny/lightline.vim'
-" let g:lightline = {
-"       \ 'colorscheme': 'nord',
-"       \ }
-
-
-" Plug 'tomtom/quickfixsigns_vim'
-" Plug 'bling/vim-bufferline'
 Plug 'edkolev/tmuxline.vim', { 'on': 'Tmuxline'}
-
-Plug 'hylang/vim-hy'
 
 
 " if executable('task')
 "   Plug 'blindFS/vim-taskwarrior'
 " endif
 
+" visual register selection
 Plug 'junegunn/vim-peekaboo'
 
-" support for live wrapping
+" support for live wrapping, soft and hard
 Plug 'reedes/vim-pencil'
-", { 'for': 'tex'}
 
 " ==== filetype handlers, highlighting etc ====
 Plug 'sheerun/vim-polyglot' " pulls in syntax for almost everything
 let g:polyglot_disabled = [ 'markdown']
 " Plug 'darfink/vim-plist'
 " let g:plist_display_format='xml'
-Plug 'gu-fan/riv.vim'
+Plug 'gu-fan/riv.vim' " RST handler etc.
+Plug 'hylang/vim-hy'
 Plug 'chrisbra/vim-zsh'
 let g:zsh_fold_enable = 1
 Plug 'lervag/vimtex'
@@ -145,9 +122,13 @@ let g:vimtex_syntax_minted = [
 "      \   'lang' : 'fortran',
 "      \   'environments' : ['ompfPragma'],
 "      \ },
+
+" table handling
 Plug 'godlygeek/tabular'
+
 " Plug 'plasticboy/vim-markdown' " this one did some strange things, not fond
 " testing pandoc markdown plugins, since that's usually my preference
+Plug 'rkaminsk/vim-syntax-clingo'
 Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-syntax'
 let g:pandoc#syntax#conceal#use=v:false
@@ -155,9 +136,13 @@ nnoremap <Leader>pc :let g:pandoc#syntax#conceal#use=v:true<CR>
 " Plug 'tpope/vim-markdown'
 let g:markdown_fenced_languages = ['html', 'python', 'bash=sh', "c", "c++=cpp", "latex=tex", "wdiff", "diff"]
 let g:pandoc#syntax#codeblocks#embeds#langs = ['html', 'python', 'bash=sh', "c", "cpp", "latex=tex", "wdiff", "diff"]
+" sensible setup for path, suffixes, include and so-forth so gf, :find, etc can
+" work sanely for a decent chunk of languages
 Plug 'tpope/vim-apathy'
+" tmux control commands :Tmux and :Tyank/:Tput for buffers
 Plug 'tpope/vim-tbone'
-Plug 'rkaminsk/vim-syntax-clingo'
+"tmux integration, disabling in favor of tbone for now
+" Plug 'vim-scripts/vimux'
 
 function! InGui()
   return has("gui_running") || exists("g:gui_oni") || exists("neovim_dot_app") || has("gui_vimr")
@@ -181,11 +166,6 @@ Plug 'cweagans/vim-taskpaper'
 " date incrementing with ^a and so-forth
 Plug 'tpope/vim-speeddating'
 
-"tmux integration
-Plug 'vim-scripts/vimux'
-
-
-Plug 'Shougo/neco-vim' " add vim completion to ycm or deoplete
 
 
 if ! has('win32')
@@ -251,15 +231,7 @@ if ! has('win32')
   " vmap <leader>ca <Plug>(coc-codeaction-selected)
 
 
-  " function! BuildYCM(info)
-  "   " info is a dictionary with 3 fields
-  "   " - name:   name of the plugin
-  "   " - status: 'installed', 'updated', or 'unchanged'
-  "   " - force:  set on PlugInstall! or PlugUpdate!
-  "   if a:info.status != 'unchanged'
-  "     !./install.py --clang-completer --rust-completer
-  "   endif
-  " endfunction
+  " Plug 'Shougo/neco-vim' " add vim completion to ycm or deoplete
   " Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') }
 
   " Plug 'autozimu/LanguageClient-neovim', {
@@ -284,10 +256,10 @@ if ! has('win32')
   Plug 'thomasfaingnaert/vim-lsp-snippets'
   Plug 'thomasfaingnaert/vim-lsp-ultisnips'
 
-  Plug 'dense-analysis/ale'
-  let g:ale_linters = {
-  \   'python': ['mypy'],
-  \}
+  " Plug 'dense-analysis/ale'
+  " let g:ale_linters = {
+  " \   'python': ['mypy'],
+  " \}
 
   function! s:on_lsp_buffer_enabled() abort
     setlocal omnifunc=lsp#complete
@@ -467,9 +439,21 @@ noremap!        <M-f> <S-Right>
 " Plug 'airblade/vim-gitgutter'
 "
 " Python poetry and pipenv
+let g:poetv_executables=['poetry']
 Plug 'petobens/poet-v'
 
-" indent objects
+" load tcomment before vim-swap so vim-swap mappings win
+Plug 'tomtom/tcomment_vim'
+" allow swapping of arguments, and i,/a, for selecting swappable component of
+" comma-delimited argument lists
+Plug 'machakann/vim-swap'
+
+omap i, <Plug>(swap-textobject-i)
+xmap i, <Plug>(swap-textobject-i)
+omap a, <Plug>(swap-textobject-a)
+xmap a, <Plug>(swap-textobject-a)
+
+" indent objects, around or in (i)ndent regions
 Plug 'michaeljsmith/vim-indent-object'
 Plug 'nathanaelkane/vim-indent-guides'
 let g:indent_guides_start_level = 2
@@ -479,14 +463,17 @@ let g:indent_guides_enable_on_vim_startup = 1
 " Plug 'terryma/vim-multiple-cursors'
 
 
-" Plug 'Raimondi/delimitMate'
+" indispensible command for changing surrounding delimiters
 Plug 'tpope/vim-surround'
+" exchange arbitrary stuff, cx on each, cxx for a line, cxc to clear and start
+" over
 Plug 'tommcdo/vim-exchange'
+" snippets engine
 Plug 'SirVer/ultisnips'
-" Snippets are separated from the engine. Add this if you want them:
+" Snippets are separated from the engine
 Plug 'honza/vim-snippets'
-Plug 'Lokaltog/vim-easymotion'
-map <Leader>e <Plug>(easymotion-prefix)
+Plug 'justinmk/vim-sneak'
+" format on Ctrl-k, maybe look into using lsp support in place or in addition?
 Plug 'Chiel92/vim-autoformat'
 let g:formatters_python=['black']
 let g:formatters_c=['clangformat']
@@ -494,22 +481,33 @@ let g:formatters_cpp=['clangformat']
 " Ensure we have black, add Black command
 Plug 'psf/black', { 'branch': 'stable' }
 
-" Plug 'sjl/gundo.vim' " replaced with undotree
+" :UndotreeToggle to walk undo tree
 Plug 'mbbill/undotree'
+" support library for supporting repeats in commands
 Plug 'tpope/vim-repeat'
 Plug 'vim-scripts/visualrepeat'
 "new alignment plugin, CR from visual mode to use
 Plug 'junegunn/vim-easy-align'
+" case-mixed search, replace and so-forth with Abolish and Subvert
 Plug 'tpope/vim-abolish'
-" Plug 'tpope/vim-pastie'
 "Unix command aliases, Chmod and company
 Plug 'tpope/vim-eunuch'
+" convenient paired things: need to practice with this, common uses:
+" paste mode | [op | enter paste mode before current line
+" paste mode | yop | enter paste mode after cutting current line
+" diff mode | [od | diffthis/diffoff
+" wrap mode | [ow | wrap o/off
+" add blank lines | [<Space> | add lines before, takes a count
+" switch files in dir | [f | previous file by name in directory
+" switch SCM or diff hunk | [n | previous hunk or marker
+"
+" lots more for buffers, open files, etc.  these are most used though
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-dispatch'
 Plug 'radenling/vim-dispatch-neovim'
-Plug 'tomtom/tcomment_vim'
 
 "Word highlighting for possible but uncertain errors
+"not on by default, have to use :Wordy
 Plug 'reedes/vim-wordy'
 
 Plug 'tpope/vim-vinegar'
@@ -521,17 +519,7 @@ call plug#end()
 
 " neovim ruby setup
 
-" let g:ruby_host_prog = '/usr/local/opt/ruby/bin/ruby'
-
-" if has('nvim')
-"   lua <<EOF
-"   require 'lspconfig'.clangd.setup{name="clangd", settings = {}}
-"   require 'lspconfig'.pyls.setup{name="pyls", settings = {},  cmd = {"pipx", "run", "pyls"}}
-" EOF
-" endif
-
 colorscheme apprentice
-" let g:airline_theme='apprentice'
 
 let mapleader      = ','
 let maplocalleader = ','
@@ -650,8 +638,8 @@ endfunction
 
 function! Decl_clap_map_condroot(key, cmd)
   " regular rooting enabled version
-  execute 'nnoremap <silent> <leader>s' . a:key . '  :Clap ' . a:cmd . '<CR>'
-  execute 'nnoremap <silent> <leader>s' . toupper(a:key) . "  :call  Run_clap_cmd_noroot('" . a:cmd . "')<CR>"
+  execute 'nnoremap <silent> <leader>s' . toupper(a:key) . '  :Clap ' . a:cmd . '<CR>'
+  execute 'nnoremap <silent> <leader>s' . a:key . "  :call  Run_clap_cmd_noroot('" . a:cmd . "')<CR>"
 endfunction
 
 call Decl_clap_map_condroot('r', 'files')
@@ -684,43 +672,12 @@ nmap <leader>vl yy:@"<CR>
 " source a visual range
 vmap <leader>vs y:@"<CR>
 
-" let g:unite_source_gtags_project_config = {
-"       \ '_':                   { 'gtags_libpath': include_paths }
-"       \ }
-
-
-
 let g:global_objdir=$HOME . "/.cache/vim/global-obj"
 call FindOrCreate(g:global_objdir)
 " For regular tags
 let tag_file = g:global_objdir . "/tags"
 set tags=./tags;.git/tags;,tags
 
-
-"YouCompleteMe
-nnoremap <leader>yg :YcmCompleter GoTo<CR>
-nnoremap <leader>yG :YcmCompleter GoToImprecise<CR>
-nnoremap <leader>yf :YcmCompleter FixIt<CR>
-nnoremap <leader>yt :YcmCompleter GetType<CR>
-nnoremap <leader>yp :YcmCompleter GetParent<CR>
-nnoremap <leader>yd :YcmCompleter GetDoc<CR>
-
-let g:ycm_semantic_triggers =  {
-      \ 'c' : ['_'],
-      \ 'vim' : ['_'],
-      \}
-let g:ycm_complete_in_strings = 1
-let g:ycm_extra_conf_vim_data=['&filetype']
-let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
-let g:ycm_extra_conf_globlist = ['~/Dropbox/*','~/projects/*','~/Projects/*']
-let g:ycm_autoclose_preview_window_after_insertion = 1
-" let g:ycm_key_invoke_completion = '<C-S-Space>'
-let g:ycm_key_invoke_completion = '<C-Space>'
-" let g:ycm_key_invoke_completion = '<Tab>'
-let g:ycm_key_list_select_completion = ['<C-n>', '<Down>', '<Tab>']
-let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>', '<S-Tab>']
-let g:ycm_min_num_of_chars_for_completion = 99
-let g:ycm_min_num_identifier_candidate_chars = 99
 
 let g:UltiSnipsExpandTrigger="<c-j>"
 inoremap <S-tab> <Esc>:call UltiSnips_ListSnippets()<CR>
@@ -859,33 +816,6 @@ endif
 "Normalize backspace
 set t_kb=
 call helpers#Map_for_all("", "<BS>", 1, 1)
-
-" if &term =~ "screen.*" "screen configurations
-"   if &term =~ "screen.*-bce"
-"     set term=screen-256color
-"   endif
-"   "set ttymouse=xterm "falls back to xterm for unsupported terminal type
-"   set t_ku=OA
-"   set t_kd=OB
-"   set t_kr=OC
-"   set t_kl=OD
-"   set t_@7=OF
-"   set t_kh=[1~
-"
-"   call helpers#Map_for_all("<Esc>[C", "<Right>", 1, 1)
-"   call helpers#Map_for_all("<Esc>[D", "<Left>", 1, 1)
-"   call helpers#Map_for_all("<Esc>[A", "<Up>", 1, 1)
-"   call helpers#Map_for_all("<Esc>[B", "<Down>", 1, 1)
-"
-"   call helpers#Map_for_all("<Esc>[4~", "<End>", 1, 1)
-"   call helpers#Map_for_all("<Esc>[1~", "<Home>", 1, 1)
-"
-"   call helpers#Map_for_all("<Esc>0F", "<End>", 1, 1)
-"   call helpers#Map_for_all("<Esc>OH", "<Home>", 1, 1)
-"   call helpers#Map_for_all("<Esc>[F", "<End>", 1, 1)
-"   call helpers#Map_for_all("<Esc>[H", "<Home>", 1, 1)
-" endif
-"
 
 " tComment extra mappings:
 " yank visual before toggle comment
@@ -1054,22 +984,14 @@ if ! InGui()
   "new experiment, using xterm clipboard escapes for copy portability, no paste
   "(I think..?)
 
-  noremap <silent> <A-c>        :Oscyank<CR>
-  noremap <silent> <Esc>c       :Oscyank<CR>
+  noremap <silent> <A-c>        :OSCYank<CR>
+  noremap <silent> <Esc>c       :OSCYank<CR>
 
   if has('macunix')
-    " should be handled in tmux now...
-    " let tmux_reattach_prefix="reattach-to-user-namespace"
-    " if (! executable(tmux_reattach_prefix))
-    "   let tmux_reattach_prefix=glob("~/Dropbox/config/tmux-MacOSX-pasteboard/reattach-to-user-namespace")
-    " elseif (! filereadable(tmux_reattach_prefix))
-    "   let tmux_reattach_prefix=glob("~/Projects/config-sync/tmux-MacOSX-pasteboard/reattach-to-user-namespace")
-    " endif
-
     "paste from pbpaste as paste normally works, from the current cursor position
     function! Paste_proper()
       " let @p=system(g:tmux_reattach_prefix . " pbpaste")
-      let @p=system(g:tmux_reattach_prefix . " pbpaste")
+      let @p=system("pbpaste")
       execute 'normal "pp'
     endfunction
     vmap <silent> <A-v>        dh:call Paste_proper()<CR>
