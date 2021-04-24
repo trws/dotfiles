@@ -1,0 +1,35 @@
+xmodmap -e 'clear lock'
+xmodmap -e 'clear mod1'
+xmodmap -e 'clear mod2'
+xmodmap -e 'keycode 66 = Meta_L'
+xmodmap -e 'add mod1 = Alt_R'
+xmodmap -e 'add mod2 = Meta_L'
+xmodmap -e 'keycode 63 = Super_L'
+xmodmap -e 'keycode 71 = Super_R'
+xmodmap -e 'add mod4 = Super_L'
+xmodmap -e 'add mod4 = Super_R'
+# original
+#xmodmap:  up to 2 keys per modifier, (keycodes in parentheses):
+#
+#shift       Shift_L (0x40),  Shift_R (0x44)
+#lock        Caps_Lock (0x41)
+#control     Control_L (0x43),  Control_R (0x46)
+#mod1        Alt_L (0x42),  Alt_R (0x45)
+#mod2        Meta_L (0x3f),  Meta_R (0x47)
+#mod3      
+#mod4      
+#mod5      
+
+
+#after:
+# xmodmap:  up to 2 keys per modifier, (keycodes in parentheses):
+# 
+# shift       Shift_L (0x40),  Shift_R (0x44)
+# lock      
+# control     Control_L (0x43),  Control_R (0x46)
+# mod1        Alt_R (0x45)
+# mod2        Meta_L (0x42)
+# mod3      
+# mod4        Super_L (0x3f),  Super_R (0x47)
+# mod5      
+# 

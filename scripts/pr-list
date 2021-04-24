@@ -1,0 +1,2 @@
+#!/bin/sh
+hub pr list -f "%pC%>(8)%i%Creset %t% l: %U%n"

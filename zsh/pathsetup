@@ -7,55 +7,61 @@ typeset -U pkg_config_path
 typeset -T PKG_CONFIG_PATH pkg_config_path
 
 function remove_from_path(){
-for p in $@ ; do
+  for p in $@ ; do
     path=("${(@)path:#$p}")
-done
+  done
 }
 
 function add_to_path_front(){
-for p in $@ ; do
+  for p in $@ ; do
+    if [[ ! -d $p ]] ; then
+      continue
+    fi
     if [ -d $p/bin ] ; then
-        path=($p/bin $path)
+      path=($p/bin $path)
     fi
     if [ -d $p/man ] ; then
-        manpath=($p/man $manpath)
+      manpath=($p/man $manpath)
     fi
     if [ -d $p/share/man ] ; then
-        manpath=($p/share/man $manpath)
+      manpath=($p/share/man $manpath)
     fi
     if [ -d $p/share/pkgconfig ] ; then
-        pkg_config_path=($p/share/pkgconfig $pkg_config_path)
+      pkg_config_path=($p/share/pkgconfig $pkg_config_path)
     fi
     if [ -d $p/lib/pkgconfig ] ; then
-        pkg_config_path=($p/lib/pkgconfig $pkg_config_path)
+      pkg_config_path=($p/lib/pkgconfig $pkg_config_path)
     fi
     if [ -d $p/lib64/pkgconfig ] ; then
-        pkg_config_path=($p/lib64/pkgconfig $pkg_config_path)
+      pkg_config_path=($p/lib64/pkgconfig $pkg_config_path)
     fi
-done
+  done
 }
 
 function add_to_path_back(){
-for p in $@ ; do
+  for p in $@ ; do
+    if [[ ! -d $p ]] ; then
+      continue
+    fi
     if [ -d $p/bin ] ; then
-        path=($path $p/bin)
+      path=($path $p/bin)
     fi
     if [ -d $p/man ] ; then
-        manpath=($manpath $p/man)
+      manpath=($manpath $p/man)
     fi
     if [ -d $p/share/man ] ; then
-        manpath=($manpath $p/share/man)
+      manpath=($manpath $p/share/man)
     fi
     if [ -d $p/share/pkgconfig ] ; then
-        pkg_config_path=($pkg_config_path $p/share/pkgconfig )
+      pkg_config_path=($pkg_config_path $p/share/pkgconfig )
     fi
     if [ -d $p/lib/pkgconfig ] ; then
-        pkg_config_path=($pkg_config_path $p/lib/pkgconfig )
+      pkg_config_path=($pkg_config_path $p/lib/pkgconfig )
     fi
     if [ -d $p/lib64/pkgconfig ] ; then
-        pkg_config_path=($pkg_config_path $p/lib64/pkgconfig )
+      pkg_config_path=($pkg_config_path $p/lib64/pkgconfig )
     fi
-done
+  done
 }
 
 [[ -x /usr/local/bin/defaultpaths ]] && eval `/usr/local/bin/defaultpaths`
@@ -63,33 +69,36 @@ done
 add_to_path_back /usr ""
 
 if (( $gotroot )) ; then
-    path=(/usr/local/sbin /opt/local/sbin $path)
-    path=($path /sbin /usr/sbin)
+  path=(/usr/local/sbin /opt/local/sbin $path)
+  path=($path /sbin /usr/sbin)
 fi
 
 # path=(/usr/local/opt/coreutils/libexec/gnubin /opt/local/libexec/gnubin $path)
 [[ -d /opt/local/libexec/gnubin ]] && path=(/opt/local/libexec/gnubin $path)
-add_to_path_front /Developer/usr /opt/local
+
+if is-darwin ; then
+  add_to_path_front /Developer/usr /opt/local
+fi
+
+if is-linux ; then
+  # for brew on linux
+  add_to_path_front /home/linuxbrew/.linuxbrew
+fi
+
 
 # for pipx
 add_to_path_front ~/.local
 
 manpath=( ~/programs/man ~/programs/share/man /opt/local/man /usr/share/man $manpath )
 
-if [[ $system = solaris ]] ; then
-    add_to_path_front /p/zsh /p/openssh/ /p/cvs/ $JAVACC $CS352 $J2SE15 /usr/xpg4 /usr/ccs 
-    add_to_path_back /usr/ucb
+if [[ $system == solaris ]] ; then
+  add_to_path_front /p/zsh /p/openssh/ /p/cvs/ $JAVACC $CS352 $J2SE15 /usr/xpg4 /usr/ccs
+  add_to_path_back /usr/ucb
 fi
 
-add_to_path_back /usr/local/cuda  /usr/local/opt/go/libexec ~/.cargo
+add_to_path_back /usr/local/cuda  /usr/local/opt/go/libexec
 
-[[ -d /opt/pgi/linux86-64/2014/bin/ ]] && path=( $path /opt/pgi/linux86-64/2014/bin ) && manpath=($manpath /opt/pgi/linux86-64/2013/man)
-[[ -d /opt/pgi/osx86-64/2014/bin/ ]] && path=( $path /opt/pgi/osx86-64/2014/bin ) && manpath=($manpath /opt/pgi/osx86-64/2013/man)
-
-[[ -d ~/build/clang ]] && path=( ~/build/clang/install/bin $path )
-[[ -d ~/build/depot_tools/ ]] && path=( $path ~/build/depot_tools )
-
-add_to_path_front /usr/local ~/spack 
+add_to_path_front /usr/local ~/spack
 
 function load_vim() {
   if [[ -d /usr/tce/packages/vim/ ]] ; then
@@ -107,18 +116,18 @@ load_vim
 add_to_path_back ~/.dotfiles/doom-emacs
 
 if [[ -n "$SYS_TYPE" ]] ; then
-    export PRGPATH=~/programs/${SYS_TYPE}
+  export PRGPATH=~/programs/${SYS_TYPE}
 else
-    export PRGPATH=~/programs/default
+  export PRGPATH=~/programs/default
 fi
 add_to_path_front  "$PRGPATH"
 
-mkdir -p $PRGPATH/go/bin
+mkdirp_if_missing $PRGPATH/go/bin
 export GOPATH="$PRGPATH/go"
 add_to_path_front "$PRGPATH/go"
 
-mkdir -p $PRGPATH/cargo/bin
-mkdir -p $PRGPATH/rustup
+mkdirp_if_missing $PRGPATH/cargo/bin
+mkdirp_if_missing $PRGPATH/rustup
 export CARGO_HOME="$PRGPATH/cargo"
 export RUSTUP_HOME="$PRGPATH/rustup"
 add_to_path_front "$PRGPATH/cargo"

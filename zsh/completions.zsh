@@ -63,7 +63,7 @@ autoload -U bashcompinit && bashcompinit
 
 # Use caching to make completion for commands such as dpkg and apt usable.
 zstyle ':completion::complete:*' use-cache on
-compl_cache="${ZDOTDIR:-$HOME}/.cache/zsh/zcompcache"
+compl_cache="${HOME}/.cache/zsh/zcompcache"
 mkdir -p $compl_cache
 zstyle ':completion::complete:*' cache-path $compl_cache
 

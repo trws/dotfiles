@@ -1,0 +1,2 @@
+#!/bin/bash -x
+pbpaste | clang-format | pygmentize -l cuda -f html -O full=true | textutil -convert rtf -stdin -stdout | /usr/bin/pbcopy -Prefer rtf

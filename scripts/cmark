@@ -1,0 +1,6 @@
+#!/bin/sh
+# cat > ~/Downloads/input
+# cat ~/Downloads/input | pandoc -s --self-contained -t html -f commonmark
+sed -e 's/^>\(.*\)\s*/>\1  /' -e 's/^>\(\s*\)#/>\1\\#/' | pandoc -s --self-contained -t html -f markdown-blank_before_blockquote
+# exec pandoc -s --self-contained -t html -f commonmark
+# sed -e 's/^>\(.*\)\s*/>\1  /' | /usr/bin/cmark

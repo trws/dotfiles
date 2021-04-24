@@ -1,0 +1,15 @@
+#!/usr/bin/env zsh
+if [[ -x ~/.local/bin/hy || -x /usr/local/bin/hy ]] ; then
+    # happy path
+    [[ -x ~/.local/bin/hy ]] && HY=~/.local/bin/hy
+    [[ -x /usr/local/bin/hy ]] && HY=/usr/local/bin/hy
+else
+    if (( $+commands[brew] )) ; then
+        brew install hy
+        HY=/usr/local/bin/hy
+    else
+        python3 -m pip install --user hy
+        HY=~/.local/bin/hy
+    fi
+fi
+exec $HY "$@"

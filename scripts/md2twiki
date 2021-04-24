@@ -1,0 +1,12 @@
+#!/usr/bin/env perl
+use Markdown::Foswiki;
+my $mc = Markdown::Foswiki->new();
+$mc->setConfig('header_text'=>"");
+my @lines;
+while(<>) {
+  push @lines, $_
+}
+# print @lines;
+# my @md_lines = $mc->getData(<>);
+my $fw_text = $mc->process(@lines);
+print $fw_text;

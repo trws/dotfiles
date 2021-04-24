@@ -1,0 +1,5 @@
+#!/usr/bin/osascript -lJavaScript
+var app = Application.currentApplication()
+app.includeStandardAdditions = true
+var resp = app.displayDialog("1password pw?", {defaultAnswer: "", buttons: ["Cancel", "Continue"], defaultButton: "Continue"})
+console.log(resp.textReturned)

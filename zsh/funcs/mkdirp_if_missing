@@ -1,0 +1,6 @@
+#!zsh
+function mkdirp_if_missing {
+  for f in "$@" ; do
+    [[ ! -d "$f" ]] && mkdir -p "$f"
+  done
+}

@@ -1,0 +1,4 @@
+#!/bin/bash
+/usr/bin/mate-session
+/bin/kill -s SIGTERM $PPID
+

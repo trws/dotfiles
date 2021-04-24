@@ -32,17 +32,6 @@ endif
 
 call plug#begin(plugged_directory)
 
-Plug 'Shougo/vimproc.vim' , { 'do' : 'make'}
-
-" allow swapping of arguments, and i,/a, for selecting swappable component of
-" comma-delimited argument lists
-Plug 'machakann/vim-swap'
-
-omap i, <Plug>(swap-textobject-i)
-xmap i, <Plug>(swap-textobject-i)
-omap a, <Plug>(swap-textobject-a)
-xmap a, <Plug>(swap-textobject-a)
-
 "split management
 Plug 'wesQ3/vim-windowswap'
 let g:windowswap_map_keys = 0 "prevent default bindings
@@ -51,10 +40,6 @@ nnoremap <silent> <leader>wp :call WindowSwap#DoWindowSwap()<CR>
 nnoremap <silent> <leader>ws :call WindowSwap#EasyWindowSwap()<CR>
 
 
-
-"Mail search
-" Plug 'daisuzu/unite-notmuch'
-" Plug 'felipec/notmuch-vim'
 
 " let g:bracketed_paste_tmux_wrap=0
 " Plug 'ConradIrwin/vim-bracketed-paste'
@@ -69,14 +54,12 @@ nnoremap <silent> <leader>ws :call WindowSwap#EasyWindowSwap()<CR>
 Plug 'romainl/Apprentice', { 'branch' : 'fancylines-and-neovim' }
 Plug 'arcticicestudio/nord-vim'
 Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
+Plug 'dracula/vim'
 
-Plug 'greymd/oscyank.vim'  " clipboard support for xterm-type terms
+Plug 'ojroques/vim-oscyank'  " clipboard support for xterm-type terms
 
-" Plug 'luochen1990/rainbow' " rainbow parens and braces etc.
-
-" Render man pages in vim, seems to be breaking neovim right now, missing
-" function man#open_file
-" Plug 'vim-utils/vim-man'
+" Render man pages in vim
+Plug 'vim-utils/vim-man'
 
 " Plug 'dhruvasagar/vim-table-mode'
 
@@ -85,14 +68,6 @@ Plug 'greymd/oscyank.vim'  " clipboard support for xterm-type terms
 "powerline not working, light alternative?
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-" Plug 'itchyny/lightline.vim'
-" let g:lightline = {
-"       \ 'colorscheme': 'nord',
-"       \ }
-
-
-" Plug 'tomtom/quickfixsigns_vim'
-" Plug 'bling/vim-bufferline'
 Plug 'edkolev/tmuxline.vim', { 'on': 'Tmuxline'}
 
 
@@ -100,19 +75,22 @@ Plug 'edkolev/tmuxline.vim', { 'on': 'Tmuxline'}
 "   Plug 'blindFS/vim-taskwarrior'
 " endif
 
+" visual register selection
 Plug 'junegunn/vim-peekaboo'
 
-" support for live wrapping
-Plug 'reedes/vim-pencil' 
-", { 'for': 'tex'}
+" support for live wrapping, soft and hard
+Plug 'reedes/vim-pencil'
 
 " ==== filetype handlers, highlighting etc ====
 Plug 'sheerun/vim-polyglot' " pulls in syntax for almost everything
 let g:polyglot_disabled = [ 'markdown']
-Plug 'gu-fan/riv.vim'
+" Plug 'darfink/vim-plist'
+" let g:plist_display_format='xml'
+Plug 'gu-fan/riv.vim' " RST handler etc.
+Plug 'hylang/vim-hy'
 Plug 'chrisbra/vim-zsh'
 let g:zsh_fold_enable = 1
-" Plug 'lervag/vimtex'
+Plug 'lervag/vimtex'
 
 let g:vimtex_disable_recursive_main_file_detection = 1
 let g:vimtex_view_method='skim'
@@ -124,12 +102,12 @@ let g:vimtex_syntax_minted = [
       \   'lang' : 'c',
       \ },
       \ {
-      \   'lang' : 'fortran',
-      \   'environments' : ['ompfPragma'],
-      \ },
-      \ {
       \   'lang' : 'cpp',
       \   'environments' : ['ompcPragma', 'boxedcode', 'cppcode', 'cppcode_test'],
+      \ },
+      \ {
+      \   'lang' : 'lua',
+      \   'environments' : ['directivespec'],
       \ },
       \ {
       \   'lang' : 'python',
@@ -139,10 +117,32 @@ let g:vimtex_syntax_minted = [
       \     ],
       \ }
       \]
-Plug 'tpope/vim-markdown'
+" Remove fortran highlighting due to syntax bug
+"      \ {
+"      \   'lang' : 'fortran',
+"      \   'environments' : ['ompfPragma'],
+"      \ },
+
+" table handling
+Plug 'godlygeek/tabular'
+
+" Plug 'plasticboy/vim-markdown' " this one did some strange things, not fond
+" testing pandoc markdown plugins, since that's usually my preference
+Plug 'rkaminsk/vim-syntax-clingo'
+Plug 'vim-pandoc/vim-pandoc'
+Plug 'vim-pandoc/vim-pandoc-syntax'
+let g:pandoc#syntax#conceal#use=v:false
+nnoremap <Leader>pc :let g:pandoc#syntax#conceal#use=v:true<CR>
+" Plug 'tpope/vim-markdown'
 let g:markdown_fenced_languages = ['html', 'python', 'bash=sh', "c", "c++=cpp", "latex=tex", "wdiff", "diff"]
+let g:pandoc#syntax#codeblocks#embeds#langs = ['html', 'python', 'bash=sh', "c", "cpp", "latex=tex", "wdiff", "diff"]
+" sensible setup for path, suffixes, include and so-forth so gf, :find, etc can
+" work sanely for a decent chunk of languages
 Plug 'tpope/vim-apathy'
+" tmux control commands :Tmux and :Tyank/:Tput for buffers
 Plug 'tpope/vim-tbone'
+"tmux integration, disabling in favor of tbone for now
+" Plug 'vim-scripts/vimux'
 
 function! InGui()
   return has("gui_running") || exists("g:gui_oni") || exists("neovim_dot_app") || has("gui_vimr")
@@ -166,11 +166,6 @@ Plug 'cweagans/vim-taskpaper'
 " date incrementing with ^a and so-forth
 Plug 'tpope/vim-speeddating'
 
-"tmux integration
-Plug 'vim-scripts/vimux'
-
-
-Plug 'Shougo/neco-vim' " add vim completion to ycm or deoplete
 
 
 if ! has('win32')
@@ -194,34 +189,50 @@ if ! has('win32')
   set hidden
   set updatetime=300
   set shortmess+=c
-  inoremap <silent><expr> <TAB>
-        \ pumvisible() ? "\<C-n>" :
-        \ <SID>check_back_space() ? "\<TAB>" :
-        \ coc#refresh()
-  inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-  " Use `[g` and `]g` to navigate diagnostics
-  nmap <silent> [g <Plug>(coc-diagnostic-prev)
-  nmap <silent> ]g <Plug>(coc-diagnostic-next)
-  function! s:check_back_space() abort
-    let col = col('.') - 1
-    return !col || getline('.')[col - 1]  =~# '\s'
-  endfunction
+  " inoremap <silent><expr> <TAB>
+  "       \ pumvisible() ? "\<C-n>" :
+  "       \ <SID>check_back_space() ? "\<TAB>" :
+  "       \ coc#refresh()
+  " inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+  " " Use `[g` and `]g` to navigate diagnostics
+  " nmap <silent> [g <Plug>(coc-diagnostic-prev)
+  " nmap <silent> ]g <Plug>(coc-diagnostic-next)
+  " function! s:check_back_space() abort
+  "   let col = col('.') - 1
+  "   return !col || getline('.')[col - 1]  =~# '\s'
+  " endfunction
+  "
+  " " Use <c-space> to trigger completion.
+  " inoremap <silent><expr> <c-space> coc#refresh()
+  " " for some reason C-space is sometimes giving me this...
+  " inoremap <silent><expr> <c-@> coc#refresh()
+  "
+  "
+  "
+  " " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
+  " " position. Coc only does snippet and additional edit on confirm.
+  " if has('patch8.1.1068')
+  "   " Use `complete_info` if your (Neo)Vim version supports it.
+  "   inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+  " else
+  "   imap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+  " endif
+  "
+  "
+  "
+  " Plug 'neoclide/coc-neco'
+  " Plug 'neoclide/coc.nvim', {'branch': 'release'}
+  " let g:coc_global_extensions = ['coc-highlight', 'coc-json',  'coc-lists', 'coc-python', 'coc-rls', 'coc-snippets', 'coc-vimlsp' ]
+  "
+  " nnoremap <leader>cd <Plug>(coc-definition)
+  " nnoremap <leader>cD <Plug>(coc-declaration)
+  " " Remap for rename current word
+  " nmap <leader>cr <Plug>(coc-rename)
+  " vmap <leader>ca <Plug>(coc-codeaction-selected)
 
-  " Use <c-space> to trigger completion.
-  inoremap <silent><expr> <c-space> coc#refresh()
-  " for some reason C-space is sometimes giving me this...
-  inoremap <silent><expr> <c-@> coc#refresh()
 
-
-
-  " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
-  " position. Coc only does snippet and additional edit on confirm.
-  if has('patch8.1.1068')
-    " Use `complete_info` if your (Neo)Vim version supports it.
-    inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
-  else
-    imap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-  endif
+  " Plug 'Shougo/neco-vim' " add vim completion to ycm or deoplete
+  " Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') }
 
   " Plug 'autozimu/LanguageClient-neovim', {
   "       \ 'branch': 'next',
@@ -230,39 +241,98 @@ if ! has('win32')
   "
   " let g:LanguageClient_serverCommands = {
   "       \ 'rust': [$CARGO_HOME . '/bin/rustup', 'run', 'stable', 'rls'],
-  "       \ 'python': ['/usr/local/bin/pyls'],
+  "       \ 'python': ['~/.local/bin/pipx', 'run', '--spec=python-language-server[all]', 'pyls'],
   "       \ }
   "
   " nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
   " nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
   " nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
+  " nmap <F5> <Plug>(lcn-menu)
 
-  " function! BuildYCM(info)
-  "   " info is a dictionary with 3 fields
-  "   " - name:   name of the plugin
-  "   " - status: 'installed', 'updated', or 'unchanged'
-  "   " - force:  set on PlugInstall! or PlugUpdate!
-  "   if a:info.status != 'unchanged'
-  "     !./install.py --clang-completer --rust-completer
-  "   endif
-  " endfunction
-  " Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') }
+  Plug 'prabirshrestha/asyncomplete.vim'
+  Plug 'prabirshrestha/vim-lsp'
+  Plug 'prabirshrestha/asyncomplete-lsp.vim'
+  Plug 'mattn/vim-lsp-settings'
+  Plug 'thomasfaingnaert/vim-lsp-snippets'
+  Plug 'thomasfaingnaert/vim-lsp-ultisnips'
 
-  Plug 'neoclide/coc-neco'
-  Plug 'neoclide/coc.nvim', {'branch': 'release'}
-  let g:coc_global_extensions = ['coc-highlight', 'coc-json',  'coc-lists', 'coc-python', 'coc-rls', 'coc-snippets', 'coc-vimlsp' ]
+  " Plug 'dense-analysis/ale'
+  " let g:ale_linters = {
+  " \   'python': ['mypy'],
+  " \}
 
-  nnoremap <leader>cd <Plug>(coc-definition)
-  nnoremap <leader>cD <Plug>(coc-declaration)
-  " Remap for rename current word
-  nmap <leader>cr <Plug>(coc-rename)
-  vmap <leader>ca <Plug>(coc-codeaction-selected)
+  function! s:on_lsp_buffer_enabled() abort
+    setlocal omnifunc=lsp#complete
+    setlocal signcolumn=yes
+    if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
 
+    imap <c-space> <Plug>(asyncomplete_force_refresh)
+    function! s:check_back_space() abort
+      let col = col('.') - 1
+      return !col || getline('.')[col - 1]  =~ '\s'
+    endfunction
 
+    inoremap <silent><expr> <TAB>
+          \ pumvisible() ? "\<C-n>" :
+          \ <SID>check_back_space() ? "\<TAB>" :
+          \ asyncomplete#force_refresh()
+    inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+    inoremap <expr> <cr>    pumvisible() ? asyncomplete#close_popup() : "\<cr>"
 
+    nmap <buffer> gd <plug>(lsp-definition)
+    nmap <buffer> gr <plug>(lsp-references)
+    nmap <buffer> gi <plug>(lsp-implementation)
+    nmap <buffer> gt <plug>(lsp-type-definition)
+    nmap <buffer> <leader>rn <plug>(lsp-rename)
+    nmap <buffer> [g <Plug>(lsp-previous-diagnostic)
+    nmap <buffer> ]g <Plug>(lsp-next-diagnostic)
+    nmap <buffer> K <plug>(lsp-hover)
+
+    " refer to doc to add more commands
+  endfunction
+
+  augroup lsp_install
+    au!
+    " call s:on_lsp_buffer_enabled only for languages that has the server registered.
+    autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+  augroup END
+
+  " if executable('pyls')
+  "   au User lsp_setup call lsp#register_server({
+  "         \ 'name': 'pyls-all',
+  "         \ 'cmd': {server_info->['pyls']},
+  "         \ 'whitelist': ['python'],
+  "         \ })
+  " endif
+  let g:lsp_log_verbose = 1
+  let g:lsp_log_file = expand('./lsp.log')
+  let g:lsp_settings = {
+        \   'pyls': {
+        \     'workspace_config': {
+        \       'pyls': {
+        \         'plugins': {
+        \           'pyflakes': {'enabled': v:false},
+        \           'flake8': {'enabled': v:true},
+        \           'black': {'enabled': v:true},
+        \           'pycodestyle': {'enabled': v:false},
+        \           'mypy': {'enabled': v:true},
+        \           'mccabe': {'enabled': v:false},
+        \           'jedi': {
+        \             'extra_paths': [
+        \               './bin',
+        \               './lib/spack',
+        \               './lib/spack/external'
+        \             ]
+        \           }
+        \         }
+        \       }
+        \     }
+        \   },
+        \}
 endif
 
 if has('nvim')
+  " Plug 'neovim/nvim-lspconfig'
   "   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 else
   "   Plug 'Shougo/deoplete.nvim'
@@ -278,6 +348,7 @@ endif
 "bindings
 
 "shell/terminal emulation
+Plug 'kassio/neoterm'
 
 "file management
 " Plug 'xolox/vim-misc'
@@ -316,18 +387,20 @@ Plug 'junegunn/fzf.vim'
 Plug 'liuchengxu/vista.vim'
 Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary' }
 
-if(has("python3"))
-  Plug 'Shougo/denite.nvim'
-  " Plug 'ozelentok/denite-gtags'
-  Plug 'nixprime/cpsm'
-  Plug 'raghur/fruzzy', {'do': { -> fruzzy#install()}}
-  let g:fruzzy#usenative = 1
-else
-  Plug 'Shougo/unite.vim'
-  Plug 'Shougo/unite-ssh'
-  " Plug 'hewes/unite-gtags'
-  Plug 'tsukkee/unite-tag'
-endif
+
+"" NOTE: replaced with CLAP, not sure if I care to bring these back
+" if(has("python3"))
+"   Plug 'Shougo/denite.nvim'
+"   " Plug 'ozelentok/denite-gtags'
+"   Plug 'nixprime/cpsm'
+"   Plug 'raghur/fruzzy', {'do': { -> fruzzy#install()}}
+"   let g:fruzzy#usenative = 1
+" else
+"   Plug 'Shougo/unite.vim'
+"   Plug 'Shougo/unite-ssh'
+"   " Plug 'hewes/unite-gtags'
+"   Plug 'tsukkee/unite-tag'
+" endif
 
 Plug 'Shougo/neomru.vim'
 
@@ -364,8 +437,23 @@ noremap!        <M-f> <S-Right>
 " Plug 'critiqjo/husk-x.vim'
 
 " Plug 'airblade/vim-gitgutter'
+"
+" Python poetry and pipenv
+let g:poetv_executables=['poetry']
+Plug 'petobens/poet-v'
 
-" indent objects
+" load tcomment before vim-swap so vim-swap mappings win
+Plug 'tomtom/tcomment_vim'
+" allow swapping of arguments, and i,/a, for selecting swappable component of
+" comma-delimited argument lists
+Plug 'machakann/vim-swap'
+
+omap i, <Plug>(swap-textobject-i)
+xmap i, <Plug>(swap-textobject-i)
+omap a, <Plug>(swap-textobject-a)
+xmap a, <Plug>(swap-textobject-a)
+
+" indent objects, around or in (i)ndent regions
 Plug 'michaeljsmith/vim-indent-object'
 Plug 'nathanaelkane/vim-indent-guides'
 let g:indent_guides_start_level = 2
@@ -375,34 +463,51 @@ let g:indent_guides_enable_on_vim_startup = 1
 " Plug 'terryma/vim-multiple-cursors'
 
 
-" Plug 'Raimondi/delimitMate'
+" indispensible command for changing surrounding delimiters
 Plug 'tpope/vim-surround'
+" exchange arbitrary stuff, cx on each, cxx for a line, cxc to clear and start
+" over
 Plug 'tommcdo/vim-exchange'
+" snippets engine
 Plug 'SirVer/ultisnips'
-" Snippets are separated from the engine. Add this if you want them:
+" Snippets are separated from the engine
 Plug 'honza/vim-snippets'
-Plug 'Lokaltog/vim-easymotion'
-map <Leader>e <Plug>(easymotion-prefix)
+Plug 'justinmk/vim-sneak'
+" format on Ctrl-k, maybe look into using lsp support in place or in addition?
 Plug 'Chiel92/vim-autoformat'
 let g:formatters_python=['black']
 let g:formatters_c=['clangformat']
 let g:formatters_cpp=['clangformat']
-" Plug 'sjl/gundo.vim' " replaced with undotree
+" Ensure we have black, add Black command
+Plug 'psf/black', { 'branch': 'stable' }
+
+" :UndotreeToggle to walk undo tree
 Plug 'mbbill/undotree'
+" support library for supporting repeats in commands
 Plug 'tpope/vim-repeat'
 Plug 'vim-scripts/visualrepeat'
 "new alignment plugin, CR from visual mode to use
 Plug 'junegunn/vim-easy-align'
+" case-mixed search, replace and so-forth with Abolish and Subvert
 Plug 'tpope/vim-abolish'
-" Plug 'tpope/vim-pastie'
 "Unix command aliases, Chmod and company
 Plug 'tpope/vim-eunuch'
+" convenient paired things: need to practice with this, common uses:
+" paste mode | [op | enter paste mode before current line
+" paste mode | yop | enter paste mode after cutting current line
+" diff mode | [od | diffthis/diffoff
+" wrap mode | [ow | wrap o/off
+" add blank lines | [<Space> | add lines before, takes a count
+" switch files in dir | [f | previous file by name in directory
+" switch SCM or diff hunk | [n | previous hunk or marker
+"
+" lots more for buffers, open files, etc.  these are most used though
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-dispatch'
 Plug 'radenling/vim-dispatch-neovim'
-Plug 'tomtom/tcomment_vim'
 
 "Word highlighting for possible but uncertain errors
+"not on by default, have to use :Wordy
 Plug 'reedes/vim-wordy'
 
 Plug 'tpope/vim-vinegar'
@@ -412,9 +517,9 @@ Plug 'tpope/vim-sensible'
 
 call plug#end()
 
+" neovim ruby setup
 
 colorscheme apprentice
-" let g:airline_theme='apprentice'
 
 let mapleader      = ','
 let maplocalleader = ','
@@ -446,8 +551,8 @@ map <Leader>vq :VimuxCloseRunner<CR>
 map <Leader>vx :VimuxInterruptRunner<CR>
 
 
-source ~/.vim/unite_denite.vim
-
+" source ~/.vim/unite_denite.vim
+"
 
 " enable history
 let g:fzf_buffers_jump = 1
@@ -519,20 +624,40 @@ let g:clap_provider_dotfiles = {
       \ }
 let g:clap_layout = { 'relative': 'editor' }
 let g:clap_project_root_markers = ['.root', '.git', '.git/', '.latexmkrc', '.travis.yml']
-nnoremap <silent> <leader>sr  :Clap files<CR>
-nnoremap <silent> <leader>sy  :Clap yanks<CR>
-nnoremap <silent> <leader>sb  :Clap history<CR>
-nnoremap <silent> <leader>sq  :Clap history<CR>
-nnoremap <silent> <leader>sd  :Clap dotfiles<CR>
-nnoremap <silent> <leader>sB  :Clap buffers<CR>
-nnoremap <silent> <leader>sw  :Clap windows<CR>
-nnoremap <silent> <leader>ss  :Clap gfiles?<CR>
-nnoremap <silent> <leader>sn  :Clap files ~/onedrive/vimwiki/<CR>
-nnoremap <silent> <leader>sg  :Clap grep<CR>
+" add provider that always uses cwd rather than root of target file
+let g:clap_provider_files_cwd = deepcopy(g:clap#provider#files#)
+let g:clap_provider_files_cwd.enable_rooter = v:false
+
+let g:clap_disable_run_rooter = v:false
+function! Run_clap_cmd_noroot(cmd)
+  let l:tmp = g:clap_disable_run_rooter
+  let g:clap_disable_run_rooter = v:true
+  :execute ':Clap ' . a:cmd
+  let g:clap_disable_run_rooter = l:tmp
+endfunction
+
+function! Decl_clap_map_condroot(key, cmd)
+  " regular rooting enabled version
+  execute 'nnoremap <silent> <leader>s' . toupper(a:key) . '  :Clap ' . a:cmd . '<CR>'
+  execute 'nnoremap <silent> <leader>s' . a:key . "  :call  Run_clap_cmd_noroot('" . a:cmd . "')<CR>"
+endfunction
+
+call Decl_clap_map_condroot('r', 'files')
+call Decl_clap_map_condroot('s', 'gfiles')
+call Decl_clap_map_condroot('g', 'grep')
+
 nnoremap <silent> <leader>sc  :Clap bcommits<CR>
 nnoremap <silent> <leader>sC  :Clap commits<CR>
+nnoremap <silent> <leader>sd  :Clap files ~/.dotfiles<CR>
+nnoremap <silent> <leader>sb  :Clap history<CR>
+nnoremap <silent> <leader>sq  :Clap history<CR>
+nnoremap <silent> <leader>sm  :Clap maps<CR>
+nnoremap <silent> <leader>sB  :Clap buffers<CR>
+nnoremap <silent> <leader>sw  :Clap windows<CR>
+nnoremap <silent> <leader>sn  :Clap files ~/onedrive/vimwiki/<CR>
 nnoremap <silent> <leader>sl  :Clap blines<CR>
 nnoremap <silent> <leader>sL  :Clap lines<CR>
+nnoremap <silent> <leader>sy  :Clap yanks<CR>
 nnoremap <silent> <leader>sT  :Clap tags<CR>
 nnoremap <silent> <leader>st  :Clap tags<CR>
 " nnoremap <silent> <leader>l]  :call TagsWithCword()<CR>
@@ -540,11 +665,12 @@ nnoremap <silent> <leader>st  :Clap tags<CR>
 let include_paths = ['/opt/local/include','/usr/local/include','/usr/include','/Developer/Headers',fnamemodify('~/programs/include',':p')]
 let &path= join(['.', '', './include'] + include_paths, ',')
 
-" let g:unite_source_gtags_project_config = {
-"       \ '_':                   { 'gtags_libpath': include_paths }
-"       \ }
-
-
+" source the current file
+nmap <leader>vs :source %<CR>
+" source the current line
+nmap <leader>vl yy:@"<CR>
+" source a visual range
+vmap <leader>vs y:@"<CR>
 
 let g:global_objdir=$HOME . "/.cache/vim/global-obj"
 call FindOrCreate(g:global_objdir)
@@ -552,31 +678,6 @@ call FindOrCreate(g:global_objdir)
 let tag_file = g:global_objdir . "/tags"
 set tags=./tags;.git/tags;,tags
 
-
-"YouCompleteMe
-nnoremap <leader>yg :YcmCompleter GoTo<CR>
-nnoremap <leader>yG :YcmCompleter GoToImprecise<CR>
-nnoremap <leader>yf :YcmCompleter FixIt<CR>
-nnoremap <leader>yt :YcmCompleter GetType<CR>
-nnoremap <leader>yp :YcmCompleter GetParent<CR>
-nnoremap <leader>yd :YcmCompleter GetDoc<CR>
-
-let g:ycm_semantic_triggers =  {
-      \ 'c' : ['_'],
-      \ 'vim' : ['_'],
-      \}
-let g:ycm_complete_in_strings = 1
-let g:ycm_extra_conf_vim_data=['&filetype']
-let g:ycm_global_ycm_extra_conf = '~/.ycm_extra_conf.py'
-let g:ycm_extra_conf_globlist = ['~/Dropbox/*','~/projects/*','~/Projects/*']
-let g:ycm_autoclose_preview_window_after_insertion = 1
-" let g:ycm_key_invoke_completion = '<C-S-Space>'
-let g:ycm_key_invoke_completion = '<C-Space>'
-" let g:ycm_key_invoke_completion = '<Tab>'
-let g:ycm_key_list_select_completion = ['<C-n>', '<Down>', '<Tab>']
-let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>', '<S-Tab>']
-let g:ycm_min_num_of_chars_for_completion = 99
-let g:ycm_min_num_identifier_candidate_chars = 99
 
 let g:UltiSnipsExpandTrigger="<c-j>"
 inoremap <S-tab> <Esc>:call UltiSnips_ListSnippets()<CR>
@@ -666,7 +767,7 @@ let g:airline#extensions#whitespace#enabled=0
 "" let g:airline_extensions = ["tmuxline","branch","tagbar","quickfix","denite","csv","netrw","term","vimtex"]
 "let g:airline_extensions = ["branch","tagbar","quickfix","csv","netrw","term","vimtex","undotree","windowswap","fugitiveline"]
 " let g:airline_extensions = ["tmuxline","branch","tagbar","quickfix","denite","csv","term","vimtex"]
-let g:airline_extensions = ["branch","vista","quickfix","csv","term","vimtex","undotree","windowswap","fugitiveline","denite"]
+let g:airline_extensions = ["branch","vista","quickfix","csv","term","vimtex","undotree","windowswap","fugitiveline"]
 set timeoutlen=300
 set ttimeoutlen=10
 
@@ -675,7 +776,7 @@ if InGui()
   if has("gui_macvim")
     "CRITICAL option, allows alt-based key-bindings to work in macvim
     set macmeta
-    set transparency=10
+    " set transparency=10
     " set gfn=Courier\ New:h11.00
     " set gfn=ProFontX:h9.00
     " expariment to get italic monospace variant with full powerline support
@@ -715,33 +816,6 @@ endif
 "Normalize backspace
 set t_kb=
 call helpers#Map_for_all("", "<BS>", 1, 1)
-
-" if &term =~ "screen.*" "screen configurations
-"   if &term =~ "screen.*-bce"
-"     set term=screen-256color
-"   endif
-"   "set ttymouse=xterm "falls back to xterm for unsupported terminal type
-"   set t_ku=OA
-"   set t_kd=OB
-"   set t_kr=OC
-"   set t_kl=OD
-"   set t_@7=OF
-"   set t_kh=[1~
-"
-"   call helpers#Map_for_all("<Esc>[C", "<Right>", 1, 1)
-"   call helpers#Map_for_all("<Esc>[D", "<Left>", 1, 1)
-"   call helpers#Map_for_all("<Esc>[A", "<Up>", 1, 1)
-"   call helpers#Map_for_all("<Esc>[B", "<Down>", 1, 1)
-"
-"   call helpers#Map_for_all("<Esc>[4~", "<End>", 1, 1)
-"   call helpers#Map_for_all("<Esc>[1~", "<Home>", 1, 1)
-"
-"   call helpers#Map_for_all("<Esc>0F", "<End>", 1, 1)
-"   call helpers#Map_for_all("<Esc>OH", "<Home>", 1, 1)
-"   call helpers#Map_for_all("<Esc>[F", "<End>", 1, 1)
-"   call helpers#Map_for_all("<Esc>[H", "<Home>", 1, 1)
-" endif
-"
 
 " tComment extra mappings:
 " yank visual before toggle comment
@@ -910,22 +984,14 @@ if ! InGui()
   "new experiment, using xterm clipboard escapes for copy portability, no paste
   "(I think..?)
 
-  noremap <silent> <A-c>        :Oscyank<CR>
-  noremap <silent> <Esc>c       :Oscyank<CR>
+  noremap <silent> <A-c>        :OSCYank<CR>
+  noremap <silent> <Esc>c       :OSCYank<CR>
 
   if has('macunix')
-    " should be handled in tmux now...
-    " let tmux_reattach_prefix="reattach-to-user-namespace"
-    " if (! executable(tmux_reattach_prefix))
-    "   let tmux_reattach_prefix=glob("~/Dropbox/config/tmux-MacOSX-pasteboard/reattach-to-user-namespace")
-    " elseif (! filereadable(tmux_reattach_prefix))
-    "   let tmux_reattach_prefix=glob("~/Projects/config-sync/tmux-MacOSX-pasteboard/reattach-to-user-namespace")
-    " endif
-
     "paste from pbpaste as paste normally works, from the current cursor position
     function! Paste_proper()
       " let @p=system(g:tmux_reattach_prefix . " pbpaste")
-      let @p=system(g:tmux_reattach_prefix . " pbpaste")
+      let @p=system("pbpaste")
       execute 'normal "pp'
     endfunction
     vmap <silent> <A-v>        dh:call Paste_proper()<CR>
@@ -1050,17 +1116,12 @@ if !has("nvim")
   endif
 endif
 
-" colorscheme solarized
-if &term =~ ".*256color.*" || InGui()
-  if $COLORTERM == "truecolor"
-    let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
-    let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
-    set termguicolors
-  else
-    set t_Co=256
-  endif
-  " let g:inkpot_black_background=1
-  " colorscheme inkpot
+if $COLORTERM == "truecolor"
+  let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
+  let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
+  set termguicolors
+else
+  set t_Co=256
 endif
 
 " let g:jellybeans_overrides = {
