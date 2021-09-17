@@ -97,7 +97,7 @@ Host rzmanta rztopaz ray
 #   ProxyCommand ssh -W rzgw:22 vortex
 
 # this *must* be before the cz/rz catch-all
-Host *z-stash* *z-bitbucket*
+Host *z-stash* *z-bitbucket* *zgitlab*
     User git
     Port 7999
     ProxyJump rztopaz
@@ -185,7 +185,7 @@ Match originalhost rztopaz
     PasswordAuthentication yes
 
 Match exec " ~/.dotfiles/scripts/at-llnl.py " originalhost github.com
-    ProxyCommand ssh ddwrt -W github.com:22
+    ProxyCommand ssh rztopaz -W github.com:22
 
 
 Host lanlgw ihpc-gate

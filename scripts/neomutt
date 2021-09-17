@@ -4,4 +4,8 @@ if [[ $TERM == "tmux-256color" ]] ; then
   export TERM=tmux
 fi
 
-neomutt "$@"
+if [[ -x /usr/local/bin/neomutt ]] ; then
+  /usr/local/bin/neomutt "$@"
+else
+  /usr/bin/neomutt "$@"
+fi

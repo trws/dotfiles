@@ -1,7 +1,7 @@
 #!/bin/bash
 
 notmuch new
-afew -n -t
+afew -n -t || pipx run afew -n -t
 
 # remove stupid list tags for broken-ass lists
 notmuch search --output=tags '*' | egrep 'lists/([0-9_a-f]{8,}|.*=)' | xargs -n 1 -I '{}' notmuch tag '-{}' -- 'tag:{}'
@@ -10,6 +10,12 @@ notmuch search --output=tags '*' | egrep 'lists/([0-9_a-f]{8,}|.*=)' | xargs -n 
 notmuch search --output=tags lists.isocpp.org 'tag:lists' | grep 'lists/' | grep -v 'lists/cpp' | sed -e 's|lists/||' | xargs -n 1 -I '{}' notmuch tag -lists/{} '+lists/cpp-{}' -- 'tag:lists/{}'
 
 notmuch tag -inbox -- tag:inbox AND NOT folder:INBOX
-notmuch tag +sent -- folder:sent AND NOT tag:sent
 
-afew -m
+# move mails based on tags
+afew -m || pipx run afew -m
+notmuch tag +inbox -- 'folder:INBOX AND NOT (tag:inbox OR tag:delete OR tag:travel OR tag:conference OR tag:archive OR tag:killed)'
+notmuch tag +sent -- '(folder:sent OR from:scogland1@llnl.gov) AND NOT tag:sent'
+
+# strip archive tags off after moving mails
+notmuch tag -archive -- tag:archive AND NOT folder:INBOX
+

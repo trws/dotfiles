@@ -21,4 +21,8 @@ proxied/cache
 *.sug
 *.spl
 
+*.zwc
 
+__pycache__
+.mypy_cache
+.ropeproject

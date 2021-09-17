@@ -3,7 +3,12 @@
 # receives filename as only argument, writes replacement, echos new filename to
 # stdout
 
+if which batcat > /dev/null 2>&1 ; then
+    BAT=batcat
+else
+    BAT=bat
+fi
 export BAT_STYLE=plain
-bat --pager never --color always --decorations always "$1" > /tmp/lessopen-bat.$$
+${BAT} --pager never --color always --decorations always "$1" > /tmp/lessopen-bat.$$
 echo /tmp/lessopen-bat.$$
 
