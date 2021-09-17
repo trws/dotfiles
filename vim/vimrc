@@ -904,7 +904,7 @@ set scrolloff=3
 " Start scrolling three lines before the horizontal window border
 set sidescrolloff=3
 
-nnoremap <silent> <Leader>ml :call AppendModeline()<CR>
+nnoremap <silent> <Leader>ml :call helpers#AppendModeline()<CR>
 
 
 "diff behavior

@@ -3,6 +3,8 @@ mafredri/zsh-async
 zsh-users/zsh-completions
 
 sorin-ionescu/prezto
+# for is-darwin, is-linux, etc.
+# sorin-ionescu/prezto path:modules/helper
 sorin-ionescu/prezto path:modules/environment
 sorin-ionescu/prezto path:modules/terminal
 sorin-ionescu/prezto path:modules/editor
@@ -10,6 +12,7 @@ sorin-ionescu/prezto path:modules/git
 sorin-ionescu/prezto path:modules/gnu-utility
 sorin-ionescu/prezto path:modules/homebrew
 sorin-ionescu/prezto path:modules/osx
+sorin-ionescu/prezto path:modules/ssh
 # sorin-ionescu/prezto path:modules/python
 sorin-ionescu/prezto path:modules/tmux
 sorin-ionescu/prezto path:modules/history
@@ -24,3 +27,9 @@ sorin-ionescu/prezto path:modules/autosuggestions
 
 sorin-ionescu/prezto path:modules/syntax-highlighting
 sorin-ionescu/prezto path:modules/history-substring-search
+
+
+# autoenv support, for .autoenv.zsh files
+Tarrasch/zsh-autoenv
+
+clvv/fasd kind:path

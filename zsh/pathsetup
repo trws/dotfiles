@@ -89,6 +89,7 @@ fi
 # for pipx
 add_to_path_front ~/.local
 
+
 manpath=( ~/programs/man ~/programs/share/man /opt/local/man /usr/share/man $manpath )
 
 if [[ $system == solaris ]] ; then
@@ -100,6 +101,9 @@ add_to_path_back /usr/local/cuda  /usr/local/opt/go/libexec
 
 add_to_path_front /usr/local ~/spack
 
+#zinit
+add_to_path_front $ZPFX
+
 function load_vim() {
   if [[ -d /usr/tce/packages/vim/ ]] ; then
     local vimdirs
@@ -108,6 +112,8 @@ function load_vim() {
       local highest_version=${vimdirs[-1]}
       add_to_path_front "$highest_version"
     fi
+  elif [[ -d /Applications/VimR.app ]] ; then
+    # add_to_path_front /Applications/VimR.app/Contents/MacOS/VimR
   fi
 }
 load_vim

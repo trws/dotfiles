@@ -32,7 +32,9 @@ nmap <silent> <Leader>wc bi\code{<esc>ea}<esc>
 vmap <silent> <Leader>wc di\code{}<esc>P
 nmap <silent> <Leader>wp bi\plc{<esc>ea}<esc>
 vmap <silent> <Leader>wp di\plc{}<esc>P
+vmap <silent> <Leader>wl di\lstinline{}<esc>P
 
+nmap wil diwi\lstinline{}<Esc>P
 nmap wip diwi\plc{}<Esc>P
 nmap wic diwi\code{}<Esc>P
 

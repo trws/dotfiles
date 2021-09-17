@@ -17,8 +17,12 @@
 " let b:current_syntax=s:current_syntax
 
 " syn region texZone	start="\\begin{boxedcode}"		end="\\end{boxedcode}\|%stopzone\>"
+syn region texZone	start="\\begin{lstlisting}"		end="\\end{lstlisting}\|%stopzone\>"
 syn region texZone	start="\\begin{indentedcodelist}"		end="\\end{indentedcodelist}\|%stopzone\>"
 syn region texZone	start="\\begin{ompcFunction}"		end="\\end{ompcFunction}\|%stopzone\>"
+syn region texZone	start="\\begin{ompcPragma}"		end="\\end{ompcPragma}\|%stopzone\>"
+syn region texZone	start="\\begin{ompfFunction}"		end="\\end{ompfFunction}\|%stopzone\>"
+syn region texZone	start="\\begin{ompfPragma}"		end="\\end{ompfPragma}\|%stopzone\>"
 syn region texZone	start="\\vcode\*\=\z([^\ta-zA-Z]\)"	end="\z1\|%stopzone\>"		
 syntax match texZone "\\code\s*\(\[.*\]\)\={.\{-}}"
 syntax match texZone "\\scode\s*\(\[.*\]\)\={.\{-}}"

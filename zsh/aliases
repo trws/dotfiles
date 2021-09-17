@@ -1,5 +1,8 @@
 #!zsh aliases
 
+autoload -U regexp-replace
+setopt re_match_pcre
+
 # alias bd='mkbdir -p'
 # alias cdb='cd $(mkbdir -p)'
 # alias cdp='cd $(mkbdir -pr)'
@@ -26,7 +29,9 @@ alias cal=ncal
 
 alias rm=""${${aliases[rm]:-rm -I}:s/-i/-I/}""
 
-
+# fasd aliases
+alias v="f -e vim"
+command -v open > /dev/null && alias o='f -e xdg-open' || alias o="f -e open" 
 
 #IMPORTED
 # Easier navigation: .., ..., ...., ....., ~ and -
@@ -37,11 +42,8 @@ alias .....="cd ../../../.."
 alias ~="cd ~" # `cd` is probably faster to type though
 alias -- -="cd -"
 
-# Shortcuts
-alias d="cd ~/Dropbox"
-alias dl="cd ~/Downloads"
-alias dt="cd ~/Desktop"
-alias p="cd ~/Projects"
+# additional docker alias for normal run command
+alias dkrit='docker run --rm -it -v $(pwd):/curdir -w /curdir'
 
 if hub >& /dev/null ; then
     alias git='noglob hub'
@@ -49,7 +51,43 @@ else
     alias git='noglob git'
 fi
 
+alias git-branch-current="git branch --show-current"
+alias gbsc="git branch --show-current"
 alias g="git"
+function gRuo() {
+    local origin=($(git remote -v | grep '^origin'))
+    local upstream=($(git remote -v | grep '^upstream'))
+    local origin_s="${origin[2]}"
+    local new_origin="${origin[2]}"
+    if [[ $new_origin =~ https://.* ]] ; then
+        echo "$new_origin"
+        new_origin=$(echo $new_origin | sed -e 's|https://|git@|' -e 's|/|:|')
+    else
+    fi
+    local user=trws
+    if [[ $new_origin =~ llnl ]] ; then
+        user=scogland
+    fi
+    regexp-replace new_origin ':[^/]+?/' ":$user/"
+    echo "Change origin from ${origin_s} to $new_origin?"
+    local q
+    read -q q
+    if [[ $q == y ]] ; then
+        echo
+        if git remote show upstream >& /dev/null ; then
+            echo "$upstream already exists, replace?"
+            read -q q
+            if [[ $q == n ]] ; then
+                return
+            fi
+            git remote remove upstream
+        fi
+        git remote rename origin upstream
+        git remote add origin "$new_origin"
+        echo Done
+    fi
+    # git remote rename origin upstream
+}
 alias gfu="git fetch upstream"
 alias grum="git rebase upstream/master"
 alias gpoc='git push origin $(git rev-parse --abbrev-ref HEAD)'
@@ -94,6 +132,7 @@ alias lscleanup="/System/Library/Frameworks/CoreServices.framework/Frameworks/La
 alias sniff="sudo ngrep -d 'en1' -t '^(GET|POST) ' 'tcp and port 80'"
 alias httpdump="sudo tcpdump -i en1 -n -s 0 -w - | grep -a -o -E \"Host\: .*|GET \/.*\""
 
+command -v open > /dev/null || alias open=xdg-open
 # Canonical hex dump; some systems have this symlinked
 command -v hd > /dev/null || alias hd="hexdump -C"
 
@@ -107,9 +146,6 @@ command -v sha1sum > /dev/null || alias sha1sum="shasum"
 jscbin="/System/Library/Frameworks/JavaScriptCore.framework/Versions/A/Resources/jsc";
 [ -e "${jscbin}" ] && alias jsc="${jscbin}";
 unset jscbin;
-
-# Trim new lines and copy to clipboard
-alias c="tr -d '\n' | pbcopy"
 
 # Recursively delete `.DS_Store` files
 alias cleanup="find . -type f -name '*.DS_Store' -ls -delete"
