@@ -1,3 +1,10 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zsh/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 # Executes commands at the start of an interactive session.
 # Author: Tom Scogland
 # PROF_INIT=false
@@ -21,7 +28,7 @@ if [[ -f "$_zinit_mod_path/zdharma/zplugin.bundle" ]] ; then
   module_path+=( "$_zinit_mod_path" )
   zmodload zdharma/zplugin
 else
-  echo Warning: no compiled zinit module 
+  # echo Warning: no compiled zinit module
 fi
 
 # use a decent version...
@@ -59,17 +66,19 @@ zinit for annexes
 
 # general plugins
 zinit load mafredri/zsh-async
-zinit ice wait lucid for 
+zinit ice wait lucid for
 zinit load Tarrasch/zsh-autoenv
 
 # command/script
 export _FASD_DATA=$ZSH_CACHE_DIR/z-dirjump-list.txt
 export ZSHZ_DATA=${_FASD_DATA}
+
+function zinit-setup() {
 zinit ice sbin"fasd" pick"fasd" \
   src"fasd-init" \
   atclone"./fasd --init posix-alias zsh-hook zsh-ccomp zsh-ccomp-install zsh-wcomp zsh-wcomp-install >| fasd-init" \
   atpull"%atclone"
-zinit load clvv/fasd
+  zinit load clvv/fasd
 
 # terminfo updates, no more missing terminfo YAY!
 function import_terminfo() {
@@ -86,7 +95,7 @@ function import_terminfo() {
   done
 }
 function update_terminfo() {
-  zinit ice extract as"command" pick"" atclone"gunzip terminfo.src.gz ; import_terminfo tmux tmux-256color kitty kitty-direct iterm2 iterm2-direct alacritty-direct" atpull"%atclone"
+  zinit ice extract as"command" pick"" atclone"gunzip -f terminfo.src.gz ; import_terminfo tmux tmux-256color kitty kitty-direct iterm2 iterm2-direct alacritty-direct" atpull"%atclone"
   zinit snippet https://invisible-island.net/datafiles/current/terminfo.src.gz
 }
 update_terminfo
@@ -110,8 +119,6 @@ zinit snippet PZTM::utility
 zinit ice wait lucid
 zinit load zsh-users/zsh-history-substring-search
 
-zinit snippet OMZP::tmux
-
 zinit ice submod'external'
 zinit snippet OMZP::tmux
 
@@ -119,12 +126,30 @@ zinit snippet OMZP::tmux
 zinit ice svn
 zinit snippet PZTM::git
 
+# vims, vim-stream to run a vim command on each line of a pipe, vim as sed
+# basically
+zinit null sbin"vims" for MilesCranmer/vim-stream
+
 
 # issues with this version, trying something new
 # zinit ice svn
 # zinit snippet PZTM::syntax-highlighting
+# amazing fzf git interactions
+forgit_log=gl
+forgit_diff=gd
+forgit_add=ga
+forgit_reset_head=gwrh
+forgit_ignore=gi
+forgit_checkout_file=gcf
+forgit_checkout_branch=gcb
+forgit_checkout_commit=gco
+forgit_clean=gclean
+forgit_stash_show=gss
+forgit_cherry_pick=gcp
+forgit_rebase=grb
+forgit_fixup=gfu
 zinit ice wait lucid
-zinit load wfxr/forgit
+zinit load ext-git
 # sorin-ionescu/prezto path:modules/python
 # copied to zsh/completions.zsh
 # sorin-ionescu/prezto path:modules/completion
@@ -143,25 +168,27 @@ if (( ! $+commands[direnv] )) ; then
 fi
 
 zinit ice sbin"bin/(fzf|fzf-tmux)" \
-    atclone"cp shell/completion.zsh _fzf_completion" \
-    atpull"%atclone" \
-    pick"shell/key-bindings.zsh" \
-    make"install"
-zinit load junegunn/fzf
+  atclone"cp shell/completion.zsh _fzf_completion" \
+  atpull"%atclone" \
+  pick"shell/key-bindings.zsh" \
+  make"install"
+  zinit load junegunn/fzf
 
-zinit ice pip"pipx" fbin"p:venv/bin/pipx" id-as"pipx" fbin
-zinit load zdharma/null
+  zinit ice pip"pipx" fbin"p:venv/bin/pipx" id-as"pipx" fbin
+  zinit load zdharma/null
 
 
-if [[ ! $ARCH =~ ppc64 ]] ; then
-  # binary stuff we can't have on ppc here
-  # sharkdp/fd
-  zinit ice from"gh-r" mv"fd* -> fd" sbin"fd/fd"
-  zinit load sharkdp/fd
+  if [[ ! $ARCH =~ ppc64 ]] ; then
+    # binary stuff we can't have on ppc here
+    # fd, bat, hyperfine, vivid
+    zinit load sharkdp
 
-  # sharkdp/bat
-  zinit ice from"gh-r" mv"bat* -> bat" sbin"bat/bat"
-  zinit load sharkdp/bat
+  # zinit ice from"gh-r" mv"fd* -> fd" sbin"fd/fd"
+  # zinit load sharkdp/fd
+  #
+  # # sharkdp/bat
+  # zinit ice from"gh-r" mv"bat* -> bat" sbin"bat/bat"
+  # zinit load sharkdp/bat
 
   # ogham/exa, replacement for ls
   zinit ice wait"2" lucid from"gh-r" sbin"bin/exa" mv"exa* -> exa"
@@ -190,12 +217,42 @@ zinit light zdharma/fast-syntax-highlighting
 zinit ice wait"1" lucid atload"!_zsh_autosuggest_start"
 zinit load zsh-users/zsh-autosuggestions
 
+}
+if ! is-at-least 5.3 ; then
+  echo You are running the horrifyingly ancient zsh version: $ZSH_VERSION
+  echo running in a severely degraded mode
+else
+  zinit-setup
+fi
 # source antibody output
 # source $_ab_path
 
+# pl10k theme
+zinit ice depth=1; zinit light romkatv/powerlevel10k
+
+function dbg_prompt_segment() {
+  local cmd=("p10k" "segment")
+  if [[ -n "${prompt_dbg+1}" ]] ; then
+    cmd=echo
+  fi
+  $cmd "$@"
+}
+# custom prompt support functions
+function prompt_flux_id() {
+  dbg_prompt_segment -f green -c "$FLUX_URI" -i '' -t "$FLUX_URI"
+}
+function prompt_slurm_id() {
+  dbg_prompt_segment -f red -c "$SLURM_JOB_ID" -i '' -t "$SLURM_JOB_ID"
+}
+function prompt_zinit_mod() {
+  dbg_prompt_segment -f red -c "$missing" -i '!' -t "$missing"
+}
 # load my prompt, must be after async loads
 autoload -Uz promptinit && promptinit
-prompt mypure
+# prompt mypure
+# prompt powerlevel10k
+# To customize prompt, run `p10k configure` or edit ~/.zsh/.p10k.zsh.
+[[ ! -f ~/.zsh/.p10k.zsh ]] || source ~/.zsh/.p10k.zsh
 
 if infocmp $TERM >& /dev/null ; then
 else
@@ -261,10 +318,6 @@ if typeset -f '[' > /dev/null ; then
   unset -f '['
 fi
 
-# Turn off the stop key binding
-stty -ixon
-
-
 if [ -x "$(which spack)" ] ; then
   SPACKDIR=$(dirname $(dirname $(which spack )))
   # export MODULEPATH=${MODULEPATH}:${SPACKDIR}/share/spack/modules
@@ -304,3 +357,4 @@ if [[ $PROF_INIT == "true" ]] ; then
 fi
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+

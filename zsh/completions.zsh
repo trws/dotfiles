@@ -31,13 +31,6 @@ unsetopt FLOW_CONTROL      # Disable start/stop characters in shell editor.
 # cache time of 20 hours, so it should almost always regenerate the first time a
 # shell is opened each day.
 autoload -Uz compinit
-# _comp_files=(${ZDOTDIR:-$HOME}/.zcompdump(Nm-20))
-# if (( $#_comp_files )); then
-#   compinit -i -C
-# else
-#   compinit -i
-# fi
-# unset _comp_files
 
 function recomp () {
   rm -f $COMPDUMP_PATH
@@ -46,7 +39,7 @@ function recomp () {
 
 COMPDUMP_PATH=$ZSH_CACHE_DIR/compdump-$SYS_TYPE
  _comp_files=($COMPDUMP_PATH(Nm-20))
-# only update compdump if it's been a day
+# only update compdump if it's been 20 hours
 if (( $#_comp_files )); then
   compinit -d $COMPDUMP_PATH -C
 else

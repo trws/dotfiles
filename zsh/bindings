@@ -1,6 +1,9 @@
 #!zsh bindings
 bindkey -me >& /dev/null
 
+# Turn off the stop key binding
+stty -ixon
+
 bindkey '[3~' delete-char
 bindkey '[4~' end-of-line
 bindkey '[1~' beginning-of-line

@@ -9,6 +9,32 @@ local hints = hs.hints
 local json = hs.json
 local ipc = require("hs.ipc")
 local urle = require("hs.urlevent")
+local net = hs.network
+local http = hs.http
+
+hs_cfg_path = '~/.hammerspoon'
+if not string.find(hs_cfg_path, package.path) then
+  package.path = hs_cfg_path .. '/?.lua;' .. package.path
+end
+
+nc_store = hs.network.configuration.open()
+home_hub_ethernet_key = "State:/Network/Interface/en11/Link"
+dhcp_uuid = "C4C5F3A9-4807-49F2-80E8-F45FFC3090A2"
+wifi_uuid = "66F89159-EFE5-4C32-A4E1-B4393A294FB4"
+
+nc_store:monitorKeys(home_hub_ethernet_key, false)
+nc_store:setCallback(function(store, keys)
+  state = store:contents()
+  if state[home_hub_ethernet_key] ~= nil and state[home_hub_ethernet_key]["Active"] then
+    print("on hub, switch to dhcp")
+    store:setLocation(dhcp_uuid)
+  else
+    print("not on hub, switch to wifi")
+    store:setLocation(wifi_uuid)
+  end
+end)
+
+nc_store:start()
 
 -- set up your windowfilter
 switcher = hs.window.switcher.new() -- default windowfilter: only visible windows, all Spaces
@@ -63,26 +89,74 @@ end)
 
 screen_sharing_watcher:start()
 
+open_and_focus_with_bundle = function(url, bundleID)
+  urle.openURLWithBundle(url, bundleID)
+  hs.timer.doAfter(0.2, function()
+    hs.application.applicationsForBundleID(bundleID)[1]:activate()
+  end)
+end
+
+match_any = function(s, list)
+  for k, v in pairs(list) do
+    if string.match(s, v) then return true end
+  end
+  return false
+end
+
 urle.httpCallback = function(scheme, host, params, fullURL)
   print("routing URL: " .. fullURL)
-  if string.match(fullURL, "webex.com") or string.match(fullURL, "meet.intel.com") then
-    print("sending to Safari")
-    urle.openURLWithBundle(fullURL, 'com.apple.Safari')
+  if match_any(fullURL, { "urldefense" }) then
+    prev = ""
+    while string.find(fullURL, "urldefense") and fullURL ~= prev do
+      prev = fullURL
+      url_parts = http.urlParts(fullURL)
+      print("url parts: ", url_parts)
+      print(hs.inspect(url_parts))
+      if url_parts.query and url_parts.queryItems[1].u then
+        fullURL = url_parts.queryItems[1].u
+        fullURL = fullURL:gsub("-", "%%")
+        fullURL = fullURL:gsub("_", "/")
+        neturl = require('url')
+        fullURL = neturl.decode(fullURL)
+        goto continue
+      end
+
+      print("removing urldefense garbage, especially *broken* garbage")
+      fullURL = fullURL:gsub("^[^_]+__", "")
+      fullURL = fullURL:gsub("__.+", "")
+      fullURL = fullURL:gsub("*", "#")
+      ::continue::
+    end
+    print("result: " .. fullURL)
+  end
+  if match_any(fullURL, { "mattermost.energy.gov" }) then
+    print("sending to Wavebox")
+    open_and_focus_with_bundle(fullURL, 'com.bookry.wavebox')
     return
   end
-  if string.match(fullURL, "llnl.gov") or string.match(fullURL, "webex.com") or string.match(fullURL, "bluejeans.com") then
+  if true or match_any(fullURL, { "webex.com",
+        "meet.intel.com",
+        "bluejeans.com",
+        "zoom.us",
+      "llnl.gov" })
+    then
+    print("sending to Safari")
+    open_and_focus_with_bundle(fullURL, 'com.apple.Safari')
+    return
+  end
+  if match_any(fullURL, { "llnl.gov", "teams.microsoft.com" }) then
     print("sending to Wavebox")
-    urle.openURLWithBundle(fullURL, 'com.bookry.wavebox')
+    open_and_focus_with_bundle(fullURL, 'com.bookry.wavebox')
     return
   end
   if string.match(fullURL, "nvidia.sharepoint.com") then
     print("sending to Wavebox")
-    urle.openURLWithBundle(fullURL, 'com.bookry.wavebox')
+    open_and_focus_with_bundle(fullURL, 'com.bookry.wavebox')
     return
   end
   print("sending to Qute")
-  urle.openURLWithBundle(fullURL, "org.qt-project.Qt.QtWebEngineCore")
-  end
+  open_and_focus_with_bundle(fullURL, "org.qt-project.Qt.QtWebEngineCore")
+end
 
 -- pl = require 'pl.pretty'
 -- bindings:insert('a')
@@ -99,13 +173,13 @@ mute_toggle = function()
   app = hs.window.find("Webex Meetings"):application()
   if app:findMenuItem("Mute Me")['enabled'] then
     print("mute me enabled, so mute")
-    app:selectMenuItem("Mute Me") 
+    app:selectMenuItem("Mute Me")
   else
     print("mute me disabled, so unmute")
-    app:selectMenuItem("Unmute Me") 
+    app:selectMenuItem("Unmute Me")
   end
 end
-bindings:insert(hotkey.bind(mash, "m", mute_toggle))
+-- bindings:insert(hotkey.bind(mash, "m", mute_toggle))
 bindings:insert(hotkey.bind({"ctrl","cmd"}, "s", function() toggle_application("com.freron.MailMate") end))
 bindings:insert(hotkey.bind({"ctrl","cmd","shift"}, "s", function() toggle_application("com.apple.Safari") end))
 bindings:insert(hotkey.bind({"ctrl","cmd"}, "a", function() toggle_application("com.apple.iCal") end))
@@ -115,7 +189,10 @@ bindings:insert(hotkey.bind({"ctrl","cmd"}, "f", function() toggle_application("
 bindings:insert(hotkey.bind({"ctrl","cmd"}, "g", function() toggle_application("com.google.Chrome") end))
 bindings:insert(hotkey.bind({"ctrl","cmd"}, "b", function() toggle_application("org.qt-project.Qt.QtWebEngineCore") end))
 bindings:insert(hotkey.bind({"ctrl","cmd"}, "t", function() toggle_application("com.googlecode.iterm2") end))
-bindings:insert(hotkey.bind({"ctrl","cmd"}, "v", function() toggle_application("org.vim.macvim") end))
+bindings:insert(hotkey.bind({"ctrl","cmd","shift"}, "v", function() toggle_application("org.vim.macvim") end))
+bindings:insert(hotkey.bind({"ctrl","cmd"}, "v", function() toggle_application("com.qvacua.VimR") end))
+bindings:insert(hotkey.bind({"ctrl","cmd"}, "w", function() toggle_application("com.bookry.wavebox") end))
+bindings:insert(hotkey.bind({"ctrl","cmd"}, "e", function() toggle_application("org.gnu.Emacs") end))
 
 -- alternatively, call .nextWindow() or .previousWindow() directly (same as hs.window.switcher.new():next())
 -- hs.hotkey.bind('alt','tab','Next window',hs.window.switcher.nextWindow)
@@ -143,10 +220,10 @@ function choose_pw(args)
 
   for objk,obj in pairs(js) do
     choices:insert({
-      ["text"] = (obj["overview"]["title"] or "unknown") .. ": " .. (obj["overview"]["url"] or "unknown"),
-      ["path"] = args[3],
-      ["obj"] = obj,
-    })
+        ["text"] = (obj["overview"]["title"] or "unknown") .. ": " .. (obj["overview"]["url"] or "unknown"),
+        ["path"] = args[3],
+        ["obj"] = obj,
+      })
   end
   pws:choices(choices)
   pws:show()
@@ -178,13 +255,13 @@ bindings:insert(hotkey.bind(mash, 'c', choose_win))
 bindings:insert(hotkey.bind(mashshift, 'm', function() hs.execute("pbpaste | ~/scripts/md2clip") end))
 
 bindings:insert(
-hotkey.bind({"cmd", "alt", "ctrl"}, "D", function()
-  local win = window.focusedWindow()
-  local f = win:frame()
-  f.x = f.x + 10
-  win:setFrame(f)
-end)
-)
+  hotkey.bind({"cmd", "alt", "ctrl"}, "D", function()
+    local win = window.focusedWindow()
+    local f = win:frame()
+    f.x = f.x + 10
+    win:setFrame(f)
+  end)
+  )
 
 hints.style = 'vimperator'
 bindings:insert(hotkey.bind(mash, "g", function() hs.hints.windowHints() end))
@@ -197,6 +274,7 @@ grid.MARGINX    = 0
 grid.MARGINY    = 0
 
 -- Grid key expariments
+bindings:insert(hotkey.bind(mash, '\\', function() grid.show() end))
 bindings:insert(hotkey.bind(mash, ';', function() grid.snap(window.focusedWindow()) end))
 bindings:insert(hotkey.bind(mash, "'", function() fnutils.map(window.visiblewindows(), grid.snap) end))
 bindings:insert(hotkey.bind(mash,      '=', function() grid.resizeWindowWider() end))
@@ -213,65 +291,85 @@ bindings:insert(hotkey.bind(mashshift, '-', function() grid.resizeWindowShorter(
 -- hotkey.bind(mash, 'L', grid.pushWindowRight)
 
 
-bindings:insert(
-hotkey.bind({'cmd', 'ctrl'}, 'W', function()
-    local all = window.allWindows()
-    for _, w in ipairs(all) do
-        print("checking window: " .. w:title())
-        if string.find(w:title(), 'vit') then
-            w:focus()
-            break
-        end
-    end
-end)
-)
+-- bindings:insert(
+-- hotkey.bind({'cmd', 'ctrl'}, 'W', function()
+--     local all = window.allWindows()
+--     for _, w in ipairs(all) do
+--         print("checking window: " .. w:title())
+--         if string.find(w:title(), 'vit') then
+--             w:focus()
+--             break
+--         end
+--     end
+-- end)
+-- )
 
 --
 -- Window focus hotkeys
 bindings:insert(
-hotkey.bind(mashcmd, "H", function()
-  -- local new_rect = geometry.rect(x=0, y=0, w=0.5, h=1.0)
-  window.focusedWindow():focusWindowWest()
-end)
-)
+  hotkey.bind(mashcmd, "H", function()
+    -- local new_rect = geometry.rect(x=0, y=0, w=0.5, h=1.0)
+    window.focusedWindow():focusWindowWest()
+  end)
+  )
 bindings:insert(
-hotkey.bind(mashcmd, "L", function()
-  window.focusedWindow():focusWindowEast()
-end)
-)
+  hotkey.bind(mashcmd, "L", function()
+    window.focusedWindow():focusWindowEast()
+  end)
+  )
 bindings:insert(
-hotkey.bind(mashcmd, "K", function()
-  window.focusedWindow():focusWindowNorth()
-end)
-)
+  hotkey.bind(mashcmd, "K", function()
+    window.focusedWindow():focusWindowNorth()
+  end)
+  )
 bindings:insert(
-hotkey.bind(mashcmd, "J", function()
-  window.focusedWindow():focusWindowSouth()
-end)
-)
+  hotkey.bind(mashcmd, "J", function()
+    window.focusedWindow():focusWindowSouth()
+  end)
+  )
 -- Window throwing
 bindings:insert(
-hotkey.bind(mashshift, "H", function()
-  -- local new_rect = geometry.rect(x=0, y=0, w=0.5, h=1.0)
-  window.focusedWindow():moveToUnit(geometry.rect(0.0, 0.0, 0.5, 1.0))
-end)
-)
+  hotkey.bind(mashshift, "H", function()
+    -- local new_rect = geometry.rect(x=0, y=0, w=0.5, h=1.0)
+    window.focusedWindow():moveToUnit(geometry.rect(0.0, 0.0, 0.5, 1.0))
+  end)
+  )
 bindings:insert(
-hotkey.bind(mashshift, "L", function()
-  local w = window.focusedWindow()
-  w:moveToUnit(geometry.rect(0.5, 0.0, 0.5, 1.0))
-end)
-)
+  hotkey.bind(mashshift, "L", function()
+    local w = window.focusedWindow()
+    w:moveToUnit(geometry.rect(0.5, 0.0, 0.5, 1.0))
+  end)
+  )
 bindings:insert(
-hotkey.bind(mashshift, "K", function()
-  window.focusedWindow():moveToUnit(geometry.rect(0.0, 0.0, 1.0, 0.5))
-end)
-)
+  hotkey.bind(mashshift, "K", function()
+    window.focusedWindow():moveToUnit(geometry.rect(0.0, 0.0, 1.0, 0.5))
+  end)
+  )
 bindings:insert(
-hotkey.bind(mashshift, "J", function()
-  window.focusedWindow():moveToUnit(geometry.rect(0.0, 0.5, 1.0, 0.5))
-end)
-)
+  hotkey.bind(mashshift, "J", function()
+    window.focusedWindow():moveToUnit(geometry.rect(0.0, 0.5, 1.0, 0.5))
+  end)
+  )
+
+bindings:insert(
+  hotkey.bind(mashshift, "1", function()
+    -- local new_rect = geometry.rect(x=0, y=0, w=0.5, h=1.0)
+    window.focusedWindow():moveToUnit(geometry.rect(0.0, 0.0, 1.0/3, 1.0))
+  end)
+  )
+bindings:insert(
+  hotkey.bind(mashshift, "2", function()
+    -- local new_rect = geometry.rect(x=0, y=0, w=0.5, h=1.0)
+    window.focusedWindow():moveToUnit(geometry.rect(1.0/3, 0.0, 1.0/3, 1.0))
+  end)
+  )
+bindings:insert(
+  hotkey.bind(mashshift, "3", function()
+    -- local new_rect = geometry.rect(x=0, y=0, w=0.5, h=1.0)
+    window.focusedWindow():moveToUnit(geometry.rect(2.0/3, 0.0, 1.0/3, 1.0))
+  end)
+  )
+
 bindings:insert(hotkey.bind(mashshift, "N", function() window.moveToScreen(window.focusedWindow():screen():next()) end))
 bindings:insert(hotkey.bind(mashshift, "P", function() window.moveToScreen(window.focusedWindow():screen():previous()) end))
 
@@ -325,119 +423,119 @@ disable_modal_hotkeys = function()
 end
 
 bindings:insert(
-hotkey.bind(mashshift, "S", function()
-  enable_modal_hotkeys(s_modal_hotkeys)
-end)
-)
+  hotkey.bind(mashshift, "S", function()
+    enable_modal_hotkeys(s_modal_hotkeys)
+  end)
+  )
 
 -- modal keys
 
 table.insert(modal_hotkeys,
-hotkey.bind({}, "R", function()
-  hs.reload()
-end))
+  hotkey.bind({}, "R", function()
+    hs.reload()
+  end))
 
--- maximize
-table.insert(modal_hotkeys,
-hotkey.bind({}, "M", function()
-  disable_modal_hotkeys()
-  window.focusedWindow():maximize()
-end))
+  -- maximize
+  table.insert(modal_hotkeys,
+    hotkey.bind({}, "M", function()
+      disable_modal_hotkeys()
+      window.focusedWindow():maximize()
+    end))
 
--- resize
-table.insert(modal_hotkeys,
-hotkey.bind({}, "K", function()
-  disable_modal_hotkeys()
-  local w = window.focusedWindow()
-  local f = w:frame()
-  f.h = f.h/2
-  w:setFrame(f)
-end))
-table.insert(modal_hotkeys,
-hotkey.bind({}, "J", function()
-  disable_modal_hotkeys()
-  local w = window.focusedWindow()
-  local f = w:frame()
-  f.y = f.y + f.h / 2
-  f.h = f.h / 2
-  w:setFrame(f)
-end))
-table.insert(modal_hotkeys,
-hotkey.bind({}, "H", function()
-  disable_modal_hotkeys()
-  local w = window.focusedWindow()
-  local f = w:frame()
-  f.w = f.w/2
-  w:setFrame(f)
-end))
-table.insert(modal_hotkeys,
-hotkey.bind({}, "L", function()
-  disable_modal_hotkeys()
-  local w = window.focusedWindow()
-  local f = w:frame()
-  f.x = f.x + f.w / 2
-  f.w = f.w / 2
-  w:setFrame(f)
-end))
+    -- resize
+    table.insert(modal_hotkeys,
+      hotkey.bind({}, "K", function()
+        disable_modal_hotkeys()
+        local w = window.focusedWindow()
+        local f = w:frame()
+        f.h = f.h/2
+        w:setFrame(f)
+      end))
+      table.insert(modal_hotkeys,
+        hotkey.bind({}, "J", function()
+          disable_modal_hotkeys()
+          local w = window.focusedWindow()
+          local f = w:frame()
+          f.y = f.y + f.h / 2
+          f.h = f.h / 2
+          w:setFrame(f)
+        end))
+        table.insert(modal_hotkeys,
+          hotkey.bind({}, "H", function()
+            disable_modal_hotkeys()
+            local w = window.focusedWindow()
+            local f = w:frame()
+            f.w = f.w/2
+            w:setFrame(f)
+          end))
+          table.insert(modal_hotkeys,
+            hotkey.bind({}, "L", function()
+              disable_modal_hotkeys()
+              local w = window.focusedWindow()
+              local f = w:frame()
+              f.x = f.x + f.w / 2
+              f.w = f.w / 2
+              w:setFrame(f)
+            end))
 
--- Move a screen left and maximize
+            -- Move a screen left and maximize
 
-table.insert(modal_hotkeys,
-hotkey.bind({}, "Left", function()
-  disable_modal_hotkeys()
-  local w = window.focusedWindow()
-  local s = w:screen():toWest()
-  w:setFrame(s:fullFrame())
-end))
+            table.insert(modal_hotkeys,
+              hotkey.bind({}, "Left", function()
+                disable_modal_hotkeys()
+                local w = window.focusedWindow()
+                local s = w:screen():toWest()
+                w:setFrame(s:fullFrame())
+              end))
 
-table.insert(modal_hotkeys,
-hotkey.bind({}, "Right", function()
-  disable_modal_hotkeys()
-  local w = window.focusedWindow()
-  local s = w:screen():toEast()
-  w:setFrame(s:fullFrame())
-end))
+              table.insert(modal_hotkeys,
+                hotkey.bind({}, "Right", function()
+                  disable_modal_hotkeys()
+                  local w = window.focusedWindow()
+                  local s = w:screen():toEast()
+                  w:setFrame(s:fullFrame())
+                end))
 
--- table.insert(modal_hotkeys,
--- hotkey.bind({}, "1", function()
---   disable_modal_hotkeys()
---   move_to_screen(screens:allScreens()[2])
---   window.focusedWindow():maximize()
--- end))
---
--- table.insert(modal_hotkeys,
--- hotkey.bind({}, "2", function()
---   disable_modal_hotkeys()
---   move_to_screen(screens:allScreens()[1])
---   window.focusedWindow():maximize()
--- end))
---
--- table.insert(modal_hotkeys,
--- hotkey.bind({}, "3", function()
---   disable_modal_hotkeys()
---   move_to_screen(screens:allScreens()[3])
---   window.focusedWindow():maximize()
--- end))
+                -- table.insert(modal_hotkeys,
+                -- hotkey.bind({}, "1", function()
+                --   disable_modal_hotkeys()
+                --   move_to_screen(screens:allScreens()[2])
+                --   window.focusedWindow():maximize()
+                -- end))
+                --
+                -- table.insert(modal_hotkeys,
+                -- hotkey.bind({}, "2", function()
+                --   disable_modal_hotkeys()
+                --   move_to_screen(screens:allScreens()[1])
+                --   window.focusedWindow():maximize()
+                -- end))
+                --
+                -- table.insert(modal_hotkeys,
+                -- hotkey.bind({}, "3", function()
+                --   disable_modal_hotkeys()
+                --   move_to_screen(screens:allScreens()[3])
+                --   window.focusedWindow():maximize()
+                -- end))
 
-table.insert(modal_hotkeys,
-hotkey.bind({}, "1", function()
-  window.focusedWindow():moveToUnit(geometry.rect(0.0, 0.0, 1/3, 1.0))
-  -- move_to_screen(screens:allScreens()[2])
-end))
-table.insert(modal_hotkeys,
-hotkey.bind({}, "2", function()
-  window.focusedWindow():moveToUnit(geometry.rect(1/3, 0.0, 1/3, 1.0))
-  -- move_to_screen(screens:allScreens()[1])
-end))
-table.insert(modal_hotkeys,
-hotkey.bind({}, "3", function()
-  window.focusedWindow():moveToUnit(geometry.rect(2/3, 0.0, 1/3, 1.0))
-  -- move_to_screen(screens:allScreens()[3])
-end))
+                table.insert(modal_hotkeys,
+                  hotkey.bind({}, "1", function()
+                    window.focusedWindow():moveToUnit(geometry.rect(0.0, 0.0, 1/3, 1.0))
+                    -- move_to_screen(screens:allScreens()[2])
+                  end))
+                  table.insert(modal_hotkeys,
+                    hotkey.bind({}, "2", function()
+                      window.focusedWindow():moveToUnit(geometry.rect(1/3, 0.0, 1/3, 1.0))
+                      -- move_to_screen(screens:allScreens()[1])
+                    end))
+                    table.insert(modal_hotkeys,
+                      hotkey.bind({}, "3", function()
+                        window.focusedWindow():moveToUnit(geometry.rect(2/3, 0.0, 1/3, 1.0))
+                        -- move_to_screen(screens:allScreens()[3])
+                      end))
 
 
 
--- cleanup calls, must be at the end
+                      -- cleanup calls, must be at the end
 
-disable_modal_hotkeys()
+                      disable_modal_hotkeys()
 

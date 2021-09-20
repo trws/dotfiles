@@ -1,19 +1,20 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import sys
 from subprocess import check_output, CalledProcessError
 
 host = check_output("hostname", shell=True)
 
-if 'vortex' in host:
+if b'vortex' in host:
     sys.exit(0)
-if "storm" in host:
+if b"storm" in host:
     try:
-        # output = check_output('networksetup -getairportnetwork en0 2>&1 | grep LLNL', shell=True)
+        # check_output('networksetup -getairportnetwork en0 2>&1 | grep LLNL',
+        #              shell=True)
         output = check_output('grep -i LLNL /etc/resolv.conf', shell=True)
-    except CalledProcessError as e:
+    except CalledProcessError:
         sys.exit(-1)
     sys.exit(0)
-if "vpn" in host:
+if b"vpn" in host:
     sys.exit(0)
 sys.exit(-1)
