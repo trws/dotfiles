@@ -245,7 +245,15 @@ function prompt_slurm_id() {
   dbg_prompt_segment -f red -c "$SLURM_JOB_ID" -i '' -t "$SLURM_JOB_ID"
 }
 function prompt_zinit_mod() {
+  local missing=''
+  if [[ -f "$_zinit_mod_path/zdharma/zplugin.bundle" ]] ; then
+  else
+    missing='zmod'
+  fi
   dbg_prompt_segment -f red -c "$missing" -i '!' -t "$missing"
+}
+function prompt_spack_env() {
+  dbg_prompt_segment -f blue -c "$SPACK_ENV" -i '' -t "$SPACK_ENV:t"
 }
 # load my prompt, must be after async loads
 autoload -Uz promptinit && promptinit
