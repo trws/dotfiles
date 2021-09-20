@@ -138,6 +138,8 @@ export CARGO_HOME="$PRGPATH/cargo"
 export RUSTUP_HOME="$PRGPATH/rustup"
 add_to_path_front "$PRGPATH/cargo"
 
+add_to_path_front "$PRGPATH/spack"
+
 remove_from_path ~/scripts
 path=(~/scripts $path)
 
