@@ -11,4 +11,6 @@ if (( $+commands[nvim] )) ; then
   exec nvim "$@"
 fi
 
+#remove self
+path=("${(@)path:#~/scripts}")
 exec vim "$@"

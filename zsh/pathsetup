@@ -132,11 +132,11 @@ mkdirp_if_missing $PRGPATH/go/bin
 export GOPATH="$PRGPATH/go"
 add_to_path_front "$PRGPATH/go"
 
-mkdirp_if_missing $PRGPATH/cargo/bin
-mkdirp_if_missing $PRGPATH/rustup
-export CARGO_HOME="$PRGPATH/cargo"
-export RUSTUP_HOME="$PRGPATH/rustup"
-add_to_path_front "$PRGPATH/cargo"
+# mkdirp_if_missing $PRGPATH/cargo/bin
+# mkdirp_if_missing $PRGPATH/rustup
+# export CARGO_HOME="$PRGPATH/cargo"
+# export RUSTUP_HOME="$PRGPATH/rustup"
+# add_to_path_front "$PRGPATH/cargo"
 
 add_to_path_front "$PRGPATH/spack"
 

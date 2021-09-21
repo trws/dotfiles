@@ -177,6 +177,15 @@ zinit ice sbin"bin/(fzf|fzf-tmux)" \
   zinit ice pip"pipx" fbin"p:venv/bin/pipx" id-as"pipx" fbin
   zinit load zdharma/null
 
+  # rust stuff
+  # zinit load rust-toolchain
+  # A little more complex rustup configuration that uses Bin-Gem-Node annex
+  # and installs the cargo completion provided with rustup, using for-syntax
+  zinit id-as=rust wait=1 as=null sbin="bin/*" lucid rustup \
+      atload="[[ ! -f ${ZINIT[COMPLETIONS_DIR]}/_cargo ]] && zi creinstall
+      rust; \
+          export CARGO_HOME=\$PWD RUSTUP_HOME=\$PWD/rustup" for \
+                  zdharma/null
 
   if [[ ! $ARCH =~ ppc64 ]] ; then
     # binary stuff we can't have on ppc here
@@ -198,6 +207,9 @@ zinit ice sbin"bin/(fzf|fzf-tmux)" \
   zinit ice from"gh-r" mv"delta* -> delta" sbin"delta/delta"
   zinit load dandavison/delta
 
+  zinit ice from"gh-r" mv"dust* -> dust" sbin"dust/dust"
+  zinit load bootandy/dust
+
   # BurntSushi/ripgrep
   zinit ice from"gh-r" mv"ripgrep* -> rg" sbin"rg/rg"
   zinit load BurntSushi/ripgrep
@@ -207,6 +219,15 @@ zinit ice sbin"bin/(fzf|fzf-tmux)" \
   # zinit ice id-as"cargo-apps" rustup cargo'!lsd'
   # zinit load zdharma/null
 else
+  zinit ice cargo'ripgrep' id-as'rg' sbin'bin/rg'
+  zinit load zdharma/null
+
+  zinit ice cargo'fd-find' id-as'fd' sbin'bin/fd'
+  zinit load zdharma/null
+
+  zinit ice cargo'du-dust' id-as'dust' sbin'bin/dust'
+  zinit load zdharma/null
+
 fi
 
 # Documented to be loaded last, delay longer

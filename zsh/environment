@@ -20,16 +20,15 @@ export GTAGSLIBPATH=/opt/local/include:/usr/local/include:/usr/include:/Develope
 [[ ! -z "$LC_ITERM_PROFILE" ]] && export ITERM_PROFILE=$LC_ITERM_PROFILE
 [[ -z "$LC_TERM_PROGRAM" ]] && export LC_TERM_PROGRAM=$TERM_PROGRAM
 [[ -z "$LC_ITERM_PROFILE" ]] && export LC_ITERM_PROFILE=$ITERM_PROFILE
-[[ -f ~/.units ]] && export UNITSFILE=~/.units
 
 ENTOMB=yes
 
-if (( $+commands[fzf] )) ; then
-  if (( $+commands[fd] )) ; then
-    export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
-  elif (( $+commands[pt] )) ; then
-    export FZF_DEFAULT_COMMAND='pt --follow --nocolor --nogroup -g=.'
-  fi
+if (( $+commands[fd] )) ; then
+  export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
+elif (( $+commands[rg] )) ; then
+  export FZF_DEFAULT_COMMAND='rg --files'
+elif (( $+commands[pt] )) ; then
+  export FZF_DEFAULT_COMMAND='pt --follow --nocolor --nogroup -g=.'
 fi
 
 export DOOMLOCALDIR="~/.cache/doom-local/"
@@ -74,12 +73,6 @@ fi
 
 PAGER=less
 
-if (( $+commands[rg] )) ; then
-  export FZF_DEFAULT_COMMAND='rg --files'
-elif (( $+commands[fd] )) ; then
-  export FZF_DEFAULT_COMMAND='fd --type f'
-fi
-
 [[ -e ~/.pystartup ]] && export PYTHONSTARTUP=$HOME/.pystartup
 
 [[ -d ~/.terminfo ]] && export TERMINFO=~/.terminfo
@@ -91,7 +84,11 @@ typeset -x LESS ENTOMB PAGER DATE_FMT
 export CVS_RSH=ssh
 export LANG=en_US.UTF-8
 
-[[ $COLORTERM = "gnome-terminal" ]] && export TERM=xterm-256color
+if [[ $TERM = iterm2-direct ]] ; then
+  export COLORTERM=truecolor
+elif [[ $COLORTERM = "gnome-terminal" ]] ; then
+  export TERM=xterm-256color
+fi
 
 [[ -d /usr/local/cuda ]] && export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda/lib64:/usr/local/cuda/lib
 
