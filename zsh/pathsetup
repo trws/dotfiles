@@ -64,6 +64,20 @@ function add_to_path_back(){
   done
 }
 
+# strip wsl paths in case we forget to configure it
+if [[ -n "$WSLENV" ]] ; then
+  typeset -a winpaths
+  typeset -a newpaths
+  for p in $path ; do
+    if [[ p =~ "/mnt/c" ]] ; then
+      winpaths+=p
+    else
+      newpaths+=p
+    fi
+  done
+  path=($newpaths)
+fi
+
 [[ -x /usr/local/bin/defaultpaths ]] && eval `/usr/local/bin/defaultpaths`
 
 add_to_path_back /usr ""

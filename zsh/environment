@@ -8,6 +8,9 @@ export GIT_COMMITTER_EMAIL=scogland1@llnl.gov
 export GITHUB_USER=trws
 [[ -e ~/scripts/ssh ]] && export GIT_SSH_COMMAND=~/scripts/ssh
 
+# WSL2 display for x410
+[[ ! -z "$WSLENV" ]] && export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}'):0.0
+
 
 # Give global tags an exuberant ctags backend
 # [[ -e ~/.globalrc ]] && export GTAGSCONF=~/.globalrc

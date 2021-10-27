@@ -607,9 +607,9 @@ nnoremap <silent> <leader>fB  :Buffers<CR>
 nnoremap <silent> <leader>fs  :GFiles?<CR>
 nnoremap <silent> <leader>fn  :Files ~/onedrive/vimwiki/<CR>
 if executable('rg')
-  nnoremap <silent> <leader>fg  :call helpers#AgWithParam()<CR>
-else
   nnoremap <silent> <leader>fg  :Rg<CR>
+else
+  nnoremap <silent> <leader>fg  :call helpers#AgWithParam()<CR>
 endif
 nnoremap <silent> <leader>fl  :BLines<CR>
 nnoremap <silent> <leader>fL  :Lines<CR>

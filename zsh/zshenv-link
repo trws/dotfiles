@@ -1,6 +1,10 @@
 # Basic universal setup, pull in environment and path
 # Author: Tom Scogland
 
+# [[ ! -z $WSLENV ]] && export XDG_RUNTIME_DIR=/tmp/$UID && mkdir -m 0700 $XDG_RUNTIME_DIR
+if [[ -n "$WSLENV" ]] ; then
+  export BROWSER=wslview
+fi
 export ZDOTDIR=~/.zsh
 # ensure my funcs, and prompts are there before load
 fpath=($ZDOTDIR/funcs $fpath)
