@@ -1,8 +1,5 @@
 #!zsh aliases
 
-autoload -U regexp-replace
-setopt re_match_pcre
-
 # alias bd='mkbdir -p'
 # alias cdb='cd $(mkbdir -p)'
 # alias cdp='cd $(mkbdir -pr)'
@@ -68,7 +65,7 @@ function gRuo() {
     if [[ $new_origin =~ llnl ]] ; then
         user=scogland
     fi
-    regexp-replace new_origin ':[^/]+?/' ":$user/"
+    new_origin=$(echo $new_origin | sed -e "s|:[^/]+?/|:$user/|")
     echo "Change origin from ${origin_s} to $new_origin?"
     local q
     read -q q

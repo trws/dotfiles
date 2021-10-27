@@ -3,6 +3,7 @@ import json
 import sys
 import logging
 import argparse
+import platform
 
 p = argparse.ArgumentParser("scrape", description="translate ID/mailbox into actions")
 p.add_argument("-f", "--flag", help="add flag")
@@ -13,6 +14,10 @@ args = p.parse_args(sys.argv[1:])
 logging.basicConfig(filename="/tmp/mmfilter", level=logging.INFO, filemode="w")
 log = logging.getLogger("filter")
 
+if platform.node() == 'bolt':
+    mbox =  "imap://scogland1%40llnl.gov@localhost/Archive"
+else:
+    mbox = "imap://scogland1%40llnl.gov@outlook.office365.com/Archive"
 
 log.info("starting filter")
 ids = []
@@ -31,7 +36,7 @@ if ids:
         actions.append(
             {
                 "type": "moveMessage",
-                "mailbox": "imap://scogland1%40llnl.gov@localhost/Archive",
+                "mailbox": mbox,
                 "ids": ids,
             }
         )

@@ -1,7 +1,17 @@
 #!/usr/bin/env zsh
 
 if (( $+commands[delta] )) ; then
-  exec delta --theme Dracula "$@"
+  args=(
+    --line-numbers
+    --theme Dracula
+    --hyperlinks
+    --relative-paths
+    --navigate
+  )
+  if [[ $(tput cols) -gt 160 ]] ; then
+    args+="--side-by-side"
+  fi
+  exec delta $args "$@"
 else
   $PAGER "$@"
 fi

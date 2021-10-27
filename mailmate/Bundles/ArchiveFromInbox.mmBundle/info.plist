@@ -2,6 +2,5 @@
 	contactName = "Tom scogland";
 	description = "given a set of emails, produce actions to archive only those that are in the inbox";
 	name = "ArchiveFromInbox";
-	executionMode = 'multipleMessages';
 	uuid = "B9E4F90C-C7C4-4213-A5BD-2E597620F8CC";
 }

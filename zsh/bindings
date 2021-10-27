@@ -2,7 +2,9 @@
 bindkey -me >& /dev/null
 
 # Turn off the stop key binding
-stty -ixon
+# NOTE: checks here to ensure ssty only applies to a real tty
+# https://github.com/sorin-ionescu/prezto/pull/1771/files
+[[ -n ${TTY:-} && $+commands[stty] == 1 ]] && stty -ixon <$TTY >$TTY
 
 bindkey '[3~' delete-char
 bindkey '[4~' end-of-line

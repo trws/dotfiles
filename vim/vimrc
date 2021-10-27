@@ -1,3 +1,4 @@
+#!/usr/bin/vim
 " prevent airline loading before my colorscheme
 if 0
   colorscheme jellybeans-stripped
@@ -31,6 +32,12 @@ if !filereadable(expand("~/.vim/autoload/plug.vim"))
 endif
 
 call plug#begin(plugged_directory)
+
+" let neovim manage its own python support
+if has('nvim')
+  Plug 'neovim/pynvim', { 'dir': plugged_directory . '/neovim', 'do': 'pip3 install --upgrade --user --editable .'}
+  Plug 'mhinz/neovim-remote', { 'dir': plugged_directory . '/neovim-remote', 'do': 'pipx install --editable .'}
+endif
 
 "split management
 Plug 'wesQ3/vim-windowswap'
@@ -68,7 +75,7 @@ Plug 'vim-utils/vim-man'
 "powerline not working, light alternative?
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'edkolev/tmuxline.vim', { 'on': 'Tmuxline'}
+Plug 'edkolev/tmuxline.vim'
 
 
 " if executable('task')
@@ -91,6 +98,9 @@ Plug 'hylang/vim-hy'
 Plug 'chrisbra/vim-zsh'
 let g:zsh_fold_enable = 1
 Plug 'lervag/vimtex'
+if has('nvim')
+  let g:vimtex_compiler_progname='nvr'
+endif
 
 let g:vimtex_disable_recursive_main_file_detection = 1
 let g:vimtex_view_method='skim'
@@ -249,9 +259,11 @@ if ! has('win32')
   " nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
   " nmap <F5> <Plug>(lcn-menu)
 
+  Plug 'prabirshrestha/async.vim'
   Plug 'prabirshrestha/asyncomplete.vim'
   Plug 'prabirshrestha/vim-lsp'
   Plug 'prabirshrestha/asyncomplete-lsp.vim'
+  Plug 'prabirshrestha/asyncomplete-file.vim'
   Plug 'mattn/vim-lsp-settings'
   Plug 'thomasfaingnaert/vim-lsp-snippets'
   Plug 'thomasfaingnaert/vim-lsp-ultisnips'
@@ -261,23 +273,34 @@ if ! has('win32')
   " \   'python': ['mypy'],
   " \}
 
+  function! Register_file_completion()
+    call asyncomplete#register_source(asyncomplete#sources#file#get_source_options({
+          \ 'name': 'file',
+          \ 'allowlist': ['*'],
+          \ 'priority': 10,
+          \ 'completor': function('asyncomplete#sources#file#completor')
+          \ }))
+  endfunction
+  au User asyncomplete_setup call Register_file_completion()
+
+  imap <c-space> <Plug>(asyncomplete_force_refresh)
+  function! s:check_back_space() abort
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~ '\s'
+  endfunction
+
+  inoremap <silent><expr> <TAB>
+        \ pumvisible() ? "\<C-n>" :
+        \ <SID>check_back_space() ? "\<TAB>" :
+        \ asyncomplete#force_refresh()
+  inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+  inoremap <expr> <cr>    pumvisible() ? asyncomplete#close_popup() : "\<cr>"
+
   function! s:on_lsp_buffer_enabled() abort
     setlocal omnifunc=lsp#complete
     setlocal signcolumn=yes
     if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
-
-    imap <c-space> <Plug>(asyncomplete_force_refresh)
-    function! s:check_back_space() abort
-      let col = col('.') - 1
-      return !col || getline('.')[col - 1]  =~ '\s'
-    endfunction
-
-    inoremap <silent><expr> <TAB>
-          \ pumvisible() ? "\<C-n>" :
-          \ <SID>check_back_space() ? "\<TAB>" :
-          \ asyncomplete#force_refresh()
-    inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-    inoremap <expr> <cr>    pumvisible() ? asyncomplete#close_popup() : "\<cr>"
+    call Register_file_completion()
 
     nmap <buffer> gd <plug>(lsp-definition)
     nmap <buffer> gr <plug>(lsp-references)
@@ -297,17 +320,12 @@ if ! has('win32')
     autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
   augroup END
 
-  " if executable('pyls')
-  "   au User lsp_setup call lsp#register_server({
-  "         \ 'name': 'pyls-all',
-  "         \ 'cmd': {server_info->['pyls']},
-  "         \ 'whitelist': ['python'],
-  "         \ })
-  " endif
+
   let g:lsp_log_verbose = 1
   let g:lsp_log_file = expand('./lsp.log')
   let g:lsp_settings = {
-        \   'pyls': {
+        \   'pyls-all': {
+        \     'cmd': ['pipx','run','--spec','python-language-server[all]','pyls'],
         \     'workspace_config': {
         \       'pyls': {
         \         'plugins': {
@@ -321,6 +339,7 @@ if ! has('win32')
         \             'extra_paths': [
         \               './bin',
         \               './lib/spack',
+        \               './py/parse/',
         \               './lib/spack/external'
         \             ]
         \           }
@@ -332,6 +351,27 @@ if ! has('win32')
 endif
 
 if has('nvim')
+
+  "TODO look at neomake? https://github.com/neomake/neomake
+
+  " add nvim-treesitter and set up
+  "   Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
+  "   lua <<EOF
+  " require'nvim-treesitter.configs'.setup {
+  "   ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+  "   ignore_install = { "javascript" }, -- List of parsers to ignore installing
+  "   highlight = {
+  "     enable = true,              -- false will disable the whole extension
+  "     disable = { "c", "rust" },  -- list of language that will be disabled
+  "     -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+  "     -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+  "     -- Using this option may slow down your editor, and you may see some duplicate highlights.
+  "     -- Instead of true it can also be a list of languages
+  "     additional_vim_regex_highlighting = false,
+  "   },
+  " }
+  " EOF
+
   " Plug 'neovim/nvim-lspconfig'
   "   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 else
@@ -380,27 +420,16 @@ augroup END
 " cool, but currently not quite what I want I think
 " Plug 'tbabej/taskwiki'
 
-Plug 'junegunn/fzf', { 'dir': plugged_directory . '/fzf', 'do': './install --all' }
+" Plug 'junegunn/fzf', { 'dir': plugged_directory . '/fzf', 'do': './install --all' }
+Plug 'junegunn/fzf', { 'dir': plugged_directory . '/fzf' }
 Plug 'junegunn/fzf.vim'
 
 " tagbar replacement " Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle'}
 Plug 'liuchengxu/vista.vim'
-Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary' }
-
-
-"" NOTE: replaced with CLAP, not sure if I care to bring these back
-" if(has("python3"))
-"   Plug 'Shougo/denite.nvim'
-"   " Plug 'ozelentok/denite-gtags'
-"   Plug 'nixprime/cpsm'
-"   Plug 'raghur/fruzzy', {'do': { -> fruzzy#install()}}
-"   let g:fruzzy#usenative = 1
-" else
-"   Plug 'Shougo/unite.vim'
-"   Plug 'Shougo/unite-ssh'
-"   " Plug 'hewes/unite-gtags'
-"   Plug 'tsukkee/unite-tag'
-" endif
+" going back to fzf from clap, seems to have all the stuff, faster
+" Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary' }
+" Plug 'nvim-lua/plenary.nvim'
+" Plug 'nvim-telescope/telescope.nvim'
 
 Plug 'Shougo/neomru.vim'
 
@@ -473,11 +502,13 @@ Plug 'SirVer/ultisnips'
 " Snippets are separated from the engine
 Plug 'honza/vim-snippets'
 Plug 'justinmk/vim-sneak'
+Plug 'rbtnn/vim-vimscript_indentexpr'
 " format on Ctrl-k, maybe look into using lsp support in place or in addition?
 Plug 'Chiel92/vim-autoformat'
 let g:formatters_python=['black']
 let g:formatters_c=['clangformat']
 let g:formatters_cpp=['clangformat']
+let g:formatters_sh=['shfmt']
 " Ensure we have black, add Black command
 Plug 'psf/black', { 'branch': 'stable' }
 
@@ -517,7 +548,8 @@ Plug 'tpope/vim-sensible'
 
 call plug#end()
 
-" neovim ruby setup
+" fix :Man command in neovim, why on earth this works is beyond me
+command! -nargs=+ Man :Vman <args>
 
 colorscheme apprentice
 
@@ -528,9 +560,6 @@ autocmd FileType vim setlocal omnifunc=helpers#Vim_complete
 
 " Alignment mapping to enter in visual mode
 vmap <CR> <Plug>(EasyAlign)
-
-" let $PYTHONPATH .= ":~/.vim/included/ropevim"
-" source ~/.vim/included/ropevim/ropevim.vim
 
 " Prompt for a command to run
 map <Leader>vp :VimuxPromptCommand<CR>
@@ -602,65 +631,79 @@ endfunction
 " fzf version of the mappings, experimental
 " nnoremap <silent> <leader>fr  :call Files_with_ur_dir()<CR>
 nnoremap <silent> <leader>fr  :Files<CR>
+nnoremap <silent> <leader>fR  :Files<CR>
 nnoremap <silent> <leader>fb  :History<CR>
 nnoremap <silent> <leader>fB  :Buffers<CR>
-nnoremap <silent> <leader>fs  :GFiles?<CR>
+nnoremap <silent> <leader>fs  :Snippets<CR>
 nnoremap <silent> <leader>fn  :Files ~/onedrive/vimwiki/<CR>
+nnoremap <silent> <leader>fd  :Files ~/.dotfiles<CR>
 if executable('rg')
   nnoremap <silent> <leader>fg  :Rg<CR>
 else
   nnoremap <silent> <leader>fg  :call helpers#AgWithParam()<CR>
 endif
+nnoremap <silent> <leader>fh  :Helptags<CR>
+nnoremap <silent> <leader>fw  :Windows<CR>
+nnoremap <silent> <leader>fc  :BCommits<CR>
+nnoremap <silent> <leader>fC  :Commits<CR>
 nnoremap <silent> <leader>fl  :BLines<CR>
 nnoremap <silent> <leader>fL  :Lines<CR>
-nnoremap <silent> <leader>fT  :BTags<CR>
-nnoremap <silent> <leader>ft  :Tags<CR>
+nnoremap <silent> <leader>ft  :BTags<CR>
+nnoremap <silent> <leader>fT  :Tags<CR>
+nnoremap <silent> <leader>fvm  :Maps<CR>
+nnoremap <silent> <leader>fvc  :Commands<CR>
+nnoremap <silent> <leader>fv:  :History:<CR>
+nnoremap <silent> <leader>fv/  :History/<CR>
 nnoremap <silent> <leader>f]  :call TagsWithCword()<CR>
 
-" clap bindings
-let g:clap_provider_dotfiles = {
-      \ 'source': ['~/.vimrc', '~/.dotfiles/emacs-custom/init.el', '~/.zsh/.zshenv', '~/.tmux.conf'],
-      \ 'sink': 'e',
-      \ }
-let g:clap_layout = { 'relative': 'editor' }
-let g:clap_project_root_markers = ['.root', '.git', '.git/', '.latexmkrc', '.travis.yml']
-" add provider that always uses cwd rather than root of target file
-let g:clap_provider_files_cwd = deepcopy(g:clap#provider#files#)
-let g:clap_provider_files_cwd.enable_rooter = v:false
+" disabling clap for now, going to see if I care
+function! s:load_clap()
+  " clap bindings
+  let g:clap_provider_dotfiles = {
+        \ 'source': ['~/.vimrc', '~/.dotfiles/emacs-custom/init.el', '~/.zsh/.zshenv', '~/.tmux.conf'],
+        \ 'sink': 'e',
+        \ }
+  let g:clap_layout = { 'relative': 'editor' }
+  let g:clap_project_root_markers = ['.root', '.git', '.git/', '.latexmkrc', '.travis.yml']
+  " add provider that always uses cwd rather than root of target file
+  let g:clap_provider_files_cwd = deepcopy(g:clap#provider#files#)
+  let g:clap_provider_files_cwd.enable_rooter = v:false
 
-let g:clap_disable_run_rooter = v:false
-function! Run_clap_cmd_noroot(cmd)
-  let l:tmp = g:clap_disable_run_rooter
-  let g:clap_disable_run_rooter = v:true
-  :execute ':Clap ' . a:cmd
-  let g:clap_disable_run_rooter = l:tmp
+  let g:clap_disable_run_rooter = v:false
+
+  function! Run_clap_cmd_noroot(cmd)
+    let l:tmp = g:clap_disable_run_rooter
+    let g:clap_disable_run_rooter = v:true
+    :execute ':Clap ' . a:cmd
+    let g:clap_disable_run_rooter = l:tmp
+  endfunction
+
+  function! Decl_clap_map_condroot(key, cmd)
+    " regular rooting enabled version
+    execute 'nnoremap <silent> <leader>s' . toupper(a:key) . '  :Clap ' . a:cmd . '<CR>'
+    execute 'nnoremap <silent> <leader>s' . a:key . "  :call  Run_clap_cmd_noroot('" . a:cmd . "')<CR>"
+  endfunction
+
+  call Decl_clap_map_condroot('r', 'files')
+  call Decl_clap_map_condroot('s', 'gfiles')
+  call Decl_clap_map_condroot('g', 'grep')
+
+  nnoremap <silent> <leader>sc  :Clap bcommits<CR>
+  nnoremap <silent> <leader>sC  :Clap commits<CR>
+  nnoremap <silent> <leader>sd  :Clap files ~/.dotfiles<CR>
+  nnoremap <silent> <leader>sb  :Clap history<CR>
+  nnoremap <silent> <leader>sq  :Clap history<CR>
+  nnoremap <silent> <leader>sm  :Clap maps<CR>
+  nnoremap <silent> <leader>sB  :Clap buffers<CR>
+  nnoremap <silent> <leader>sw  :Clap windows<CR>
+  nnoremap <silent> <leader>sn  :Clap files ~/onedrive/vimwiki/<CR>
+  nnoremap <silent> <leader>sl  :Clap blines<CR>
+  nnoremap <silent> <leader>sL  :Clap lines<CR>
+  nnoremap <silent> <leader>sy  :Clap yanks<CR>
+  nnoremap <silent> <leader>sT  :Clap tags<CR>
+  nnoremap <silent> <leader>st  :Clap tags<CR>
+  " nnoremap <silent> <leader>l]  :call TagsWithCword()<CR>
 endfunction
-
-function! Decl_clap_map_condroot(key, cmd)
-  " regular rooting enabled version
-  execute 'nnoremap <silent> <leader>s' . toupper(a:key) . '  :Clap ' . a:cmd . '<CR>'
-  execute 'nnoremap <silent> <leader>s' . a:key . "  :call  Run_clap_cmd_noroot('" . a:cmd . "')<CR>"
-endfunction
-
-call Decl_clap_map_condroot('r', 'files')
-call Decl_clap_map_condroot('s', 'gfiles')
-call Decl_clap_map_condroot('g', 'grep')
-
-nnoremap <silent> <leader>sc  :Clap bcommits<CR>
-nnoremap <silent> <leader>sC  :Clap commits<CR>
-nnoremap <silent> <leader>sd  :Clap files ~/.dotfiles<CR>
-nnoremap <silent> <leader>sb  :Clap history<CR>
-nnoremap <silent> <leader>sq  :Clap history<CR>
-nnoremap <silent> <leader>sm  :Clap maps<CR>
-nnoremap <silent> <leader>sB  :Clap buffers<CR>
-nnoremap <silent> <leader>sw  :Clap windows<CR>
-nnoremap <silent> <leader>sn  :Clap files ~/onedrive/vimwiki/<CR>
-nnoremap <silent> <leader>sl  :Clap blines<CR>
-nnoremap <silent> <leader>sL  :Clap lines<CR>
-nnoremap <silent> <leader>sy  :Clap yanks<CR>
-nnoremap <silent> <leader>sT  :Clap tags<CR>
-nnoremap <silent> <leader>st  :Clap tags<CR>
-" nnoremap <silent> <leader>l]  :call TagsWithCword()<CR>
 
 let include_paths = ['/opt/local/include','/usr/local/include','/usr/include','/Developer/Headers',fnamemodify('~/programs/include',':p')]
 let &path= join(['.', '', './include'] + include_paths, ',')
@@ -754,7 +797,7 @@ call helpers#Map_for_all("<C-k>", ":Autoformat<CR>", 1, 0, 0)
 
 " use ascii symbols instead of unicode, expariment
 " let g:airline_symbols_ascii = 1
-" let g:airline#extensions#tmuxline#enabled = 1
+let g:airline#extensions#tmuxline#enabled = 1
 " let g:airline#extensions#bufferline#enabled = 1
 " let g:airline#extensions#branch#enabled = 1
 " let g:airline#extensions#tagbar#enabled = 1
@@ -767,7 +810,7 @@ let g:airline#extensions#whitespace#enabled=0
 "" let g:airline_extensions = ["tmuxline","branch","tagbar","quickfix","denite","csv","netrw","term","vimtex"]
 "let g:airline_extensions = ["branch","tagbar","quickfix","csv","netrw","term","vimtex","undotree","windowswap","fugitiveline"]
 " let g:airline_extensions = ["tmuxline","branch","tagbar","quickfix","denite","csv","term","vimtex"]
-let g:airline_extensions = ["branch","vista","quickfix","csv","term","vimtex","undotree","windowswap","fugitiveline"]
+let g:airline_extensions = ["tmuxline","branch","vista","quickfix","csv","term","vimtex","undotree","windowswap","fugitiveline"]
 set timeoutlen=300
 set ttimeoutlen=10
 

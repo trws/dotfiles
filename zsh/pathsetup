@@ -80,15 +80,12 @@ fi
 
 [[ -x /usr/local/bin/defaultpaths ]] && eval `/usr/local/bin/defaultpaths`
 
-add_to_path_back /usr ""
+add_to_path_back /usr/local /usr ""
 
 if (( $gotroot )) ; then
   path=(/usr/local/sbin /opt/local/sbin $path)
   path=($path /sbin /usr/sbin)
 fi
-
-# path=(/usr/local/opt/coreutils/libexec/gnubin /opt/local/libexec/gnubin $path)
-[[ -d /opt/local/libexec/gnubin ]] && path=(/opt/local/libexec/gnubin $path)
 
 if is-darwin ; then
   add_to_path_front /Developer/usr /opt/local
@@ -103,17 +100,9 @@ fi
 # for pipx
 add_to_path_front ~/.local
 
-
-manpath=( ~/programs/man ~/programs/share/man /opt/local/man /usr/share/man $manpath )
-
-if [[ $system == solaris ]] ; then
-  add_to_path_front /p/zsh /p/openssh/ /p/cvs/ $JAVACC $CS352 $J2SE15 /usr/xpg4 /usr/ccs
-  add_to_path_back /usr/ucb
-fi
-
 add_to_path_back /usr/local/cuda  /usr/local/opt/go/libexec
 
-add_to_path_front /usr/local ~/spack
+add_to_path_front ~/spack
 
 #zinit
 add_to_path_front $ZPFX
@@ -142,9 +131,9 @@ else
 fi
 add_to_path_front  "$PRGPATH"
 
-mkdirp_if_missing $PRGPATH/go/bin
-export GOPATH="$PRGPATH/go"
-add_to_path_front "$PRGPATH/go"
+# mkdirp_if_missing $PRGPATH/go/bin
+# export GOPATH="$PRGPATH/go"
+# add_to_path_front "$PRGPATH/go"
 
 # mkdirp_if_missing $PRGPATH/cargo/bin
 # mkdirp_if_missing $PRGPATH/rustup
