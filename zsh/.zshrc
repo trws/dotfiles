@@ -77,7 +77,8 @@ function zinit-setup() {
 zinit ice sbin"fasd" pick"fasd" \
   src"fasd-init" \
   atclone"./fasd --init posix-alias zsh-hook zsh-ccomp zsh-ccomp-install zsh-wcomp zsh-wcomp-install >| fasd-init" \
-  atpull"%atclone"
+  atpull"%atclone" \
+  lucid wait
   zinit load clvv/fasd
 
 # terminfo updates, no more missing terminfo YAY!
@@ -95,7 +96,7 @@ function import_terminfo() {
   done
 }
 function update_terminfo() {
-  zinit ice extract as"command" pick"" atclone"gunzip -f terminfo.src.gz ; import_terminfo tmux tmux-256color kitty kitty-direct iterm2 iterm2-direct alacritty-direct" atpull"%atclone"
+  zinit ice extract cloneonly as"null" pick"" atclone"gunzip -f terminfo.src.gz ; import_terminfo tmux tmux-256color kitty kitty-direct iterm2 iterm2-direct alacritty-direct" atpull"%atclone"
   zinit snippet https://invisible-island.net/datafiles/current/terminfo.src.gz
 }
 update_terminfo
@@ -106,18 +107,18 @@ zinit snippet PZTM::environment
 zinit snippet PZTM::terminal
 zinit snippet PZTM::editor
 zinit snippet PZTM::gnu-utility
-zinit ice wait lucid
-zinit snippet PZTM::homebrew
-zinit snippet PZTM::osx
 zinit snippet PZTM::ssh
 zinit snippet PZTM::history
 zinit snippet PZTM::directory
 zinit snippet PZTM::spectrum
 zinit ice wait lucid
 zinit snippet PZTM::utility
-# zinit snippet PZTM::history-substring-search
-zinit ice wait lucid
-zinit load zsh-users/zsh-history-substring-search
+
+if [[ $SYSTEM = darwin ]] ; then
+  zinit ice wait lucid
+  zinit snippet PZTM::homebrew
+  zinit snippet PZTM::osx
+fi
 
 zinit ice submod'external'
 zinit snippet OMZP::tmux
@@ -148,8 +149,20 @@ forgit_stash_show=gss
 forgit_cherry_pick=gcp
 forgit_rebase=grb
 forgit_fixup=gfu
-zinit ice wait lucid
-zinit load ext-git
+
+zinit as"null" wait"3" lucid for \
+  sbin Fakerr/git-recall \
+  sbin paulirish/git-open \
+  sbin paulirish/git-recent \
+  sbin atload"export _MENU_THEME=legacy" \
+  arzzen/git-quick-stats \
+  sbin iwata/git-now \
+  sbin"bin/git-dsf;bin/diff-so-fancy" zdharma/zsh-diff-so-fancy \
+  sbin"git-url;git-guclone" make"GITURL_NO_CGITURL=1" zdharma/git-url \
+
+  zinit wait"1" lucid for wfxr/forgit
+
+
 # sorin-ionescu/prezto path:modules/python
 # copied to zsh/completions.zsh
 # sorin-ionescu/prezto path:modules/completion
@@ -161,74 +174,119 @@ zinit load ext-git
 zinit ice submods'zsh-users/zsh-completions -> external' wait"1" lucid blockf atpull'zinit creinstall -q .'
 zinit snippet PZTM::completion
 
+function _spack_load() {
+  source "${SPACK_ROOT}/share/spack/setup-env.sh"
+}
+zinit ice lucid wait'1' atinit'export SPACK_SKIP_MODULES=1' sbin'bin/spack' pick'share/spack/setup-env.sh >& /dev/null' atinit'export SPACK_ROOT=$(pwd)'
+zinit load spack/spack
 
-if (( ! $+commands[direnv] )) ; then
-  zinit ice has"go" as"program" make'!' atclone'./direnv hook zsh > zhook.zsh' atpull'%atclone' src"zhook.zsh"
-  zinit load direnv/direnv
-fi
+# function spack() {
+#   if [[ -z "$SPACK_LOADED" ]] ; then
+#     source "${SPACK_ROOT}/share/spack/setup-env.sh"
+#   fi
+#   spack "$@"
+# }
 
-zinit ice sbin"bin/(fzf|fzf-tmux)" \
+zinit ice lucid wait sbin'direnv' make'!' atclone'./direnv hook zsh > zhook.zsh' atpull'%atclone' src"zhook.zsh"
+zinit load direnv/direnv
+
+zinit sbin"bin/(fzf|fzf-tmux)" \
   atclone"cp shell/completion.zsh _fzf_completion" \
   atpull"%atclone" \
-  pick"shell/key-bindings.zsh" \
-  make"install"
-  zinit load junegunn/fzf
+  multisrc"shell/{key-bindings,completion}.zsh" \
+  make"install" for junegunn/fzf
 
-  zinit ice pip"pipx" fbin"p:venv/bin/pipx" id-as"pipx" fbin
-  zinit load zdharma/null
+zinit light Aloxaf/fzf-tab
+zinit light wookayin/fzf-fasd
 
-  # rust stuff
-  # zinit load rust-toolchain
-  # A little more complex rustup configuration that uses Bin-Gem-Node annex
-  # and installs the cargo completion provided with rustup, using for-syntax
-  zinit id-as=rust wait=1 as=null sbin="bin/*" lucid rustup \
-      atload="[[ ! -f ${ZINIT[COMPLETIONS_DIR]}/_cargo ]] && zi creinstall
-      rust; \
-          export CARGO_HOME=\$PWD RUSTUP_HOME=\$PWD/rustup" for \
-                  zdharma/null
+zinit ice pip"pipx" sbin"p:venv/bin/pipx" id-as"pipx"
+zinit load zdharma/null
 
+# use asdf to ensure rust and go are available at acceptable versions
+export RUST_WITHOUT=rust-docs
+function asdf_plugins() {
+  local plugins=(golang rust python )
+
+  for p in $plugins ; do
+    asdf plugin add $p
+  done
+  asdf install
+}
+zinit ice id-as'asdf' pick'asdf.sh' sbin'bin/asdf' atclone'asdf_plugins' atload'export ASDF_DATA_DIR=$(pwd)/data'
+zinit load asdf-vm/asdf
+
+if [[ ! ~/.tool-versions -ef ~/.dotfiles/asdf/tool-versions ]] ; then
+  ln -sf ~/.dotfiles/asdf/tool-versions ~/.tool-versions
+fi
+
+zinit ice from"gh-r" as"program" mv"shfmt* -> shfmt"
+zinit light mvdan/sh
+
+function vivid_gen() {
+  echo "export LS_COLORS=\"$(./vivid/vivid generate jellybeans)\"" > clrs.zsh
+}
+
+function vivid_load() {
+  zinit ice atclone"vivid_gen" \
+    atpull'%atclone' pick"clrs.zsh" \
+    atload'zstyle ":completion:*" list-colors “${(s.:.)LS_COLORS}”' \
+    lucid wait from'gh-r' mv'vivid* vivid' sbin'**/vivid(.exe|) -> vivid'
+
+  zinit load sharkdp/vivid
+}
+vivid_load
+
+function load_tools() {
   if [[ ! $ARCH =~ ppc64 ]] ; then
     # binary stuff we can't have on ppc here
     # fd, bat, hyperfine, vivid
-    zinit load sharkdp
+    for tool in fd bat hyperfine ; do
+      if (( !$+commands[$tool] )) ; then
+        zinit ice wait lucid from'gh-r' mv'$tool* $tool' sbin"**/$tool(.exe|) -> $tool"
+        zinit load sharkdp/$tool
+      fi
+    done
 
-  # zinit ice from"gh-r" mv"fd* -> fd" sbin"fd/fd"
-  # zinit load sharkdp/fd
-  #
-  # # sharkdp/bat
-  # zinit ice from"gh-r" mv"bat* -> bat" sbin"bat/bat"
-  # zinit load sharkdp/bat
+    # ogham/exa, replacement for ls
+    zinit ice lucid wait"2" lucid from"gh-r" sbin"bin/exa" mv"exa* -> exa"
+    zinit load ogham/exa
 
-  # ogham/exa, replacement for ls
-  zinit ice wait"2" lucid from"gh-r" sbin"bin/exa" mv"exa* -> exa"
-  zinit load ogham/exa
+    # dandavision/delta
+    zinit ice lucid wait"2" from"gh-r" mv"delta* -> delta" sbin"delta/delta"
+    zinit load dandavison/delta
 
-  # dandavision/delta
-  zinit ice from"gh-r" mv"delta* -> delta" sbin"delta/delta"
-  zinit load dandavison/delta
+    # gh cli
+    zinit ice from"gh-r" sbin"**/bin/gh" atclone'./**/gh completion --shell zsh > _gh' atpull'%atclone'
+    zinit light cli/cli
 
-  zinit ice from"gh-r" mv"dust* -> dust" sbin"dust/dust"
-  zinit load bootandy/dust
+    zinit ice lucid wait"2" from"gh-r" mv"dust* -> dust" sbin"dust/dust"
+    zinit load bootandy/dust
 
-  # BurntSushi/ripgrep
-  zinit ice from"gh-r" mv"ripgrep* -> rg" sbin"rg/rg"
-  zinit load BurntSushi/ripgrep
+    # BurntSushi/ripgrep
+    zinit ice lucid wait"2" from"gh-r" mv"ripgrep* -> rg" sbin"rg/rg"
+    zinit load BurntSushi/ripgrep
 
-  # Installs rust and then the `lsd' crate and creates
-  # the `lsd' shim exposing the binary
-  # zinit ice id-as"cargo-apps" rustup cargo'!lsd'
-  # zinit load zdharma/null
-else
-  zinit ice cargo'ripgrep' id-as'rg' sbin'bin/rg'
-  zinit load zdharma/null
+    # Installs rust and then the `lsd' crate and creates
+    # the `lsd' shim exposing the binary
+    # zinit ice id-as"cargo-apps" rustup cargo'!lsd'
+    # zinit load zdharma/null
 
-  zinit ice cargo'fd-find' id-as'fd' sbin'bin/fd'
-  zinit load zdharma/null
+  else
+    zinit ice cargo'vivid' id-as'vivid' sbin'bin/vivid'
+    zinit load zdharma/null
 
-  zinit ice cargo'du-dust' id-as'dust' sbin'bin/dust'
-  zinit load zdharma/null
+    zinit ice cargo'ripgrep' id-as'rg' sbin'bin/rg'
+    zinit load zdharma/null
 
-fi
+    zinit ice cargo'fd-find' id-as'fd' sbin'bin/fd'
+    zinit load zdharma/null
+
+    zinit ice cargo'du-dust' id-as'dust' sbin'bin/dust'
+    zinit load zdharma/null
+
+  fi
+}
+load_tools
 
 # Documented to be loaded last, delay longer
 # Autosuggestions & fast-syntax-highlighting
@@ -237,6 +295,8 @@ zinit light zdharma/fast-syntax-highlighting
 # zsh-autosuggestions
 zinit ice wait"1" lucid atload"!_zsh_autosuggest_start"
 zinit load zsh-users/zsh-autosuggestions
+zinit ice wait"1.1" lucid
+zinit load zsh-users/zsh-history-substring-search
 
 }
 if ! is-at-least 5.3 ; then
@@ -264,6 +324,9 @@ function prompt_flux_id() {
 }
 function prompt_slurm_id() {
   dbg_prompt_segment -f red -c "$SLURM_JOB_ID" -i '' -t "$SLURM_JOB_ID"
+}
+function prompt_lsf_id() {
+  dbg_prompt_segment -f blue -c "$LSB_JOBID" -i '' -t "$LSB_JOBID"
 }
 function prompt_zinit_mod() {
   local missing=''
@@ -347,20 +410,6 @@ if typeset -f '[' > /dev/null ; then
   unset -f '['
 fi
 
-if [ -x "$(which spack)" ] ; then
-  SPACKDIR=$(dirname $(dirname $(which spack )))
-  # export MODULEPATH=${MODULEPATH}:${SPACKDIR}/share/spack/modules
-
-  #TODO: takes WAY too long
-  # source ${SPACKDIR}/share/spack/setup-env.sh
-
-  # using links in programs dir
-  # for PKG in git python tmux vim task taskd ruby tmuxinator the_silver_searcher; do
-  #   spack use $PKG
-  # done
-fi
-
-
 # pull in aliases
 source $ZDOTDIR/aliases
 # pull in backwards compatibility bindings for screen, etc.
@@ -384,6 +433,4 @@ source $ZDOTDIR/pathsetup
 if [[ $PROF_INIT == "true" ]] ; then
   zprof
 fi
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 

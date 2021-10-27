@@ -25,10 +25,10 @@ ENTOMB=yes
 
 if (( $+commands[fd] )) ; then
   export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
+  export FZF_ALL_FILES_COMMAND='fd --type f --hidden --no-ignore --follow --exclude .git'
 elif (( $+commands[rg] )) ; then
   export FZF_DEFAULT_COMMAND='rg --files'
-elif (( $+commands[pt] )) ; then
-  export FZF_DEFAULT_COMMAND='pt --follow --nocolor --nogroup -g=.'
+  export FZF_ALL_FILES_COMMAND='rg --files --no-ignore'
 fi
 
 export DOOMLOCALDIR="~/.cache/doom-local/"
@@ -52,9 +52,10 @@ export VISUAL="$VIM"
 export VIMPAGER_VIM="$VIM"
 
 # set up homebrew nvm
-export NVM_DIR="$HOME/.nvm"
-[ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
-[ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && . "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+# switching to asdf for now, will see
+# export NVM_DIR="$HOME/.nvm"
+# [ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
+# [ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && . "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 
 # Set the default Less options.
 # Mouse-wheel scrolling has been disabled by -X (disable screen clearing).
@@ -86,6 +87,8 @@ export LANG=en_US.UTF-8
 
 if [[ $TERM = iterm2-direct ]] ; then
   export COLORTERM=truecolor
+elif [[ $TERM = "tmux" ]] ; then
+  export TERM=tmux-256color
 elif [[ $COLORTERM = "gnome-terminal" ]] ; then
   export TERM=xterm-256color
 fi

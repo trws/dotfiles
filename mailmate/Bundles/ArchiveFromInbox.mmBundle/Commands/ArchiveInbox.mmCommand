@@ -1,11 +1,11 @@
 {
 input         = "formatted";
 output        = "actions";
-// keyEquivalent = "^a";
+keyEquivalent = "^a";
 uuid          = "A4E60AFE-94F5-42B0-850D-9E486B4CB63D";
 environment   = "MM_MESSAGE_ID=${message-id.split}";
 formatString  = '"${#body-part-id}":^:"${#source.path.noinbox}"';
 executionMode = "multipleMessages";
-command       = '#!/bin/bash\n"${MM_BUNDLE_SUPPORT}/scrape.py" --archive';
+command       = '#!/bin/bash\necho trying to launch scrape >> /tmp/mmfilter\n"${MM_BUNDLE_SUPPORT}/scrape.py" --archive';
 name          = "Archive if in inbox";
 }
