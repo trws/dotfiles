@@ -26,15 +26,11 @@ function add_to_path_front(){
     if [ -d $p/share/man ] ; then
       manpath=($p/share/man $manpath)
     fi
-    if [ -d $p/share/pkgconfig ] ; then
-      pkg_config_path=($p/share/pkgconfig $pkg_config_path)
-    fi
-    if [ -d $p/lib/pkgconfig ] ; then
-      pkg_config_path=($p/lib/pkgconfig $pkg_config_path)
-    fi
-    if [ -d $p/lib64/pkgconfig ] ; then
-      pkg_config_path=($p/lib64/pkgconfig $pkg_config_path)
-    fi
+    for pp in share lib lib64 ; do
+      if [ -d $p/$pp/pkgconfig ] ; then
+        pkg_config_path=($p/$pp/pkgconfig $pkg_config_path)
+      fi
+    done
   done
 }
 
@@ -70,9 +66,9 @@ if [[ -n "$WSLENV" ]] ; then
   typeset -a newpaths
   for p in $path ; do
     if [[ p =~ "/mnt/c" ]] ; then
-      winpaths+=p
+      winpaths+=$p
     else
-      newpaths+=p
+      newpaths+=$p
     fi
   done
   path=($newpaths)
@@ -104,8 +100,10 @@ add_to_path_back /usr/local/cuda  /usr/local/opt/go/libexec
 
 add_to_path_front ~/spack
 
-#zinit
-add_to_path_front $ZPFX
+
+for p in $zimpaths; do
+  add_to_path_front $p
+done
 
 function load_vim() {
   if [[ -d /usr/tce/packages/vim/ ]] ; then

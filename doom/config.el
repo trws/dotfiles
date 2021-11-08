@@ -26,7 +26,7 @@
 ;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
 ;; font string. You generally only need these two:
 (catch 'break
-  (dolist (f '("FiraCode Nerd Font" "ProFontIIx Nerd Font Mono" "monospace"))
+  (dolist (f '("FiraCode Nerd Font" "ProFontIIx Nerd Font Mono" "ProFontIIx NF"  "monospace"))
     (if (find-font (font-spec :family f))
         (progn
           (setq doom-font (font-spec :family f :size 10))
