@@ -2,10 +2,28 @@
 # Author: Tom Scogland
 
 export ZDOTDIR=~/.zsh
+
 # ensure my funcs, and prompts are there before load
 fpath=($ZDOTDIR/funcs $fpath)
 autoload -Uz $ZDOTDIR/funcs/*(.:t)
 source $ZDOTDIR/sysmagic
+
+# XDG setup and notes
+# NOTE: every path must be absolute, must be after sys-magic
+h=~/
+h=${h:P}
+# portable scripts go in ~/.local/bin
+# portable binaries go in ~/.local/lib
+# arch specific binaries go in ~/.local/lib/$SYS_TYPE
+export XDG_DATA_HOME=$h/.local/share
+export XDG_CONFIG_HOME=$h/.config
+export XDG_CACHE_HOME=$h/.cache # non-essential (cached) data
+export XDG_STATE_HOME=$h/.local/state # cross-run state but not long-term, logs, history, swap files possibly
+# export XDG_DATA_DIRS= # additional data directories
+# export XDG_CONFIG_DIRS= # additional config directories
+# export XDG_RUNTIME_DIR # runtime files, sockets etc.  Not sure we can safely set this
+unset h
+
 source $ZDOTDIR/pathsetup
 source $ZDOTDIR/environment
 
