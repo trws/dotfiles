@@ -4,10 +4,10 @@ if (( $+commands[delta] )) ; then
   args=(
     --line-numbers
     --theme Dracula
-    --hyperlinks
     --relative-paths
     --navigate
   )
+  # --hyperlinks # removed because of alacritty and winTerm, no support yet
   if [[ $(tput cols) -gt 160 ]] ; then
     args+="--side-by-side"
   fi
