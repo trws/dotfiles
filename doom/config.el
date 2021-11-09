@@ -130,6 +130,7 @@
 (defmacro keylambda (body)
   `(lambda () (interactive) ,body))
 (use-package! mu4e-icalendar
+  :if (executable-find "mu")
   :after mu4e
   :config
   (mu4e-icalendar-setup))
@@ -164,6 +165,7 @@
     ))
 
 (use-package! mu4e
+  :if (executable-find "mu")
   :config
   ;; (use-package! org-mu4e)
   (defun view-attachment-vsplit  (msg num)

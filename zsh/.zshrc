@@ -49,74 +49,6 @@ function update_terminfo() {
 }
 # update_terminfo
 
-if ! (( ${+commands[fzf]} )) ; then
-  echo no fzf
-  if ! (( ${+commands[go]} )) ; then
-    echo go is missing, fix it to get fzf
-  else
-    typeset -a zimpaths
-    zimpaths+=$ZIM_HOME/modules/fzf
-    echo $zimpaths
-  fi
-fi
-if (( ${+commands[fzf]} )) ; then
-  # forgit: amazing fzf git interactions forgit_log=gl forgit_diff=gd
-  forgit_add=ga
-  forgit_reset_head=gwrh
-  forgit_ignore=gi
-  forgit_checkout_file=gcf
-  forgit_checkout_branch=gcb
-  forgit_checkout_commit=gco
-  forgit_clean=gclean
-  forgit_stash_show=gss
-  forgit_cherry_pick=gcp
-  forgit_rebase=grb
-  forgit_fixup=gfu
-fi
-
-function brew_or_cargo() {
-  zparseopts -D -E -F - -brew:=bpkg -cargo:=cpkg
-  local cmd=$1
-  if ! (( ${+commands[$cmd]} )) ; then
-    if (( ${+commands[brew]} )) ; then
-      brew install ${bpkg[1]}
-    elif (( ${+commands[cargo]} )) ; then
-      cargo install $pkg
-    else
-      echo brew and cargo are missing, fix it to get $cmd
-    fi
-  fi
-}
-
-brew_or_cargo --brew ripgrep --cargo ripgrep rg
-brew_or_cargo --brew dust --cargo dust dust
-
-# use asdf to ensure rust and go are available at acceptable versions
-#export RUST_WITHOUT=rust-docs
-#export ASDF_DIR=~/.cache/asdf
-#export ASDF_DATA_DIR=~/.cache/asdf
-#
-#function asdf_plugins() {
-#  local plugins=(golang) # golang rust python)
-#  # if ! asdf plugin list | grep direnv >& /dev/null ; then
-#  #   asdf plugin-add direnv
-#  # fi
-#  # asdf install direnv latest
-#  # asdf global direnv latest
-#
-#  for p in $plugins ; do
-#    asdf plugin add $p
-#    asdf install $p latest
-#    asdf global $p latest
-#  done
-#}
-#if [[ ! -f ~/.tool-versions ]] ; then
-#  # ln -sf ~/.dotfiles/asdf/tool-versions ~/.tool-versions
-#  asdf_plugins
-#fi
-#[[ -e ~/.envrc ]] || ln -s ~/.dotfiles/direnv/base-envrc ~/.envrc
-#[[ -d ~/.config/direnv ]] || ln -s ~/.dotfiles/direnv/ ~/.config/direnv
-
 # load dircolors
 source ~/.dotfiles/zsh/dir_colors_vivid_jelly
 zstyle ":completion:*" list-colors “${(s.:.)LS_COLORS}”
@@ -263,6 +195,110 @@ bindkey -M vicmd 'k' history-substring-search-up
 bindkey -M vicmd 'j' history-substring-search-down
 # }}} End configuration added by Zim install
 
+for plg in rust golang direnv neovim ; do
+  [[ -d ${ASDF_DATA_DIR}/plugins/$plg ]] || asdf plugin add $plg
+done
+
+# use asdf to ensure rust and go are available at acceptable versions
+#export RUST_WITHOUT=rust-docs
+#
+#function asdf_plugins() {
+#  local plugins=(golang) # golang rust python)
+#  # if ! asdf plugin list | grep direnv >& /dev/null ; then
+#  #   asdf plugin-add direnv
+#  # fi
+#  # asdf install direnv latest
+#  # asdf global direnv latest
+#
+#  for p in $plugins ; do
+#    asdf plugin add $p
+#    asdf install $p latest
+#    asdf global $p latest
+#  done
+#}
+#if [[ ! -f ~/.tool-versions ]] ; then
+#  # ln -sf ~/.dotfiles/asdf/tool-versions ~/.tool-versions
+#  asdf_plugins
+#fi
+[[ -e ~/.envrc ]] || ln -s ~/.dotfiles/direnv/base-envrc ~/.envrc
+[[ -d ~/.config/direnv ]] || ln -s ~/.dotfiles/direnv/ ~/.config/direnv
+
+function brew_or_cargo() {
+  zparseopts -D -E -F - -brew:=bpkg -cargo:=cpkg
+  local cmd=$1
+  if (( ${+commands[$cmd]} )) ; then
+    return
+  fi
+  if (( ${+commands[brew]} )) ; then
+    if [[ -v INSTALL_TOOLS ]] ; then
+      echo could install $cmd, set INSTALL_TOOLS to install
+    else
+      brew install ${bpkg[2]}
+    fi
+  elif (( ${+commands[cargo]} )) ; then
+    if [[ -v INSTALL_TOOLS ]] ; then
+      echo could install $cmd, set INSTALL_TOOLS to install
+    else
+      cargo install --root "$CARGO_HOME" ${cpkg[2]}
+    fi
+  else
+    echo brew and cargo are missing, fix it to get $cmd
+  fi
+}
+
+[[ -f ~/.rustup/settings.toml ]] || rustup default stable
+typeset -A mytools
+mytools[rg]='--brew ripgrep --cargo ripgrep'
+mytools[dust]='--brew dust --cargo du-dust'
+mytools[bat]='--brew bat --cargo bat'
+mytools[delta]='--brew delta --cargo git-delta'
+mytools[hyperfine]='--brew hyperfine --cargo hyperfine'
+mytools[exa]='--brew exa --cargo exa'
+
+for cmd args in ${(kv)mytools} ; do
+  brew_or_cargo ${=args} $cmd
+done
+
+if ! (( ${+commands[fd]} )) ; then
+  if (( ${+commands[fdfind]} )) ; then
+    alias fd=fdfind
+  else
+    brew_or_cargo --brew fd --cargo fd-find fd
+  fi
+fi
+
+if ! (( ${+commands[fzf]} )) ; then
+  go get -u github.com/junegunn/fzf
+fi
+
+if ! (( ${+commands[fzf]} )) ; then
+  echo no fzf
+  if ! (( ${+commands[go]} )) ; then
+    echo go is missing, fix it to get fzf
+  fi
+else
+  # forgit: amazing fzf git interactions forgit_log=gl forgit_diff=gd
+  forgit_add=ga
+  forgit_reset_head=gwrh
+  forgit_ignore=gi
+  forgit_checkout_file=gcf
+  forgit_checkout_branch=gcb
+  forgit_checkout_commit=gco
+  forgit_clean=gclean
+  forgit_stash_show=gss
+  forgit_cherry_pick=gcp
+  forgit_rebase=grb
+  forgit_fixup=gfu
+fi
+
+# not quite working, revisit
+# if ! is-at-least 2.2.0 $(gh --version | awk -e '/ [0-9]+\.[0-9]+\.[0-9]+ /{ print $3}') ; then
+#   echo installing updated gh
+#   go get github.com/cli/cli/cmd/gh
+# fi
+
+
+
 # prompt powerlevel10k
 # To customize prompt, run `p10k configure` or edit ~/.zsh/.p10k.zsh.
 [[ ! -f ~/.zsh/.p10k.zsh ]] || source ~/.zsh/.p10k.zsh
@@ -336,13 +372,6 @@ fi
 # something is messing with pathsetup between zshenv and here
 source $ZDOTDIR/sysmagic
 source $ZDOTDIR/pathsetup
-
-# make fzf actually load as a plugin
-if [[ -d $ZIM_HOME/modules/fzf ]] ; then
-  source $ZIM_HOME/modules/fzf/shell/completion.zsh
-  source $ZIM_HOME/modules/fzf/shell/key-bindings.zsh
-fi
-
 
 if [[ $PROF_INIT == "true" ]] ; then
   zprof

@@ -3,11 +3,11 @@ echo evaluating zimrc
 typeset -a zimpaths
 if (( ${+commands[go]} )) ; then
   zmodule  junegunn/fzf -s shell/completion.zsh -s shell/key-bindings.zsh
-  local FZFD=$ZIM_HOME/modules/fzf
-  [[ -x $FZFD/bin/fzf || $FZFD/bin/fzf -ot $FZFD/.git/HEAD ]] || make -C $FZFD bin/fzf bin/fzf-tmux
-
   zmodule wookayin/fzf-fasd
 fi
+
+# zmodule asdf-vm/asdf --name asdf-vm -s asdf.sh
+zmodule asdf
 
 # directory and file frecency
 zmodule fasd

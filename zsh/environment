@@ -56,6 +56,8 @@ export VIMPAGER_VIM="$VIM"
 
 # set up homebrew nvm
 # switching to asdf for now, will see
+export ASDF_DIR=~/.cache/asdf
+export ASDF_DATA_DIR=~/.cache/asdf
 # export NVM_DIR="$HOME/.nvm"
 # [ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
 # [ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && . "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
