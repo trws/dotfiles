@@ -26,15 +26,11 @@ function add_to_path_front(){
     if [ -d $p/share/man ] ; then
       manpath=($p/share/man $manpath)
     fi
-    if [ -d $p/share/pkgconfig ] ; then
-      pkg_config_path=($p/share/pkgconfig $pkg_config_path)
-    fi
-    if [ -d $p/lib/pkgconfig ] ; then
-      pkg_config_path=($p/lib/pkgconfig $pkg_config_path)
-    fi
-    if [ -d $p/lib64/pkgconfig ] ; then
-      pkg_config_path=($p/lib64/pkgconfig $pkg_config_path)
-    fi
+    for pp in share lib lib64 ; do
+      if [ -d $p/$pp/pkgconfig ] ; then
+        pkg_config_path=($p/$pp/pkgconfig $pkg_config_path)
+      fi
+    done
   done
 }
 
@@ -64,6 +60,20 @@ function add_to_path_back(){
   done
 }
 
+# strip wsl paths in case we forget to configure it
+if [[ -n "$WSLENV" ]] ; then
+  typeset -a winpaths
+  typeset -a newpaths
+  for p in $path ; do
+    if [[ p =~ "/mnt/c" ]] ; then
+      winpaths+=$p
+    else
+      newpaths+=$p
+    fi
+  done
+  path=($newpaths)
+fi
+
 [[ -x /usr/local/bin/defaultpaths ]] && eval `/usr/local/bin/defaultpaths`
 
 add_to_path_back /usr/local /usr ""
@@ -90,8 +100,10 @@ add_to_path_back /usr/local/cuda  /usr/local/opt/go/libexec
 
 add_to_path_front ~/spack
 
-#zinit
-add_to_path_front $ZPFX
+
+for p in $zimpaths; do
+  add_to_path_front $p
+done
 
 function load_vim() {
   if [[ -d /usr/tce/packages/vim/ ]] ; then
@@ -108,7 +120,7 @@ function load_vim() {
 load_vim
 
 
-add_to_path_back ~/.dotfiles/doom-emacs
+add_to_path_back ~/.cache/doom-emacs
 
 if [[ -n "$SYS_TYPE" ]] ; then
   export PRGPATH=~/programs/${SYS_TYPE}
@@ -117,20 +129,24 @@ else
 fi
 add_to_path_front  "$PRGPATH"
 
-# mkdirp_if_missing $PRGPATH/go/bin
-# export GOPATH="$PRGPATH/go"
-# add_to_path_front "$PRGPATH/go"
+mkdirp_if_missing $PRGPATH/go/bin
+export GOPATH="$PRGPATH/go"
+add_to_path_front "$PRGPATH/go"
 
-# mkdirp_if_missing $PRGPATH/cargo/bin
-# mkdirp_if_missing $PRGPATH/rustup
-# export CARGO_HOME="$PRGPATH/cargo"
+mkdirp_if_missing $PRGPATH/cargo/bin
+mkdirp_if_missing $PRGPATH/rustup
+export CARGO_HOME="$PRGPATH/cargo"
 # export RUSTUP_HOME="$PRGPATH/rustup"
-# add_to_path_front "$PRGPATH/cargo"
+add_to_path_front "$PRGPATH/cargo"
 
 add_to_path_front "$PRGPATH/spack"
 
 remove_from_path ~/scripts
 path=(~/scripts $path)
+
+# not named bin, must be manual, should be last to shortcut with direnv when
+# possible
+path=($path ~/.cache/asdf/shims)
 
 export PKG_CONFIG_PATH
 export pkg_config_path

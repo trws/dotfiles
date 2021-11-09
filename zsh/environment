@@ -8,6 +8,9 @@ export GIT_COMMITTER_EMAIL=scogland1@llnl.gov
 export GITHUB_USER=trws
 [[ -e ~/scripts/ssh ]] && export GIT_SSH_COMMAND=~/scripts/ssh
 
+# WSL2 display for x410
+[[ ! -z "$WSLENV" ]] && export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2; exit;}'):0.0
+
 
 # Give global tags an exuberant ctags backend
 # [[ -e ~/.globalrc ]] && export GTAGSCONF=~/.globalrc
@@ -53,6 +56,8 @@ export VIMPAGER_VIM="$VIM"
 
 # set up homebrew nvm
 # switching to asdf for now, will see
+export ASDF_DIR=~/.cache/asdf
+export ASDF_DATA_DIR=~/.cache/asdf
 # export NVM_DIR="$HOME/.nvm"
 # [ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
 # [ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && . "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion

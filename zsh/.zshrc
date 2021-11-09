@@ -1,9 +1,9 @@
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zsh/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
+# if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+#   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+# fi
 
 # Executes commands at the start of an interactive session.
 # Author: Tom Scogland
@@ -12,29 +12,9 @@ if [[ $PROF_INIT == "true" ]] ; then
   zmodload zsh/zprof
 fi
 
-declare -A ZINIT
-ZINIT[HOME_DIR]=~/.cache/zsh/zinit
-if [[ $ARCH != x86_64 ]] ; then
-  ZINIT[HOME_DIR]=~/.cache/zsh/zinit/$ARCH/
-fi
-ZINIT[BIN_DIR]="${ZINIT[HOME_DIR]}/bin"
-if [[ ! -f "${ZINIT[BIN_DIR]}/zinit.zsh" ]] ; then
-  mkdir -p "${ZINIT[HOME_DIR]}"
-  git clone https://github.com/zdharma/zinit "${ZINIT[BIN_DIR]}"
-fi
-
-_zinit_mod_path="${ZINIT[BIN_DIR]}/zmodules/Src"
-if [[ -f "$_zinit_mod_path/zdharma/zplugin.bundle" ]] ; then
-  module_path+=( "$_zinit_mod_path" )
-  zmodload zdharma/zplugin
-else
-  # echo Warning: no compiled zinit module
-fi
-
-# use a decent version...
-# TODO: make this more general
-if [[ $ZSH_VERSION < "5.0.0" ]] ; then
-  [[ -x ~/programs/chaos_5_x86_64_ib/bin/zsh ]] && exec ~/programs/chaos_5_x86_64_ib/bin/zsh
+roothosts=(storm vortex deb hurricane gale wind chimera bolt falcon)
+if [[ ${roothosts[(i)$HOST]} -le ${#roothosts} ]] ; then
+  export gotroot=1
 fi
 
 fpath=($ZDOTDIR/funcs $fpath)
@@ -45,41 +25,9 @@ export ZSH_CACHE_DIR=~/.cache/zsh
 zstyle ':completion:*:default:' cache-path $ZSH_CACHE_DIR/zcompcache
 
 
-# prezto style settings
-zstyle ':prezto:*:*' color 'yes'
-zstyle ':prezto:module:editor' key-bindings 'emacs'
-zstyle ':prezto:module:git:status:ignore' submodules 'all'
-zstyle ':prezto:module:ssh:load' identities
-
-source $ZDOTDIR/completions.zsh
-compdef bmake=make
-compdef bcmake=cmake
-
-
-# Bring in zinit
-source "${ZINIT[BIN_DIR]}/zinit.zsh"
-
-# zinit sources and plugins
-zinit load zinit-zsh/z-a-meta-plugins
-# pulling in z-a-bin-gem-node, rust and submods
-zinit for annexes
-
-# general plugins
-zinit load mafredri/zsh-async
-zinit ice wait lucid for
-zinit load Tarrasch/zsh-autoenv
-
-# command/script
+# FASD setup
 export _FASD_DATA=$ZSH_CACHE_DIR/z-dirjump-list.txt
 export ZSHZ_DATA=${_FASD_DATA}
-
-function zinit-setup() {
-zinit ice sbin"fasd" pick"fasd" \
-  src"fasd-init" \
-  atclone"./fasd --init posix-alias zsh-hook zsh-ccomp zsh-ccomp-install zsh-wcomp zsh-wcomp-install >| fasd-init" \
-  atpull"%atclone" \
-  lucid wait
-  zinit load clvv/fasd
 
 # terminfo updates, no more missing terminfo YAY!
 function import_terminfo() {
@@ -99,217 +47,11 @@ function update_terminfo() {
   zinit ice extract cloneonly as"null" pick"" atclone"gunzip -f terminfo.src.gz ; import_terminfo tmux tmux-256color kitty kitty-direct iterm2 iterm2-direct alacritty-direct" atpull"%atclone"
   zinit snippet https://invisible-island.net/datafiles/current/terminfo.src.gz
 }
-update_terminfo
+# update_terminfo
 
-# prezto components
-zinit snippet PZTM::helper
-zinit snippet PZTM::environment
-zinit snippet PZTM::terminal
-zinit snippet PZTM::editor
-zinit snippet PZTM::gnu-utility
-zinit snippet PZTM::ssh
-zinit snippet PZTM::history
-zinit snippet PZTM::directory
-zinit snippet PZTM::spectrum
-zinit ice wait lucid
-zinit snippet PZTM::utility
-
-if [[ $SYSTEM = darwin ]] ; then
-  zinit ice wait lucid
-  zinit snippet PZTM::homebrew
-  zinit snippet PZTM::osx
-fi
-
-zinit ice submod'external'
-zinit snippet OMZP::tmux
-
-# these require the whole directory rather than a file
-zinit ice svn
-zinit snippet PZTM::git
-
-# vims, vim-stream to run a vim command on each line of a pipe, vim as sed
-# basically
-zinit null sbin"vims" for MilesCranmer/vim-stream
-
-
-# issues with this version, trying something new
-# zinit ice svn
-# zinit snippet PZTM::syntax-highlighting
-# amazing fzf git interactions
-forgit_log=gl
-forgit_diff=gd
-forgit_add=ga
-forgit_reset_head=gwrh
-forgit_ignore=gi
-forgit_checkout_file=gcf
-forgit_checkout_branch=gcb
-forgit_checkout_commit=gco
-forgit_clean=gclean
-forgit_stash_show=gss
-forgit_cherry_pick=gcp
-forgit_rebase=grb
-forgit_fixup=gfu
-
-zinit as"null" wait"3" lucid for \
-  sbin Fakerr/git-recall \
-  sbin paulirish/git-open \
-  sbin paulirish/git-recent \
-  sbin atload"export _MENU_THEME=legacy" \
-  arzzen/git-quick-stats \
-  sbin iwata/git-now \
-  sbin"bin/git-dsf;bin/diff-so-fancy" zdharma/zsh-diff-so-fancy \
-  sbin"git-url;git-guclone" make"GITURL_NO_CGITURL=1" zdharma/git-url \
-
-  zinit wait"1" lucid for wfxr/forgit
-
-
-# sorin-ionescu/prezto path:modules/python
-# copied to zsh/completions.zsh
-# sorin-ionescu/prezto path:modules/completion
-
-# completions
-# zinit wait"1" lucid blockf atpull'zinit creinstall -q .' for \
-#     zsh-users/zsh-completions
-
-zinit ice submods'zsh-users/zsh-completions -> external' wait"1" lucid blockf atpull'zinit creinstall -q .'
-zinit snippet PZTM::completion
-
-function _spack_load() {
-  source "${SPACK_ROOT}/share/spack/setup-env.sh"
-}
-zinit ice lucid wait'1' atinit'export SPACK_SKIP_MODULES=1' sbin'bin/spack' pick'share/spack/setup-env.sh >& /dev/null' atinit'export SPACK_ROOT=$(pwd)'
-zinit load spack/spack
-
-# function spack() {
-#   if [[ -z "$SPACK_LOADED" ]] ; then
-#     source "${SPACK_ROOT}/share/spack/setup-env.sh"
-#   fi
-#   spack "$@"
-# }
-
-zinit ice lucid wait sbin'direnv' make'!' atclone'./direnv hook zsh > zhook.zsh' atpull'%atclone' src"zhook.zsh"
-zinit load direnv/direnv
-
-zinit sbin"bin/(fzf|fzf-tmux)" \
-  atclone"cp shell/completion.zsh _fzf_completion" \
-  atpull"%atclone" \
-  multisrc"shell/{key-bindings,completion}.zsh" \
-  make"install" for junegunn/fzf
-
-zinit light Aloxaf/fzf-tab
-zinit light wookayin/fzf-fasd
-
-zinit ice pip"pipx" sbin"p:venv/bin/pipx" id-as"pipx"
-zinit load zdharma/null
-
-# use asdf to ensure rust and go are available at acceptable versions
-export RUST_WITHOUT=rust-docs
-function asdf_plugins() {
-  local plugins=(golang rust python )
-
-  for p in $plugins ; do
-    asdf plugin add $p
-  done
-  asdf install
-}
-zinit ice id-as'asdf' pick'asdf.sh' sbin'bin/asdf' atclone'asdf_plugins' atload'export ASDF_DATA_DIR=$(pwd)/data'
-zinit load asdf-vm/asdf
-
-if [[ ! ~/.tool-versions -ef ~/.dotfiles/asdf/tool-versions ]] ; then
-  ln -sf ~/.dotfiles/asdf/tool-versions ~/.tool-versions
-fi
-
-zinit ice from"gh-r" as"program" mv"shfmt* -> shfmt"
-zinit light mvdan/sh
-
-function vivid_gen() {
-  echo "export LS_COLORS=\"$(./vivid/vivid generate jellybeans)\"" > clrs.zsh
-}
-
-function vivid_load() {
-  zinit ice atclone"vivid_gen" \
-    atpull'%atclone' pick"clrs.zsh" \
-    atload'zstyle ":completion:*" list-colors “${(s.:.)LS_COLORS}”' \
-    lucid wait from'gh-r' mv'vivid* vivid' sbin'**/vivid(.exe|) -> vivid'
-
-  zinit load sharkdp/vivid
-}
-vivid_load
-
-function load_tools() {
-  if [[ ! $ARCH =~ ppc64 ]] ; then
-    # binary stuff we can't have on ppc here
-    # fd, bat, hyperfine, vivid
-    for tool in fd bat hyperfine ; do
-      if (( !$+commands[$tool] )) ; then
-        zinit ice wait lucid from'gh-r' mv'$tool* $tool' sbin"**/$tool(.exe|) -> $tool"
-        zinit load sharkdp/$tool
-      fi
-    done
-
-    # ogham/exa, replacement for ls
-    zinit ice lucid wait"2" lucid from"gh-r" sbin"bin/exa" mv"exa* -> exa"
-    zinit load ogham/exa
-
-    # dandavision/delta
-    zinit ice lucid wait"2" from"gh-r" mv"delta* -> delta" sbin"delta/delta"
-    zinit load dandavison/delta
-
-    # gh cli
-    zinit ice from"gh-r" sbin"**/bin/gh" atclone'./**/gh completion --shell zsh > _gh' atpull'%atclone'
-    zinit light cli/cli
-
-    zinit ice lucid wait"2" from"gh-r" mv"dust* -> dust" sbin"dust/dust"
-    zinit load bootandy/dust
-
-    # BurntSushi/ripgrep
-    zinit ice lucid wait"2" from"gh-r" mv"ripgrep* -> rg" sbin"rg/rg"
-    zinit load BurntSushi/ripgrep
-
-    # Installs rust and then the `lsd' crate and creates
-    # the `lsd' shim exposing the binary
-    # zinit ice id-as"cargo-apps" rustup cargo'!lsd'
-    # zinit load zdharma/null
-
-  else
-    zinit ice cargo'vivid' id-as'vivid' sbin'bin/vivid'
-    zinit load zdharma/null
-
-    zinit ice cargo'ripgrep' id-as'rg' sbin'bin/rg'
-    zinit load zdharma/null
-
-    zinit ice cargo'fd-find' id-as'fd' sbin'bin/fd'
-    zinit load zdharma/null
-
-    zinit ice cargo'du-dust' id-as'dust' sbin'bin/dust'
-    zinit load zdharma/null
-
-  fi
-}
-load_tools
-
-# Documented to be loaded last, delay longer
-# Autosuggestions & fast-syntax-highlighting
-zinit ice wait"1" lucid atinit"zpcompinit; zpcdreplay" atload"FAST_HIGHLIGHT[chroma-git]=\"chroma/-ogit.ch\""
-zinit light zdharma/fast-syntax-highlighting
-# zsh-autosuggestions
-zinit ice wait"1" lucid atload"!_zsh_autosuggest_start"
-zinit load zsh-users/zsh-autosuggestions
-zinit ice wait"1.1" lucid
-zinit load zsh-users/zsh-history-substring-search
-
-}
-if ! is-at-least 5.3 ; then
-  echo You are running the horrifyingly ancient zsh version: $ZSH_VERSION
-  echo running in a severely degraded mode
-else
-  zinit-setup
-fi
-# source antibody output
-# source $_ab_path
-
-# pl10k theme
-zinit ice depth=1; zinit light romkatv/powerlevel10k
+# load dircolors
+source ~/.dotfiles/zsh/dir_colors_vivid_jelly
+zstyle ":completion:*" list-colors “${(s.:.)LS_COLORS}”
 
 function dbg_prompt_segment() {
   local cmd=("p10k" "segment")
@@ -328,14 +70,6 @@ function prompt_slurm_id() {
 function prompt_lsf_id() {
   dbg_prompt_segment -f blue -c "$LSB_JOBID" -i '' -t "$LSB_JOBID"
 }
-function prompt_zinit_mod() {
-  local missing=''
-  if [[ -f "$_zinit_mod_path/zdharma/zplugin.bundle" ]] ; then
-  else
-    missing='zmod'
-  fi
-  dbg_prompt_segment -f red -c "$missing" -i '!' -t "$missing"
-}
 function prompt_spack_env() {
   dbg_prompt_segment -f blue -c "$SPACK_ENV" -i '' -t "$SPACK_ENV:t"
 }
@@ -352,12 +86,222 @@ else
   export TERM=xterm-256color
 fi
 
-
-
-roothosts=(storm vortex deb hurricane gale wind chimera bolt falcon)
-if [[ ${roothosts[(i)$HOST]} -le ${#roothosts} ]] ; then
-  export gotroot=1
+# Start configuration added by Zim install {{{
+#
+# User configuration sourced by interactive shells
+#
+# -----------------
+# Zsh configuration
+# -----------------
+#
+# History
+#
+# Remove older command from the history if a duplicate is to be added.
+setopt HIST_IGNORE_ALL_DUPS
+#
+# Input/output
+#
+# Set editor default keymap to emacs (\`-e\`) or vi (\`-v\`)
+bindkey -e
+# Prompt for spelling correction of commands.
+#setopt CORRECT
+# Customize spelling correction prompt.
+#SPROMPT='zsh: correct %F{red}%R%f to %F{green}%r%f [nyae]? '
+# Remove path separator from WORDCHARS.
+WORDCHARS=${WORDCHARS//[\/]}
+# -----------------
+# Zim configuration
+# -----------------
+# Use degit instead of git as the default tool to install and update modules.
+#zstyle ':zim:zmodule' use 'degit'
+# --------------------
+# Module configuration
+# --------------------
+#
+# completion
+#
+# Set a custom path for the completion dump file.
+# If none is provided, the default ${ZDOTDIR:-${HOME}}/.zcompdump is used.
+#zstyle ':zim:completion' dumpfile "${ZDOTDIR:-${HOME}}/.zcompdump-${ZSH_VERSION}"
+#
+# git
+#
+# Set a custom prefix for the generated aliases. The default prefix is 'G'.
+zstyle ':zim:git' aliases-prefix 'g'
+#
+# input
+#
+# Append \`../\` to your input for each \`.\` you type after an initial \`..\`
+#zstyle ':zim:input' double-dot-expand yes
+#
+# termtitle
+#
+# Set a custom terminal title format using prompt expansion escape sequences.
+# See http://zsh.sourceforge.net/Doc/Release/Prompt-Expansion.html#Simple-Prompt-Escapes
+# If none is provided, the default '%n@%m: %~' is used.
+#zstyle ':zim:termtitle' format '%1~'
+#
+# zsh-autosuggestions
+#
+# Customize the style that the suggestions are shown with.
+# See https://github.com/zsh-users/zsh-autosuggestions/blob/master/README.md#suggestion-highlight-style
+#ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=242'
+#
+# zsh-syntax-highlighting
+#
+# Set what highlighters will be used.
+# See https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/docs/highlighters.md
+ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
+# Customize the main highlighter styles.
+# See https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/docs/highlighters/main.md#how-to-tweak-it
+#typeset -A ZSH_HIGHLIGHT_STYLES
+#ZSH_HIGHLIGHT_STYLES[comment]='fg=242'
+# ------------------
+# Initialize modules
+# ------------------
+if [[ ! -e ${ZIM_HOME}/zimfw.zsh ]]; then
+  # Download zimfw script if missing.
+  command mkdir -p ${ZIM_HOME}
+  if (( ${+commands[curl]} )); then
+    command curl -fsSL -o ${ZIM_HOME}/zimfw.zsh https://github.com/zimfw/zimfw/releases/latest/download/zimfw.zsh
+  else
+    command wget -nv -O ${ZIM_HOME}/zimfw.zsh https://github.com/zimfw/zimfw/releases/latest/download/zimfw.zsh
+  fi
 fi
+if [[ ! ${ZIM_HOME}/init.zsh -nt ${ZDOTDIR:-${HOME}}/.zimrc ]]; then
+  # Install missing modules, and update ${ZIM_HOME}/init.zsh if it does not exist
+  # or it's outdated, before sourcing it.
+  source ${ZIM_HOME}/zimfw.zsh init -q
+fi
+source ${ZIM_HOME}/init.zsh
+# ------------------------------
+# Post-init module configuration
+# ------------------------------
+#
+# zsh-history-substring-search
+#
+# Bind ^[[A/^[[B manually so up/down works both before and after zle-line-init
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
+# Bind up and down keys
+zmodload -F zsh/terminfo +p:terminfo
+if [[ -n ${terminfo[kcuu1]} && -n ${terminfo[kcud1]} ]]; then
+  bindkey ${terminfo[kcuu1]} history-substring-search-up
+  bindkey ${terminfo[kcud1]} history-substring-search-down
+fi
+bindkey '^P' history-substring-search-up
+bindkey '^N' history-substring-search-down
+bindkey -M vicmd 'k' history-substring-search-up
+bindkey -M vicmd 'j' history-substring-search-down
+# }}} End configuration added by Zim install
+
+for plg in rust golang direnv neovim ; do
+  [[ -d ${ASDF_DATA_DIR}/plugins/$plg ]] || asdf plugin add $plg
+done
+
+# use asdf to ensure rust and go are available at acceptable versions
+#export RUST_WITHOUT=rust-docs
+#
+#function asdf_plugins() {
+#  local plugins=(golang) # golang rust python)
+#  # if ! asdf plugin list | grep direnv >& /dev/null ; then
+#  #   asdf plugin-add direnv
+#  # fi
+#  # asdf install direnv latest
+#  # asdf global direnv latest
+#
+#  for p in $plugins ; do
+#    asdf plugin add $p
+#    asdf install $p latest
+#    asdf global $p latest
+#  done
+#}
+#if [[ ! -f ~/.tool-versions ]] ; then
+#  # ln -sf ~/.dotfiles/asdf/tool-versions ~/.tool-versions
+#  asdf_plugins
+#fi
+[[ -e ~/.envrc ]] || ln -s ~/.dotfiles/direnv/base-envrc ~/.envrc
+[[ -d ~/.config/direnv ]] || ln -s ~/.dotfiles/direnv/ ~/.config/direnv
+
+function brew_or_cargo() {
+  zparseopts -D -E -F - -brew:=bpkg -cargo:=cpkg
+  local cmd=$1
+  if (( ${+commands[$cmd]} )) ; then
+    return
+  fi
+  if (( ${+commands[brew]} )) ; then
+    if [[ -v INSTALL_TOOLS ]] ; then
+      echo could install $cmd, set INSTALL_TOOLS to install
+    else
+      brew install ${bpkg[2]}
+    fi
+  elif (( ${+commands[cargo]} )) ; then
+    if [[ -v INSTALL_TOOLS ]] ; then
+      echo could install $cmd, set INSTALL_TOOLS to install
+    else
+      cargo install --root "$CARGO_HOME" ${cpkg[2]}
+    fi
+  else
+    echo brew and cargo are missing, fix it to get $cmd
+  fi
+}
+
+[[ -f ~/.rustup/settings.toml ]] || rustup default stable
+typeset -A mytools
+mytools[rg]='--brew ripgrep --cargo ripgrep'
+mytools[dust]='--brew dust --cargo du-dust'
+mytools[bat]='--brew bat --cargo bat'
+mytools[delta]='--brew delta --cargo git-delta'
+mytools[hyperfine]='--brew hyperfine --cargo hyperfine'
+mytools[exa]='--brew exa --cargo exa'
+
+for cmd args in ${(kv)mytools} ; do
+  brew_or_cargo ${=args} $cmd
+done
+
+if ! (( ${+commands[fd]} )) ; then
+  if (( ${+commands[fdfind]} )) ; then
+    alias fd=fdfind
+  else
+    brew_or_cargo --brew fd --cargo fd-find fd
+  fi
+fi
+
+if ! (( ${+commands[fzf]} )) ; then
+  go get -u github.com/junegunn/fzf
+fi
+
+if ! (( ${+commands[fzf]} )) ; then
+  echo no fzf
+  if ! (( ${+commands[go]} )) ; then
+    echo go is missing, fix it to get fzf
+  fi
+else
+  # forgit: amazing fzf git interactions forgit_log=gl forgit_diff=gd
+  forgit_add=ga
+  forgit_reset_head=gwrh
+  forgit_ignore=gi
+  forgit_checkout_file=gcf
+  forgit_checkout_branch=gcb
+  forgit_checkout_commit=gco
+  forgit_clean=gclean
+  forgit_stash_show=gss
+  forgit_cherry_pick=gcp
+  forgit_rebase=grb
+  forgit_fixup=gfu
+fi
+
+# not quite working, revisit
+# if ! is-at-least 2.2.0 $(gh --version | awk -e '/ [0-9]+\.[0-9]+\.[0-9]+ /{ print $3}') ; then
+#   echo installing updated gh
+#   go get github.com/cli/cli/cmd/gh
+# fi
+
+
+
+# prompt powerlevel10k
+# To customize prompt, run `p10k configure` or edit ~/.zsh/.p10k.zsh.
+[[ ! -f ~/.zsh/.p10k.zsh ]] || source ~/.zsh/.p10k.zsh
 
 HISTFILE=~/.cache/zsh/zhistory
 # HISTFILE=~/.zsh-history-${HOST//[0-9]/}
@@ -366,7 +310,6 @@ SAVEHIST=10000                # Default: 200
 setopt INC_APPEND_HISTORY
 setopt   APPEND_HISTORY        # multiple zsh's all append to same history file (rather than last
 # setopt   SHARE_HISTORY        # share between instances
-# overwrites)  SET
 setopt HIST_FCNTL_LOCK #use file locking to allow multiple writers to collaborate on a history file, important for clusters with NFS
 setopt banghist             # Perform textual history expansion, csh-style, treating '!' specially  SET
 unsetopt cshjunkiehistory     # A history reference without an event specifier will always refer to

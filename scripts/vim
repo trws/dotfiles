@@ -1,5 +1,10 @@
 #!/usr/bin/env zsh
 
+if (( ${+commands[asdf]} )) ; then
+  if [[ -d ~/.cache/asdf/installs/neovim ]] ; then
+    exec asdf exec nvim "$@"
+  fi
+fi
 
 # if (( $+commands[snap] )) ; then
 #   if snap run nvim --version &> /dev/null ; then

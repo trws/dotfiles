@@ -1,6 +1,9 @@
 # Basic universal setup, pull in environment and path
 # Author: Tom Scogland
-
+# [[ ! -z $WSLENV ]] && export XDG_RUNTIME_DIR=/tmp/$UID && mkdir -m 0700 $XDG_RUNTIME_DIR
+if [[ -n "$WSLENV" ]] ; then
+  export BROWSER=wslview
+fi
 export ZDOTDIR=~/.zsh
 
 # ensure my funcs, and prompts are there before load
@@ -27,4 +30,13 @@ unset h
 source $ZDOTDIR/pathsetup
 source $ZDOTDIR/environment
 
+# Skip the not really helping Ubuntu global compinit
+skip_global_compinit=1
 
+# Start configuration added by Zim install {{{
+#
+# User configuration sourced by all invocations of the shell
+#
+# Define Zim location
+ZIM_HOME=~/.cache/zsh/zim
+# }}} End configuration added by Zim install
