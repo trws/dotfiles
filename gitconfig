@@ -1,4 +1,18 @@
 [alias]
+  files = !git diff --name-only $(git merge-base HEAD \"${REVIEW_BASE:-$(git rev-parse --abbrev-ref upstream)}\")
+
+  # Same as above, but with a diff stat instead of just names
+  # (better for interactive use)
+  stat = !git diff --stat $(git merge-base HEAD \"${REVIEW_BASE:-$(git rev-parse --abbrev-ref upstream)}\")
+  # Open all files changed since REVIEW_BASE in Vim tabs
+  # Then, run fugitive's :Gdiff in each tab, and finally
+  # tell vim-gitgutter to show +/- for changes since REVIEW_BASE
+  review = !vim -p $(git files) +\"tabdo Gdiff $REVIEW_BASE\" +\"let g:gitgutter_diff_base = '$REVIEW_BASE'\"
+
+  # Same as the above, except specify names of files as arguments,
+  # instead of opening all files:
+  # git reviewone foo.js bar.js
+  reviewone = !vim -p +\"tabdo Gdiff $REVIEW_BASE\" +\"let g:gitgutter_diff_base = '$REVIEW_BASE'\"
 
   # View abbreviated SHA, description, and history graph of the latest 20 commits
   l = log --pretty=oneline -n 20 --graph --abbrev-commit
@@ -166,3 +180,6 @@
   remote = upstream
 [init]
 	defaultBranch = main
+# [credential "https://github.com"]
+# 	helper = 
+# 	helper = !/home/njustn/.cache/zsh/zinit/plugins/cli---cli/usr/bin/gh auth git-credential
