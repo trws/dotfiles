@@ -6,6 +6,9 @@ if (( ${+commands[go]} )) ; then
   zmodule wookayin/fzf-fasd
 fi
 
+# get gnu-utility support from prezto
+zmodule $ZDOTDIR/gnu-utility
+
 # zmodule asdf-vm/asdf --name asdf-vm -s asdf.sh
 zmodule asdf
 
