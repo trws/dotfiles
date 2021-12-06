@@ -14,7 +14,7 @@ args = p.parse_args(sys.argv[1:])
 logging.basicConfig(filename="/tmp/mmfilter", level=logging.INFO, filemode="w")
 log = logging.getLogger("filter")
 
-if platform.node() == 'bolt':
+if platform.node().startswith('bolt'):
     mbox =  "imap://scogland1%40llnl.gov@localhost/Archive"
 else:
     mbox = "imap://scogland1%40llnl.gov@outlook.office365.com/Archive"
