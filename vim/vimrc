@@ -66,12 +66,12 @@ Plug 'dracula/vim'
 Plug 'ojroques/vim-oscyank'  " clipboard support for xterm-type terms
 
 " Render man pages in vim
-Plug 'vim-utils/vim-man'
+if has('nvim')
+  Plug 'paretje/nvim-man'
+else
+  Plug 'vim-utils/vim-man'
+endif
 
-" Plug 'dhruvasagar/vim-table-mode'
-
-"visual
-"Plug 'Powerline'
 "powerline not working, light alternative?
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -81,6 +81,7 @@ Plug 'edkolev/tmuxline.vim'
 " if executable('task')
 "   Plug 'blindFS/vim-taskwarrior'
 " endif
+" Plug 'https://gitlab.com/dbeniamine/todo.txt-vim'
 
 " visual register selection
 Plug 'junegunn/vim-peekaboo'
@@ -138,7 +139,6 @@ Plug 'godlygeek/tabular'
 
 " Plug 'plasticboy/vim-markdown' " this one did some strange things, not fond
 " testing pandoc markdown plugins, since that's usually my preference
-Plug 'rkaminsk/vim-syntax-clingo'
 Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-syntax'
 let g:pandoc#syntax#conceal#use=v:false
@@ -164,6 +164,7 @@ Plug 'mrtazz/DoxygenToolkit.vim'
 Plug 'vim-scripts/utl.vim' " execute URLs
 " not in polyglot - cool csv highlighting
 Plug 'chrisbra/csv.vim'
+Plug 'rkaminsk/vim-syntax-clingo'
 " Plug 'LucHermitte/lh-vim-lib' " dep for the below
 " Plug 'LucHermitte/VimFold4C'
 " CSupport plugin: XXX: reacts badly with several others
@@ -179,94 +180,31 @@ Plug 'tpope/vim-speeddating'
 
 
 if ! has('win32')
-
-  " Plug 'ncm2/ncm2'
-  " Plug 'ncm2/ncm2-path'
-  " let g:ncm2#complete_length=[[1,1],[7,2]]
-  "
-  " " enable ncm2 for all buffers
-  " autocmd BufEnter * call ncm2#enable_for_buffer()
-  " autocmd TextChangedI * call ncm2#auto_trigger()
-  "
-  " inoremap <C-Space> <Plug>(ncm2_manual_trigger)
-  " inoremap <expr> <CR> pumvisible() ? "\<C-y>\<CR>" : "\<CR>"
-  " inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-  " inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<Tab>"
-  "
-  " " IMPORTANT: :help Ncm2PopupOpen for more information
-  " set completeopt=noinsert,menuone,noselect
-  "
   set hidden
   set updatetime=300
   set shortmess+=c
-  " inoremap <silent><expr> <TAB>
-  "       \ pumvisible() ? "\<C-n>" :
-  "       \ <SID>check_back_space() ? "\<TAB>" :
-  "       \ coc#refresh()
-  " inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-  " " Use `[g` and `]g` to navigate diagnostics
-  " nmap <silent> [g <Plug>(coc-diagnostic-prev)
-  " nmap <silent> ]g <Plug>(coc-diagnostic-next)
-  " function! s:check_back_space() abort
-  "   let col = col('.') - 1
-  "   return !col || getline('.')[col - 1]  =~# '\s'
-  " endfunction
-  "
-  " " Use <c-space> to trigger completion.
-  " inoremap <silent><expr> <c-space> coc#refresh()
-  " " for some reason C-space is sometimes giving me this...
-  " inoremap <silent><expr> <c-@> coc#refresh()
-  "
-  "
-  "
-  " " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
-  " " position. Coc only does snippet and additional edit on confirm.
-  " if has('patch8.1.1068')
-  "   " Use `complete_info` if your (Neo)Vim version supports it.
-  "   inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
-  " else
-  "   imap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-  " endif
-  "
-  "
-  "
-  " Plug 'neoclide/coc-neco'
-  " Plug 'neoclide/coc.nvim', {'branch': 'release'}
-  " let g:coc_global_extensions = ['coc-highlight', 'coc-json',  'coc-lists', 'coc-python', 'coc-rls', 'coc-snippets', 'coc-vimlsp' ]
-  "
-  " nnoremap <leader>cd <Plug>(coc-definition)
-  " nnoremap <leader>cD <Plug>(coc-declaration)
-  " " Remap for rename current word
-  " nmap <leader>cr <Plug>(coc-rename)
-  " vmap <leader>ca <Plug>(coc-codeaction-selected)
-
 
   " Plug 'Shougo/neco-vim' " add vim completion to ycm or deoplete
   " Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') }
 
-  " Plug 'autozimu/LanguageClient-neovim', {
-  "       \ 'branch': 'next',
-  "       \ 'do': 'bash install.sh',
-  "       \ }
-  "
-  " let g:LanguageClient_serverCommands = {
-  "       \ 'rust': [$CARGO_HOME . '/bin/rustup', 'run', 'stable', 'rls'],
-  "       \ 'python': ['~/.local/bin/pipx', 'run', '--spec=python-language-server[all]', 'pyls'],
-  "       \ }
-  "
-  " nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
-  " nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
-  " nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
-  " nmap <F5> <Plug>(lcn-menu)
-
   Plug 'prabirshrestha/async.vim'
   Plug 'prabirshrestha/asyncomplete.vim'
   Plug 'prabirshrestha/vim-lsp'
+  " for non-lsp vimscript completion
+  " Plug 'Shougo/neco-vim'
+  " Plug 'prabirshrestha/asyncomplete-necovim.vim'
+  " au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#necovim#get_source_options({
+  "  \ 'name': 'necovim',
+  "  \ 'allowlist': ['vim'],
+  "  \ 'completor': function('asyncomplete#sources#necovim#completor'),
+  "  \ }))
   Plug 'prabirshrestha/asyncomplete-lsp.vim'
   Plug 'prabirshrestha/asyncomplete-file.vim'
   Plug 'mattn/vim-lsp-settings'
   Plug 'thomasfaingnaert/vim-lsp-snippets'
   Plug 'thomasfaingnaert/vim-lsp-ultisnips'
+
+  let g:lsp_settings_servers_dir=plugged_directory+"/../vim-lsp-servers"
 
   " Plug 'dense-analysis/ale'
   " let g:ale_linters = {
@@ -320,9 +258,8 @@ if ! has('win32')
     autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
   augroup END
 
-
-  let g:lsp_log_verbose = 1
-  let g:lsp_log_file = expand('./lsp.log')
+  " let g:lsp_log_verbose = 1
+  " let g:lsp_log_file = expand('./lsp.log')
   let g:lsp_settings = {
         \   'pyls-all': {
         \     'cmd': ['pipx','run','--spec','python-language-server[all]','pyls'],
@@ -351,7 +288,6 @@ if ! has('win32')
 endif
 
 if has('nvim')
-
   "TODO look at neomake? https://github.com/neomake/neomake
 
   " add nvim-treesitter and set up
@@ -372,8 +308,11 @@ if has('nvim')
   " }
   " EOF
 
-  " Plug 'neovim/nvim-lspconfig'
-  "   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+  Plug 'nvim-lua/plenary.nvim'
+  Plug 'nvim-telescope/telescope.nvim'
+  " fzf-compatible matcher
+  Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
+
 else
   "   Plug 'Shougo/deoplete.nvim'
   Plug 'roxma/nvim-yarp'
@@ -386,9 +325,6 @@ endif
 " Plug 'zchee/deoplete-zsh'
 
 "bindings
-
-"shell/terminal emulation
-Plug 'kassio/neoterm'
 
 "file management
 " Plug 'xolox/vim-misc'
@@ -428,8 +364,6 @@ Plug 'junegunn/fzf.vim'
 Plug 'liuchengxu/vista.vim'
 " going back to fzf from clap, seems to have all the stuff, faster
 " Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary' }
-" Plug 'nvim-lua/plenary.nvim'
-" Plug 'nvim-telescope/telescope.nvim'
 
 Plug 'Shougo/neomru.vim'
 
@@ -442,27 +376,18 @@ Plug 'Shougo/neomru.vim'
 " Plug 'xolox/vim-misc'
 " Plug 'xolox/vim-easytags'
 
-" if (! exists("g:gui_oni"))
-"   "ctrlp
-"   Plug 'kien/ctrlp.vim'
-"   let g:ctrlp_working_path_mode = 'ra'
-"   let g:ctrlp_extensions = ['tag', 'buffertag', 'quickfix', 'dir', 'rtscript',
-"         \ 'undo', 'line', 'changes', 'mixed', 'bookmarkdir']
-"   " let g:ctrlp_extensions = ['tag', 'buffertag', 'quickfix', 'changes', 'mixed', 'bookmarkdir']
-" endif
-
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-vinegar'
-Plug 'tpope/vim-rhubarb'
+Plug 'tpope/vim-rhubarb' " github links
 
 " cmdline-mode mappings
 Plug 'tpope/vim-rsi'
-let g:rsi_no_meta=1
-noremap!        <M-b> <S-Left>
-noremap!        <M-d> <C-O>dw
-cnoremap        <M-d> <S-Right><C-W>
-noremap!        <M-BS> <C-W>
-noremap!        <M-f> <S-Right>
+" let g:rsi_no_meta=1 " not sure why this was here
+" noremap!        <M-b> <S-Left>
+" noremap!        <M-d> <C-O>dw
+" cnoremap        <M-d> <S-Right><C-W>
+" noremap!        <M-BS> <C-W>
+" noremap!        <M-f> <S-Right>
 " Plug 'critiqjo/husk-x.vim'
 
 " Plug 'airblade/vim-gitgutter'
@@ -476,11 +401,15 @@ Plug 'tomtom/tcomment_vim'
 " allow swapping of arguments, and i,/a, for selecting swappable component of
 " comma-delimited argument lists
 Plug 'machakann/vim-swap'
+" omap i, <Plug>(swap-textobject-i)
+" xmap i, <Plug>(swap-textobject-i)
+" omap a, <Plug>(swap-textobject-a)
+" xmap a, <Plug>(swap-textobject-a)
+" even more text objects, arguments, separators, tons of stuff
+Plug 'wellle/targets.vim'
+" NOTE: A is inner around, take delimiters but no space, a has old behavior
+let g:targets_aiAI = 'AiaI'
 
-omap i, <Plug>(swap-textobject-i)
-xmap i, <Plug>(swap-textobject-i)
-omap a, <Plug>(swap-textobject-a)
-xmap a, <Plug>(swap-textobject-a)
 
 " indent objects, around or in (i)ndent regions
 Plug 'michaeljsmith/vim-indent-object'
@@ -510,7 +439,12 @@ let g:formatters_c=['clangformat']
 let g:formatters_cpp=['clangformat']
 let g:formatters_sh=['shfmt']
 " Ensure we have black, add Black command
+let g:black_virtualenv=expand("~/.cache/vim/black")
 Plug 'psf/black', { 'branch': 'stable' }
+
+" show available mappings off of current prefix
+Plug 'liuchengxu/vim-which-key'
+nnoremap <silent> <leader> :WhichKey ','<CR>
 
 " :UndotreeToggle to walk undo tree
 Plug 'mbbill/undotree'
@@ -541,12 +475,29 @@ Plug 'radenling/vim-dispatch-neovim'
 "not on by default, have to use :Wordy
 Plug 'reedes/vim-wordy'
 
-Plug 'tpope/vim-vinegar'
 nnoremap <silent> _ :Rexplore<cr>
 
 Plug 'tpope/vim-sensible'
 
 call plug#end()
+
+lua <<EOF
+require('telescope').setup {
+extensions = {
+fzf = {
+fuzzy = true,                    -- false will only do exact matching
+override_generic_sorter = true,  -- override the generic sorter
+override_file_sorter = true,     -- override the file sorter
+case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
+-- the default case_mode is "smart_case"
+}
+}
+}
+-- To get fzf loaded and working with telescope, you need to call
+-- load_extension, somewhere after setup function:
+require('telescope').load_extension('fzf')
+EOF
+
 
 " fix :Man command in neovim, why on earth this works is beyond me
 command! -nargs=+ Man :Vman <args>
@@ -1195,4 +1146,4 @@ if exists("$TERM_PROGRAM") && $TERM_PROGRAM == 'iTerm.app'
     endif
   endif
 endif
-
+" vim: set ts=2 sw=2 tw=80 et :
