@@ -62,6 +62,9 @@
 ;; (package! mu4e-conversation)
 (package! mu4e-alert :disable t)
 
+;; todoist in org?
+(package! todoist)
+
 ;; (package! apprentice :recipe
 ;;   (:host github
 ;;    :repo "sjas/apprentice-theme"

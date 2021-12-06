@@ -11,6 +11,7 @@
 (setq user-full-name "Tom Scogland"
       user-mail-address "scogland1@llnl.gov")
 
+(setq browse-url-browser-function 'browse-url-xdg-open)
 (unless window-system
   (global-set-key (kbd "<mouse-4>") 'scroll-down-line)
   (global-set-key (kbd "<mouse-5>") 'scroll-up-line))
@@ -314,6 +315,34 @@
               (funcall next-url)))))))
 
   (add-hook 'mu4e-view-mode-hook 'mu4e-make-hypertext-clickable))
+(after! forge
+  (setq magit-status-sections-hook
+        '(magit-insert-status-headers
+          magit-insert-merge-log
+          magit-insert-rebase-sequence
+          magit-insert-am-sequence
+          magit-insert-sequencer-sequence
+          magit-insert-bisect-output
+          magit-insert-bisect-rest
+          magit-insert-bisect-log
+          magit-insert-untracked-files
+          magit-insert-unstaged-changes
+          magit-insert-staged-changes
+          magit-insert-stashes
+          magit-insert-unpushed-to-pushremote
+          magit-insert-unpushed-to-upstream-or-recent
+          magit-insert-unpulled-from-pushremote
+          magit-insert-unpulled-from-upstream
+          forge-insert-requested-reviews
+          ;; assigned
+          forge-insert-assigned-pullreqs
+          forge-insert-assigned-issues
+          ;; pullreqs
+          forge-insert-authored-pullreqs
+          forge-insert-pullreqs
+          ;; issues
+          forge-insert-authored-issues
+          forge-insert-issues)))
 
 (after! notmuch
   ;; Don't copy into sent for me, server does it
