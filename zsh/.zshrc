@@ -76,9 +76,6 @@ function prompt_spack_env() {
 # load my prompt, must be after async loads
 autoload -Uz promptinit && promptinit
 # prompt mypure
-# prompt powerlevel10k
-# To customize prompt, run `p10k configure` or edit ~/.zsh/.p10k.zsh.
-[[ ! -f ~/.zsh/.p10k.zsh ]] || source ~/.zsh/.p10k.zsh
 
 if infocmp $TERM >& /dev/null ; then
 else
