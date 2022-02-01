@@ -188,7 +188,7 @@ if (( ! $+commands[antibody] )) ; then
 fi
 
 autoload -U fasd
-_ab_dir=${XDG_CACHE_HOME}/antibody
+_ab_dir=${XDG_CACHE_HOME:=~/.cache}/antibody
 _ab_path=$_ab_dir/init.zsh
 
 function zupdate() {
