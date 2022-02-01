@@ -338,6 +338,8 @@ if is-at-least 5.1; then
   [[ ! -f ~/.zsh/.p10k.zsh ]] || source ~/.zsh/.p10k.zsh
 fi
 
+# defaults to asciiship
+
 HISTFILE=~/.cache/zsh/zhistory
 # HISTFILE=~/.zsh-history-${HOST//[0-9]/}
 HISTSIZE=10000

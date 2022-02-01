@@ -15,7 +15,7 @@ source $ZDOTDIR/sysmagic
 # XDG setup and notes
 # NOTE: every path must be absolute, must be after sys-magic
 h=~/
-h=${h:P}
+h=${h:A}
 # portable scripts go in ~/.local/bin
 # portable binaries go in ~/.local/lib
 # arch specific binaries go in ~/.local/lib/$SYS_TYPE
