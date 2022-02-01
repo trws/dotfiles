@@ -225,9 +225,11 @@ bindkey -M vicmd 'k' history-substring-search-up
 bindkey -M vicmd 'j' history-substring-search-down
 # }}} End configuration added by Zim install
 
-for plg in rust golang direnv neovim ; do
-  [[ -d ${ASDF_DATA_DIR}/plugins/$plg ]] || asdf plugin add $plg
-done
+if (( $+commands[asdf] )) ; then
+  for plg in rust golang direnv neovim ; do
+    [[ -d ${ASDF_DATA_DIR}/plugins/$plg ]] || asdf plugin add $plg
+  done
+fi
 
 # use asdf to ensure rust and go are available at acceptable versions
 #export RUST_WITHOUT=rust-docs
@@ -276,26 +278,28 @@ function brew_or_cargo() {
   fi
 }
 
-if (( ${+commands[rustup]} )) ; then
-  [[ -f ~/.rustup/settings.toml ]] || rustup default stable
-fi
-typeset -A mytools
-mytools[rg]='--brew ripgrep --cargo ripgrep'
-mytools[dust]='--brew dust --cargo du-dust'
-mytools[bat]='--brew bat --cargo bat'
-mytools[delta]='--brew delta --cargo git-delta'
-mytools[hyperfine]='--brew hyperfine --cargo hyperfine'
-mytools[exa]='--brew exa --cargo exa'
+if is-at-least 5.1; then
+  if (( ${+commands[rustup]} )) ; then
+    [[ -f ~/.rustup/settings.toml ]] || rustup default stable
+  fi
+  typeset -A mytools
+  mytools[rg]='--brew ripgrep --cargo ripgrep'
+  mytools[dust]='--brew dust --cargo du-dust'
+  mytools[bat]='--brew bat --cargo bat'
+  mytools[delta]='--brew delta --cargo git-delta'
+  mytools[hyperfine]='--brew hyperfine --cargo hyperfine'
+  mytools[exa]='--brew exa --cargo exa'
 
-for cmd args in ${(kv)mytools} ; do
-  brew_or_cargo ${=args} $cmd
-done
+  for cmd args in ${(kv)mytools} ; do
+    brew_or_cargo ${=args} $cmd
+  done
 
-if ! (( ${+commands[fd]} )) ; then
-  if (( ${+commands[fdfind]} )) ; then
-    alias fd=fdfind
-  else
-    brew_or_cargo --brew fd --cargo fd-find fd
+  if ! (( ${+commands[fd]} )) ; then
+    if (( ${+commands[fdfind]} )) ; then
+      alias fd=fdfind
+    else
+      brew_or_cargo --brew fd --cargo fd-find fd
+    fi
   fi
 fi
 
@@ -333,7 +337,9 @@ fi
 
 # prompt powerlevel10k
 # To customize prompt, run `p10k configure` or edit ~/.zsh/.p10k.zsh.
-[[ ! -f ~/.zsh/.p10k.zsh ]] || source ~/.zsh/.p10k.zsh
+if is-at-least 5.1; then
+  [[ ! -f ~/.zsh/.p10k.zsh ]] || source ~/.zsh/.p10k.zsh
+fi
 
 HISTFILE=~/.cache/zsh/zhistory
 # HISTFILE=~/.zsh-history-${HOST//[0-9]/}
