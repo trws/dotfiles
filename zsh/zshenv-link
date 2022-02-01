@@ -3,6 +3,7 @@
 # [[ ! -z $WSLENV ]] && export XDG_RUNTIME_DIR=/tmp/$UID && mkdir -m 0700 $XDG_RUNTIME_DIR
 if [[ -n "$WSLENV" ]] ; then
   export BROWSER=wslview
+  pgrep -f syncthing >& /dev/null || syncthing -no-browser 1> /dev/null 2>&1 &
 fi
 export ZDOTDIR=~/.zsh
 
@@ -40,3 +41,4 @@ skip_global_compinit=1
 # Define Zim location
 ZIM_HOME=~/.cache/zsh/zim
 # }}} End configuration added by Zim install
+if [ -e /Users/scogland1/.nix-profile/etc/profile.d/nix.sh ]; then . /Users/scogland1/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer

@@ -1,35 +1,97 @@
-mafredri/zsh-async
-
-zsh-users/zsh-completions
-
-sorin-ionescu/prezto
-# for is-darwin, is-linux, etc.
-# sorin-ionescu/prezto path:modules/helper
-sorin-ionescu/prezto path:modules/environment
-sorin-ionescu/prezto path:modules/terminal
-sorin-ionescu/prezto path:modules/editor
-sorin-ionescu/prezto path:modules/git
-sorin-ionescu/prezto path:modules/gnu-utility
-sorin-ionescu/prezto path:modules/homebrew
-sorin-ionescu/prezto path:modules/osx
-sorin-ionescu/prezto path:modules/ssh
-# sorin-ionescu/prezto path:modules/python
-sorin-ionescu/prezto path:modules/tmux
-sorin-ionescu/prezto path:modules/history
-sorin-ionescu/prezto path:modules/directory
-sorin-ionescu/prezto path:modules/spectrum
-sorin-ionescu/prezto path:modules/utility
-# copied to zsh/completions.zsh
-# sorin-ionescu/prezto path:modules/completion
-sorin-ionescu/prezto path:modules/docker
-
-sorin-ionescu/prezto path:modules/autosuggestions
-
-sorin-ionescu/prezto path:modules/syntax-highlighting
-sorin-ionescu/prezto path:modules/history-substring-search
+#mafredri/zsh-async
+#
+#zsh-users/zsh-completions
+#
+#sorin-ionescu/prezto
+## for is-darwin, is-linux, etc.
+## sorin-ionescu/prezto path:modules/helper
+#sorin-ionescu/prezto path:modules/environment
+#sorin-ionescu/prezto path:modules/terminal
+#sorin-ionescu/prezto path:modules/editor
+#sorin-ionescu/prezto path:modules/git
+#sorin-ionescu/prezto path:modules/gnu-utility
+#sorin-ionescu/prezto path:modules/homebrew
+#sorin-ionescu/prezto path:modules/osx
+#sorin-ionescu/prezto path:modules/ssh
+## sorin-ionescu/prezto path:modules/python
+#sorin-ionescu/prezto path:modules/tmux
+#sorin-ionescu/prezto path:modules/history
+#sorin-ionescu/prezto path:modules/directory
+#sorin-ionescu/prezto path:modules/spectrum
+#sorin-ionescu/prezto path:modules/utility
+## copied to zsh/completions.zsh
+## sorin-ionescu/prezto path:modules/completion
+#sorin-ionescu/prezto path:modules/docker
+#
+#sorin-ionescu/prezto path:modules/autosuggestions
+#
+#sorin-ionescu/prezto path:modules/syntax-highlighting
+#sorin-ionescu/prezto path:modules/history-substring-search
 
 
 # autoenv support, for .autoenv.zsh files
 Tarrasch/zsh-autoenv
 
-clvv/fasd kind:path
+junegunn/fzf path:shell
+wookayin/fzf-fasd
+
+# get gnu-utility support from prezto
+~/.dotfiles/zsh/gnu-utility
+
+# zmodule asdf-vm/asdf --name asdf-vm -s asdf.sh
+# zmodule asdf
+
+# directory and file frecency
+# zmodule fasd
+# clvv/fasd kind:path
+zimfw/fasd kind:fpath path:functions
+zimfw/fasd
+
+zimfw/exa
+zimfw/homebrew
+
+wfxr/forgit
+
+# fzf for completion - buggy
+# zmodule Aloxaf/fzf-tab
+
+# Start configuration added by Zim install {{{
+# -------
+# Modules
+# -------
+# Sets sane Zsh built-in environment options.
+zimfw/environment
+# Provides handy git aliases and functions.
+zimfw/git # prezto-like
+# Applies correct bindkeys for input events.
+zimfw/input #more general handling for EOL and delete etc. than I had
+# Sets a custom terminal title.
+zimfw/termtitle
+# Utility aliases and functions. Adds colour to ls, grep and less.
+zimfw/utility
+
+
+#
+# Prompt
+#
+romkatv/powerlevel10k
+# Exposes to prompts how long the last command took to execute, used by asciiship.
+zimfw/duration-info
+# Exposes git repository status information to prompts, used by asciiship.
+zimfw/git-info
+# A heavily reduced, ASCII-only version of the Spaceship and Starship prompts.
+zimfw/asciiship
+# Additional completion definitions for Zsh.
+zsh-users/zsh-completions
+# Enables and configures smart and extensive tab completion.
+# completion must be sourced after zsh-users/zsh-completions
+zimfw/completion
+# Fish-like autosuggestions for Zsh.
+zsh-users/zsh-autosuggestions
+# Fish-like syntax highlighting for Zsh.
+# zsh-users/zsh-syntax-highlighting must be sourced after completion
+zsh-users/zsh-syntax-highlighting
+# Fish-like history search (up arrow) for Zsh.
+# zsh-users/zsh-history-substring-search must be sourced after zsh-users/zsh-syntax-highlighting
+zsh-users/zsh-history-substring-search
+# }}} End configuration added by Zim install

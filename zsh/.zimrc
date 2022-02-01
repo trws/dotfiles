@@ -1,8 +1,8 @@
 #!/usr/bin/env zsh
 echo evaluating zimrc
 typeset -a zimpaths
-if (( ${+commands[go]} )) ; then
-  zmodule  junegunn/fzf -s shell/completion.zsh -s shell/key-bindings.zsh
+if (( ${+commands[fzf]} )) ; then
+  zmodule junegunn/fzf -s shell/completion.zsh -s shell/key-bindings.zsh
   zmodule wookayin/fzf-fasd
 fi
 
@@ -10,7 +10,7 @@ fi
 zmodule $ZDOTDIR/gnu-utility
 
 # zmodule asdf-vm/asdf --name asdf-vm -s asdf.sh
-zmodule asdf
+# zmodule asdf
 
 # directory and file frecency
 zmodule fasd

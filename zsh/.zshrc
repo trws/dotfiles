@@ -13,7 +13,7 @@ if [[ $PROF_INIT == "true" ]] ; then
 fi
 
 roothosts=(storm vortex deb hurricane gale wind chimera bolt falcon)
-if [[ ${roothosts[(i)$HOST]} -le ${#roothosts} ]] ; then
+if [[ ${roothosts[(i)${HOST:=$(hostname)}]} -le ${#roothosts} ]] ; then
   export gotroot=1
 fi
 
@@ -109,71 +109,101 @@ bindkey -e
 #SPROMPT='zsh: correct %F{red}%R%f to %F{green}%r%f [nyae]? '
 # Remove path separator from WORDCHARS.
 WORDCHARS=${WORDCHARS//[\/]}
-# -----------------
-# Zim configuration
-# -----------------
-# Use degit instead of git as the default tool to install and update modules.
-#zstyle ':zim:zmodule' use 'degit'
-# --------------------
-# Module configuration
-# --------------------
-#
-# completion
-#
-# Set a custom path for the completion dump file.
-# If none is provided, the default ${ZDOTDIR:-${HOME}}/.zcompdump is used.
-#zstyle ':zim:completion' dumpfile "${ZDOTDIR:-${HOME}}/.zcompdump-${ZSH_VERSION}"
-#
-# git
-#
-# Set a custom prefix for the generated aliases. The default prefix is 'G'.
-zstyle ':zim:git' aliases-prefix 'g'
-#
-# input
-#
-# Append \`../\` to your input for each \`.\` you type after an initial \`..\`
-#zstyle ':zim:input' double-dot-expand yes
-#
-# termtitle
-#
-# Set a custom terminal title format using prompt expansion escape sequences.
-# See http://zsh.sourceforge.net/Doc/Release/Prompt-Expansion.html#Simple-Prompt-Escapes
-# If none is provided, the default '%n@%m: %~' is used.
-#zstyle ':zim:termtitle' format '%1~'
-#
-# zsh-autosuggestions
-#
-# Customize the style that the suggestions are shown with.
-# See https://github.com/zsh-users/zsh-autosuggestions/blob/master/README.md#suggestion-highlight-style
-#ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=242'
-#
-# zsh-syntax-highlighting
-#
-# Set what highlighters will be used.
-# See https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/docs/highlighters.md
-ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
-# Customize the main highlighter styles.
-# See https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/docs/highlighters/main.md#how-to-tweak-it
-#typeset -A ZSH_HIGHLIGHT_STYLES
-#ZSH_HIGHLIGHT_STYLES[comment]='fg=242'
-# ------------------
-# Initialize modules
-# ------------------
-if [[ ! -e ${ZIM_HOME}/zimfw.zsh ]]; then
-  # Download zimfw script if missing.
-  command mkdir -p ${ZIM_HOME}
-  if (( ${+commands[curl]} )); then
-    command curl -fsSL -o ${ZIM_HOME}/zimfw.zsh https://github.com/zimfw/zimfw/releases/latest/download/zimfw.zsh
+
+## -----------------
+## Zim configuration
+## -----------------
+## Use degit instead of git as the default tool to install and update modules.
+##zstyle ':zim:zmodule' use 'degit'
+## --------------------
+## Module configuration
+## --------------------
+##
+## completion
+##
+## Set a custom path for the completion dump file.
+## If none is provided, the default ${ZDOTDIR:-${HOME}}/.zcompdump is used.
+##zstyle ':zim:completion' dumpfile "${ZDOTDIR:-${HOME}}/.zcompdump-${ZSH_VERSION}"
+##
+## git
+##
+## Set a custom prefix for the generated aliases. The default prefix is 'G'.
+#zstyle ':zim:git' aliases-prefix 'g'
+##
+## input
+##
+## Append \`../\` to your input for each \`.\` you type after an initial \`..\`
+##zstyle ':zim:input' double-dot-expand yes
+##
+## termtitle
+##
+## Set a custom terminal title format using prompt expansion escape sequences.
+## See http://zsh.sourceforge.net/Doc/Release/Prompt-Expansion.html#Simple-Prompt-Escapes
+## If none is provided, the default '%n@%m: %~' is used.
+##zstyle ':zim:termtitle' format '%1~'
+##
+## zsh-autosuggestions
+##
+## Customize the style that the suggestions are shown with.
+## See https://github.com/zsh-users/zsh-autosuggestions/blob/master/README.md#suggestion-highlight-style
+##ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=242'
+##
+## zsh-syntax-highlighting
+##
+## Set what highlighters will be used.
+## See https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/docs/highlighters.md
+#ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
+## Customize the main highlighter styles.
+## See https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/docs/highlighters/main.md#how-to-tweak-it
+##typeset -A ZSH_HIGHLIGHT_STYLES
+##ZSH_HIGHLIGHT_STYLES[comment]='fg=242'
+## ------------------
+## Initialize modules
+## ------------------
+#if [[ ! -e ${ZIM_HOME}/zimfw.zsh ]]; then
+#  # Download zimfw script if missing.
+#  command mkdir -p ${ZIM_HOME}
+#  if (( ${+commands[curl]} )); then
+#    command curl -fsSL -o ${ZIM_HOME}/zimfw.zsh https://github.com/zimfw/zimfw/releases/latest/download/zimfw.zsh
+#  else
+#    command wget -nv -O ${ZIM_HOME}/zimfw.zsh https://github.com/zimfw/zimfw/releases/latest/download/zimfw.zsh
+#  fi
+#fi
+#if [[ ! ${ZIM_HOME}/init.zsh -nt ${ZDOTDIR:-${HOME}}/.zimrc ]]; then
+#  # Install missing modules, and update ${ZIM_HOME}/init.zsh if it does not exist
+#  # or it's outdated, before sourcing it.
+#  source ${ZIM_HOME}/zimfw.zsh init -q
+#fi
+#source ${ZIM_HOME}/init.zsh
+
+
+if (( ! $+commands[antibody] )) ; then
+  if (( $+commands[brew] )) ; then
+    brew install getantibody/tap/antibody
+  elif (( $+commands[go] )) ; then
+    go get -v github.com/getantibody/antibody
   else
-    command wget -nv -O ${ZIM_HOME}/zimfw.zsh https://github.com/zimfw/zimfw/releases/latest/download/zimfw.zsh
+    echo Install go or brew!
   fi
 fi
-if [[ ! ${ZIM_HOME}/init.zsh -nt ${ZDOTDIR:-${HOME}}/.zimrc ]]; then
-  # Install missing modules, and update ${ZIM_HOME}/init.zsh if it does not exist
-  # or it's outdated, before sourcing it.
-  source ${ZIM_HOME}/zimfw.zsh init -q
+
+autoload -U fasd
+_ab_dir=${XDG_CACHE_HOME}/antibody
+_ab_path=$_ab_dir/init.zsh
+
+function zupdate() {
+  mkdir -p $_ab_dir
+  rm -f $_ab_path
+  antibody bundle < $ZDOTDIR/antibody_bundles.txt > $_ab_path
+}
+if [[ ! -s $_ab_path ]]; then
+  zupdate
 fi
-source ${ZIM_HOME}/init.zsh
+
+# source antibody output
+source $_ab_path
+
+
 # ------------------------------
 # Post-init module configuration
 # ------------------------------
@@ -246,7 +276,9 @@ function brew_or_cargo() {
   fi
 }
 
-[[ -f ~/.rustup/settings.toml ]] || rustup default stable
+if (( ${+commands[rustup]} )) ; then
+  [[ -f ~/.rustup/settings.toml ]] || rustup default stable
+fi
 typeset -A mytools
 mytools[rg]='--brew ripgrep --cargo ripgrep'
 mytools[dust]='--brew dust --cargo du-dust'
