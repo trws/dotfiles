@@ -73,9 +73,11 @@ else
 endif
 
 "powerline not working, light alternative?
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-Plug 'edkolev/tmuxline.vim'
+" Plug 'vim-airline/vim-airline'
+" Plug 'vim-airline/vim-airline-themes'
+" Plug 'edkolev/tmuxline.vim'
+" One more try for something fast, maybe?
+Plug 'rbong/vim-crystalline'
 
 
 " if executable('task')
@@ -102,7 +104,8 @@ Plug 'lervag/vimtex'
 if has('nvim')
   let g:vimtex_compiler_progname='nvr'
 endif
-
+let g:tex_comment_nospell=1
+let g:Tex_CompileRule_pdf="latexmk -shell-escape -synctex=1 $*"
 let g:vimtex_disable_recursive_main_file_detection = 1
 let g:vimtex_view_method='skim'
 let g:vimtex_fold_manual=1
@@ -365,7 +368,7 @@ Plug 'liuchengxu/vista.vim'
 " going back to fzf from clap, seems to have all the stuff, faster
 " Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary' }
 
-Plug 'Shougo/neomru.vim'
+" Plug 'Shougo/neomru.vim'
 
 " Plug 'Shougo/vimfiler.vim'
 " Plug 'Shougo/neoyank.vim' " provides history/yank unite source
@@ -761,9 +764,69 @@ let g:airline#extensions#whitespace#enabled=0
 "" let g:airline_extensions = ["tmuxline","branch","tagbar","quickfix","denite","csv","netrw","term","vimtex"]
 "let g:airline_extensions = ["branch","tagbar","quickfix","csv","netrw","term","vimtex","undotree","windowswap","fugitiveline"]
 " let g:airline_extensions = ["tmuxline","branch","tagbar","quickfix","denite","csv","term","vimtex"]
-let g:airline_extensions = ["tmuxline","branch","vista","quickfix","csv","term","vimtex","undotree","windowswap","fugitiveline"]
+" let g:airline_extensions = ["tmuxline","fzf","branch","vista","quickfix","csv","term","vimtex","undotree","windowswap","fugitiveline"]
+let g:airline_extensions = ["tmuxline","fzf","vista","quickfix","csv","term","vimtex","undotree","windowswap","fugitiveline"]
+
+
+function! StatusLine(current, width)
+  let l:s = ''
+
+  if a:current
+    let l:s .= crystalline#mode() . crystalline#right_mode_sep('')
+  else
+    let l:s .= '%#CrystallineInactive#'
+  endif
+  let l:s .= ' %f%h%w%m%r '
+  if a:current && a:width > 60
+    let l:s .= crystalline#right_sep('', 'Fill') . ' %{fugitive#head()}'
+  endif
+
+  let l:s .= '%='
+  if a:current
+    let l:s .= crystalline#left_sep('', 'Fill') . ' %{&paste ?"PASTE ":""}%{&spell?"SPELL ":""}'
+    let l:s .= crystalline#left_mode_sep('')
+  endif
+  if a:width > 80
+    let l:s .= ' %{&ft}[%{&fenc!=#"" ? &fenc : &enc}][%{&ff}] '
+  else
+    let l:s .= ' '
+  endif
+
+  if a:current
+    let l:s .= ' %{&ft==#"csv" ? "CSV[" . CSVCol() . "]" : ""} '
+  endif
+  let l:s .= ' %l/%L %c%V %P '
+
+  return l:s
+endfunction
+
+" function! TabLine()
+"   let l:vimlabel = has('nvim') ?  ' NVIM ' : ' VIM '
+"   return crystalline#bufferline(2, len(l:vimlabel), 1) . '%=%#CrystallineTab# ' . l:vimlabel
+" endfunction
+
+let g:crystalline_enable_sep = 1
+let g:crystalline_statusline_fn = 'StatusLine'
+" let g:crystalline_tabline_fn = 'TabLine'
+let g:crystalline_theme = 'onedark'
+
+set showtabline=2
+set guioptions-=e
+set laststatus=2
+
+
+
+
+
 set timeoutlen=300
 set ttimeoutlen=10
+if ! has('gui_running')
+  augroup FastEscape
+    autocmd!
+    au InsertEnter * set timeoutlen=0
+    au InsertLeave * set timeoutlen=300
+  augroup END
+endif
 
 if InGui()
   set guioptions=egmt
