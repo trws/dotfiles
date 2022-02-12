@@ -68,13 +68,13 @@ function helpers#Map_for_all(mapping, target, ...)
   endif
 
   if l:for_cmd != 0
-    execute 'cmap '.a:mapping.' '.a:target
+    execute 'cnoremap '.a:mapping.' '.a:target
   endif
 
   if l:for_input > 1
-    execute 'imap ' . a:mapping . ' <esc>' . a:target
+    execute 'inoremap ' . a:mapping . ' <esc>' . a:target
   else
-    execute 'imap ' . a:mapping . ' ' . a:target
+    execute 'inoremap ' . a:mapping . ' ' . a:target
   endif
 endfunction
 

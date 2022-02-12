@@ -59,7 +59,7 @@ nnoremap <silent> <leader>ws :call WindowSwap#EasyWindowSwap()<CR>
 " Plug 'crusoexia/vim-monokai'
 " Plug 'nanotech/jellybeans.vim' " in base repo now
 Plug 'romainl/Apprentice', { 'branch' : 'fancylines-and-neovim' }
-Plug 'arcticicestudio/nord-vim'
+" Plug 'arcticicestudio/nord-vim'
 Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
 Plug 'dracula/vim'
 
@@ -78,6 +78,7 @@ endif
 " Plug 'edkolev/tmuxline.vim'
 " One more try for something fast, maybe?
 Plug 'rbong/vim-crystalline'
+" Plug 'ryanoasis/vim-devicons'
 
 
 " if executable('task')
@@ -96,7 +97,7 @@ Plug 'sheerun/vim-polyglot' " pulls in syntax for almost everything
 let g:polyglot_disabled = [ 'markdown']
 " Plug 'darfink/vim-plist'
 " let g:plist_display_format='xml'
-Plug 'gu-fan/riv.vim' " RST handler etc.
+" Plug 'gu-fan/riv.vim' " RST handler etc.
 Plug 'hylang/vim-hy'
 Plug 'chrisbra/vim-zsh'
 let g:zsh_fold_enable = 1
@@ -209,11 +210,6 @@ if ! has('win32')
 
   let g:lsp_settings_servers_dir=plugged_directory+"/../vim-lsp-servers"
 
-  " Plug 'dense-analysis/ale'
-  " let g:ale_linters = {
-  " \   'python': ['mypy'],
-  " \}
-
   function! Register_file_completion()
     call asyncomplete#register_source(asyncomplete#sources#file#get_source_options({
           \ 'name': 'file',
@@ -293,31 +289,12 @@ endif
 if has('nvim')
   "TODO look at neomake? https://github.com/neomake/neomake
 
-  " add nvim-treesitter and set up
-  "   Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
-  "   lua <<EOF
-  " require'nvim-treesitter.configs'.setup {
-  "   ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
-  "   ignore_install = { "javascript" }, -- List of parsers to ignore installing
-  "   highlight = {
-  "     enable = true,              -- false will disable the whole extension
-  "     disable = { "c", "rust" },  -- list of language that will be disabled
-  "     -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-  "     -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-  "     -- Using this option may slow down your editor, and you may see some duplicate highlights.
-  "     -- Instead of true it can also be a list of languages
-  "     additional_vim_regex_highlighting = false,
-  "   },
-  " }
-  " EOF
-
   Plug 'nvim-lua/plenary.nvim'
   Plug 'nvim-telescope/telescope.nvim'
   " fzf-compatible matcher
   Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 
 else
-  "   Plug 'Shougo/deoplete.nvim'
   Plug 'roxma/nvim-yarp'
   Plug 'roxma/vim-hug-neovim-rpc'
 endif
@@ -400,7 +377,8 @@ let g:poetv_executables=['poetry']
 Plug 'petobens/poet-v'
 
 " load tcomment before vim-swap so vim-swap mappings win
-Plug 'tomtom/tcomment_vim'
+" Plug 'tomtom/tcomment_vim'
+Plug 'tpope/vim-commentary'
 " allow swapping of arguments, and i,/a, for selecting swappable component of
 " comma-delimited argument lists
 Plug 'machakann/vim-swap'
@@ -411,7 +389,9 @@ Plug 'machakann/vim-swap'
 " even more text objects, arguments, separators, tons of stuff
 Plug 'wellle/targets.vim'
 " NOTE: A is inner around, take delimiters but no space, a has old behavior
-let g:targets_aiAI = 'AiaI'
+" let g:targets_aiAI = 'AiaI'
+let g:targets_aiAI = 'aiAI'
+let g:targets_seekRanges = 'cr cb cB lc ac Ac lr lb ar ab lB Ar aB Ab AB rr ll rb al rB Al bb aa bB Aa BB AA'
 
 
 " indent objects, around or in (i)ndent regions
@@ -442,8 +422,8 @@ let g:formatters_c=['clangformat']
 let g:formatters_cpp=['clangformat']
 let g:formatters_sh=['shfmt']
 " Ensure we have black, add Black command
-let g:black_virtualenv=expand("~/.cache/vim/black")
-Plug 'psf/black', { 'branch': 'stable' }
+" let g:black_virtualenv=expand("~/.cache/vim/black")
+" Plug 'psf/black', { 'branch': 'stable' }
 
 " show available mappings off of current prefix
 Plug 'liuchengxu/vim-which-key'
@@ -484,6 +464,7 @@ Plug 'tpope/vim-sensible'
 
 call plug#end()
 
+if has('nvim')
 lua <<EOF
 require('telescope').setup {
 extensions = {
@@ -500,6 +481,7 @@ case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
 -- load_extension, somewhere after setup function:
 require('telescope').load_extension('fzf')
 EOF
+endif
 
 
 " fix :Man command in neovim, why on earth this works is beyond me
@@ -558,11 +540,6 @@ let g:fzf_colors =
       \ 'marker':  ['fg', 'Keyword'],
       \ 'spinner': ['fg', 'Label'],
       \ 'header':  ['fg', 'Comment'] }
-command! -bang -nargs=* Ag
-      \ call fzf#vim#ag(<q-args>,
-      \                 <bang>0 ? fzf#vim#with_preview('up:60%')
-      \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
-      \                 <bang>0)
 
 command! FZFMru call fzf#run({
       \ 'source':  reverse(s:all_files()),
@@ -767,6 +744,29 @@ let g:airline#extensions#whitespace#enabled=0
 " let g:airline_extensions = ["tmuxline","fzf","branch","vista","quickfix","csv","term","vimtex","undotree","windowswap","fugitiveline"]
 let g:airline_extensions = ["tmuxline","fzf","vista","quickfix","csv","term","vimtex","undotree","windowswap","fugitiveline"]
 
+function! StatusEncFmt(current)
+  let l:s = ''
+  if strlen(&ft)
+    " let l:s .= &ft.WebDevIconsGetFileTypeSymbol()
+    let l:s .= &ft
+  else
+    let l:s .= 'NO-FT'
+  endif
+  if a:current && &ft == "csv"
+    let l:s .= '[%{CSVCol()}/%{csv#MaxColumns(line("."))}]'
+  endif
+  let l:enc = &fenc!=#"" ? &fenc : &enc
+  let l:fs = " "
+  if l:enc != "utf-8"
+    let l:s .= l:fs . "[" . l:enc . "]"
+    let l:fs = ""
+  endif
+  if &ff != "unix"
+    let l:s .= l:fs . "[" . &ff . "]"
+  endif
+  return l:s
+endfunction
+
 
 function! StatusLine(current, width)
   let l:s = ''
@@ -787,14 +787,11 @@ function! StatusLine(current, width)
     let l:s .= crystalline#left_mode_sep('')
   endif
   if a:width > 80
-    let l:s .= ' %{&ft}[%{&fenc!=#"" ? &fenc : &enc}][%{&ff}] '
+    let l:s .= StatusEncFmt(a:current)
   else
-    let l:s .= ' '
+    let l:s .= ''
   endif
 
-  if a:current
-    let l:s .= ' %{&ft==#"csv" ? "CSV[" . CSVCol() . "]" : ""} '
-  endif
   let l:s .= ' %l/%L %c%V %P '
 
   return l:s
@@ -808,7 +805,7 @@ endfunction
 let g:crystalline_enable_sep = 1
 let g:crystalline_statusline_fn = 'StatusLine'
 " let g:crystalline_tabline_fn = 'TabLine'
-let g:crystalline_theme = 'onedark'
+let g:crystalline_theme = 'gruvbox'
 
 set showtabline=2
 set guioptions-=e
