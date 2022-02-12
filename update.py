@@ -8,7 +8,10 @@ parser.add_argument(
     "-f",
     "--force",
     action="store_true",
-    help="Replace existing links, will *NOT* delete files or directories, and *WILL* error out if you ask it to",
+    help=(
+        "Replace existing links, will *NOT* delete files or directories, and *WILL*"
+        " error out if you ask it to"
+    ),
 )
 args = parser.parse_args()
 
@@ -19,6 +22,7 @@ os.chdir(script_dir)
 
 link_files = {
     "pystartup.py": "~/.pystartup",
+    "flake8": "~/.flake8",
     "ssh/config": "~/.ssh/config",
     "vim::orig": "~/.vim",
     "vim/vimrc": "~/.vimrc",
@@ -44,8 +48,8 @@ if os.path.exists("~/Library"):
 
 
 def try_link(link, target):
-    if '::' in target:
-        target, _ = target.split('::')
+    if "::" in target:
+        target, _ = target.split("::")
     target = os.path.join(script_dir, target)
     print("linking {} to {}".format(link, target))
     l_path = os.path.expanduser(link)
