@@ -1,12 +1,12 @@
 *.a
 *.so
 *.tmp
-~*
-*.swp
+(?d)~*
+(?d)*.swp
 *.o
 vim/swaps
 vim/sessions
-.DS_Store
+(?d).DS_Store
 
 .cache
 
