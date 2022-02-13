@@ -134,7 +134,7 @@ urle.httpCallback = function(scheme, host, params, fullURL)
     open_and_focus_with_bundle(fullURL, 'com.bookry.wavebox')
     return
   end
-  if true or match_any(fullURL, { "webex.com",
+  if match_any(fullURL, { "webex.com",
         "meet.intel.com",
         "bluejeans.com",
         "zoom.us",
@@ -186,7 +186,7 @@ bindings:insert(hotkey.bind({"ctrl","cmd"}, "a", function() toggle_application("
 bindings:insert(hotkey.bind({"ctrl","cmd"}, "i", function() toggle_application("com.apple.ActivityMonitor") end))
 bindings:insert(hotkey.bind({"ctrl","cmd"}, "o", function() toggle_application("com.microsoft.Outlook") end))
 bindings:insert(hotkey.bind({"ctrl","cmd"}, "f", function() toggle_application("com.omnigroup.Omnifocus3.macappstore") end))
-bindings:insert(hotkey.bind({"ctrl","cmd"}, "g", function() toggle_application("com.google.Chrome") end))
+-- bindings:insert(hotkey.bind({"ctrl","cmd"}, "g", function() toggle_application("com.google.Chrome") end))
 bindings:insert(hotkey.bind({"ctrl","cmd"}, "b", function() toggle_application("org.qt-project.Qt.QtWebEngineCore") end))
 bindings:insert(hotkey.bind({"ctrl","cmd"}, "t", function() toggle_application("com.googlecode.iterm2") end))
 bindings:insert(hotkey.bind({"ctrl","cmd","shift"}, "v", function() toggle_application("org.vim.macvim") end))

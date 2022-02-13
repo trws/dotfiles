@@ -8,7 +8,6 @@
 #sorin-ionescu/prezto path:modules/environment
 #sorin-ionescu/prezto path:modules/terminal
 #sorin-ionescu/prezto path:modules/editor
-#sorin-ionescu/prezto path:modules/git
 #sorin-ionescu/prezto path:modules/gnu-utility
 #sorin-ionescu/prezto path:modules/homebrew
 #sorin-ionescu/prezto path:modules/osx
@@ -52,6 +51,9 @@ zimfw/homebrew
 
 wfxr/forgit
 
+sorin-ionescu/prezto
+sorin-ionescu/prezto path:modules/git
+
 # fzf for completion - buggy
 # zmodule Aloxaf/fzf-tab
 
@@ -62,7 +64,7 @@ wfxr/forgit
 # Sets sane Zsh built-in environment options.
 zimfw/environment
 # Provides handy git aliases and functions.
-zimfw/git # prezto-like
+# zimfw/git # prezto-like
 # Applies correct bindkeys for input events.
 zimfw/input #more general handling for EOL and delete etc. than I had
 # Sets a custom terminal title.
