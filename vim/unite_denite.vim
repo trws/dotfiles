@@ -61,15 +61,6 @@ else
         \ ['git', 'ls-files', '-co', '--exclude-standard'])
   " nnoremap <silent> <leader>ur :<C-u>Denite
   "       \ `finddir('.git', ';') != '' ? 'file/rec/git' : 'file/rec'`<CR>
-  function! Find_ur_dir()
-    let l:target=fnamemodify(resolve(expand('%:p')), ':p:h')
-    let l:git=finddir('.git',l:target . ';')
-    if l:git != ''
-      return fnamemodify(l:git, ':h')
-    else
-      return '.'
-    endif
-  endfunction
 
   nnoremap <silent> <leader>ur :<C-u>Denite `'file/rec:' . Find_ur_dir()`<CR>
   " nnoremap <silent> <leader>ur :<C-u>Denite file/rec<CR>

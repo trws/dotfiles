@@ -1,11 +1,6 @@
 #!/usr/bin/vim
-" prevent airline loading before my colorscheme
-if 0
-  colorscheme jellybeans-stripped
-  let g:airline_theme='jellybeans'
-endif
 if has('python3')
-  silent! python3 1
+  " silent! python3 1
 endif
 function! FindOrCreate(dir)
   if !isdirectory(expand(a:dir))
@@ -32,6 +27,9 @@ if !filereadable(expand("~/.vim/autoload/plug.vim"))
 endif
 
 call plug#begin(plugged_directory)
+
+filetype indent on " covered by sensible, BUT running here avoids double load, must be before plug#end
+filetype plugin on
 
 " let neovim manage its own python support
 if has('nvim')
@@ -156,7 +154,7 @@ Plug 'tpope/vim-apathy'
 " tmux control commands :Tmux and :Tyank/:Tput for buffers
 Plug 'tpope/vim-tbone'
 "tmux integration, disabling in favor of tbone for now
-" Plug 'vim-scripts/vimux'
+Plug 'vim-scripts/vimux'
 
 function! InGui()
   return has("gui_running") || exists("g:gui_oni") || exists("neovim_dot_app") || has("gui_vimr")
@@ -257,13 +255,13 @@ if ! has('win32')
     autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
   augroup END
 
+  let g:lsp_settings_filetype_python = 'pylsp-all'
   " let g:lsp_log_verbose = 1
   " let g:lsp_log_file = expand('./lsp.log')
   let g:lsp_settings = {
-        \   'pyls-all': {
-        \     'cmd': ['pipx','run','--spec','python-language-server[all]','pyls'],
+        \   'pylsp-all': {
         \     'workspace_config': {
-        \       'pyls': {
+        \       'pylsp': {
         \         'plugins': {
         \           'pyflakes': {'enabled': v:false},
         \           'flake8': {'enabled': v:true},
@@ -291,6 +289,7 @@ if has('nvim')
 
   Plug 'nvim-lua/plenary.nvim'
   Plug 'nvim-telescope/telescope.nvim'
+  Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
   " fzf-compatible matcher
   Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 
@@ -358,6 +357,7 @@ Plug 'liuchengxu/vista.vim'
 
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-vinegar'
+nnoremap <silent> _ :Rexplore<cr>
 Plug 'tpope/vim-rhubarb' " github links
 
 " cmdline-mode mappings
@@ -374,7 +374,7 @@ Plug 'tpope/vim-rsi'
 "
 " Python poetry and pipenv
 let g:poetv_executables=['poetry']
-Plug 'petobens/poet-v'
+Plug 'petobens/poet-v', { 'for': 'python' }
 
 " load tcomment before vim-swap so vim-swap mappings win
 " Plug 'tomtom/tcomment_vim'
@@ -414,6 +414,7 @@ Plug 'SirVer/ultisnips'
 " Snippets are separated from the engine
 Plug 'honza/vim-snippets'
 Plug 'justinmk/vim-sneak'
+let g:sneak#label=1
 Plug 'rbtnn/vim-vimscript_indentexpr'
 " format on Ctrl-k, maybe look into using lsp support in place or in addition?
 Plug 'Chiel92/vim-autoformat'
@@ -427,7 +428,8 @@ let g:formatters_sh=['shfmt']
 
 " show available mappings off of current prefix
 Plug 'liuchengxu/vim-which-key'
-nnoremap <silent> <leader> :WhichKey ','<CR>
+nnoremap <leader> :<C-U>WhichKey ','<CR>
+vnoremap <silent> <leader> :<c-u>WhichKeyVisual ','<CR>
 
 " :UndotreeToggle to walk undo tree
 Plug 'mbbill/undotree'
@@ -458,7 +460,6 @@ Plug 'radenling/vim-dispatch-neovim'
 "not on by default, have to use :Wordy
 Plug 'reedes/vim-wordy'
 
-nnoremap <silent> _ :Rexplore<cr>
 
 Plug 'tpope/vim-sensible'
 
@@ -554,6 +555,16 @@ function! s:all_files()
         \ map(filter(range(1, bufnr('$')), 'buflisted(v:val)'), 'bufname(v:val)'))
 endfunction
 
+function! Find_ur_dir()
+  let l:target=fnamemodify(resolve(expand('%:p')), ':p:h')
+  let l:git=finddir('.git',l:target . ';')
+  if l:git != ''
+    return fnamemodify(l:git, ':h')
+  else
+    return l:target
+  endif
+endfunction
+
 function! Files_with_ur_dir()
   let l:dir = Find_ur_dir()
   echo l:dir
@@ -562,7 +573,9 @@ endfunction
 " fzf version of the mappings, experimental
 " nnoremap <silent> <leader>fr  :call Files_with_ur_dir()<CR>
 nnoremap <silent> <leader>fr  :Files<CR>
-nnoremap <silent> <leader>fR  :Files<CR>
+nnoremap <silent> <expr> <leader>fR  ":Files". Find_ur_dir() . "<CR>"
+nnoremap <silent> <leader>ffg  :GFiles<CR>
+nnoremap <silent> <leader>ffr  :GFiles<CR>
 nnoremap <silent> <leader>fb  :History<CR>
 nnoremap <silent> <leader>fB  :Buffers<CR>
 nnoremap <silent> <leader>fs  :Snippets<CR>
@@ -586,55 +599,6 @@ nnoremap <silent> <leader>fvc  :Commands<CR>
 nnoremap <silent> <leader>fv:  :History:<CR>
 nnoremap <silent> <leader>fv/  :History/<CR>
 nnoremap <silent> <leader>f]  :call TagsWithCword()<CR>
-
-" disabling clap for now, going to see if I care
-function! s:load_clap()
-  " clap bindings
-  let g:clap_provider_dotfiles = {
-        \ 'source': ['~/.vimrc', '~/.dotfiles/emacs-custom/init.el', '~/.zsh/.zshenv', '~/.tmux.conf'],
-        \ 'sink': 'e',
-        \ }
-  let g:clap_layout = { 'relative': 'editor' }
-  let g:clap_project_root_markers = ['.root', '.git', '.git/', '.latexmkrc', '.travis.yml']
-  " add provider that always uses cwd rather than root of target file
-  let g:clap_provider_files_cwd = deepcopy(g:clap#provider#files#)
-  let g:clap_provider_files_cwd.enable_rooter = v:false
-
-  let g:clap_disable_run_rooter = v:false
-
-  function! Run_clap_cmd_noroot(cmd)
-    let l:tmp = g:clap_disable_run_rooter
-    let g:clap_disable_run_rooter = v:true
-    :execute ':Clap ' . a:cmd
-    let g:clap_disable_run_rooter = l:tmp
-  endfunction
-
-  function! Decl_clap_map_condroot(key, cmd)
-    " regular rooting enabled version
-    execute 'nnoremap <silent> <leader>s' . toupper(a:key) . '  :Clap ' . a:cmd . '<CR>'
-    execute 'nnoremap <silent> <leader>s' . a:key . "  :call  Run_clap_cmd_noroot('" . a:cmd . "')<CR>"
-  endfunction
-
-  call Decl_clap_map_condroot('r', 'files')
-  call Decl_clap_map_condroot('s', 'gfiles')
-  call Decl_clap_map_condroot('g', 'grep')
-
-  nnoremap <silent> <leader>sc  :Clap bcommits<CR>
-  nnoremap <silent> <leader>sC  :Clap commits<CR>
-  nnoremap <silent> <leader>sd  :Clap files ~/.dotfiles<CR>
-  nnoremap <silent> <leader>sb  :Clap history<CR>
-  nnoremap <silent> <leader>sq  :Clap history<CR>
-  nnoremap <silent> <leader>sm  :Clap maps<CR>
-  nnoremap <silent> <leader>sB  :Clap buffers<CR>
-  nnoremap <silent> <leader>sw  :Clap windows<CR>
-  nnoremap <silent> <leader>sn  :Clap files ~/onedrive/vimwiki/<CR>
-  nnoremap <silent> <leader>sl  :Clap blines<CR>
-  nnoremap <silent> <leader>sL  :Clap lines<CR>
-  nnoremap <silent> <leader>sy  :Clap yanks<CR>
-  nnoremap <silent> <leader>sT  :Clap tags<CR>
-  nnoremap <silent> <leader>st  :Clap tags<CR>
-  " nnoremap <silent> <leader>l]  :call TagsWithCword()<CR>
-endfunction
 
 let include_paths = ['/opt/local/include','/usr/local/include','/usr/include','/Developer/Headers',fnamemodify('~/programs/include',':p')]
 let &path= join(['.', '', './include'] + include_paths, ',')
@@ -725,24 +689,6 @@ let python_highlight_all = 1
 
 call helpers#Map_for_all("<C-k>", ":Autoformat<CR>", 1, 0, 0)
 
-
-" use ascii symbols instead of unicode, expariment
-" let g:airline_symbols_ascii = 1
-let g:airline#extensions#tmuxline#enabled = 1
-" let g:airline#extensions#bufferline#enabled = 1
-" let g:airline#extensions#branch#enabled = 1
-" let g:airline#extensions#tagbar#enabled = 1
-" let g:airline#extensions#tagbar#flags = 'f'
-" let g:airline#extensions#quickfix#enabled = 1
-" let g:airline#extensions#branch#displayed_head_limit = 10
-" let g:airline#extensions#csv#enabled = 1
-let g:airline_highlighting_cache = 1
-let g:airline#extensions#whitespace#enabled=0
-"" let g:airline_extensions = ["tmuxline","branch","tagbar","quickfix","denite","csv","netrw","term","vimtex"]
-"let g:airline_extensions = ["branch","tagbar","quickfix","csv","netrw","term","vimtex","undotree","windowswap","fugitiveline"]
-" let g:airline_extensions = ["tmuxline","branch","tagbar","quickfix","denite","csv","term","vimtex"]
-" let g:airline_extensions = ["tmuxline","fzf","branch","vista","quickfix","csv","term","vimtex","undotree","windowswap","fugitiveline"]
-let g:airline_extensions = ["tmuxline","fzf","vista","quickfix","csv","term","vimtex","undotree","windowswap","fugitiveline"]
 
 function! StatusEncFmt(current)
   let l:s = ''
@@ -1081,9 +1027,6 @@ endif
 "alt
 "Powerline
 set laststatus=2 "keeps the statusbar on
-if exists("$TERM_PROGRAM") && $TERM_PROGRAM == 'iTerm.app'
-  let g:airline_powerline_fonts = 1
-endif
 
 "general options
 set grepprg=grep\ -nH\ $*
@@ -1091,9 +1034,7 @@ set grepprg=grep\ -nH\ $*
 set wildmenu
 set wildmode=longest:list,full
 set foldmethod=syntax
-" set foldcolumn=1 " show fold depth in the gutter
-" filetype indent on " covered by sensible
-" filetype plugin on
+set foldcolumn=1 " show fold depth in the gutter
 
 "winmanager
 let g:winManagerWindowLayout = "Project|TagList"
@@ -1107,6 +1048,8 @@ call helpers#Map_for_all_meta("<Left>", "<C-w>h", 2, 0, 1)
 call helpers#Map_for_all_meta("<Down>", "<C-w>j", 2, 0, 1)
 call helpers#Map_for_all_meta("<Up>", "<C-w>k", 2, 0, 1)
 call helpers#Map_for_all_meta("<Right>", "<C-w>l", 2, 0, 1)
+set splitbelow
+set splitright
 "
 "tab management
 call helpers#Map_for_all_meta('t', ":tabnew<CR>", 2, 1, 1)
@@ -1178,32 +1121,4 @@ else
   set t_Co=256
 endif
 
-" let g:jellybeans_overrides = {
-"             \    'background': { 'ctermbg': 'Black' },
-"             \}
-if !has("gui_running")
-  " let g:jellybeans_background_color = "000000"
-  " let g:jellybeans_use_lowcolor_black = 1
-  " let g:jellybeans_background_color_256="0"
-endif
-
-" set background=dark
-" let g:solarized_contrast = "high"
-let g:solarized_contrast = "normal"
-let g:solarized_visibility = "normal"
-let g:solarized_termcolors=256
-" let g:solarized_termcolors=16
-let g:solarized_termtrans = 1
-" colorscheme solarized
-
-if exists("$TERM_PROGRAM") && $TERM_PROGRAM == 'iTerm.app'
-  if exists("$ITERM_PROFILE")
-    if $ITERM_PROFILE == 'Monokai'
-      colorscheme monokai
-    elseif $ITERM_PROFILE == 'Default'
-      " colorscheme inkpot
-      " colorscheme badwolf
-    endif
-  endif
-endif
 " vim: set ts=2 sw=2 tw=80 et :
