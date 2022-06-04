@@ -42,3 +42,5 @@ skip_global_compinit=1
 ZIM_HOME=~/.cache/zsh/zim
 # }}} End configuration added by Zim install
 if [ -e /Users/scogland1/.nix-profile/etc/profile.d/nix.sh ]; then . /Users/scogland1/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
+
+if [ -e /home/scogland1/.nix-profile/etc/profile.d/nix.sh ]; then . /home/scogland1/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer

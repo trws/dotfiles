@@ -41,6 +41,7 @@ alias -- -="cd -"
 
 # additional docker alias for normal run command
 alias dkrit='docker run --rm -it -v $(pwd):/curdir -w /curdir'
+alias podit='podman run --rm -it -v $(pwd):/curdir -w /curdir'
 
 if hub >& /dev/null ; then
     alias git='noglob hub'
@@ -65,7 +66,7 @@ function gRuo() {
     if [[ $new_origin =~ llnl ]] ; then
         user=scogland
     fi
-    new_origin=$(echo $new_origin | sed -e "s|:[^/]+?/|:$user/|")
+    new_origin=$(echo $new_origin | sed -e "s|:[^/]*/|:$user/|")
     echo "Change origin from ${origin_s} to $new_origin?"
     local q
     read -q q

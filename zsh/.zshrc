@@ -173,31 +173,30 @@ WORDCHARS=${WORDCHARS//[\/]}
 #fi
 #source ${ZIM_HOME}/init.zsh
 
-
-if (( ! $+commands[antibody] )) ; then
-  if (( $+commands[brew] )) ; then
-    brew install getantibody/tap/antibody
-  elif (( $+commands[go] )) ; then
-    go get -v github.com/getantibody/antibody
-  else
-    echo Install go or brew!
-  fi
+# ensure we get homebrew completion
+if (( $+commands[brew] )) ; then
+  FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
 fi
 
+# clone antidote if necessary
+[[ -e ~/.cache/antidote ]] || git clone https://github.com/mattmc3/antidote.git ~/.cache/antidote
+
+# source antidote
+. ~/.cache/antidote/antidote.zsh
+
 autoload -U fasd
+export ANTIDOTE_HOME=~/.cache/antidote
 _ab_dir=${XDG_CACHE_HOME:=~/.cache}/antibody
 _ab_path=$_ab_dir/init.zsh
 
-function zupdate() {
-  mkdir -p $_ab_dir
-  rm -f $_ab_path
-  antibody bundle < $ZDOTDIR/antibody_bundles.txt > $_ab_path
-}
-if [[ ! -s $_ab_path ]]; then
-  zupdate
+# generate and source plugins from ~/.zsh_plugins.txt
+if [[ ! $_ab_path -nt $ZDOTDIR/antibody_bundles.txt ]]; then
+  [[ -d $_ab_dir ]] || mkdir -p $_ab_dir
+  (
+    source ~/.cache/antidote/antidote.zsh
+    envsubst <$ZDOTDIR/antibody_bundles.txt | antidote bundle >$_ab_path
+  )
 fi
-
-# source antibody output
 source $_ab_path
 
 
@@ -275,6 +274,8 @@ function brew_or_cargo() {
   fi
 }
 
+
+autoload is-at-least
 if is-at-least 5.1; then
   if (( ${+commands[rustup]} )) ; then
     [[ -f ~/.rustup/settings.toml ]] || rustup default stable

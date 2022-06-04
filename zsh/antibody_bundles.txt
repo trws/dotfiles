@@ -1,41 +1,13 @@
-#mafredri/zsh-async
-#
-#zsh-users/zsh-completions
-#
-#sorin-ionescu/prezto
-## for is-darwin, is-linux, etc.
-## sorin-ionescu/prezto path:modules/helper
-#sorin-ionescu/prezto path:modules/environment
-#sorin-ionescu/prezto path:modules/terminal
-#sorin-ionescu/prezto path:modules/editor
-#sorin-ionescu/prezto path:modules/gnu-utility
-#sorin-ionescu/prezto path:modules/homebrew
-#sorin-ionescu/prezto path:modules/osx
-#sorin-ionescu/prezto path:modules/ssh
-## sorin-ionescu/prezto path:modules/python
-#sorin-ionescu/prezto path:modules/tmux
-#sorin-ionescu/prezto path:modules/history
-#sorin-ionescu/prezto path:modules/directory
-#sorin-ionescu/prezto path:modules/spectrum
-#sorin-ionescu/prezto path:modules/utility
-## copied to zsh/completions.zsh
-## sorin-ionescu/prezto path:modules/completion
-#sorin-ionescu/prezto path:modules/docker
-#
-#sorin-ionescu/prezto path:modules/autosuggestions
-#
-#sorin-ionescu/prezto path:modules/syntax-highlighting
-#sorin-ionescu/prezto path:modules/history-substring-search
-
-
 # autoenv support, for .autoenv.zsh files
 Tarrasch/zsh-autoenv
 
 junegunn/fzf path:shell
+junegunn/fzf path:shell/key-bindings.zsh
 wookayin/fzf-fasd
 
+
 # get gnu-utility support from prezto
-~/.dotfiles/zsh/gnu-utility
+$HOME/.dotfiles/zsh/gnu-utility
 
 # zmodule asdf-vm/asdf --name asdf-vm -s asdf.sh
 # zmodule asdf
@@ -47,17 +19,16 @@ zimfw/fasd kind:fpath path:functions
 zimfw/fasd
 
 zimfw/exa
-zimfw/homebrew
 
 wfxr/forgit
 
 sorin-ionescu/prezto
 sorin-ionescu/prezto path:modules/git
+sorin-ionescu/prezto path:modules/homebrew
 
 # fzf for completion - buggy
 # zmodule Aloxaf/fzf-tab
 
-# Start configuration added by Zim install {{{
 # -------
 # Modules
 # -------
@@ -66,7 +37,8 @@ zimfw/environment
 # Provides handy git aliases and functions.
 # zimfw/git # prezto-like
 # Applies correct bindkeys for input events.
-zimfw/input #more general handling for EOL and delete etc. than I had
+#more general handling for EOL and delete etc. than I had
+zimfw/input
 # Sets a custom terminal title.
 zimfw/termtitle
 # Utility aliases and functions. Adds colour to ls, grep and less.
@@ -80,7 +52,7 @@ romkatv/powerlevel10k
 # Exposes to prompts how long the last command took to execute, used by asciiship.
 zimfw/duration-info
 # Exposes git repository status information to prompts, used by asciiship.
-zimfw/git-info
+zimfw/git-info kind:fpath path:functions
 # A heavily reduced, ASCII-only version of the Spaceship and Starship prompts.
 zimfw/asciiship
 # Additional completion definitions for Zsh.
@@ -96,4 +68,6 @@ zsh-users/zsh-syntax-highlighting
 # Fish-like history search (up arrow) for Zsh.
 # zsh-users/zsh-history-substring-search must be sourced after zsh-users/zsh-syntax-highlighting
 zsh-users/zsh-history-substring-search
-# }}} End configuration added by Zim install
+
+# Tmux
+tmux-plugins/tpm kind:clone
