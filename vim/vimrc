@@ -153,7 +153,7 @@ let g:pandoc#syntax#codeblocks#embeds#langs = ['html', 'python', 'bash=sh', "c",
 Plug 'tpope/vim-apathy'
 " tmux control commands :Tmux and :Tyank/:Tput for buffers
 Plug 'tpope/vim-tbone'
-"tmux integration, disabling in favor of tbone for now
+"tmux integration
 Plug 'vim-scripts/vimux'
 
 function! InGui()
@@ -808,7 +808,7 @@ function! StatusLine(current, width)
   endif
   let l:s .= ' %f%h%w%m%r '
   if a:current && a:width > 60
-    let l:s .= crystalline#right_sep('', 'Fill') . ' %{fugitive#head()}'
+    let l:s .= crystalline#right_sep('', 'Fill') . ' %{FugitiveHead()}'
   endif
 
   let l:s .= '%='
