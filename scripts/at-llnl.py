@@ -7,7 +7,7 @@ host = check_output("hostname", shell=True)
 
 if b'vortex' in host:
     sys.exit(0)
-if b"storm" in host:
+if any(hn in host for hn in (b"storm", b"bolt")):
     try:
         # check_output('networksetup -getairportnetwork en0 2>&1 | grep LLNL',
         #              shell=True)

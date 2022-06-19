@@ -1,13 +1,24 @@
 *.a
 *.so
 *.tmp
-(?d)~*
-(?d)*.swp
 *.o
 vim/swaps
 vim/sessions
-(?d).DS_Store
+(?d).DS_Store*
+
+(?d)*.swp
+(?d).*~
+(?d)*~
+(?d)\#*\#
+(?d)/.emacs.desktop
+(?d)/.emacs.desktop.lock
+(?d)*.elc
+(?d)auto-save-list
+(?d)tramp
+(?d).\#*
+# zsh compiled scripts
+(?d)*.zwc
 
 .cache
 
-alfred/alfred.alfredpreferences/preferences/local
+(?i)alfred/alfred.alfredpreferences/preferences/local

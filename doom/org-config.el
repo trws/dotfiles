@@ -103,6 +103,9 @@ Email with subject: %:annotation
 ;; Start the weekly agenda on Monday
 (setq org-agenda-start-on-weekday 1)
 
+;; Log timestamps into LOGBOOK drawer
+(setq org-log-into-drawer t)
+
 
 
 ;;;;;;;;;; experimenting with this from norang

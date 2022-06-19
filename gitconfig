@@ -179,7 +179,9 @@
 [forge]
   remote = upstream
 [init]
-	defaultBranch = main
+  defaultBranch = main
 # [credential "https://github.com"]
 # 	helper = 
 # 	helper = !/home/njustn/.cache/zsh/zinit/plugins/cli---cli/usr/bin/gh auth git-credential
+[pull]
+	rebase = false

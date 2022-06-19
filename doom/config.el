@@ -11,7 +11,18 @@
 (setq user-full-name "Tom Scogland"
       user-mail-address "scogland1@llnl.gov")
 
-(setq browse-url-browser-function 'browse-url-xdg-open)
+(setq browse-url-browser-function ( if (eq system-type 'darwin)
+                                      'browse-url-default-macosx-browser
+                                      'browse-url-xdg-open
+                                      ))
+(defun my-browse-url-on-client (URL &optional IGNORED)
+  (print (format "\033]1337;Custom=id=%s:%s:%s\a" "url-open-sec" "open-link" URL) #'external-debugging-output))
+(defun my-toggle-url-handler ()
+  (interactive)
+  (if (= browse-url-browser-function 'browse-url-xdg-open)
+      (setq browse-url-browser-function 'my-browse-url-on-client)
+      (setq browse-url-browser-function 'browse-url-xdg-open)))
+
 (unless window-system
   (global-set-key (kbd "<mouse-4>") 'scroll-down-line)
   (global-set-key (kbd "<mouse-5>") 'scroll-up-line))
@@ -68,6 +79,8 @@
 ;; You can also try 'gd' (or 'C-c g d') to jump to their definition and see how
 ;; they are implemented.
 ;;
+(add-to-list 'load-path "/usr/local/share/emacs/site-lisp")
+(add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu/mu4e")
 (load! "org-config.el")
 ;; org-gtd needs some doom stuff
 
@@ -122,6 +135,16 @@
   (setq key-chord-two-keys-delay 0.2)
   (key-chord-mode 1)
   )
+
+(use-package! org-roam
+  :after org
+  :config
+  (setq org-roam-directory (expand-file-name "~/org")))
+(use-package! org-logseq
+  :after org
+  :config
+  (setq org-logseq-dir (expand-file-name "~/org"))
+  (setq org-logseq-block-ref-overlay-p t))
 
 ;; NotMuch email config
 (setq gnus-select-method

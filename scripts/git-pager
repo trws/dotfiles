@@ -2,7 +2,7 @@
 
 if (( $+commands[delta] )) ; then
   args=(
-    --theme Dracula
+    # --theme Dracula
   )
     #--relative-paths
     #--navigate

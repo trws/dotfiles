@@ -28,6 +28,8 @@ export XDG_STATE_HOME=$h/.local/state # cross-run state but not long-term, logs,
 # export XDG_RUNTIME_DIR # runtime files, sockets etc.  Not sure we can safely set this
 unset h
 
+# if [ -e /Users/scogland1/.nix-profile/etc/profile.d/nix.sh ]; then . /Users/scogland1/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
+# if [ -e /home/scogland1/.nix-profile/etc/profile.d/nix.sh ]; then . /home/scogland1/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
 source $ZDOTDIR/pathsetup
 source $ZDOTDIR/environment
 
@@ -41,6 +43,3 @@ skip_global_compinit=1
 # Define Zim location
 ZIM_HOME=~/.cache/zsh/zim
 # }}} End configuration added by Zim install
-if [ -e /Users/scogland1/.nix-profile/etc/profile.d/nix.sh ]; then . /Users/scogland1/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
-
-if [ -e /home/scogland1/.nix-profile/etc/profile.d/nix.sh ]; then . /home/scogland1/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer

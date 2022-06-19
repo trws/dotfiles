@@ -179,7 +179,7 @@ if (( $+commands[brew] )) ; then
 fi
 
 # clone antidote if necessary
-[[ -e ~/.cache/antidote ]] || git clone https://github.com/mattmc3/antidote.git ~/.cache/antidote
+[[ -e ~/.cache/antidote ]] || git clone git@github.com:mattmc3/antidote.git ~/.cache/antidote
 
 # source antidote
 . ~/.cache/antidote/antidote.zsh
@@ -190,7 +190,7 @@ _ab_dir=${XDG_CACHE_HOME:=~/.cache}/antibody
 _ab_path=$_ab_dir/init.zsh
 
 # generate and source plugins from ~/.zsh_plugins.txt
-if [[ ! $_ab_path -nt $ZDOTDIR/antibody_bundles.txt ]]; then
+if [[ ! -f $_ab_path ]] || [[ ! $_ab_path -nt $ZDOTDIR/antibody_bundles.txt ]]; then
   [[ -d $_ab_dir ]] || mkdir -p $_ab_dir
   (
     source ~/.cache/antidote/antidote.zsh
