@@ -411,6 +411,8 @@ fi
 source $ZDOTDIR/sysmagic
 source $ZDOTDIR/pathsetup
 
+(( $+commands[direnv] )) && eval "$(direnv hook zsh)"
+
 if [[ $PROF_INIT == "true" ]] ; then
   zprof
 fi

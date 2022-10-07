@@ -101,10 +101,6 @@ add_to_path_back /usr/local/cuda  /usr/local/opt/go/libexec
 add_to_path_front ~/spack
 
 
-for p in $zimpaths; do
-  add_to_path_front $p
-done
-
 function load_vim() {
   if [[ -d /usr/tce/packages/vim/ ]] ; then
     local vimdirs

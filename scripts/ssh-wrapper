@@ -1,5 +1,6 @@
 #!/usr/bin/env zsh
 # V=$(/usr/bin/ssh -V |& sed -e 's/OpenSSH_\([0-9]\.[0-9]\+\).*/\1/')
+[[ ! -x /usr/bin/ssh ]] && exec ssh "$@"
 V=$(/usr/bin/ssh -V 2>&1 )
 V=${V#OpenSSH_}
 V=${V[1,3]}

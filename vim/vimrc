@@ -368,6 +368,10 @@ if v:false && ! has('win32')
 endif
 """"""" vim-lsp stuff
 
+" Plug 'junegunn/fzf', { 'dir': plugged_directory . '/fzf', 'do': './install --all' }
+Plug 'junegunn/fzf', { 'dir': plugged_directory . '/fzf' }
+Plug 'junegunn/fzf.vim'
+
 if has('nvim')
   "TODO look at neomake? https://github.com/neomake/neomake
 
@@ -418,10 +422,6 @@ augroup END
 " nasty deps, only works with vimwiki syntax not markdown for now,
 " cool, but currently not quite what I want I think
 " Plug 'tbabej/taskwiki'
-
-" Plug 'junegunn/fzf', { 'dir': plugged_directory . '/fzf', 'do': './install --all' }
-Plug 'junegunn/fzf', { 'dir': plugged_directory . '/fzf' }
-Plug 'junegunn/fzf.vim'
 
 " tagbar replacement " Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle'}
 Plug 'liuchengxu/vista.vim'
