@@ -1,3 +1,15 @@
+[user]
+  name = Tom Scogland
+  email = scogland1@llnl.gov
+
+[includeIf "gitdir:/Users"]
+  path = ~/.dotfiles/git/gitconfig-macos
+[includeIf "gitdir:C:"]
+  path = ~/.dotfiles/git/gitconfig-windows
+[includeIf "gitdir:/home"]
+  path = ~/.dotfiles/git/gitconfig-linux
+
+
 [alias]
   files = !git diff --name-only $(git merge-base HEAD \"${REVIEW_BASE:-$(git rev-parse --abbrev-ref upstream)}\")
 
@@ -7,12 +19,12 @@
   # Open all files changed since REVIEW_BASE in Vim tabs
   # Then, run fugitive's :Gdiff in each tab, and finally
   # tell vim-gitgutter to show +/- for changes since REVIEW_BASE
-  review = !vim -p $(git files) +\"tabdo Gdiff $REVIEW_BASE\" +\"let g:gitgutter_diff_base = '$REVIEW_BASE'\"
+  review = !vim -p $(git files) +\"tabdo vert Gdiffsplit ${REVIEW_BASE:-$(git rev-parse --abbrev-ref upstream)}\" +\"let g:gitgutter_diff_base = '${REVIEW_BASE:-$(git rev-parse --abbrev-ref upstream)}'\"
 
   # Same as the above, except specify names of files as arguments,
   # instead of opening all files:
   # git reviewone foo.js bar.js
-  reviewone = !vim -p +\"tabdo Gdiff $REVIEW_BASE\" +\"let g:gitgutter_diff_base = '$REVIEW_BASE'\"
+  reviewone = !vim -p +\"tabdo vert Gdiff ${REVIEW_BASE:-$(git rev-parse --abbrev-ref upstream)}\" +\"let g:gitgutter_diff_base = '${REVIEW_BASE:-$(git rev-parse --abbrev-ref upstream)}'\"
 
   # View abbreviated SHA, description, and history graph of the latest 20 commits
   l = log --pretty=oneline -n 20 --graph --abbrev-commit
@@ -147,25 +159,17 @@
   # installations. To use `simple` instead, add this to your `~/.extra` file:
   # `git config --global push.default simple`. See http://git.io/mMah-w.
   default = current
-
+######## TOOLS
 [merge "wiggle"]
   name = "Wiggle flexible merging"
   driver = wiggle -o %A %A %O %B
   recursive = binary
-; [merge]
-;     tool = wiggle
 [mergetool "wiggle"]
   cmd = wiggle -Bb -o $MERGED $LOCAL $BASE $REMOTE
 [difftool "wiggle"]
   cmd = wiggle -Bdb $LOCAL $REMOTE
 [difftool "wdiff"]
   cmd = wdiff -3 $LOCAL $REMOTE
-[user]
-  name = Tom Scogland
-  email = scogland1@llnl.gov
-[credential]
-  helper = osxkeychain
-  helper = /usr/share/doc/git/contrib/credential/libsecret/git-credential-libsecret
 [filter "lfs"]
   clean = git-lfs clean -- %f
   smudge = git-lfs smudge -- %f
@@ -179,7 +183,9 @@
 [forge]
   remote = upstream
 [init]
-	defaultBranch = main
+  defaultBranch = main
 # [credential "https://github.com"]
-# 	helper = 
+# 	helper =
 # 	helper = !/home/njustn/.cache/zsh/zinit/plugins/cli---cli/usr/bin/gh auth git-credential
+[pull]
+	rebase = false
