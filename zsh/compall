@@ -1,2 +1,0 @@
-#!/bin/zsh
-for i; zcompile $i;

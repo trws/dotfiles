@@ -1,9 +1,0 @@
-compctl -k hosts \
-        -x "c[-1,-l]" -u \
-        - "c[-1,-i]" -f \
-        - "c[-1,-e]" -k "(~ none)" \
-        - "c[-1,-c]" -k "(idea des 3des tss arcfour none)" \
-        - "c[-1,-p]" -k ports \
-        - "c[-1,-L] c[-1,-R] c[-1,-o]" -k "()" \
-        -- ssh
-
