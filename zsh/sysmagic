@@ -40,6 +40,20 @@ typeset -U zshuse # needed because $domain may== $host
 
 gotroot=0
 
+roothosts=(
+	abrams
+	bolt
+	chimera
+	falcon
+	nixos
+)
+for rh in $roothosts ; do
+	if [[ $rh =~ $HOST.* ]] ; then
+		gotroot=1
+	fi
+done
+unset roothosts
+
 
 # IMPORT from prezto's helper module, fantastic idea
 # is true on MacOS Darwin

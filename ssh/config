@@ -136,7 +136,7 @@ Host github.com
 Host *.llnl.gov
     HostName %h
 
-Host corona ruby quartz ipa hype ray surface vulcan sierra impetus hype2 pascal lassen rz*
+Host corona ruby quartz ipa hype ray surface vulcan sierra impetus hype2 pascal lassen rz* izgw
     User scogland
     HostName %h.llnl.gov
     ForwardX11 yes
