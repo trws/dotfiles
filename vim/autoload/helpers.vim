@@ -73,7 +73,7 @@ function helpers#Map_for_all(mapping, target, ...)
 
   if l:for_input > 1
     execute 'inoremap ' . a:mapping . ' <esc>' . a:target
-  else
+  elseif l:for_input > 0
     execute 'inoremap ' . a:mapping . ' ' . a:target
   endif
 endfunction

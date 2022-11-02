@@ -33,8 +33,13 @@ filetype plugin on
 
 " let neovim manage its own python support
 if has('nvim')
-  Plug 'neovim/pynvim', { 'dir': plugged_directory . '/neovim', 'do': 'pip3 install --upgrade --user --editable .'}
-  Plug 'mhinz/neovim-remote', { 'dir': plugged_directory . '/neovim-remote', 'do': 'pipx install --editable .'}
+  let g:python3_host_prog = plugged_directory . '/neovim/venv/bin/python3'
+  if !filereadable(g:python3_host_prog)
+    echo('creating virtualenv')
+    call system('python3 -m venv ' . plugged_directory . '/neovim/venv')
+    echo('installing pynvim')
+    call system(g:python3_host_prog . ' -m pip install --upgrade pynvim')
+  endif
 endif
 
 "split management
@@ -91,6 +96,8 @@ Plug 'junegunn/vim-peekaboo'
 Plug 'reedes/vim-pencil'
 
 " ==== filetype handlers, highlighting etc ====
+Plug 'vim-scripts/TWiki-Syntax'
+Plug 'vim-perl/vim-perl', { 'for': 'perl', 'do': 'make clean carp dancer highlight-all-pragmas moose test-more try-tiny' }
 Plug 'sheerun/vim-polyglot' " pulls in syntax for almost everything
 let g:polyglot_disabled = [ 'markdown']
 " Plug 'darfink/vim-plist'
@@ -192,10 +199,14 @@ let g:coc_global_extensions = ['coc-json', 'coc-julia',
     \ 'coc-pyright', 'coc-emoji', 'coc-sh', 'coc-cmake', 'coc-yaml',
     \ 'coc-yank', 'coc-sumneko-lua', 'coc-snippets', 'coc-vimlsp' ]
 inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ CheckBackspace() ? "\<TAB>" :
+      \ coc#pum#visible() ? coc#pum#next(1) :
+      \ CheckBackspace() ? "\<Tab>" :
       \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+" set signcolumn=yes #avoid shifting back and forth
 
 function! CheckBackspace() abort
   let col = col('.') - 1
@@ -262,115 +273,147 @@ nmap <leader>ac  <Plug>(coc-codeaction)
 " Apply AutoFix to problem on the current line.
 nmap <leader>qf  <Plug>(coc-fix-current)
 
+xmap if <Plug>(coc-funcobj-i)
+omap if <Plug>(coc-funcobj-i)
+xmap af <Plug>(coc-funcobj-a)
+omap af <Plug>(coc-funcobj-a)
+xmap ic <Plug>(coc-classobj-i)
+omap ic <Plug>(coc-classobj-i)
+xmap ac <Plug>(coc-classobj-a)
+omap ac <Plug>(coc-classobj-a)
+
 " Run the Code Lens action on the current line.
 nmap <leader>cl  <Plug>(coc-codelens-action)
+" Remap <C-f> and <C-b> for scroll float windows/popups.
+if has('nvim-0.4.0') || has('patch-8.2.0750')
+  nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+  nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+  inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+  inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+  vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+  vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+endif
+"
+" Use <C-j> for jump to next placeholder, it's default of coc.nvim
+let g:coc_snippet_next = '<c-j>'
+
+" Use <C-k> for jump to previous placeholder, it's default of coc.nvim
+let g:coc_snippet_prev = '<c-k>'
+
+" Use <C-j> for both expand and jump (make expand higher priority.)
+imap <C-j> <Plug>(coc-snippets-expand-jump)
+
+" Use <leader>x for convert visual selected code to snippet
+xmap <leader>x  <Plug>(coc-convert-snippet)
 """""" coc
 
-""""""" vim-lsp stuff
-if v:false && ! has('win32')
+" """"""" vim-lsp stuff
+" if v:false && ! has('win32')
 
-  " Plug 'Shougo/neco-vim' " add vim completion to ycm or deoplete
-  " Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') }
+"   " Plug 'Shougo/neco-vim' " add vim completion to ycm or deoplete
+"   " Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') }
 
-  Plug 'prabirshrestha/async.vim'
-  Plug 'prabirshrestha/asyncomplete.vim'
-  Plug 'prabirshrestha/vim-lsp'
-  " for non-lsp vimscript completion
-  " Plug 'Shougo/neco-vim'
-  " Plug 'prabirshrestha/asyncomplete-necovim.vim'
-  " au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#necovim#get_source_options({
-  "  \ 'name': 'necovim',
-  "  \ 'allowlist': ['vim'],
-  "  \ 'completor': function('asyncomplete#sources#necovim#completor'),
-  "  \ }))
-  Plug 'prabirshrestha/asyncomplete-lsp.vim'
-  Plug 'prabirshrestha/asyncomplete-file.vim'
-  Plug 'mattn/vim-lsp-settings'
-  Plug 'thomasfaingnaert/vim-lsp-snippets'
-  Plug 'thomasfaingnaert/vim-lsp-ultisnips'
+"   Plug 'prabirshrestha/async.vim'
+"   Plug 'prabirshrestha/asyncomplete.vim'
+"   Plug 'prabirshrestha/vim-lsp'
+"   " for non-lsp vimscript completion
+"   " Plug 'Shougo/neco-vim'
+"   " Plug 'prabirshrestha/asyncomplete-necovim.vim'
+"   " au User asyncomplete_setup call asyncomplete#register_source(asyncomplete#sources#necovim#get_source_options({
+"   "  \ 'name': 'necovim',
+"   "  \ 'allowlist': ['vim'],
+"   "  \ 'completor': function('asyncomplete#sources#necovim#completor'),
+"   "  \ }))
+"   Plug 'prabirshrestha/asyncomplete-lsp.vim'
+"   Plug 'prabirshrestha/asyncomplete-file.vim'
+"   Plug 'mattn/vim-lsp-settings'
+"   Plug 'thomasfaingnaert/vim-lsp-snippets'
+"   Plug 'thomasfaingnaert/vim-lsp-ultisnips'
 
-  let g:lsp_settings_servers_dir=plugged_directory+"/../vim-lsp-servers"
+"   let g:lsp_settings_servers_dir=plugged_directory+"/../vim-lsp-servers"
 
-  function! Register_file_completion()
-    call asyncomplete#register_source(asyncomplete#sources#file#get_source_options({
-          \ 'name': 'file',
-          \ 'allowlist': ['*'],
-          \ 'priority': 10,
-          \ 'completor': function('asyncomplete#sources#file#completor')
-          \ }))
-  endfunction
-  au User asyncomplete_setup call Register_file_completion()
+"   function! Register_file_completion()
+"     call asyncomplete#register_source(asyncomplete#sources#file#get_source_options({
+"           \ 'name': 'file',
+"           \ 'allowlist': ['*'],
+"           \ 'priority': 10,
+"           \ 'completor': function('asyncomplete#sources#file#completor')
+"           \ }))
+"   endfunction
+"   au User asyncomplete_setup call Register_file_completion()
 
-  imap <c-space> <Plug>(asyncomplete_force_refresh)
-  function! s:check_back_space() abort
-    let col = col('.') - 1
-    return !col || getline('.')[col - 1]  =~ '\s'
-  endfunction
+"   imap <c-space> <Plug>(asyncomplete_force_refresh)
+"   function! s:check_back_space() abort
+"     let col = col('.') - 1
+"     return !col || getline('.')[col - 1]  =~ '\s'
+"   endfunction
 
-  inoremap <silent><expr> <TAB>
-        \ pumvisible() ? "\<C-n>" :
-        \ <SID>check_back_space() ? "\<TAB>" :
-        \ asyncomplete#force_refresh()
-  inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-  inoremap <expr> <cr>    pumvisible() ? asyncomplete#close_popup() : "\<cr>"
+"   inoremap <silent><expr> <TAB>
+"         \ pumvisible() ? "\<C-n>" :
+"         \ <SID>check_back_space() ? "\<TAB>" :
+"         \ asyncomplete#force_refresh()
+"   inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+"   inoremap <expr> <cr>    pumvisible() ? asyncomplete#close_popup() : "\<cr>"
 
-  function! s:on_lsp_buffer_enabled() abort
-    setlocal omnifunc=lsp#complete
-    setlocal signcolumn=yes
-    if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
-    call Register_file_completion()
+"   function! s:on_lsp_buffer_enabled() abort
+"     setlocal omnifunc=lsp#complete
+"     setlocal signcolumn=yes
+"     if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
+"     call Register_file_completion()
 
-    nmap <buffer> gd <plug>(lsp-definition)
-    nmap <buffer> gr <plug>(lsp-references)
-    nmap <buffer> gi <plug>(lsp-implementation)
-    nmap <buffer> gt <plug>(lsp-type-definition)
-    nmap <buffer> <leader>rn <plug>(lsp-rename)
-    nmap <buffer> [g <Plug>(lsp-previous-diagnostic)
-    nmap <buffer> ]g <Plug>(lsp-next-diagnostic)
-    nmap <buffer> K <plug>(lsp-hover)
+"     nmap <buffer> gd <plug>(lsp-definition)
+"     nmap <buffer> gr <plug>(lsp-references)
+"     nmap <buffer> gi <plug>(lsp-implementation)
+"     nmap <buffer> gt <plug>(lsp-type-definition)
+"     nmap <buffer> <leader>rn <plug>(lsp-rename)
+"     nmap <buffer> [g <Plug>(lsp-previous-diagnostic)
+"     nmap <buffer> ]g <Plug>(lsp-next-diagnostic)
+"     nmap <buffer> K <plug>(lsp-hover)
 
-    " refer to doc to add more commands
-  endfunction
+"     " refer to doc to add more commands
+"   endfunction
 
-  augroup lsp_install
-    au!
-    " call s:on_lsp_buffer_enabled only for languages that has the server registered.
-    autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
-  augroup END
+"   augroup lsp_install
+"     au!
+"     " call s:on_lsp_buffer_enabled only for languages that has the server registered.
+"     autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+"   augroup END
 
-  let g:lsp_settings_filetype_python = 'pylsp-all'
-  " let g:lsp_log_verbose = 1
-  " let g:lsp_log_file = expand('./lsp.log')
-  let g:lsp_settings = {
-        \   'pylsp-all': {
-        \     'workspace_config': {
-        \       'pylsp': {
-        \         'plugins': {
-        \           'pyflakes': {'enabled': v:false},
-        \           'flake8': {'enabled': v:true},
-        \           'black': {'enabled': v:true},
-        \           'pycodestyle': {'enabled': v:false},
-        \           'mypy': {'enabled': v:true},
-        \           'mccabe': {'enabled': v:false},
-        \           'jedi': {
-        \             'extra_paths': [
-        \               './bin',
-        \               './lib/spack',
-        \               './py/parse/',
-        \               './lib/spack/external'
-        \             ]
-        \           }
-        \         }
-        \       }
-        \     }
-        \   },
-        \}
-endif
+"   let g:lsp_settings_filetype_python = 'pylsp-all'
+"   " let g:lsp_log_verbose = 1
+"   " let g:lsp_log_file = expand('./lsp.log')
+"   let g:lsp_settings = {
+"         \   'pylsp-all': {
+"         \     'workspace_config': {
+"         \       'pylsp': {
+"         \         'plugins': {
+"         \           'pyflakes': {'enabled': v:false},
+"         \           'flake8': {'enabled': v:true},
+"         \           'black': {'enabled': v:true},
+"         \           'pycodestyle': {'enabled': v:false},
+"         \           'mypy': {'enabled': v:true},
+"         \           'mccabe': {'enabled': v:false},
+"         \           'jedi': {
+"         \             'extra_paths': [
+"         \               './bin',
+"         \               './lib/spack',
+"         \               './py/parse/',
+"         \               './lib/spack/external'
+"         \             ]
+"         \           }
+"         \         }
+"         \       }
+"         \     }
+"         \   },
+"         \}
+" endif
 """"""" vim-lsp stuff
 
 if has('nvim')
   "TODO look at neomake? https://github.com/neomake/neomake
 
+  Plug 'kyazdani42/nvim-web-devicons'
+  Plug 'pwntester/octo.nvim'
   Plug 'nvim-lua/plenary.nvim'
   Plug 'nvim-telescope/telescope.nvim'
   Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
@@ -425,6 +468,16 @@ Plug 'junegunn/fzf.vim'
 
 " tagbar replacement " Plug 'majutsushi/tagbar', { 'on': 'TagbarToggle'}
 Plug 'liuchengxu/vista.vim'
+let g:vista_default_executive="ctags"
+let g:vista_executive_for = {
+      \ 'cpp': 'coc',
+      \ 'c': 'coc',
+      \ 'vim': 'coc',
+      \ 'python': 'coc',
+      \ }
+if exists("/opt/homebrew/bin/ctags")
+  let g:vista_ctags_executable="/opt/homebrew/bin/ctags"
+endif
 " going back to fzf from clap, seems to have all the stuff, faster
 " Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary' }
 
@@ -562,6 +615,10 @@ case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
 }
 }
 }
+
+-- GH pull request
+require"octo".setup()
+
 -- To get fzf loaded and working with telescope, you need to call
 -- load_extension, somewhere after setup function:
 require('telescope').load_extension('fzf')
@@ -701,8 +758,8 @@ let tag_file = g:global_objdir . "/tags"
 set tags=./tags;.git/tags;,tags
 
 
-let g:UltiSnipsExpandTrigger="<c-j>"
-inoremap <S-tab> <Esc>:call UltiSnips_ListSnippets()<CR>
+" let g:UltiSnipsExpandTrigger="<c-j>"
+" inoremap <S-tab> <Esc>:call UltiSnips_ListSnippets()<CR>
 
 "syntax/visual options
 let g:vimsyn_folding = 'aflP'
@@ -771,7 +828,7 @@ let python_highlight_all = 1
 "there is no local value for fp, must set other languages to use cindent
 "manually
 
-call helpers#Map_for_all("<C-k>", ":Autoformat<CR>", 1, 0, 0)
+call helpers#Map_for_all("<C-k>", ":Autoformat<CR>", 0, 0, 0)
 
 
 function! StatusEncFmt(current)
@@ -869,6 +926,8 @@ if InGui()
     set fuopt=maxvert,maxhorz
   elseif has("gui_vimr")
     " VimRSetFontAndSize "ProFontIIx Nerd Font Mono", 9
+    " vimr doesn't set term for some reason
+    let $TERM="xterm-256color"
   elseif has("gui_gtk2")
     set guifont=Terminus\ 8
   elseif has("x11")
