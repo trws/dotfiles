@@ -1,0 +1,20 @@
+{
+  "python.linting.flake8Enabled": false,
+  "python.linting.pylintEnabled": false,
+  "python.linting.mypyEnabled": true,
+  "python.linting.enabled": true,
+  // "Lua.diagnostics.globals": ["hs", "spoon"],
+  "Lua.workspace.library": [
+    "/Users/scogland1/.hammerspoon/Spoons/EmmyLua.spoon/annotations"
+  ],
+  "Lua.runtime.path": [
+    "?.lua",
+    "?/init.lua"
+    // "/Applications/Hammerspoon.app/Contents/Resources/extensions/?.lua",
+    // "/Applications/Hammerspoon.app/Contents/Resources/extensions/?/init.lua"
+  ],
+  "Lua.diagnostics.disable" : [
+    "lowercase-global"
+  ]
+}
+
