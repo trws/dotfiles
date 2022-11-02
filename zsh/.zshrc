@@ -40,12 +40,20 @@ function import_terminfo() {
   fi
   local t
   for t in "$@" ; do
-    $TIC -xe $t terminfo.src
+    $TIC -xe $t ~/Downloads/terminfo.src
   done
 }
+function mydownload() {
+  if (( ${+commands[curl]} )); then
+    command curl -fsSL -o "${DDIR:-$HOME/Downloads}/${FN:-$(basename $1)}" "$1"
+  else
+    command wget -nv -O "${DDIR:-$HOME/Downloads}/${FN:-$(basename $1)}" "$1"
+  fi
+}
 function update_terminfo() {
-  zinit ice extract cloneonly as"null" pick"" atclone"gunzip -f terminfo.src.gz ; import_terminfo tmux tmux-256color kitty kitty-direct iterm2 iterm2-direct alacritty-direct" atpull"%atclone"
-  zinit snippet https://invisible-island.net/datafiles/current/terminfo.src.gz
+  mydownload https://invisible-island.net/datafiles/current/terminfo.src.gz
+  gunzip -f ~/Downloads/terminfo.src.gz
+  import_terminfo tmux tmux-256color kitty kitty-direct iterm2 iterm2-direct alacritty-direct atpull
 }
 # update_terminfo
 
@@ -179,23 +187,99 @@ if (( $+commands[brew] )) ; then
 fi
 
 # clone antidote if necessary
-[[ -e ~/.cache/antidote ]] || git clone https://github.com/mattmc3/antidote.git ~/.cache/antidote
-
-# source antidote
-. ~/.cache/antidote/antidote.zsh
+[[ -e ~/.cache/antidote ]] || git clone git@github.com:mattmc3/antidote.git ~/.cache/antidote
 
 autoload -U fasd
 export ANTIDOTE_HOME=~/.cache/antidote
-_ab_dir=${XDG_CACHE_HOME:=~/.cache}/antibody
-_ab_path=$_ab_dir/init.zsh
+# source antidote
+. ~/.cache/antidote/antidote.zsh
+export _ab_dir=${XDG_CACHE_HOME:=~/.cache}/antidote
+export _ab_path=$_ab_dir/init.zsh
+
+function zupdate() {
+  set -x
+  [[ -d $_ab_dir ]] || mkdir -p $_ab_dir
+  ( cat  | antidote bundle >! $_ab_path; ) <<EOF
+# autoenv support, for .autoenv.zsh files
+Tarrasch/zsh-autoenv
+
+junegunn/fzf path:shell
+junegunn/fzf path:shell/key-bindings.zsh
+wookayin/fzf-fasd
+
+
+# get gnu-utility support from prezto
+$HOME/.dotfiles/zsh/gnu-utility
+
+# zmodule asdf-vm/asdf --name asdf-vm -s asdf.sh
+# zmodule asdf
+
+# directory and file frecency
+zimfw/fasd kind:fpath path:functions
+zimfw/fasd
+
+zimfw/exa
+
+wfxr/forgit
+
+sorin-ionescu/prezto
+sorin-ionescu/prezto path:modules/git
+sorin-ionescu/prezto path:modules/homebrew
+# Enables and configures smart and extensive tab completion.
+# completion must be sourced after zsh-users/zsh-completions
+# zimfw/completion
+sorin-ionescu/prezto path:modules/completion
+
+
+# fzf for completion - buggy
+# zmodule Aloxaf/fzf-tab
+
+# -------
+# Modules
+# -------
+# Sets sane Zsh built-in environment options.
+zimfw/environment
+# Provides handy git aliases and functions.
+# zimfw/git # prezto-like
+# Applies correct bindkeys for input events.
+#more general handling for EOL and delete etc. than I had
+zimfw/input
+# Sets a custom terminal title.
+zimfw/termtitle
+# Utility aliases and functions. Adds colour to ls, grep and less.
+zimfw/utility
+
+
+#
+# Prompt
+#
+romkatv/powerlevel10k
+# Exposes to prompts how long the last command took to execute, used by asciiship.
+zimfw/duration-info
+# Exposes git repository status information to prompts, used by asciiship.
+zimfw/git-info kind:fpath path:functions
+# A heavily reduced, ASCII-only version of the Spaceship and Starship prompts.
+zimfw/asciiship
+
+# Fish-like autosuggestions for Zsh.
+zsh-users/zsh-autosuggestions
+# Fish-like syntax highlighting for Zsh.
+# zsh-users/zsh-syntax-highlighting must be sourced after completion
+zsh-users/zsh-syntax-highlighting
+# Fish-like history search (up arrow) for Zsh.
+# zsh-users/zsh-history-substring-search must be sourced after zsh-users/zsh-syntax-highlighting
+zsh-users/zsh-history-substring-search
+
+# Tmux
+tmux-plugins/tpm kind:clone
+EOF
+  update_terminfo
+}
+
 
 # generate and source plugins from ~/.zsh_plugins.txt
-if [[ ! $_ab_path -nt $ZDOTDIR/antibody_bundles.txt ]]; then
-  [[ -d $_ab_dir ]] || mkdir -p $_ab_dir
-  (
-    source ~/.cache/antidote/antidote.zsh
-    envsubst <$ZDOTDIR/antibody_bundles.txt | antidote bundle >$_ab_path
-  )
+if [[ ! -f $_ab_path ]] || [[ ! $_ab_path -nt $ZDOTDIR/.zshrc ]]; then
+  zupdate
 fi
 source $_ab_path
 

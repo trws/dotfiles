@@ -76,7 +76,8 @@ fi
 
 [[ -x /usr/local/bin/defaultpaths ]] && eval `/usr/local/bin/defaultpaths`
 
-add_to_path_back /usr/local /usr ""
+add_to_path_front /usr/local /opt/homebrew
+add_to_path_back /usr ""
 
 if (( $gotroot )) ; then
   path=(/usr/local/sbin /opt/local/sbin $path)
@@ -128,6 +129,8 @@ else
   export PRGPATH=~/programs/default
 fi
 add_to_path_front  "$PRGPATH"
+
+add_to_path_front ~/.juliaup
 
 mkdirp_if_missing $PRGPATH/go/bin
 export GOPATH="$PRGPATH/go"
