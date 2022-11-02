@@ -64,8 +64,13 @@
 
 ;; todoist in org?
 (package! todoist)
+;(package! another-package
+;  :recipe (:host github :repo "username/repo"))
 
 ;; (package! apprentice :recipe
 ;;   (:host github
 ;;    :repo "sjas/apprentice-theme"
 ;;    :files ("*.el")))
+; (package! org-roam)
+; (package! org-logseq
+;   :recipe (:host github :repo "llcc/org-logseq"))
