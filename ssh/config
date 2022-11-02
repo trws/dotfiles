@@ -1,11 +1,33 @@
-Host deb
-    User scogland
-    HostName localhost
-    Port 3127
+Match host * exec "hostname | grep abrams"
+  IdentityAgent "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+
+Host deb debian
+    User scogland1
+    HostName debian.local
+Host nix nios
+    User scogland1
+    HostName 192.168.219.209
 
 # Home
 Host gale hurricane
     User njustn
+
+Match originalhost falcon* !originalhost falcon.win exec wsl-get-ip
+  HostName falcon
+  User njustn
+  HostKeyAlias falcon.ubuntu
+  ProxyCommand wsl-jump 22
+
+Match originalhost falcon.win exec " ! ~/.dotfiles/scripts/at-home.py "
+  HostName ssh.scogland.com
+  Port 2023
+
+Host falcon.win
+  ForwardAgent yes
+  User trws
+  HostKeyAlias falcon.win
+  HostName falcon.local
+  DynamicForward 127.0.0.1:12349
 
 Host hurricane
   LocalForward 5903 localhost:5900
@@ -16,14 +38,14 @@ Host gale
 
 Host ddwrt
   User root
-  hostname ssh.scogland.com
-  port 5022
+  HostName ssh.scogland.com
+  Port 5022
 
 Host ddwrt-ssl
   User root
   # hostname localhost
   # port 9022
-  ProxyCommand socat -ly -  OPENSSL:ssh.scogland.com:443,verify=0
+  ProxyCommand socat -ly - OPENSSL:ssh.scogland.com:443,verify=0
   # ProxyCommand openssl s_client -connect ssh.scogland.com:443 -quiet -CAfile ~/projects/certs/ca.llnl.gov.pem
 
 Host ddwrt-lab
@@ -46,10 +68,10 @@ Match originalhost hurricane exec " ! ~/.dotfiles/scripts/at-home.py "
 
 #base nano setup
 
-Match originalhost nano
-  DynamicForward 12345
-  LocalForward 4443 sync11.omnigroup.com:443
-  User scogland
+# Match originalhost nano
+  # DynamicForward 12345
+  # LocalForward 4443 sync11.omnigroup.com:443
+  # User scogland
 
 Match originalhost nano exec "hostname | grep vortex"
   RemoteForward 43222 localhost:22
@@ -74,13 +96,16 @@ Match originalhost funnel
   # ProxyJump rzquartz
 
 
+Host openmp openmp-vm
+  HostName 161.35.129.111
+  User tscogland
 
 Host *.cs.vt.edu
     User njustn
 
 Host charon charon.cs.vt.edu
     Protocol 2
-    port 2222
+    Port 2222
     HostName charon.cs.vt.edu
     User njustn
     LocalForward 2022 localhost:22
@@ -111,7 +136,7 @@ Host github.com
 Host *.llnl.gov
     HostName %h
 
-Host quartz ipa hype ray surface vulcan sierra impetus hype2 rz*
+Host corona ruby quartz ipa hype ray surface vulcan sierra impetus hype2 pascal lassen rz*
     User scogland
     HostName %h.llnl.gov
     ForwardX11 yes
@@ -123,6 +148,8 @@ Host vortex vortex.llnl.gov 10.253.134.139 cyclone funnel
   User scogland1
   # HostName vortex.llnl.gov
   LocalForward 5902 10.5.0.3:5900
+  LocalForward 22003 localhost:22000
+  LocalForward 22004 10.5.0.3:22000
 
 Match exec "~/.dotfiles/scripts/hop-vpn.sh" originalhost vortex !host localhost
     HostName localhost
@@ -140,7 +167,7 @@ Match !exec "~/.dotfiles/scripts/hop-gpvpn.sh" originalhost vortex !host localho
     LocalForward 22002 10.5.0.3:22000
     LocalForward 2202 10.5.0.3:22
 
-Host vortex* 10.253.134.139 bolt*
+Host vortex* 10.253.134.139 bolt* abrams*
     User scogland1
     Port 22
 
@@ -159,33 +186,62 @@ Host chimera
     User scogland1
     LocalForward 5904 localhost:5900
 
+Match exec " ~/.dotfiles/scripts/at-llnl.py" host chimera-relay
+    Port 22
+    HostName chimera
+    # ProxyJump funnel
+    ProxyCommand ssh eris -W chimera:22
+    # ProxyCommand ssh funnel -W 10.5.0.3:22
+
 Match host chimera-funnel exec "~/.dotfiles/scripts/hop-vpn.sh"
     # ProxyJump funnel
-    ProxyCommand ssh vortex -W 10.5.0.3:22
+    ProxyCommand ssh eris -W chimera:22
+Host chimera-*
+    User scogland1
+    LocalForward 5901 localhost:5900
+    LocalForward 22001 localhost:22000
+    LocalForward 22002 localhost:22000
+    LocalForward 2202 localhost:22
+    LocalForward 8385 localhost:8384
 
 Host chimera-funnel
     Port 22
-    HostName 10.5.0.3
-    User scogland1
+    HostName chimera
     # ProxyJump funnel
-    ProxyCommand ssh funnel -W 10.5.0.3:22
+    ProxyCommand ssh eris -W chimera:22
+    # ProxyCommand ssh funnel -W 10.5.0.3:22
+Host chimera-relay
+    ProxyCommand ssh -W 127.0.0.1:6022 falcon.win
+    DynamicForward localhost:12347
+    LocalForward 4043 outlook.office365.com:443
+    LocalForward 9993 outlook.office365.com:993
+    LocalForward 5587 smtp.office365.com:587
 # GPVPN script provides these ports
 Match !exec "~/.dotfiles/scripts/hop-gpvpn.sh" originalhost chimera-funnel !host localhost
     LocalForward 5904 localhost:5900
     LocalForward 40000 127.0.0.1:4000
     LocalForward 33890 10.5.0.3:3389
 
-Match exec " ~/.dotfiles/scripts/at-llnl.py" !host eris.llnl.gov !host localhost !originalhost chimera !host cz-bit* !originalhost github.com !originalhost rztopaz !originalhost 10.253.134.139 !originalhost vortex !originalhost localhost !originalhost 127.0.0.1
+Match exec " ~/.dotfiles/scripts/at-llnl.py" !originalhost debian !originalhost deb !host eris !host eris.llnl.gov !originalhost nix !host localhost !originalhost chimera* !host cz-bit* !originalhost *.*.*.* !originalhost github.com !originalhost rztopaz !originalhost 10.253.134.139 !originalhost vortex !originalhost localhost !originalhost 127.0.0.1
     #this must be overridden above if wrong
     Port 622
     ProxyJump rztopaz
+
+Match host eris exec "~/.dotfiles/scripts/hop-vpn.sh"
+  Port 9023
+  HostName localhost
+
+Host eris
+  HostName eris.llnl.gov
+  User scogland
+  PreferredAuthentications publickey,keyboard-interactive,password
 
 Match originalhost rztopaz
     PubkeyAuthentication no
     PasswordAuthentication yes
 
 Match exec " ~/.dotfiles/scripts/at-llnl.py " originalhost github.com
-    ProxyCommand ssh rztopaz -W github.com:22
+    ProxyJump rztopaz
 
 
 Host lanlgw ihpc-gate
