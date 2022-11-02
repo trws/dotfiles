@@ -21,6 +21,7 @@ script_dir = os.path.dirname(script_path)
 os.chdir(script_dir)
 
 link_files = {
+    "tridactylrc": "~/.tridactylrc",
     "pystartup.py": "~/.pystartup",
     "flake8": "~/.flake8",
     "ssh/config": "~/.ssh/config",

@@ -1,0 +1,279 @@
+" " bovine3dom's dogfood
+"
+" " Every line in this file is commented out because in general they're all bad ideas.
+" " If anything in here was a good idea, it would be default behaviour in Tridactyl.
+" " It's just a collection of interesting ideas that happen to also be bovine3dom's
+" " RC file
+"
+" " WARNING: This file defines and runs a command called fixamo_quiet. If you
+" " also have a malicious addon that operates on `<all_urls>` installed this
+" " will allow it to steal your firefox account credentials!
+" "
+" " With those credentials, an attacker can read anything in your sync account,
+" " publish addons to the AMO, etc, etc.
+" "
+" " Without this command a malicious addon can steal credentials from any site
+" " that you visit that is not in the rstrictedDomains list.
+" "
+" " You should comment out the fixamo lines unless you are entirely sure that
+" " they are what you want.
+" "
+" " The advantage of running the command is that you can use the tridactyl
+" " interface on addons.mozilla.org and other restricted sites.
+"
+" " Provided only as an example.
+" " Do not install/run without reading through as you may be surprised by some
+" " of the settings.
+"
+" " May require the latest beta builds.
+"
+" " Uncomment the lines you want to keep then move this file to
+" " $XDG_CONFIG_DIR/tridactyl/tridactylrc (that's
+" " ~/.config/tridactyl/tridactylrc to mere mortals) or ~/.tridactylrc and
+" " install the native messenger (:installnative in Tridactyl). Run :source to
+" " get it in the browser, or just restart.
+"
+" " If you're bovine3dom run sed 's|^" ||' .tridactylrc > ~/.config/tridactyl/tridactylrc
+"
+"
+" "
+" " Binds
+" "
+"
+" " Comment toggler for Reddit, Hacker News and Lobste.rs
+" bind ;c hint -Jc [class*="expand"],[class="togg"],[class="comment_folder"]
+"
+" " GitHub pull request checkout command to clipboard (only works if you're a collaborator or above)
+" bind yp composite js document.getElementById("clone-help-step-1").textContent.replace("git checkout -b", "git checkout -B").replace("git pull ", "git fetch ") + "git reset --hard " + document.getElementById("clone-help-step-1").textContent.split(" ")[3].replace("-","/") | yank
+"
+" " Git{Hub,Lab} git clone via SSH yank
+bind yg composite js "git clone " + document.location.href.replace(/https?:\/\//,"git@").replace("/",":").replace(/$/,".git") | clipboard yank
+"
+" " As above but execute it and open terminal in folder
+bind ,g js let uri = document.location.href.replace(/https?:\/\//,"git@").replace("/",":").replace(/$/,".git"); tri.native.run("cd ~/Repos; git clone " + uri + "; cd \"$(basename \"" + uri + "\" .git)\"; st")
+"
+"
+" " make d take you to the left (I find it much less confusing)
+bind d composite tabprev; tabclose #
+" bind D tabclose
+"
+" " make t open the selection with tabopen
+" bind --mode=visual t composite js document.getSelection().toString() | fillcmdline tabopen
+"
+" " I like wikiwand but I don't like the way it changes URLs
+" bindurl wikiwand.com yy composite js document.location.href.replace("wikiwand.com/en","wikipedia.org/wiki") | clipboard yank
+"
+" " Make gu take you back to subreddit from comments
+" bindurl reddit.com gu urlparent 4
+"
+" " Only hint search results on Google and DDG
+" bindurl www.google.com f hint -Jc #search div:not(.action-menu) > a
+" bindurl www.google.com F hint -Jbc #search div:not(.action-menu) > a
+"
+"
+" bindurl ^https://duckduckgo.com f hint -Jc [class~=result__a]
+" bindurl ^https://duckduckgo.com F hint -Jbc [class~=result__a]
+"
+" " Allow Ctrl-a to select all in the commandline
+" unbind --mode=ex <C-a>
+"
+" " Allow Ctrl-c to copy in the commandline
+" unbind --mode=ex <C-c>
+"
+" " Handy multiwindow/multitasking binds
+bind D tabduplicate
+bind gd tabdetach
+bind gD composite tabduplicate; tabdetach
+
+bind <C-w> tabclose
+"
+" " Stupid workaround to let hint -; be used with composite which steals semi-colons
+" command hint_focus hint -;
+"
+" " Open right click menu on links
+" bind ;C composite hint_focus; !s xdotool key Menu
+"
+" " Suspend / "discard" all tabs - handy for stretching out battery life
+" command discardall jsb browser.tabs.query({}).then(ts => browser.tabs.discard(ts.map(t=>t.id)))
+"
+" " Julia docs' built in search is bad
+" set searchurls.julia https://www.google.com/search?q=site:http://docs.julialang.org/en/v1%20
+"
+" "
+" " Misc settings
+" "
+"
+" " set editorcmd to suckless terminal, or use the defaults on other platforms
+" js tri.browserBg.runtime.getPlatformInfo().then(os=>{const editorcmd = os.os=="linux" ? "st vim" : "auto"; tri.config.set("editorcmd", editorcmd)})
+"
+" " set profile dir on Windows
+" jsb browser.runtime.getPlatformInfo().then(os=>{const profiledir = os.os=="win" ? "C:\\Users\\olie\\AppData\\Roaming\\Mozilla\\Firefox\\Profiles\\gwm76nmk.default" : "auto"; tri.config.set("profiledir", profiledir)})
+"
+" Sane hinting mode
+set hintfiltermode vimperator-reflow
+set hintnames numeric
+"
+" " Defaults to 300ms but I'm a 'move fast and close the wrong tabs' kinda chap
+" set hintdelay 100
+"
+" Add helper commands that Mozillians think make Firefox irredeemably
+" insecure. For details, read the comment at the top of this file.
+command fixamo_quiet jsb tri.excmds.setpref("privacy.resistFingerprinting.block_mozAddonManager", "true").then(tri.excmds.setpref("extensions.webextensions.restrictedDomains", '""'))
+command fixamo js tri.excmds.setpref("privacy.resistFingerprinting.block_mozAddonManager", "true").then(tri.excmds.setpref("extensions.webextensions.restrictedDomains", '""').then(tri.excmds.fillcmdline_tmp(3000, "Permissions added to user.js. Please restart Firefox to make them take affect.")))
+"
+" " Make Tridactyl work on more sites at the expense of some security. For
+" " details, read the comment at the top of this file.
+fixamo_quiet
+"
+" " Equivalent to `set csp clobber` before it was removed. This weakens your
+" " defences against cross-site-scripting attacks and other types of
+" " code-injection by reducing the strictness of Content Security Policy on
+" " every site in a couple of ways.
+" "
+" " You may not wish to run this. Mozilla strongly feels that you shouldn't.
+" "
+" " It allows Tridactyl to function on more pages, e.g. raw GitHub pages.
+" "
+" " We remove the sandbox directive
+" " https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/sandbox
+" " which allows our iframe to run (and anyone else's) on any website.
+" "
+" " We weaken the style-src directive
+" " https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/style-src
+" " to allow us to theme our elements. This exposes you to 'cross site styling'
+" " attacks.
+" "
+" " Read https://wiki.mozilla.org/Security/CSP#Goals for more information.
+" jsb browser.webRequest.onHeadersReceived.addListener(tri.request.clobberCSP,{urls:["<all_urls>"],types:["main_frame"]},["blocking","responseHeaders"])
+"
+" " Make quickmarks for the sane Tridactyl issue view
+" quickmark t https://github.com/tridactyl/tridactyl/issues?utf8=%E2%9C%93&q=sort%3Aupdated-desc+
+
+" " Quickmark for PRs by humans
+" quickmark p https://github.com/tridactyl/tridactyl/pulls?q=is%3Apr+is%3Aopen+-label%3Adependencies+-author%3Abovine3dom+sort%3Aupdated-desc
+"
+" " Inject Google Translate
+" " This (clearly) is remotely hosted code. Google will be sent the whole
+" " contents of the page you are on if you run `:translate`
+" " From https://github.com/jeremiahlee/page-translator
+" command translate js let googleTranslateCallback = document.createElement('script'); googleTranslateCallback.innerHTML = "function googleTranslateElementInit(){ new google.translate.TranslateElement(); }"; document.body.insertBefore(googleTranslateCallback, document.body.firstChild); let googleTranslateScript = document.createElement('script'); googleTranslateScript.charset="UTF-8"; googleTranslateScript.src = "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit&tl=&sl=&hl="; document.body.insertBefore(googleTranslateScript, document.body.firstChild);
+"
+" "
+" " URL redirects
+" "
+"
+" " New reddit is bad
+" autocmd DocStart ^http(s?)://www.reddit.com js tri.excmds.urlmodify("-t", "www", "old")
+" " Mosquito nets won't make themselves
+" autocmd DocStart ^http(s?)://www.amazon.co.uk js tri.excmds.urlmodify("-t", "www", "smile")
+"
+" " Isolate Facebook in its own container
+" " set auconcreatecontainer true
+" " autocontain facebook\.com facebook
+
+
+" Try find mode
+bind / fillcmdline find
+bind ? fillcmdline find -?
+bind n findnext 1
+bind N findnext -1
+bind ,<Space> nohlsearch
+bind <C-l> nohlsearch
+
+" familiar open new tab with input
+bind O fillcmdline tabopen
+bind ,fs source ~/.tridactylrc
+
+" try to deal with autofocus issues
+autocmd TabEnter .* unfocus
+
+" TST "integration" so I can bind stuff
+command ttoutdent_children js -d€ browser.runtime.sendMessage("treestyletab@piro.sakura.ne.jp", {type: 'get-tree', tab: JS_ARGS[1]}).then(cur => console.log(cur.children.forEach(child => browser.runtime.sendMessage("treestyletab@piro.sakura.ne.jp", {type: 'outdent', tab: child.id}))))€
+" All commands except :ttcollapse_current_or_parent require an argument to specify the affected tab as described by TST Api - Basics to specify tabs. E.g. :ttcollapse current collapses the current tab.
+
+" These commands to expand/collapse specified tab. The recursively variants expand/collapse all subtrees of that tab as well:
+
+command tttoggle js -d€ browser.runtime.sendMessage("treestyletab@piro.sakura.ne.jp", {type: 'toggle-tree-collapsed', tab: JS_ARGS[1]})€
+command tttoggle_recursively js -d€ browser.runtime.sendMessage("treestyletab@piro.sakura.ne.jp", {type: 'toggle-tree-collapsed', tab: JS_ARGS[1], recursively: true})€
+command ttcollapse js -d€ browser.runtime.sendMessage("treestyletab@piro.sakura.ne.jp", {type: 'collapse-tree', tab: JS_ARGS[1]})€
+command ttcollapse_recursively js -d€ browser.runtime.sendMessage("treestyletab@piro.sakura.ne.jp", {type: 'collapse-tree', tab: JS_ARGS[1], recursively: true})€
+command ttexpand js -d€ browser.runtime.sendMessage("treestyletab@piro.sakura.ne.jp", {type: 'expand-tree', tab: JS_ARGS[1]})€
+command ttexpand_recursively js -d€ browser.runtime.sendMessage("treestyletab@piro.sakura.ne.jp", {type: 'expand-tree', tab: JS_ARGS[1], recursively: true})€
+
+" :ttcollapse_current_or_parent has no parameter. It collapses the current tab if it's expanded, but when it's already collapsed it collapses the parent. This is similar to vim's zc map:
+
+command ttcollapse_current_or_parent js browser.runtime.sendMessage("treestyletab@piro.sakura.ne.jp", {type: 'get-tree-structure', tab: 'current'}).then(struct => browser.runtime.sendMessage("treestyletab@piro.sakura.ne.jp", {type: 'collapse-tree', tab: struct[0].collapsed ? 'parent' : 'current'}))
+
+" :ttfocus is useful to move to parents (parameter parent or root) and between siblings while jumping over subtrees (nextSibling/prevSibling):
+
+command ttfocus js -d€ browser.runtime.sendMessage("treestyletab@piro.sakura.ne.jp", {type: 'focus', tab: JS_ARGS[1]})€
+
+" Indenting/outdenting tabs. The recursively variants shift the whole subtree:
+
+command ttindent js -d€ browser.runtime.sendMessage("treestyletab@piro.sakura.ne.jp", {type: 'indent', tab: JS_ARGS[1]})€
+command ttindent_recursively js -d€ browser.runtime.sendMessage("treestyletab@piro.sakura.ne.jp", {type: 'indent', tab: JS_ARGS[1], followChildren: true})€
+command ttoutdent js -d€ browser.runtime.sendMessage("treestyletab@piro.sakura.ne.jp", {type: 'outdent', tab: JS_ARGS[1]})€
+command ttoutdent_recursively js -d€ browser.runtime.sendMessage("treestyletab@piro.sakura.ne.jp", {type: 'outdent', tab: JS_ARGS[1], followChildren: true})€
+
+command set_up_temp_ignore bind --mode=ignore <Escape> composite mode normal ; unbind --mode=ignore <Escape>
+bind i composite set_up_temp_ignore ; mode ignore
+
+" Bindings
+
+" Note that these override some standard zoom bindings of tridactyl.
+
+" Collapsing current/parent or recursively the current root:
+
+bind zc ttcollapse_current_or_parent
+bind zC ttcollapse_recursively root
+
+" Collapsing root might be useful:
+
+bind zX ttcollapse root
+bind zx ttcollapse parent
+
+" Expand current tab or current and all children:
+
+bind zo ttexpand current
+bind zO ttexpand_recursively current
+
+bind za tttoggle current
+bind zA tttoggle_recursively current
+
+" Collapse/expand all:
+
+bind zM ttcollapse *
+bind zR ttexpand *
+
+" Move up the tree:
+
+bind zp ttfocus parent
+bind zP ttfocus root
+
+" Focus next/previous, skipping over subtrees. May also try
+" nextSiblingCyclic/prevSiblingCyclic:
+
+bind zj ttfocus nextSibling
+bind zk ttfocus prevSibling
+bind J ttfocus nextVisibleCyclic
+bind K ttfocus prevVisibleCyclic
+bind <CS-j> ttfocus nextCyclic
+bind <CS-k> ttfocus prevCyclic
+" bind J ttfocus nextVisibleCyclic
+" bind K ttfocus prevVisibleCyclic
+
+" These indent/outdent bindings override the standard tab move bindings, so might consider z>,z< or similar:
+
+bind << ttoutdent_recursively current
+bind >> ttindent_recursively current
+
+" get focus back after edit-in-vim
+set editorcmd ~/scripts/my-vim-gui %f '+:set ft=markdown' '+normal!%lGzv%c|'
+
+" guiset_quiet gui none
+guiset_quiet navbar always
+guiset_quiet statuspanel top-right
+guiset_quiet tabs autohide
+" " For syntax highlighting see https://github.com/tridactyl/vim-tridactyl
+" " vim: set filetype=tridactyl
+
