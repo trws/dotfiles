@@ -1,1 +1,2 @@
 use asdf
+[ -x /nix/var/nix/profiles/default/bin/direnv ] && use_nix
