@@ -1,7 +1,7 @@
 #!/bin/bash
 echo "msmtp-wrap called with:" "$@" > /tmp/msmtp-wrap.log
 if pgrep ocproxy >& /dev/null ; then
-  if [[ $(hostname) == "bolt.llnl.gov" ]] ; then
+  if [[ $(hostname) == "bolt.llnl.gov" || $(hostname) == "abrams" ]] ; then
     exec proxychains4 -q -f ~/.dotfiles/proxychains.conf msmtp "$@"
   else
     exec msmtp "$@"
