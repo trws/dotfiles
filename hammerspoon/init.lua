@@ -1,8 +1,9 @@
+hs.loadSpoon("EmmyLua")
 local application = hs.application
 local hotkey = hs.hotkey
 local window = hs.window
 local fnutils = hs.fnutils
-local screens = hs.screens
+-- local screens = hs.screens
 local geometry = hs.geometry
 local grid = hs.grid
 local hints = hs.hints
@@ -11,20 +12,28 @@ local ipc = require("hs.ipc")
 local urle = require("hs.urlevent")
 local net = hs.network
 local http = hs.http
+-- local caf = hs.caffeinate
+local cwatch = hs.caffeinate.watcher
 
-hs_cfg_path = '~/.hammerspoon'
+local wakewatcher = cwatch.new(function (etype)
+  if (etype == cwatch.systemDidWake) then
+    hs.execute("podman machine status 2>&1 > /dev/null && podman machine ssh sudo date --set $(date +'%Y-%m-%dT%H:%M:%S')")
+  end
+  end)
+
+local hs_cfg_path = '~/.hammerspoon'
 if not string.find(hs_cfg_path, package.path) then
   package.path = hs_cfg_path .. '/?.lua;' .. package.path
 end
 
-nc_store = hs.network.configuration.open()
-home_hub_ethernet_key = "State:/Network/Interface/en11/Link"
-dhcp_uuid = "C4C5F3A9-4807-49F2-80E8-F45FFC3090A2"
-wifi_uuid = "66F89159-EFE5-4C32-A4E1-B4393A294FB4"
+local nc_store = net.configuration.open()
+local home_hub_ethernet_key = "State:/Network/Interface/en11/Link"
+local dhcp_uuid = "C4C5F3A9-4807-49F2-80E8-F45FFC3090A2"
+local wifi_uuid = "66F89159-EFE5-4C32-A4E1-B4393A294FB4"
 
 nc_store:monitorKeys(home_hub_ethernet_key, false)
-nc_store:setCallback(function(store, keys)
-  state = store:contents()
+nc_store:setCallback(function(store, _)
+  local state = store:contents()
   if state[home_hub_ethernet_key] ~= nil and state[home_hub_ethernet_key]["Active"] then
     print("on hub, switch to dhcp")
     store:setLocation(dhcp_uuid)
@@ -37,18 +46,18 @@ end)
 nc_store:start()
 
 -- set up your windowfilter
-switcher = hs.window.switcher.new() -- default windowfilter: only visible windows, all Spaces
-switcher_space = hs.window.switcher.new(hs.window.filter.new():setCurrentSpace(true):setDefaultFilter{}) -- include minimized/hidden windows, current Space only
-switcher_browsers = hs.window.switcher.new{'Safari','Google Chrome'} -- specialized switcher for your dozens of browser windows :)
+-- local switcher = hs.window.switcher.new() -- default windowfilter: only visible windows, all Spaces
+-- local switcher_space = hs.window.switcher.new(hs.window.filter.new():setCurrentSpace(true):setDefaultFilter{}) -- include minimized/hidden windows, current Space only
+-- local switcher_browsers = hs.window.switcher.new{'Safari','Google Chrome'} -- specialized switcher for your dozens of browser windows :)
 
 local mash = {'alt', 'ctrl'}
 local mashcmd = {'alt', 'ctrl', 'cmd'}
 local mashshift = {'alt', 'ctrl', 'shift'}
 
-bindings = {}
+local bindings = {}
 setmetatable(bindings, { __index = table })
 
-toggle_application = function(bundleID)
+local toggle_application = function(bundleID)
   local app = hs.application.get(bundleID)
   if (app and app:isFrontmost()) then
     app:hide()
@@ -56,7 +65,7 @@ toggle_application = function(bundleID)
     hs.application.launchOrFocusByBundleID(bundleID)
   end
 end
-toggle_application_nolaunch = function(bundleID)
+local toggle_application_nolaunch = function(bundleID)
   local app = hs.application.get(bundleID)
   if (app and app:isFrontmost()) then
     app:hide()
@@ -65,19 +74,19 @@ toggle_application_nolaunch = function(bundleID)
   end
 end
 
-enable_bindings = function()
+local enable_bindings = function()
   for k,v in pairs(bindings) do
     v:enable()
   end
 end
 
-disable_bindings = function()
+local disable_bindings = function()
   for k,v in pairs(bindings) do
     v:disable()
   end
 end
 
-screen_sharing_watcher = application.watcher.new(function(name, event, app)
+local screen_sharing_watcher = application.watcher.new(function(name, event, app)
   if(name == "Screen Sharing") then
     if(event == application.watcher.activated) then
       disable_bindings()
@@ -89,14 +98,14 @@ end)
 
 screen_sharing_watcher:start()
 
-open_and_focus_with_bundle = function(url, bundleID)
+local open_and_focus_with_bundle = function(url, bundleID)
   urle.openURLWithBundle(url, bundleID)
   hs.timer.doAfter(0.2, function()
     hs.application.applicationsForBundleID(bundleID)[1]:activate()
   end)
 end
 
-match_any = function(s, list)
+local match_any = function(s, list)
   for k, v in pairs(list) do
     if string.match(s, v) then return true end
   end
@@ -106,17 +115,17 @@ end
 urle.httpCallback = function(scheme, host, params, fullURL)
   print("routing URL: " .. fullURL)
   if match_any(fullURL, { "urldefense" }) then
-    prev = ""
+    local prev = ""
     while string.find(fullURL, "urldefense") and fullURL ~= prev do
       prev = fullURL
-      url_parts = http.urlParts(fullURL)
+      local url_parts = http.urlParts(fullURL)
       print("url parts: ", url_parts)
       print(hs.inspect(url_parts))
-      if url_parts.query and url_parts.queryItems[1].u then
+      if url_parts ~= nil and url_parts.query and url_parts.queryItems[1].u then
         fullURL = url_parts.queryItems[1].u
         fullURL = fullURL:gsub("-", "%%")
         fullURL = fullURL:gsub("_", "/")
-        neturl = require('url')
+        local neturl = require('url')
         fullURL = neturl.decode(fullURL)
         goto continue
       end
@@ -180,19 +189,20 @@ mute_toggle = function()
   end
 end
 -- bindings:insert(hotkey.bind(mash, "m", mute_toggle))
+-- bindings:insert(hotkey.bind({"ctrl","cmd"}, "g", function() toggle_application("com.google.Chrome") end))
 bindings:insert(hotkey.bind({"ctrl","cmd"}, "s", function() toggle_application("com.freron.MailMate") end))
 bindings:insert(hotkey.bind({"ctrl","cmd","shift"}, "s", function() toggle_application("com.apple.Safari") end))
 bindings:insert(hotkey.bind({"ctrl","cmd"}, "a", function() toggle_application("com.apple.iCal") end))
-bindings:insert(hotkey.bind({"ctrl","cmd"}, "i", function() toggle_application("com.apple.ActivityMonitor") end))
-bindings:insert(hotkey.bind({"ctrl","cmd"}, "o", function() toggle_application("com.microsoft.Outlook") end))
-bindings:insert(hotkey.bind({"ctrl","cmd"}, "f", function() toggle_application("com.omnigroup.Omnifocus3.macappstore") end))
--- bindings:insert(hotkey.bind({"ctrl","cmd"}, "g", function() toggle_application("com.google.Chrome") end))
 bindings:insert(hotkey.bind({"ctrl","cmd"}, "b", function() toggle_application("org.qt-project.Qt.QtWebEngineCore") end))
+bindings:insert(hotkey.bind({"ctrl","cmd"}, "i", function() toggle_application("com.apple.ActivityMonitor") end))
+bindings:insert(hotkey.bind({"ctrl","cmd"}, "e", function() toggle_application("org.gnu.Emacs") end))
+bindings:insert(hotkey.bind({"ctrl","cmd"}, "f", function() toggle_application("com.omnigroup.Omnifocus3.macappstore") end))
+bindings:insert(hotkey.bind({"ctrl","cmd","shift"}, "l", function() toggle_application("com.electron.logseq") end))
+bindings:insert(hotkey.bind({"ctrl","cmd"}, "o", function() toggle_application("com.microsoft.Outlook") end))
 bindings:insert(hotkey.bind({"ctrl","cmd"}, "t", function() toggle_application("com.googlecode.iterm2") end))
 bindings:insert(hotkey.bind({"ctrl","cmd","shift"}, "v", function() toggle_application("org.vim.macvim") end))
 bindings:insert(hotkey.bind({"ctrl","cmd"}, "v", function() toggle_application("com.qvacua.VimR") end))
 bindings:insert(hotkey.bind({"ctrl","cmd"}, "w", function() toggle_application("com.bookry.wavebox") end))
-bindings:insert(hotkey.bind({"ctrl","cmd"}, "e", function() toggle_application("org.gnu.Emacs") end))
 
 -- alternatively, call .nextWindow() or .previousWindow() directly (same as hs.window.switcher.new():next())
 -- hs.hotkey.bind('alt','tab','Next window',hs.window.switcher.nextWindow)
