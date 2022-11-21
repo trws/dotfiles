@@ -1,2 +1,6 @@
 #!/bin/sh
-python2 ./update.py
+if ! zsh 2>&1 > /dev/null ; then
+  apt update
+  apt-get install -y zsh
+fi
+python3 ./update.py
