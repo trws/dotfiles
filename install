@@ -1,6 +1,6 @@
 #!/bin/sh
 if ! zsh 2>&1 > /dev/null ; then
   apt update
-  apt-get install -y zsh
+  apt-get install -y zsh ripgrep fzf less
 fi
 python3 ./update.py
