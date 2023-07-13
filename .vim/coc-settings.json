@@ -5,7 +5,9 @@
   "python.linting.enabled": true,
   // "Lua.diagnostics.globals": ["hs", "spoon"],
   "Lua.workspace.library": [
-    "/Users/scogland1/.hammerspoon/Spoons/EmmyLua.spoon/annotations"
+    "/Users/scogland1/.hammerspoon/Spoons/EmmyLua.spoon/annotations",
+    "${3rd}/luv/library",
+    "${3rd}/OpenResty/library"
   ],
   "Lua.runtime.path": [
     "?.lua",
@@ -15,6 +17,11 @@
   ],
   "Lua.diagnostics.disable" : [
     "lowercase-global"
-  ]
+  ],
+  "Lua.runtime.version": "LuaJIT",
+  "Lua.diagnostics.globals": [
+    "ngx"
+  ],
+  "Lua.workspace.checkThirdParty": false
 }
 
