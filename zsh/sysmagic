@@ -42,6 +42,7 @@ gotroot=0
 
 roothosts=(
 	abrams
+	debian
 	bolt
 	chimera
 	falcon

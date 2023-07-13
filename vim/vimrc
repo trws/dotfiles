@@ -51,9 +51,6 @@ nnoremap <silent> <leader>ws :call WindowSwap#EasyWindowSwap()<CR>
 
 
 
-" let g:bracketed_paste_tmux_wrap=0
-" Plug 'ConradIrwin/vim-bracketed-paste'
-
 "colorschemes
 " Plug 'tomasr/molokai'
 " Plug 'sjl/badwolf'
@@ -112,7 +109,8 @@ if has('nvim')
 endif
 let g:tex_comment_nospell=1
 let g:Tex_CompileRule_pdf="latexmk -shell-escape -synctex=1 $*"
-let g:vimtex_disable_recursive_main_file_detection = 1
+" deprecated
+" let g:vimtex_disable_recursive_main_file_detection = 1
 let g:vimtex_view_method='skim'
 let g:vimtex_fold_manual=1
 " let g:vimtex_view_enabled=0
@@ -164,7 +162,7 @@ Plug 'tpope/vim-tbone'
 Plug 'vim-scripts/vimux'
 
 function! InGui()
-  return has("gui_running") || exists("g:gui_oni") || exists("neovim_dot_app") || has("gui_vimr")
+  return has("gui_running") || exists("g:gui_oni") || exists("neovim_dot_app") || has("gui_vimr") || exists("g:neovide")
 endfunction
 
 
@@ -178,8 +176,6 @@ Plug 'rkaminsk/vim-syntax-clingo'
 " Plug 'LucHermitte/VimFold4C'
 " CSupport plugin: XXX: reacts badly with several others
 " Plug 'c.vim'
-" org-mode
-Plug 'jceb/vim-orgmode'
 " Plug 'dhruvasagar/vim-dotoo' " not really working...
 Plug 'cweagans/vim-taskpaper'
 
@@ -233,6 +229,7 @@ nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
+nmap <silent> gR <Plug>(coc-rename)
 
 " Use K to show documentation in preview window.
 nnoremap <silent> K :call ShowDocumentation()<CR>
@@ -254,6 +251,7 @@ nmap <leader>rn <Plug>(coc-rename)
 " Formatting selected code.
 xmap <leader>f  <Plug>(coc-format-selected)
 nmap <leader>f  <Plug>(coc-format-selected)
+vmap <leader>f  <Plug>(coc-format-selected)
 
 augroup mygroup
   autocmd!
@@ -423,8 +421,11 @@ if has('nvim')
   Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
   " fzf-compatible matcher
   Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
-
+  Plug 'nvim-orgmode/orgmode'
+  Plug 'fannheyward/telescope-coc.nvim'
 else
+  " org-mode
+  Plug 'jceb/vim-orgmode'
   Plug 'roxma/nvim-yarp'
   Plug 'roxma/vim-hug-neovim-rpc'
 endif
@@ -533,10 +534,18 @@ let g:targets_seekRanges = 'cr cb cB lc ac Ac lr lb ar ab lB Ar aB Ab AB rr ll r
 
 " indent objects, around or in (i)ndent regions
 Plug 'michaeljsmith/vim-indent-object'
-Plug 'nathanaelkane/vim-indent-guides'
-let g:indent_guides_start_level = 2
-let g:indent_guides_guide_size = 1
-let g:indent_guides_enable_on_vim_startup = 1
+
+" causing neovim errors due to https://github.com/neovim/neovim/issues/9881
+" Plug 'nathanaelkane/vim-indent-guides'
+" let g:indent_guides_start_level = 2
+" let g:indent_guides_guide_size = 1
+" let g:indent_guides_enable_on_vim_startup = 1
+
+" more stable than above, not as nice looking
+Plug 'djpohly/outerspace.vim'
+
+" set list
+" autocmd OptionSet shiftwidth execute 'setlocal listchars=trail:·,tab:│\ ,multispace:┆' . repeat('\ ', &sw - 1)
 
 " Plug 'terryma/vim-multiple-cursors'
 
@@ -603,26 +612,7 @@ Plug 'tpope/vim-sensible'
 call plug#end()
 
 if has('nvim')
-lua <<EOF
-require('telescope').setup {
-extensions = {
-fzf = {
-fuzzy = true,                    -- false will only do exact matching
-override_generic_sorter = true,  -- override the generic sorter
-override_file_sorter = true,     -- override the file sorter
-case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
--- the default case_mode is "smart_case"
-}
-}
-}
-
--- GH pull request
-require"octo".setup()
-
--- To get fzf loaded and working with telescope, you need to call
--- load_extension, somewhere after setup function:
-require('telescope').load_extension('fzf')
-EOF
+  lua require('setup')
 endif
 
 
@@ -788,7 +778,7 @@ augroup extra_filetypes
   autocmd!
   au BufNewFile,BufRead *.cu           set      ft=cuda
   au BufNewFile,BufRead *.cuh          set      ft=cuda
-  au BufNewFile,BufRead *.cl           set      ft=opencl
+  " au BufNewFile,BufRead *.cl           set      ft=opencl
   au BufNewFile,BufRead *.go           set      ft=go
   au FileType           go             setlocal formatprg=gofmt
   au BufRead            COMMIT_EDITMSG set      backupcopy=no
@@ -809,14 +799,12 @@ augroup tw_changes
   au FileType python setlocal textwidth=88
 augroup END
 set formatoptions=crq
-" set fo-=t
-" au FileType tex set formatoptions+=a
 augroup text_formatting
   autocmd!
   au FileType txt setlocal formatoptions+=t
   au FileType txt setlocal formatexpr=cindent
 augroup END
-"set formatoptions+=a
+" set formatoptions+=a
 
 augroup folding_open_fugitive
   autocmd!
@@ -914,20 +902,25 @@ endif
 
 if InGui()
   set guioptions=egmt
-  if has("gui_macvim")
+  if $TERM == ""
+    let $TERM="xterm-256color"
+  endif
+  if exists("g:neovide") || has("gui_macvim")
+    " set gfn=ProFontIIx\ Nerd\ Font\ Mono:h9
+  endif
+  if exists("g:neovide")
+    let g:neovide_input_macos_alt_is_meta = v:true
+  elseif has("gui_macvim")
     "CRITICAL option, allows alt-based key-bindings to work in macvim
     set macmeta
     " set transparency=10
     " set gfn=Courier\ New:h11.00
     " set gfn=ProFontX:h9.00
     " expariment to get italic monospace variant with full powerline support
-    set gfn=ProFontIIx\ Nerd\ Font\ Mono:h9
     set antialias
     set fuopt=maxvert,maxhorz
   elseif has("gui_vimr")
     " VimRSetFontAndSize "ProFontIIx Nerd Font Mono", 9
-    " vimr doesn't set term for some reason
-    let $TERM="xterm-256color"
   elseif has("gui_gtk2")
     set guifont=Terminus\ 8
   elseif has("x11")
@@ -984,8 +977,6 @@ let g:utl_cfg_hdl_mt_generic = 'silent !open "%p"'
 "editing behavior
 set history=10000
 set backspace=2
-" set softtabstop=2 "used to favor the gnu style, getting used to K&R @ 4 spaces
-" set shiftwidth=2
 set softtabstop=2
 set shiftwidth=2
 set expandtab

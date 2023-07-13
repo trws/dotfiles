@@ -2,7 +2,7 @@
   name = Tom Scogland
   email = scogland1@llnl.gov
 
-[includeIf "gitdir:/Users"]
+[includeIf "gitdir:/Applications"]
   path = ~/.dotfiles/git/gitconfig-macos
 [includeIf "gitdir:C:"]
   path = ~/.dotfiles/git/gitconfig-windows
@@ -11,6 +11,11 @@
 
 
 [alias]
+  get-upstream = !git remote | egrep -o '(upstream|origin)' | tail -1
+  get-main-branch = !git branch -rl '*/HEAD' | rev | cut -d/ -f1 | rev
+  ; get-parent-branch
+  diff-base = !git diff $(git merge-base $(git get-upstream)/$(git get-main-branch) HEAD)
+
   files = !git diff --name-only $(git merge-base HEAD \"${REVIEW_BASE:-$(git rev-parse --abbrev-ref upstream)}\")
 
   # Same as above, but with a diff stat instead of just names
@@ -38,8 +43,14 @@
   # `git di $number` shows the diff between the state `$number` revisions ago and the current state
   di = !"d() { git diff --patch-with-stat HEAD~$1; }; git diff-index --quiet HEAD -- || clear; d"
 
+  # `git di $number` shows the diff between the state `$number` revisions ago and the current state
+  di = !"d() { git diff --patch-with-stat HEAD~$1; }; git diff-index --quiet HEAD -- || clear; d"
+
   # Pull in remote changes for the current repository and all its submodules
   p = !"git pull; git submodule foreach git pull origin master"
+
+  # Pull remote changes from the default branch upstream, detecting both
+  pum = !"git pull $(git get-upstream) $(git get-main-branch)"
 
   # Clone a repository including all submodules
   c = clone --recursive
@@ -122,42 +133,34 @@
   trustctime = false
 
   pager = git-pager
-[color]
 
+[color]
   # Use colors in Git commands that are capable of colored output when
   # outputting to the terminal. (This is the default setting in Git ≥ 1.8.4.)
   ui = auto
 
 [color "branch"]
-
   current = yellow reverse
   local = yellow
   remote = green
 
 [color "diff"]
-
   meta = yellow bold
   frag = magenta bold # line info
   old = red # deletions
   new = green # additions
-  algorithm = patience
 
 [color "status"]
-
   added = yellow
   changed = green
   untracked = cyan
 
 [diff]
-
   # Detect copies as well as renames
   renames = copies
+  algorithm = patience
 
 [push]
-
-  # Use the Git 1.x.x default to avoid errors on machines with old Git
-  # installations. To use `simple` instead, add this to your `~/.extra` file:
-  # `git config --global push.default simple`. See http://git.io/mMah-w.
   default = current
 ######## TOOLS
 [merge "wiggle"]
@@ -175,6 +178,7 @@
   smudge = git-lfs smudge -- %f
   required = true
   process = git-lfs filter-process
+
 [hub]
   protocol = ssh
 

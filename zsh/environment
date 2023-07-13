@@ -42,7 +42,9 @@ GIVM=vim
 if (( $+commands[nvim] )) ; then
   VIM=nvim
 fi
-if (( $+commands[vimr] )) ; then
+if (( $+commands[neovide] )) ; then
+  GVIM=neovide
+elif (( $+commands[vimr] )) ; then
   GVIM=vimr
 elif (( $+commands[mvim] )) ; then
   GVIM=mvim

@@ -187,7 +187,7 @@ if (( $+commands[brew] )) ; then
 fi
 
 # clone antidote if necessary
-[[ -e ~/.cache/antidote ]] || git clone git@github.com:mattmc3/antidote.git ~/.cache/antidote
+[[ -e ~/.cache/antidote ]] || git clone https://github.com/mattmc3/antidote ~/.cache/antidote
 
 autoload -U fasd
 export ANTIDOTE_HOME=~/.cache/antidote
@@ -379,6 +379,8 @@ if is-at-least 5.1; then
   if ! (( ${+commands[fd]} )) ; then
     if (( ${+commands[fdfind]} )) ; then
       alias fd=fdfind
+    elif (( ${+commands[fd-find]} )) ; then
+      alias fd=fd-find
     else
       brew_or_cargo --brew fd --cargo fd-find fd
     fi

@@ -64,6 +64,7 @@
 
 ;; todoist in org?
 (package! todoist)
+(package! janet-mode)
 ;(package! another-package
 ;  :recipe (:host github :repo "username/repo"))
 
