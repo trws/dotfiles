@@ -8,7 +8,7 @@ function! FindOrCreate(dir)
   endif
   return a:dir
 endfunction
-
+set rtp+=~/.dotfiles/vim
 " Deal with single home/multi-arch systems
 let plugged_directory = ""
 if exists("$ARCH")
@@ -579,6 +579,8 @@ let g:formatters_python=['black']
 let g:formatters_c=['clangformat']
 let g:formatters_cpp=['clangformat']
 let g:formatters_sh=['shfmt']
+let g:formatdef_nixpkgs="nixpkgs-fmt"
+let g:formatters_nix=['nixpkgs']
 " Ensure we have black, add Black command
 " let g:black_virtualenv=expand("~/.cache/vim/black")
 " Plug 'psf/black', { 'branch': 'stable' }
@@ -712,6 +714,10 @@ function! Files_with_ur_dir()
   echo l:dir
   :execute 'Files ' . l:dir
 endfunction
+" command! -bang -nargs=* Rgp
+"   \ call fzf#vim#grep(
+"   \   'rg --column --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 1,
+"   \   fzf#vim#with_preview(), <bang>0)
 " fzf version of the mappings, experimental
 " nnoremap <silent> <leader>fr  :call Files_with_ur_dir()<CR>
 nnoremap <silent> <leader>fr  :Files<CR>

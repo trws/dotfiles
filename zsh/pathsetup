@@ -140,8 +140,8 @@ add_to_path_front "$PRGPATH/cargo"
 
 add_to_path_front "$PRGPATH/spack"
 
-remove_from_path ~/scripts
-path=(~/scripts $path)
+remove_from_path ~/scripts ~/.dotfiles/scripts
+path=(~/.dotfiles/scripts $path)
 
 # not named bin, must be manual, should be last to shortcut with direnv when
 # possible
