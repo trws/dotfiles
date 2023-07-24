@@ -20,10 +20,13 @@ elseif (!has("win64"))
   let plugged_directory = substitute(system("uname -m"), '[ \n]\+$', '', '')
 endif
 let plugged_directory = expand("~/.cache/vim-plugged/" . plugged_directory)
-if !filereadable(expand("~/.vim/autoload/plug.vim"))
+
+if !exists("*plug#begin")
+if !filereadable(expand("~/.dotfiles/vim/autoload/plug.vim"))
   echo('fetching plug for initial install')
-  call system('curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
+  call system('curl -fLo ~/.dotfiles/vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
   call system('mkdir -p ' . plugged_directory)
+endif
 endif
 
 call plug#begin(plugged_directory)
@@ -190,6 +193,7 @@ set shortmess+=c
 
 """""" coc
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+let g:coc_config_home = '~/.dotfiles/vim'
 let g:coc_data_home = plugged_directory . '/coc-data'
 let g:coc_global_extensions = ['coc-json', 'coc-julia',
     \ 'coc-pyright', 'coc-emoji', 'coc-sh', 'coc-cmake', 'coc-yaml',
@@ -407,9 +411,13 @@ xmap <leader>x  <Plug>(coc-convert-snippet)
 " endif
 """"""" vim-lsp stuff
 
-" Plug 'junegunn/fzf', { 'dir': plugged_directory . '/fzf', 'do': './install --all' }
-Plug 'junegunn/fzf', { 'dir': plugged_directory . '/fzf' }
+if !executable('fzf')
+Plug 'junegunn/fzf', { 'dir': plugged_directory . '/fzf', 'do': './install --all' }
+else
+  Plug 'junegunn/fzf', { 'dir': plugged_directory . '/fzf' }
+endif
 Plug 'junegunn/fzf.vim'
+
 
 if has('nvim')
   "TODO look at neomake? https://github.com/neomake/neomake
@@ -423,7 +431,12 @@ if has('nvim')
   Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
   Plug 'nvim-orgmode/orgmode'
   Plug 'fannheyward/telescope-coc.nvim'
+  Plug 'phaazon/hop.nvim'
+  Plug 'ggandor/leap.nvim'
+  Plug 'ggandor/leap-spooky.nvim'
 else
+  Plug 'justinmk/vim-sneak'
+  let g:sneak#label=1
   " org-mode
   Plug 'jceb/vim-orgmode'
   Plug 'roxma/nvim-yarp'
@@ -519,7 +532,7 @@ Plug 'petobens/poet-v', { 'for': 'python' }
 Plug 'tpope/vim-commentary'
 " allow swapping of arguments, and i,/a, for selecting swappable component of
 " comma-delimited argument lists
-Plug 'machakann/vim-swap'
+" Plug 'machakann/vim-swap'
 " omap i, <Plug>(swap-textobject-i)
 " xmap i, <Plug>(swap-textobject-i)
 " omap a, <Plug>(swap-textobject-a)
@@ -559,8 +572,6 @@ Plug 'tommcdo/vim-exchange'
 Plug 'SirVer/ultisnips'
 " Snippets are separated from the engine
 Plug 'honza/vim-snippets'
-Plug 'justinmk/vim-sneak'
-let g:sneak#label=1
 Plug 'rbtnn/vim-vimscript_indentexpr'
 " format on Ctrl-k, maybe look into using lsp support in place or in addition?
 Plug 'Chiel92/vim-autoformat'
@@ -789,6 +800,7 @@ augroup END
 
 " Save a file as root (,W)
 noremap <leader>W :w !sudo tee % > /dev/null<CR>
+" noremap <leader>W <Plug>(leap-from-window)
 
 
 "automatic formatting options
