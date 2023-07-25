@@ -5,7 +5,8 @@ if [[ -n "$WSLENV" ]] ; then
   export BROWSER=wslview
   pgrep -f syncthing >& /dev/null || syncthing -no-browser 1> /dev/null 2>&1 &
 fi
-export ZDOTDIR=~/.zsh
+: ${ZDOTDIR:=~/.dotfiles/zsh}
+export ZDOTDIR
 
 # ensure my funcs, and prompts are there before load
 fpath=($ZDOTDIR/funcs $fpath)
