@@ -23,6 +23,7 @@ autoload -Uz $ZDOTDIR/funcs/*(.:t)
 mkdirp_if_missing ~/.cache/zsh
 export ZSH_CACHE_DIR=~/.cache/zsh
 zstyle ':completion:*:default:' cache-path $ZSH_CACHE_DIR/zcompcache
+[ ! -d $ZSH_CACHE_DIR/zcompcache ] && mkdir -p $ZSH_CACHE_DIR/zcompcache
 
 
 # FASD setup
@@ -115,71 +116,10 @@ bindkey -e
 # Remove path separator from WORDCHARS.
 WORDCHARS=${WORDCHARS//[\/]}
 
-## -----------------
-## Zim configuration
-## -----------------
-## Use degit instead of git as the default tool to install and update modules.
-##zstyle ':zim:zmodule' use 'degit'
-## --------------------
-## Module configuration
-## --------------------
-##
-## completion
-##
-## Set a custom path for the completion dump file.
-## If none is provided, the default ${ZDOTDIR:-${HOME}}/.zcompdump is used.
-##zstyle ':zim:completion' dumpfile "${ZDOTDIR:-${HOME}}/.zcompdump-${ZSH_VERSION}"
-##
-## git
-##
-## Set a custom prefix for the generated aliases. The default prefix is 'G'.
-#zstyle ':zim:git' aliases-prefix 'g'
-##
-## input
-##
-## Append \`../\` to your input for each \`.\` you type after an initial \`..\`
-##zstyle ':zim:input' double-dot-expand yes
-##
-## termtitle
-##
-## Set a custom terminal title format using prompt expansion escape sequences.
-## See http://zsh.sourceforge.net/Doc/Release/Prompt-Expansion.html#Simple-Prompt-Escapes
-## If none is provided, the default '%n@%m: %~' is used.
-##zstyle ':zim:termtitle' format '%1~'
-##
-## zsh-autosuggestions
-##
-## Customize the style that the suggestions are shown with.
-## See https://github.com/zsh-users/zsh-autosuggestions/blob/master/README.md#suggestion-highlight-style
-##ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=242'
-##
-## zsh-syntax-highlighting
-##
-## Set what highlighters will be used.
-## See https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/docs/highlighters.md
-#ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
-## Customize the main highlighter styles.
-## See https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/docs/highlighters/main.md#how-to-tweak-it
-##typeset -A ZSH_HIGHLIGHT_STYLES
-##ZSH_HIGHLIGHT_STYLES[comment]='fg=242'
-## ------------------
-## Initialize modules
-## ------------------
-#if [[ ! -e ${ZIM_HOME}/zimfw.zsh ]]; then
-#  # Download zimfw script if missing.
-#  command mkdir -p ${ZIM_HOME}
-#  if (( ${+commands[curl]} )); then
-#    command curl -fsSL -o ${ZIM_HOME}/zimfw.zsh https://github.com/zimfw/zimfw/releases/latest/download/zimfw.zsh
-#  else
-#    command wget -nv -O ${ZIM_HOME}/zimfw.zsh https://github.com/zimfw/zimfw/releases/latest/download/zimfw.zsh
-#  fi
-#fi
-#if [[ ! ${ZIM_HOME}/init.zsh -nt ${ZDOTDIR:-${HOME}}/.zimrc ]]; then
-#  # Install missing modules, and update ${ZIM_HOME}/init.zsh if it does not exist
-#  # or it's outdated, before sourcing it.
-#  source ${ZIM_HOME}/zimfw.zsh init -q
-#fi
-#source ${ZIM_HOME}/init.zsh
+zstyle ':prezto:*:*' color 'yes'
+zstyle ':prezto:module:editor' key-bindings 'emacs'
+zstyle ':prezto:module:git:status:ignore' submodules 'all'
+zstyle ':prezto:module:ssh:load' identities 'id_rsa' 'github_rsa'
 
 # ensure we get homebrew completion
 if (( $+commands[brew] )) ; then
@@ -227,7 +167,7 @@ sorin-ionescu/prezto path:modules/git
 sorin-ionescu/prezto path:modules/homebrew
 # Enables and configures smart and extensive tab completion.
 # completion must be sourced after zsh-users/zsh-completions
-# zimfw/completion
+zsh-users/zsh-completions
 sorin-ionescu/prezto path:modules/completion
 
 
@@ -368,7 +308,7 @@ if is-at-least 5.1; then
   mytools[rg]='--brew ripgrep --cargo ripgrep'
   mytools[dust]='--brew dust --cargo du-dust'
   mytools[bat]='--brew bat --cargo bat'
-  mytools[delta]='--brew delta --cargo git-delta'
+  # mytools[delta]='--brew delta --cargo git-delta'
   mytools[hyperfine]='--brew hyperfine --cargo hyperfine'
   mytools[exa]='--brew exa --cargo exa'
 

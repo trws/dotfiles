@@ -16,7 +16,8 @@ vim/sessions
 (?d)auto-save-list
 (?d)tramp
 (?d).\#*
-# zsh compiled scripts
+(?d).mypy_cache
+// zsh compiled scripts
 (?d)*.zwc
 
 .cache

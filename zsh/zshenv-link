@@ -30,7 +30,6 @@ export XDG_STATE_HOME=$h/.local/state # cross-run state but not long-term, logs,
 unset h
 
 if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then . ~/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
-# if [ -e /home/scogland1/.nix-profile/etc/profile.d/nix.sh ]; then . /home/scogland1/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
 source $ZDOTDIR/pathsetup
 source $ZDOTDIR/environment
 

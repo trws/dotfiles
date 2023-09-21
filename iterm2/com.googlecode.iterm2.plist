@@ -23,7 +23,7 @@
 	<key>ColorInvertedCursor</key>
 	<true/>
 	<key>Command</key>
-	<string></string>
+	<string>/bin/zsh</string>
 	<key>CommandSelection</key>
 	<true/>
 	<key>Control</key>
@@ -2426,7 +2426,7 @@
 			<key>Non-ASCII Ligatures</key>
 			<true/>
 			<key>Normal Font</key>
-			<string>HackNerdFontCompleteM-Regular 11</string>
+			<string>JetBrainsMonoNFM-Regular 11</string>
 			<key>Option Key Sends</key>
 			<integer>2</integer>
 			<key>Prompt Before Closing 2</key>

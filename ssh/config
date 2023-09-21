@@ -3,6 +3,14 @@ Include /Users/scogland1/.colima/ssh_config
 # Match host * exec "hostname | grep abrams"
 #   IdentityAgent "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
 
+Host abrams
+  User scogland1
+  Hostname abrams.localdomain
+  ProxyJump trove
+  LocalForward 5905 localhost:5900
+  LocalForward 8386 localhost:8384
+
+
 Host deb debian
     User scogland1
     HostName debian.local
@@ -179,3 +187,65 @@ Host !cz-* *
     PermitLocalCommand yes
     SendEnv LC_TERM_PROGRAM LC_ITERM_PROFILE ITERM_PROFILE TERM_PROGRAM
     PreferredAuthentications publickey,password,keyboard-interactive
+ServerAliveCountMax 0
+ServerAliveInterval 900
+ServerAliveCountMax 0
+ServerAliveInterval 900
+ServerAliveCountMax 0
+ServerAliveInterval 900
+ServerAliveCountMax 0
+ServerAliveInterval 900
+ServerAliveCountMax 0
+ServerAliveInterval 900
+ServerAliveCountMax 0
+ServerAliveInterval 900
+ServerAliveCountMax 0
+ServerAliveInterval 900
+ServerAliveCountMax 0
+ServerAliveInterval 900
+ServerAliveCountMax 0
+ServerAliveInterval 900
+ServerAliveCountMax 0
+ServerAliveInterval 900
+ServerAliveCountMax 0
+ServerAliveInterval 900
+ServerAliveCountMax 0
+ServerAliveInterval 900
+ServerAliveCountMax 0
+ServerAliveInterval 900
+ServerAliveCountMax 0
+ServerAliveInterval 900
+ServerAliveCountMax 0
+ServerAliveInterval 900
+ServerAliveCountMax 0
+ServerAliveInterval 900
+ServerAliveCountMax 0
+ServerAliveInterval 900
+ServerAliveCountMax 0
+ServerAliveInterval 900
+ServerAliveCountMax 0
+ServerAliveInterval 900
+ServerAliveCountMax 0
+ServerAliveInterval 900
+ServerAliveCountMax 0
+ServerAliveInterval 900
+ServerAliveCountMax 0
+ServerAliveInterval 900
+ServerAliveCountMax 0
+ServerAliveInterval 900
+ServerAliveCountMax 0
+ServerAliveInterval 900
+ServerAliveCountMax 0
+ServerAliveInterval 900
+ServerAliveCountMax 0
+ServerAliveInterval 900
+ServerAliveCountMax 0
+ServerAliveInterval 900
+ServerAliveCountMax 0
+ServerAliveInterval 900
+ServerAliveCountMax 0
+ServerAliveInterval 900
+ServerAliveCountMax 0
+ServerAliveInterval 900
+ServerAliveCountMax 0
+ServerAliveInterval 900

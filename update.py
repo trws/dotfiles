@@ -30,7 +30,6 @@ link_files = {
     "zsh": "~/.zsh",
     "zsh/zshenv-link": "~/.zshenv",
     "hammerspoon": "~/.hammerspoon",
-    # "mjolnir" : "~/.mjolnir",
     "tmux.conf": "~/.tmux.conf",
     "gitignore": "~/.gitignore",
     "gitconfig": "~/.gitconfig",
@@ -42,7 +41,6 @@ link_files = {
     "mailmate/Resources": "~/Library/Application Support/MailMate/Resources",
     "mailmate/Bundles": "~/Library/Application Support/MailMate/Bundles",
     "emacs-redirect": "~/.emacs.d",
-    "doom": "~/.cache/doom-local",
 }
 if os.path.exists("~/Library"):
     link_files["pip"] = "~/Library/Application Support/pip"

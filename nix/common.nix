@@ -35,29 +35,41 @@
     ];
     python-with-packages = python3.withPackages python-packages;
   in [
+    # version control
     git
     gh
-    fzf
-    helix
+    hub
+    wdiff
+    wiggle
 
+    # editor related
+    helix
+    universal-ctags
+
+    # shell tools
+    nushellFull
+    fzf
+    direnv
+    hyperfine
+    ripgrep
+    eza
+    lsd
+    bat
+    fd
+    bfs # fast find/fd-like thing that does breadth-first order traversals
+    broot
+    du-dust
+    tree
+
+    # languages
     go_1_19
 
+    # build
     gnumake
     ninja
     cmake
 
-    direnv
-
-    hyperfine
-    delta
-    ripgrep
-    exa
-    bat
-    fd
-    broot
-    du-dust
     nixpkgs-fmt
-    tree
     ];
 }
 

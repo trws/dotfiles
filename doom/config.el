@@ -19,7 +19,7 @@
   (print (format "\033]1337;Custom=id=%s:%s:%s\a" "url-open-sec" "open-link" URL) #'external-debugging-output))
 (defun my-toggle-url-handler ()
   (interactive)
-  (if (= browse-url-browser-function 'browse-url-xdg-open)
+  (if (eq browse-url-browser-function 'browse-url-xdg-open)
       (setq browse-url-browser-function 'my-browse-url-on-client)
       (setq browse-url-browser-function 'browse-url-xdg-open)))
 
@@ -200,6 +200,7 @@
     (mu4e-view-open-attachment-emacs msg num))
   (setq!
    mu4e-maildir (expand-file-name "~/Mail/scogland1")
+   mu4e-headers-buffer-name "*mu4e-headers*"
    mu4e-attachment-dir (expand-file-name "~/Downloads")
    mu4e-view-use-gnus t
    mu4e-get-mail-command  "true"
@@ -290,6 +291,8 @@
   (add-hook 'mu4e-view-mode-hook 'visual-line-mode)
   (add-hook 'mu4e-view-mode-hook 'visual-fill-column-mode)
   (map! :map 'mu4e-headers-mode-map
+        :n "s" 'mu4e-headers-search
+        :n "/" 'mu4e-headers-search-narrow
         :n "e" 'mu4e-headers-mark-for-refile
         :n "Y" 'mu4e-headers-mark-for-unflagrefile
         :n "E" 'mu4e-headers-mark-for-flagrefile

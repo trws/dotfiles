@@ -29,6 +29,59 @@ if !filereadable(expand("~/.dotfiles/vim/autoload/plug.vim"))
 endif
 endif
 
+function! StatusEncFmt(current)
+  let l:s = ''
+  if strlen(&ft)
+    " let l:s .= &ft.WebDevIconsGetFileTypeSymbol()
+    let l:s .= &ft
+  else
+    let l:s .= 'NO-FT'
+  endif
+  if a:current && &ft == "csv"
+    let l:s .= '[%{CSVCol()}/%{csv#MaxColumns(line("."))}]'
+  endif
+  let l:enc = &fenc!=#"" ? &fenc : &enc
+  let l:fs = " "
+  if l:enc != "utf-8"
+    let l:s .= l:fs . "[" . l:enc . "]"
+    let l:fs = ""
+  endif
+  if &ff != "unix"
+    let l:s .= l:fs . "[" . &ff . "]"
+  endif
+  return l:s
+endfunction
+
+
+function! g:CrystallineStatusLineFn(current, width)
+  let l:s = ''
+
+  if a:current
+    let l:s .= crystalline#mode() . crystalline#right_mode_sep('')
+  else
+    let l:s .= '%#CrystallineInactive#'
+  endif
+  let l:s .= ' %f%h%w%m%r '
+  if a:current && a:width > 60
+    let l:s .= crystalline#right_sep('', 'Fill') . ' %{FugitiveHead()}'
+  endif
+
+  let l:s .= '%='
+  if a:current
+    let l:s .= crystalline#left_sep('', 'Fill') . ' %{&paste ?"PASTE ":""}%{&spell?"SPELL ":""}'
+    let l:s .= crystalline#left_mode_sep('')
+  endif
+  if a:width > 80
+    let l:s .= StatusEncFmt(a:current)
+  else
+    let l:s .= ''
+  endif
+
+  let l:s .= ' %l/%L %c%V %P '
+
+  return l:s
+endfunction
+
 call plug#begin(plugged_directory)
 
 filetype indent on " covered by sensible, BUT running here avoids double load, must be before plug#end
@@ -99,7 +152,7 @@ Plug 'reedes/vim-pencil'
 Plug 'vim-scripts/TWiki-Syntax'
 Plug 'vim-perl/vim-perl', { 'for': 'perl', 'do': 'make clean carp dancer highlight-all-pragmas moose test-more try-tiny' }
 Plug 'sheerun/vim-polyglot' " pulls in syntax for almost everything
-let g:polyglot_disabled = [ 'markdown']
+let g:polyglot_disabled = [ 'markdown', 'org']
 " Plug 'darfink/vim-plist'
 " let g:plist_display_format='xml'
 " Plug 'gu-fan/riv.vim' " RST handler etc.
@@ -244,6 +297,12 @@ function! ShowDocumentation()
   else
     call feedkeys('K', 'in')
   endif
+endfunction
+
+function! OpenSTConflict()
+  let fn=expand('%')
+  let conflict=substitute(fn, ".sync-conflict[^.]*", "", "")
+  exec 'vert diffsplit ' . conflict
 endfunction
 
 " Highlight the symbol and its references when holding the cursor.
@@ -569,7 +628,7 @@ Plug 'tpope/vim-surround'
 " over
 Plug 'tommcdo/vim-exchange'
 " snippets engine
-Plug 'SirVer/ultisnips'
+" Plug 'SirVer/ultisnips'
 " Snippets are separated from the engine
 Plug 'honza/vim-snippets'
 Plug 'rbtnn/vim-vimscript_indentexpr'
@@ -714,10 +773,10 @@ function! Files_with_ur_dir()
   echo l:dir
   :execute 'Files ' . l:dir
 endfunction
-" command! -bang -nargs=* Rgp
-"   \ call fzf#vim#grep(
-"   \   'rg --column --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 1,
-"   \   fzf#vim#with_preview(), <bang>0)
+command! -bang -nargs=* Rgp
+  \ call fzf#vim#grep(
+  \   'rg --column --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 1,
+  \   fzf#vim#with_preview(), <bang>0)
 " fzf version of the mappings, experimental
 " nnoremap <silent> <leader>fr  :call Files_with_ur_dir()<CR>
 nnoremap <silent> <leader>fr  :Files<CR>
@@ -730,7 +789,8 @@ nnoremap <silent> <leader>fs  :Snippets<CR>
 nnoremap <silent> <leader>fn  :Files ~/onedrive/vimwiki/<CR>
 nnoremap <silent> <leader>fd  :Files ~/.dotfiles<CR>
 if executable('rg')
-  nnoremap <silent> <leader>fg  :Rg<CR>
+  " nnoremap <silent> <leader>fg  :Rg<CR>
+  nnoremap <silent> <leader>fg  :Rgp<CR>
 else
   nnoremap <silent> <leader>fg  :call helpers#AgWithParam()<CR>
 endif
@@ -837,66 +897,15 @@ let python_highlight_all = 1
 call helpers#Map_for_all("<C-k>", ":Autoformat<CR>", 0, 0, 0)
 
 
-function! StatusEncFmt(current)
-  let l:s = ''
-  if strlen(&ft)
-    " let l:s .= &ft.WebDevIconsGetFileTypeSymbol()
-    let l:s .= &ft
-  else
-    let l:s .= 'NO-FT'
-  endif
-  if a:current && &ft == "csv"
-    let l:s .= '[%{CSVCol()}/%{csv#MaxColumns(line("."))}]'
-  endif
-  let l:enc = &fenc!=#"" ? &fenc : &enc
-  let l:fs = " "
-  if l:enc != "utf-8"
-    let l:s .= l:fs . "[" . l:enc . "]"
-    let l:fs = ""
-  endif
-  if &ff != "unix"
-    let l:s .= l:fs . "[" . &ff . "]"
-  endif
-  return l:s
-endfunction
-
-
-function! StatusLine(current, width)
-  let l:s = ''
-
-  if a:current
-    let l:s .= crystalline#mode() . crystalline#right_mode_sep('')
-  else
-    let l:s .= '%#CrystallineInactive#'
-  endif
-  let l:s .= ' %f%h%w%m%r '
-  if a:current && a:width > 60
-    let l:s .= crystalline#right_sep('', 'Fill') . ' %{FugitiveHead()}'
-  endif
-
-  let l:s .= '%='
-  if a:current
-    let l:s .= crystalline#left_sep('', 'Fill') . ' %{&paste ?"PASTE ":""}%{&spell?"SPELL ":""}'
-    let l:s .= crystalline#left_mode_sep('')
-  endif
-  if a:width > 80
-    let l:s .= StatusEncFmt(a:current)
-  else
-    let l:s .= ''
-  endif
-
-  let l:s .= ' %l/%L %c%V %P '
-
-  return l:s
-endfunction
-
 " function! TabLine()
 "   let l:vimlabel = has('nvim') ?  ' NVIM ' : ' VIM '
 "   return crystalline#bufferline(2, len(l:vimlabel), 1) . '%=%#CrystallineTab# ' . l:vimlabel
 " endfunction
 
 let g:crystalline_enable_sep = 1
-let g:crystalline_statusline_fn = 'StatusLine'
+" let g:crystalline_statusline_fn = 'StatusLine'
+" let g:CrystallineStatuslineFn = 'StatusLine'
+
 " let g:crystalline_tabline_fn = 'TabLine'
 let g:crystalline_theme = 'gruvbox'
 
@@ -924,10 +933,12 @@ if InGui()
     let $TERM="xterm-256color"
   endif
   if exists("g:neovide") || has("gui_macvim")
-    " set gfn=ProFontIIx\ Nerd\ Font\ Mono:h9
+    set gfn=ProFont\ IIx\ Nerd\ Font\ Mono:h9
   endif
   if exists("g:neovide")
     let g:neovide_input_macos_alt_is_meta = v:true
+    nnoremap <ScrollWheelLeft> <ScrollWheelRight>
+    nnoremap <ScrollWheelRight> <ScrollWheelLeft>
   elseif has("gui_macvim")
     "CRITICAL option, allows alt-based key-bindings to work in macvim
     set macmeta

@@ -73,5 +73,5 @@
 ;;    :repo "sjas/apprentice-theme"
 ;;    :files ("*.el")))
 ; (package! org-roam)
-; (package! org-logseq
-;   :recipe (:host github :repo "llcc/org-logseq"))
+(package! org-logseq
+  :recipe (:host github :repo "llcc/org-logseq"))

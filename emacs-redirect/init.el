@@ -1,4 +1,4 @@
-(setq user-init-file "~/.cache/doom-emacs/init.el")
+(setq user-init-file "~/.cache/doom-emacs/early-init.el")
 (setq user-emacs-directory  "~/.cache/doom-emacs")
 (if (not (file-directory-p user-emacs-directory))
   (progn
