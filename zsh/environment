@@ -92,7 +92,7 @@ typeset -x LESS ENTOMB PAGER DATE_FMT
 export CVS_RSH=ssh
 export LANG=en_US.UTF-8
 
-if [[ $TERM = iterm2-direct ]] ; then
+if [[ -n "$ITERM_PROFILE" ]] ; then
   export COLORTERM=truecolor
 elif [[ $TERM = "tmux" ]] ; then
   export TERM=tmux-256color

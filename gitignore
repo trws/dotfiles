@@ -59,3 +59,7 @@ CMakeFiles
 build/
 build-*/
 *-build/
+
+# by default ignore my nix stuff
+nix
+flake.lock

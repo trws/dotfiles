@@ -160,8 +160,6 @@ zimfw/fasd
 
 zimfw/exa
 
-wfxr/forgit
-
 sorin-ionescu/prezto
 sorin-ionescu/prezto path:modules/git
 sorin-ionescu/prezto path:modules/homebrew
@@ -170,6 +168,7 @@ sorin-ionescu/prezto path:modules/homebrew
 zsh-users/zsh-completions
 sorin-ionescu/prezto path:modules/completion
 
+wfxr/forgit
 
 # fzf for completion - buggy
 # zmodule Aloxaf/fzf-tab
@@ -343,6 +342,8 @@ else
   forgit_ignore=gi
   forgit_checkout_file=gcf
   forgit_checkout_branch=gcb
+  forgit_branch_delete=gbd
+  forgit_checkout_tag=gct
   forgit_checkout_commit=gco
   forgit_clean=gclean
   forgit_stash_show=gss

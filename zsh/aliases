@@ -11,6 +11,7 @@ if which srun >& /dev/null  ; then
 fi
 
 alias ls.='ls -dF .*'
+eza / >& /dev/null && alias exa=eza
 
 alias grep='grep --color=auto '
 alias rezsh='exec zsh'
