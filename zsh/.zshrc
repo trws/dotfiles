@@ -309,7 +309,7 @@ if is-at-least 5.1; then
   mytools[bat]='--brew bat --cargo bat'
   # mytools[delta]='--brew delta --cargo git-delta'
   mytools[hyperfine]='--brew hyperfine --cargo hyperfine'
-  mytools[exa]='--brew exa --cargo exa'
+  mytools[eza]='--brew eza --cargo eza'
 
   for cmd args in ${(kv)mytools} ; do
     brew_or_cargo ${=args} $cmd
@@ -444,3 +444,5 @@ if [[ $PROF_INIT == "true" ]] ; then
   zprof
 fi
 
+export NVM_DIR="$HOME/.config/nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
