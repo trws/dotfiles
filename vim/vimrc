@@ -148,6 +148,9 @@ Plug 'junegunn/vim-peekaboo'
 " support for live wrapping, soft and hard
 Plug 'reedes/vim-pencil'
 
+" browser plugin support
+Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
+
 " ==== filetype handlers, highlighting etc ====
 Plug 'vim-scripts/TWiki-Syntax'
 Plug 'vim-perl/vim-perl', { 'for': 'perl', 'do': 'make clean carp dancer highlight-all-pragmas moose test-more try-tiny' }
@@ -199,6 +202,11 @@ let g:vimtex_syntax_minted = [
 
 " table handling
 Plug 'godlygeek/tabular'
+
+" dash
+Plug 'rizzatti/dash.vim'
+:nmap <silent> <leader>d <Plug>DashSearch
+:nmap <silent> <leader>D <Plug>DashGlobalSearch
 
 " Plug 'plasticboy/vim-markdown' " this one did some strange things, not fond
 " testing pandoc markdown plugins, since that's usually my preference
@@ -567,6 +575,15 @@ endif
 
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-vinegar'
+" gui font size control, must be after vinegar
+nnoremap <silent> <D--> :ZoomOut<cr>
+nnoremap <silent> <D-=> :ZoomIn<cr>
+nnoremap <silent> <M--> :ZoomOut<cr>
+nnoremap <silent> <M-=> :ZoomIn<cr>
+Plug 'vim-scripts/zoom.vim'
+" fix vinegar - shortcut
+nnoremap - <Plug>VinegarUp
+nnoremap <silent> <C-_> <Plug>VinegarVerticalSplitUp
 nnoremap <silent> _ :Rexplore<cr>
 Plug 'tpope/vim-rhubarb' " github links
 
@@ -933,10 +950,15 @@ if InGui()
     let $TERM="xterm-256color"
   endif
   if exists("g:neovide") || has("gui_macvim")
-    set gfn=ProFont\ IIx\ Nerd\ Font\ Mono:h9
+    set gfn=ProFont\ IIx\ Nerd\ Font\ Mono:h10
   endif
   if exists("g:neovide")
     let g:neovide_input_macos_alt_is_meta = v:true
+    let g:neovide_input_use_logo = v:true
+    map <D-v> "+p<CR>
+    map! <D-v> <C-R>+
+    tmap <D-v> <C-R>+
+    vmap <D-c> "+y
     nnoremap <ScrollWheelLeft> <ScrollWheelRight>
     nnoremap <ScrollWheelRight> <ScrollWheelLeft>
   elseif has("gui_macvim")
@@ -948,33 +970,12 @@ if InGui()
     " expariment to get italic monospace variant with full powerline support
     set antialias
     set fuopt=maxvert,maxhorz
-  elseif has("gui_vimr")
-    " VimRSetFontAndSize "ProFontIIx Nerd Font Mono", 9
   elseif has("gui_gtk2")
     set guifont=Terminus\ 8
   elseif has("x11")
     " Also for GTK 1
     set guifont=ProFontIIx\ Nerd\ Font\ Mono\ 10
     " set guifont=-misc-fixed-medium-r-normal-*-10-*-*-*-c-*-iso8859-15
-  endif
-
-  if exists("neovim_dot_app") || has("gui_vimr") " VimR thinks it isn't a gui..?
-    let g:terminal_color_0 = '#2e3436'
-    let g:terminal_color_1 = '#cc0000'
-    let g:terminal_color_2 = '#4e9a06'
-    let g:terminal_color_3 = '#c4a000'
-    let g:terminal_color_4 = '#3465a4'
-    let g:terminal_color_5 = '#75507b'
-    let g:terminal_color_6 = '#0b939b'
-    let g:terminal_color_7 = '#d3d7cf'
-    let g:terminal_color_8 = '#555753'
-    let g:terminal_color_9 = '#ef2929'
-    let g:terminal_color_10 = '#8ae234'
-    let g:terminal_color_11 = '#fce94f'
-    let g:terminal_color_12 = '#729fcf'
-    let g:terminal_color_13 = '#ad7fa8'
-    let g:terminal_color_14 = '#00f5e9'
-    let g:terminal_color_15 = '#eeeeec'
   endif
 endif
 
@@ -1147,8 +1148,16 @@ if ! InGui()
   "new experiment, using xterm clipboard escapes for copy portability, no paste
   "(I think..?)
 
-  noremap <silent> <A-c>        :OSCYank<CR>
-  noremap <silent> <Esc>c       :OSCYank<CR>
+  vnoremap <silent> <A-c>        <Plug>OSCYankVisual
+  vnoremap <silent> <Esc>c       <Plug>OSCYankVisual
+  nnoremap <leader>c <Plug>OSCYankOperator
+  nnoremap <leader>cc <Plug>OSCYankOperator_
+  vnoremap <leader>c <Plug>OSCYankVisual
+
+  autocmd TextYankPost *
+    \ if v:event.operator is 'y' && v:event.regname is '+' |
+    \ execute 'OSCYankRegister +' |
+    \ endif
 
   if has('macunix')
     "paste from pbpaste as paste normally works, from the current cursor position
@@ -1219,9 +1228,9 @@ call helpers#Map_for_all_meta('t', ":tabnew<CR>", 2, 1, 1)
 call helpers#Map_for_all_meta('}', ":tabnext<CR>", 2, 1, 1)
 call helpers#Map_for_all_meta('{', ":tabprevious<CR>", 2, 1, 1)
 
-if has("gui_vimr")
-  call helpers#Map_for_all_meta('S-}', ":tabnext<CR>", 2, 1, 1)
-  call helpers#Map_for_all_meta('S-{', ":tabprevious<CR>", 2, 1, 1)
+if exists("g:neovide")
+  call helpers#Map_for_all_meta('S-]', ":tabnext<CR>", 2, 1, 1)
+  call helpers#Map_for_all_meta('S-[', ":tabprevious<CR>", 2, 1, 1)
 endif
 
 function! CloseWindowOrTab()
@@ -1237,6 +1246,8 @@ call helpers#Map_for_all_meta('w', ":call CloseWindowOrTab()<CR>", 2, 1, 1)
 
 if has("nvim")
   tnoremap <C-w> <C-\><C-n><C-w>
+  tnoremap <S-Space> <Space>
+  tnoremap <S-Enter> <Enter>
 endif
 
 " let g:vimfiler_as_default_explorer = 1

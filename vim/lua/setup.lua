@@ -1,3 +1,14 @@
+-- firenvim
+vim.g.firenvim_config = {
+  globalSettings = {},
+  localSettings = {
+    [".*"] = {
+      takeover = "never",
+      priority = 0
+    }
+  }
+}
+
 -- Load custom treesitter grammar for org filetype
 require('orgmode').setup_ts_grammar()
 
