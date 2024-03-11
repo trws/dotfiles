@@ -38,23 +38,26 @@
 ;; They all accept either a font-spec, font string ("Input Mono-12"), or xlfd
 ;; font string. You generally only need these two:
 (catch 'break
-  (dolist (f '("FiraCode Nerd Font" "ProFontIIx Nerd Font Mono" "ProFontIIx NF"  "monospace"))
+  (dolist (f '("ProFontIIx Nerd Font Mono" "ProFontIIx NF"  "monospace"))
     (if (find-font (font-spec :family f))
         (progn
           (setq doom-font (font-spec :family f :size 10))
+          ;; (setq doom-symbol-font (font-spec :family f :size 10))
+          (setq doom-big-font (font-spec :family f :size 16))
           (throw 'break t)))))
                                         ; (setq doom-font (font-spec :family "ProFont IIx Nerd Font Mono" :size 12))
-
+(setq doom-symbol-font (font-spec :family "DejaVu Sans Mono" :size 10))
+(set-fontset-font "fontset-default" 'unicode "Dejavu Sans Mono")
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-;; (setq doom-theme 'doom-one)
+(setq doom-theme 'doom-one)
 ;; (setq doom-theme 'adwaita) ;; oddly nice light theme, odd blue highlight on current line
 ;; (setq doom-theme 'misterioso) ;; a bit like wombat, slightly lighter background
 ;; (setq doom-theme 'wombat) ;; nice greenish dark theme
 ;; (setq doom-theme 'sourcerer) ;; current best match for apprentice
-(setq doom-apprentice-brighter-comments nil)
-(setq doom-theme 'doom-apprentice) ;; my rework to get us apprentice
+;; (setq doom-apprentice-brighter-comments nil)
+;; (setq doom-theme 'doom-apprentice) ;; my rework to get us apprentice
 
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
@@ -97,7 +100,33 @@
       :ni "A-k" 'evil-window-up
       :ni "A-l" 'evil-window-right
       )
+(defun vertico--tab-exit ()
+  (unless (memq this-command '(vertico-tab-previous vertico-tab-next))
+    (setq this-command #'ignore)
+    (vertico-exit)))
 
+(defun vertico-tab-previous ()
+  (interactive)
+  (add-hook 'pre-command-hook #'vertico--tab-exit nil 'local)
+  (vertico-previous))
+
+(defun vertico-tab-next ()
+  (interactive)
+  (add-hook 'pre-command-hook #'vertico--tab-exit nil 'local)
+  (vertico-next))
+
+;; (define-key vertico-map [tab] #'vertico-tab-next)
+;; (define-key vertico-map [backtab] #'vertico-tab-previous)
+  (map! :when (modulep! :editor evil +everywhere)
+        :map vertico-map
+        ;; "M-TAB" #'minibuffer-complete
+        "M-TAB" #'vertico-tab-next
+        "M-S-TAB" #'vertico-tab-previous
+        )
+;; (setq +vertico-company-completion-styles '(substring partial-completion orderless basic))
+;; (setq completion-styles '(substring orderless basic))
+(setq completion-cycle-threshold t)
+(setq minibuffer-complete-cycle nil)
 ;; (dolist (m '(override notmuch-common-keymap org-agenda-mode-map))
 ;;   (map! :map 'override
 ;;         :ni "M-w" 'evil-quit
@@ -313,6 +342,15 @@
         "b W" 'visual-fill-column-mode)
 
 
+
+  (setq org-msg-greeting-fmt "\nHi%s,\n\n"
+        org-msg-greeting-fmt-mailto "\nHi%s,\n\n"
+        org-msg-signature "\n\n#+begin_signature\n-Tom\n#+end_signature")
+  ;; org-msg-signature "\n\n#+begin_signature\nAll the best,\\\\\n@@html:<b>@@Timothy@@html:</b>@@\n#+end_signature")
+
+
+
+
   ;; from https://emacs.stackexchange.com/questions/52894/how-to-open-text-links-hypertext-firefox-with-mu4e
   ;; why this isn't part of upstream I have no idea, make html email links work
   (setq mu4e-html2text-command 'mu4e-shr2text)
@@ -435,9 +473,14 @@
         :n "e" 'notmuch-search-archive-thread
         ))
 (setq message-send-mail-function 'message-send-mail-with-sendmail)
-(setq sendmail-program "~/.dotfiles/email-stuff/send.py/send.py")
-(setq message-sendmail-extra-arguments '("-f" "scogland1@llnl.gov" "--readfrommsg"))
+;; (setq sendmail-program "~/.dotfiles/email-stuff/send.py/send.py")
+;; (setq message-sendmail-extra-arguments '("-f" "scogland1@llnl.gov" "--readfrommsg"))
 
+(setq send-mail-function 'sendmail-send-it
+      sendmail-program "msmtp"
+      mail-specify-envelope-from t
+      message-sendmail-envelope-from 'header
+      mail-envelope-from 'header)
 
 
 (defun get-faces (pos)

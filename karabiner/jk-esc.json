@@ -29,7 +29,7 @@
       "description": "Map jk to escape",
       "manipulators": [
         {
-          "type": "complex",
+          "type": "basic",
           "from": {
             "simultaneous": [
               {

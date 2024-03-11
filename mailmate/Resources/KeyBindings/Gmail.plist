@@ -7,6 +7,8 @@
 
     "@\U000A" = "send:"; // ⌘+return
     "@\U000D" = "send:"; // ⌘+enter
+    "@$d" = "send:"; // ⌘+Shift+d
+    "~\UF705" = "showContextMenu:";      // ⌥F2
 
     "c"  = "newMessage:";
     "/"  = "mailboxSearch:";

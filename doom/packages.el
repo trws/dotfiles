@@ -75,3 +75,4 @@
 ; (package! org-roam)
 (package! org-logseq
   :recipe (:host github :repo "llcc/org-logseq"))
+(package! minibuffer-complete-cycle)

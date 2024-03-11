@@ -193,6 +193,7 @@ end
 bindings:insert(hotkey.bind({"ctrl","cmd"}, "s", function() toggle_application("com.freron.MailMate") end))
 bindings:insert(hotkey.bind({"ctrl","cmd","shift"}, "s", function() toggle_application("com.tinyspeck.slackmacgap") end))
 bindings:insert(hotkey.bind({"ctrl","cmd"}, "a", function() toggle_application("com.apple.iCal") end))
+bindings:insert(hotkey.bind({"shift","ctrl","cmd"}, "a", function() toggle_application("Cisco-Systems.Spark") end))
 bindings:insert(hotkey.bind({"ctrl","cmd"}, "b", function() toggle_application("org.qt-project.Qt.QtWebEngineCore") end))
 bindings:insert(hotkey.bind({"ctrl","cmd"}, "i", function() toggle_application("com.apple.ActivityMonitor") end))
 bindings:insert(hotkey.bind({"ctrl","cmd"}, "e", function() toggle_application("org.gnu.Emacs") end))
@@ -202,7 +203,7 @@ bindings:insert(hotkey.bind({"ctrl","cmd","shift"}, "l", function() toggle_appli
 bindings:insert(hotkey.bind({"ctrl","cmd"}, "o", function() toggle_application("com.microsoft.Outlook") end))
 bindings:insert(hotkey.bind({"ctrl","cmd"}, "t", function() toggle_application("com.googlecode.iterm2") end))
 bindings:insert(hotkey.bind({"ctrl","cmd","shift"}, "v", function() toggle_application("com.microsoft.VSCode") end))
-bindings:insert(hotkey.bind({"ctrl","cmd"}, "v", function() toggle_application("com.qvacua.VimR") end))
+bindings:insert(hotkey.bind({"ctrl","cmd"}, "v", function() toggle_application("com.neovide.neovide") end))
 bindings:insert(hotkey.bind({"ctrl","cmd"}, "w", function() toggle_application("com.bookry.wavebox") end))
 
 -- alternatively, call .nextWindow() or .previousWindow() directly (same as hs.window.switcher.new():next())
