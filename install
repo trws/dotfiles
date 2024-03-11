@@ -35,6 +35,8 @@ if ! nix 2>&1 >/dev/null; then
       > ~/.config/home-manager/home.nix
 
   home-manager switch
+
+  # sudo chsh -s "$(which fish)" "$USER"
 fi
 # if ! zsh 2>&1 > /dev/null ; then
 #   apt update
