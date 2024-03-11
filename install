@@ -1,6 +1,43 @@
-#!/bin/sh
-if ! zsh 2>&1 > /dev/null ; then
-  apt update
-  apt-get install -y zsh ripgrep fzf less
+#!/usr/bin/env bash
+setopt -euo pipefail
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+
+[ ! -e ~/.dotfiles ] && ln -s "$SCRIPT_DIR" ~/.dotfiles
+[ "$USER" == "root" ] && echo "root shall not pass" && exit 1
+if ! nix 2>&1 >/dev/null; then
+  # avoid seccomp filter bug in installer/nix: https://github.com/DeterminateSystems/nix-installer/issues/324
+  export NIX_INSTALLER_EXTRA_CONF='filter-syscalls = false'
+  # curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s \
+  #   -- install linux \
+  #   --extra-conf "sandbox = false" \
+  #   --init none \
+  #   --no-confirm
+  sh <(curl -L https://nixos.org/nix/install)
+
+  . ~/.nix-profile/etc/profile.d/nix.sh
+
+  # Add unstable channel
+  echo "Add unstable channel"
+  nix-channel --add https://nixos.org/channels/nixpkgs-unstable nixpkgs-unstable
+  nix-channel --update
+
+  # Install home-manager
+  echo "Install home-manager"
+  nix-channel --add https://github.com/nix-community/home-manager/archive/master.tar.gz home-manager
+  nix-channel --update
+  nix-shell '<home-manager>' -A install
+
+  mkdir -p ~/.config/home-manager
+  echo home is: $HOME
+  sed -e "s|/home/scogland1|$HOME|" \
+      -e "s|scogland1|$USER|" \
+      ~/.dotfiles/nix/debnix-home.nix \
+      > ~/.config/home-manager/home.nix
+
+  home-manager switch
 fi
-python3 ./update.py
+# if ! zsh 2>&1 > /dev/null ; then
+#   apt update
+#   apt-get install -y zsh ripgrep fzf less
+# fi
+# python3 ./update.py

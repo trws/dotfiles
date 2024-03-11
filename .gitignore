@@ -26,3 +26,4 @@ proxied/cache
 __pycache__
 .mypy_cache
 .ropeproject
+!nix

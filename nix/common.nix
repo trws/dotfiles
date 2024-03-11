@@ -43,26 +43,29 @@
     wiggle
 
     # editor related
-    helix
     universal-ctags
 
     # shell tools
-    nushellFull
     fzf
     direnv
     hyperfine
     ripgrep
     eza
-    lsd
     bat
     fd
-    bfs # fast find/fd-like thing that does breadth-first order traversals
-    broot
     du-dust
     tree
+    wget
+
+    # testing
+    bfs # fast find/fd-like thing that does breadth-first order traversals
+    broot
+    hwloc
+    ranger
+    nnn
 
     # languages
-    go_1_19
+    go
 
     # build
     gnumake
