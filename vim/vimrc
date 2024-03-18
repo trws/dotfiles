@@ -656,7 +656,8 @@ let g:formatters_c=['clangformat']
 let g:formatters_cpp=['clangformat']
 let g:formatters_sh=['shfmt']
 let g:formatdef_nixpkgs="nixpkgs-fmt"
-let g:formatters_nix=['nixpkgs']
+let g:formatdef_nixfmt="nixfmt"
+let g:formatters_nix=['nix_format']
 " Ensure we have black, add Black command
 " let g:black_virtualenv=expand("~/.cache/vim/black")
 " Plug 'psf/black', { 'branch': 'stable' }

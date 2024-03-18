@@ -1,17 +1,18 @@
-{ lib, config, pkgs, ... }:
-{
+{ self, lib, config, pkgs, home-manager, ... }: {
+  lib.meta = {
+    configPath = "${config.home.homeDirectory}/.dotfiles";
+    mkMutableSymlink = path:
+      config.lib.file.mkOutOfStoreSymlink (config.lib.meta.configPath + "/"
+        + pkgs.lib.strings.removePrefix (toString ./.) (toString path));
+  };
   programs.neovim = {
     enable = true;
-    extraConfig=''
+    extraConfig = ''
       runtime! plug.vim
       set rtp+=~/.dotfiles/vim
       source ~/.dotfiles/vim/vimrc
     '';
-    plugins= with pkgs.vimPlugins; [
-      vim-nix
-      vim-plug
-      fzf-vim
-    ];
+    plugins = with pkgs.vimPlugins; [ vim-nix vim-plug fzf-vim ];
     withNodeJs = true;
     withPython3 = true;
     viAlias = true;
@@ -22,10 +23,8 @@
   programs.zsh = {
     enable = true;
     # dotDir = ".dotfiles/zsh";
-    envExtra = "
-    export ZDOTDIR=~/.dotfiles/zsh
-    source ~/.dotfiles/zsh/zshenv-link
-    ";
+    envExtra =
+      "\n    export ZDOTDIR=~/.dotfiles/zsh\n    source ~/.dotfiles/zsh/zshenv-link\n    ";
   };
 
   programs.carapace.enable = true;
@@ -33,70 +32,75 @@
   programs.starship.enable = true;
   programs.fish = {
     enable = true;
-    plugins = with pkgs; [
-      {
-        name = "fasd";
-        src = pkgs.fetchFromGitHub {
-          owner = "oh-my-fish";
-          repo = "plugin-fasd";
-          rev = "38a5b6b6011106092009549e52249c6d6f501fba";
-          sha256 = "06v37hqy5yrv5a6ssd1p3cjd9y3hnp19d3ab7dag56fs1qmgyhbs";
-        };
-      }
-    ];
+    plugins = with pkgs; [{
+      name = "fasd";
+      src = pkgs.fetchFromGitHub {
+        owner = "oh-my-fish";
+        repo = "plugin-fasd";
+        rev = "38a5b6b6011106092009549e52249c6d6f501fba";
+        sha256 = "06v37hqy5yrv5a6ssd1p3cjd9y3hnp19d3ab7dag56fs1qmgyhbs";
+      };
+    }];
   };
-  home.packages = with pkgs; let
-    python-packages = python-packages: with python-packages; [
-      pip
-      virtualenv
-    ];
-    python-with-packages = python3.withPackages python-packages;
-  in [
-    # version control
-    git
-    gh
-    hub
-    wdiff
-    wiggle
+  home.file = {
+    ".config/karabiner".source = config.lib.meta.mkMutableSymlink "./karabiner";
+    ".hammerspoon".source = config.lib.meta.mkMutableSymlink "./hammerspoon";
+  };
+  home.packages = with pkgs;
+    let
+      python-packages = python-packages:
+        with python-packages; [
+          pip
+          virtualenv
+        ];
+      python-with-packages = python3.withPackages python-packages;
+    in [
+      # version control
+      git
+      gh
+      hub
+      wdiff
+      wiggle
 
-    # editor related
-    universal-ctags
+      # editor related
+      universal-ctags
+      nodejs
 
-    # fish
-    fasd
-    fishPlugins.forgit
+      # fish
+      fasd
+      fishPlugins.forgit
 
-    # all shells
-    starship
+      # all shells
+      starship
 
-    # shell tools
-    fzf
-    direnv
-    hyperfine
-    ripgrep
-    eza
-    bat
-    fd
-    du-dust
-    tree
-    wget
+      # shell tools
+      fzf
+      direnv
+      hyperfine
+      ripgrep
+      eza
+      bat
+      fd
+      du-dust
+      tree
+      wget
 
-    # testing
-    bfs # fast find/fd-like thing that does breadth-first order traversals
-    broot
-    hwloc
-    ranger
-    nnn
+      # testing
+      bfs # fast find/fd-like thing that does breadth-first order traversals
+      broot
+      hwloc
+      ranger
+      nnn
 
-    # languages
-    go
+      # languages
+      go
 
-    # build
-    gnumake
-    ninja
-    cmake
+      # build
+      gnumake
+      ninja
+      cmake
 
-    nixpkgs-fmt
+      nixpkgs-fmt
+      nixfmt
     ];
 }
-

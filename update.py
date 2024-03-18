@@ -41,6 +41,7 @@ link_files = {
     "mailmate/Resources": "~/Library/Application Support/MailMate/Resources",
     "mailmate/Bundles": "~/Library/Application Support/MailMate/Bundles",
     "emacs-redirect": "~/.emacs.d",
+    "karabiner": "~/.config/karabiner",
 }
 if os.path.exists("~/Library"):
     link_files["pip"] = "~/Library/Application Support/pip"
