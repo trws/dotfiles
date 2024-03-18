@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh
+#!/bin/sh
 
 # This is going to be my script for configuring a new mac, many things come from
 # the following sources:
@@ -8,6 +8,9 @@
 # Chances are *very* good that you don't want all of these unless you are me, or
 # are using the same BetterTouchTool, Hammerspoon and Alfred setup I do, you
 # have been warned.
+
+## Dark mode
+defaults write -g AppleInterfaceStyle Dark
 
 ##################################################
 # Trackpad/mouse
@@ -19,6 +22,8 @@ defaults write com.apple.AppleMultitouchTrackpad Clicking -bool true
 sudo defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
 sudo defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 sudo defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+# make trackpad fast enough
+defaults write -g com.apple.trackpad.scaling -float 1.5
 
 ##################################################
 # Keyboard
@@ -26,6 +31,30 @@ sudo defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 
 # enable key repeat by disabling iPad-like special input
 defaults write -g ApplePressAndHoldEnabled -bool false
+# faster repeat start
+defaults write -g InitialKeyRepeat -int 12
+defaults write -g KeyRepeat -int 3
+# fn keys are actually fn keys
+defaults write -g com.apple.keyboard.fnState -bool true
+
+#gesture setup
+set_gesture() {
+  defaults -currentHost write NSGlobalDomain com.apple.trackpad.${1}Finger${3}Gesture -int $4
+  defaults write com.apple.AppleMultitouchTrackpad Trackpad${2}Finger${3}Gesture -int $4
+  defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Trackpad${2}Finger${3}Gesture -int $4
+}
+# four-finger horiz swap spaces
+set_gesture four Four HorizSwipe 2
+# four-finger vert mission control
+set_gesture four Four VertSwipe 2
+# four-finger pinch for desktop and app menu
+set_gesture four Four Pinch 2
+# three-finger horiz back/forward
+set_gesture three Three HorizSwipe 0
+# three-finger vert next previous tab in btt, not sure here
+set_gesture three Three VertSwipe 0
+# three-finger tap default
+set_gesture three Three Tap 2
 
 ##################################################
 # Dock
