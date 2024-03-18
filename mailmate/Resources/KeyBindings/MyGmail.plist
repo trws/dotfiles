@@ -1,0 +1,116 @@
+{
+    // bindings: https://manual.mailmate-app.com/custom_key_bindings
+    // bundles manual: https://github.com/mailmate/mailmate_manual/wiki/Bundles#formatstring
+    // Based on: http://mail.google.com/support/bin/answer.py?answer=6594
+    // synchronize mailboxes without mouse
+    "$"  = "synchronize:";
+
+    "@\U000A" = "send:"; // ⌘+return
+    "@\U000D" = "send:"; // ⌘+enter
+    "@$d" = "send:"; // ⌘+Shift+d
+    "~\UF705" = "showContextMenu:";      // ⌥F2
+
+    "c"  = "newMessage:";
+    "/"  = "mailboxSearch:";
+    "n"  = "nextMessage:";
+    "p"  = "previousMessage:";
+    "N"  = ("showThread:", "nextMessage:");
+    "P"  = ("showThread:", "previousMessage:");
+    "j"  = "nextThread:";
+    "k"  = "previousThread:";
+    "o"  = "openMessages:"; // Gmail: Also expands or collapses a message if you are in 'Conversation View.'
+    "L"  = "expandThread:";
+    // "e"  = "archive:";
+    "e"  = ("performBundleItemWithUUID:","A4E60AFE-94F5-42B0-850D-9E486B4CB63D");
+    // "e"  = ( "selectWithFilter:", "#body-part-id = ${#body-part-id} and #source.path.noinbox = INBOX", "archive:");
+    "y"  = ("removeTag:", "Marked", "archive:");
+    // "Y"  = ( "selectWithFilter:", "#flags.flag = 'Marked'", "removeTag:", "Marked", "archive:");
+    "Y"  = ( "selectWithFilter:", "#thread-id = ${#thread-id} and #source.path.noinbox = INBOX", "archive:");
+    "m"  = ( "toggleMuteState:", "archive:" ); // FIXME: Should be 'markAsMuted:'
+    "s"  = "toggleFlag:";
+    "x"  = ("toggleTag:", "Marked");
+    // "X"  = ("selectWithFilter:", "#thread-id = ${#thread-id}", "toggleTag:", "Marked");
+    "X"  = ("selectWithFilter:", "#thread-id = ${#thread-id}");
+    "!"  = "moveToJunk:";
+    "#"  = "deleteMessage:";
+    "r"  = "reply:";
+    "a"  = "replyAll:";
+    "f"  = "forwardMessage:";
+    "^s" = "saveDocument:";
+    "l"  = "copyToMailbox:";
+    "v"  = ("removeTag:", "Marked", "moveToMailbox:");
+    "V"  = ("selectWithFilter:", "#flags.flag = 'Marked'", "removeTag:", "Marked", "moveToMailbox:");
+
+    "I"	= "toggleReadState:"; // FIXME: Should be ( "markAsRead:", "nextMessage:");
+    "U"	= "toggleReadState:"; // FIXME: Should be "markAsUnRead:"
+
+    "z"	= "undo:";
+
+    // Only in MailMate
+    //"N"	= "moveDownAndModifySelection:";
+    //"P"	= "moveUpAndModifySelection:";
+    "J"	= "moveDownAndModifySelection:";
+    "K"	= "moveUpAndModifySelection:";
+    "Z"	= "redo:";
+
+    "T"     = "showThread:";
+    "u"     = "backInHistory:";
+
+    "G"     = "selectLastMessageRow:";
+    // Combo keys
+    "g" = {
+        "g" = "selectFirstMessageRow:";
+        "a" = ( "goToMailbox:", "ALL_MESSAGES" );
+        "s" = ( "goToMailbox:", "FLAGGED" );
+        // g then c	Go to 'Contacts'	Takes you to your Contacts list.
+        "d" = ( "goToMailbox:", "DRAFTS" );
+        "l" = "goToMailbox:";
+        "i" = ( "goToMailbox:", "INBOX" );
+        "t" = ( "goToMailbox:", "SENT" );
+    };
+    "F" = {
+        "0" = ( "removeTag:", "\\Flagged", "removeTag:", "$MailFlagBit0", "removeTag:", "$MailFlagBit1", "removeTag:", "$MailFlagBit2" );
+        "1" = (    "setTag:", "\\Flagged", "removeTag:", "$MailFlagBit0", "removeTag:", "$MailFlagBit1", "removeTag:", "$MailFlagBit2" );
+        "2" = (    "setTag:", "\\Flagged",    "setTag:", "$MailFlagBit0", "removeTag:", "$MailFlagBit1", "removeTag:", "$MailFlagBit2" );
+        "3" = (    "setTag:", "\\Flagged", "removeTag:", "$MailFlagBit0",    "setTag:", "$MailFlagBit1", "removeTag:", "$MailFlagBit2" );
+        "4" = (    "setTag:", "\\Flagged",    "setTag:", "$MailFlagBit0",    "setTag:", "$MailFlagBit1", "removeTag:", "$MailFlagBit2" );
+        "5" = (    "setTag:", "\\Flagged", "removeTag:", "$MailFlagBit0", "removeTag:", "$MailFlagBit1",    "setTag:", "$MailFlagBit2" );
+        "6" = (    "setTag:", "\\Flagged",    "setTag:", "$MailFlagBit0", "removeTag:", "$MailFlagBit1",    "setTag:", "$MailFlagBit2" );
+        "7" = (    "setTag:", "\\Flagged", "removeTag:", "$MailFlagBit0",    "setTag:", "$MailFlagBit1",    "setTag:", "$MailFlagBit2" );
+    };
+
+    "*" = {
+        "c" = ("selectWithFilter:", "#thread-id = ${#thread-id}");
+        "a" = "selectAll:";
+        "n" = "deselectAll:";
+        "r" = ( "selectWithFilter:", "#flags.flag = '\\Seen'"); // Selects all mail you've read.
+        "u" = ( "selectWithFilter:", "#flags.flag !=[x] '\\Seen'"); // Selects all unread mail.
+        "s" = ( "selectWithFilter:", "#flags.flag = '\\Flagged'"); // Selects all starred mail.
+        "t" = ( "selectWithFilter:", "#flags.flag !=[x] '\\Flagged'"); // Selects all unstarred mail.
+        "x" = ( "selectWithFilter:", "#flags.flag = 'Marked'"); // Selects all unstarred mail.
+
+        "S" = ("selectWithFilter:", "subject.body = '${subject.body}'");
+    };
+}
+
+/*
+   Not included above:
+
+   u	Return to conversation list	Refreshes your page and returns you to the inbox, or list of conversations.
+   x	Select conversation	Automatically checks and selects a conversation so that you can archive, apply a label, or choose an action from the drop-down menu to apply to that conversation.
+   +	Mark as important	Helps Gmail learn what's important to you by marking misclassified messages. (Specific to Priority Inbox)
+   -	Mark as unimportant	Helps Gmail learn what's not important to you by marking misclassified messages. (Specific to Priority Inbox)
+
+   [	Archive and previous	Removes the current view's label from your conversation and moves to the previous one.
+   ]	Archive and next	Removes the current view's label from your conversation and moves to the next one.
+   y	Remove from Current View* Automatically removes the message or conversation from your current view.
+   From 'Inbox,' 'y' means Archive
+   From 'Starred,' 'y' means Unstar
+   From 'Trash,' 'y' means Move to inbox
+   From any label, 'y' means Remove the label
+ * 'y' has no effect if you're in 'Spam,' 'Sent,' or 'All Mail.'
+ .	Show more actions	Displays the 'More Actions' drop-down menu.
+
+ y then o	Archive and next	Archives your conversation and moves to the next one.
+
+ */
