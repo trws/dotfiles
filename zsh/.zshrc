@@ -212,7 +212,7 @@ zsh-users/zsh-history-substring-search
 # Tmux
 tmux-plugins/tpm kind:clone
 EOF
-  update_terminfo
+update_terminfo
 }
 
 
@@ -352,19 +352,15 @@ else
   forgit_fixup=gfu
 fi
 
-# not quite working, revisit
-# if ! is-at-least 2.2.0 $(gh --version | awk -e '/ [0-9]+\.[0-9]+\.[0-9]+ /{ print $3}') ; then
-#   echo installing updated gh
-#   go get github.com/cli/cli/cmd/gh
-# fi
-
-
-
+# if (( ${+commands[starship]} )) ; then
+#   eval "$(starship init zsh)"
+# else
 # prompt powerlevel10k
 # To customize prompt, run `p10k configure` or edit ~/.zsh/.p10k.zsh.
 if is-at-least 5.1; then
   [[ ! -f $ZDOTDIR/.p10k.zsh ]] || source $ZDOTDIR/.p10k.zsh
 fi
+# fi
 
 # defaults to asciiship
 
