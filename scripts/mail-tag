@@ -9,13 +9,20 @@ notmuch search --output=tags '*' | egrep 'lists/([0-9_a-f]{8,}|.*=)' | xargs -n 
 # mark c++ lists with a qualifier
 notmuch search --output=tags lists.isocpp.org 'tag:lists' | grep 'lists/' | grep -v 'lists/cpp' | sed -e 's|lists/||' | xargs -n 1 -I '{}' notmuch tag -lists/{} '+lists/cpp-{}' -- 'tag:lists/{}'
 
-notmuch tag -inbox -- tag:inbox AND NOT folder:INBOX
+notmuch tag --batch --input=<(cat <<EOF
+-inbox -- tag:inbox AND NOT folder:INBOX
+
+EOF
+)
 
 # move mails based on tags
 afew -m || pipx run afew -m
-notmuch tag +inbox -- 'folder:INBOX AND NOT (tag:inbox OR tag:delete OR tag:travel OR tag:conference OR tag:archive OR tag:killed)'
-notmuch tag +sent -- '(folder:sent OR from:scogland1@llnl.gov) AND NOT tag:sent'
+notmuch tag --batch --input=<(cat <<EOF
++inbox -- folder:INBOX AND NOT (tag:inbox OR tag:delete OR tag:travel OR tag:conference OR tag:archive OR tag:killed)
++sent -- (folder:sent OR from:scogland1@llnl.gov) AND NOT tag:sent
+-inbox -- folder:sent
 
 # strip archive tags off after moving mails
-notmuch tag -archive -- tag:archive AND NOT folder:INBOX
-
+-archive -- tag:archive AND NOT folder:INBOX
+EOF
+)

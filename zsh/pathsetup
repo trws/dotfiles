@@ -77,6 +77,7 @@ fi
 [[ -x /usr/local/bin/defaultpaths ]] && eval `/usr/local/bin/defaultpaths`
 
 add_to_path_front /usr/local /opt/homebrew
+add_to_path_front ~/.nix-profile/
 add_to_path_back /usr ""
 
 if (( $gotroot )) ; then
