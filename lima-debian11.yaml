@@ -1,0 +1,109 @@
+# This template requires Lima v0.8.3 or later.
+
+# NOTE: EL8-based distros are known not to work on M1 chips: https://github.com/lima-vm/lima/issues/841
+# EL9-based distros are known to work.
+
+# Example to run ubuntu using vmType: vz instead of qemu (Default)
+# This example requires Lima v0.14.0 or later and macOS 13.
+vmType: "vz"
+rosetta:
+  # Enable Rosetta for Linux.
+  # Hint: try `softwareupdate --install-rosetta` if Lima gets stuck at `Installing rosetta...`
+  enabled: true
+  # Register rosetta to /proc/sys/fs/binfmt_misc
+  binfmt: true
+
+images:
+# Try to use release-yyyyMMdd image if available. Note that release-yyyyMMdd will be removed after several months.
+- location: "https://cloud.debian.org/images/cloud/bullseye/20231004-1523/debian-11-genericcloud-amd64-20231004-1523.qcow2"
+  arch: "x86_64"
+  digest: "sha512:83cb90b44232d6899369fa0980a81baf97a2ac5b188ffe373a74f4aa9ca7a5d13b80f6cc221fc31c3e556efb4f0aa254ea265c2d452d23e2e7f05efc7f3014fe"
+- location: "https://cloud.debian.org/images/cloud/bullseye/20231004-1523/debian-11-genericcloud-arm64-20231004-1523.qcow2"
+  arch: "aarch64"
+  digest: "sha512:92e4c7ce1ca4b39f96b5f665ec52afba9421690d96c68a49032a5c7c5dcbd101badc78f7354cede9bd5b3337c821d8eeb9035b8c1dbf1d4398cce8f1c6eecd3b"
+# Fallback to the latest release image.
+# Hint: run `limactl prune` to invalidate the cache
+- location: "https://cloud.debian.org/images/cloud/bullseye/latest/debian-11-genericcloud-amd64.qcow2"
+  arch: "x86_64"
+- location: "https://cloud.debian.org/images/cloud/bullseye/latest/debian-11-genericcloud-arm64.qcow2"
+  arch: "aarch64"
+
+cpus: 6
+memory: 16GiB
+
+mounts:
+- location: "~"
+  writable: true
+- location: "/tmp/lima"
+  writable: true
+- location: "/tmp/misc"
+  writable: true
+- location: "/private"
+  writable: true
+mountType: "virtiofs"
+containerd:
+  system: false
+  user: false
+
+networks:
+# The "vzNAT" IP address is accessible from the host, but not from other guests.
+- vzNAT: true
+
+provision:
+- mode: system
+  # This script defines the host.docker.internal hostname when hostResolver is disabled.
+  # It is also needed for lima 0.8.2 and earlier, which does not support hostResolver.hosts.
+  # Names defined in /etc/hosts inside the VM are not resolved inside containers when
+  # using the hostResolver; use hostResolver.hosts instead (requires lima 0.8.3 or later).
+  script: |
+    #!/bin/sh
+    sed -i 's/host.lima.internal.*/host.lima.internal host.docker.internal/' /etc/hosts
+- mode: system
+  script: |
+    #!/bin/bash
+    set -eux -o pipefail
+    command -v docker >/dev/null 2>&1 && exit 0
+    if [ ! -e /etc/systemd/system/docker.socket.d/override.conf ]; then
+      mkdir -p /etc/systemd/system/docker.socket.d
+      # Alternatively we could just add the user to the "docker" group, but that requires restarting the user session
+      cat <<-EOF >/etc/systemd/system/docker.socket.d/override.conf
+      [Socket]
+      SocketUser=${LIMA_CIDATA_USER}
+    EOF
+    fi
+    export DEBIAN_FRONTEND=noninteractive
+    curl -fsSL https://get.docker.com | sh
+    apt -y update
+    apt -y install qemu-user-static
+probes:
+- script: |
+    #!/bin/bash
+    set -eux -o pipefail
+    if ! timeout 30s bash -c "until command -v docker >/dev/null 2>&1; do sleep 3; done"; then
+      echo >&2 "docker is not installed yet"
+      exit 1
+    fi
+    if ! timeout 30s bash -c "until pgrep dockerd; do sleep 3; done"; then
+      echo >&2 "dockerd is not running"
+      exit 1
+    fi
+  hint: See "/var/log/cloud-init-output.log". in the guest
+hostResolver:
+  # hostResolver.hosts requires lima 0.8.3 or later. Names defined here will also
+  # resolve inside containers, and not just inside the VM itself.
+  hosts:
+    host.docker.internal: host.lima.internal
+portForwards:
+- guestSocket: "/var/run/docker.sock"
+  hostSocket: "{{.Dir}}/sock/docker.sock"
+message: |
+  To run `docker` on the host (assumes docker-cli is installed), run the following commands:
+  ------
+  docker context create lima-{{.Name}} --docker "host=unix://{{.Dir}}/sock/docker.sock"
+  docker context use lima-{{.Name}}
+  docker run hello-world
+  ------
+cpuType:
+  # Workaround for "vmx_write_mem: mmu_gva_to_gpa XXXXXXXXXXXXXXXX failed" on Intel Mac
+  # https://bugs.launchpad.net/qemu/+bug/1838390
+  x86_64: "Haswell-v4"
