@@ -47,6 +47,7 @@ roothosts=(
 	chimera
 	falcon
 	nixos
+	'lima-default'
 )
 for rh in $roothosts ; do
 	if [[ $rh =~ $HOST.* ]] ; then

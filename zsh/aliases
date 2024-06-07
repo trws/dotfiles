@@ -88,7 +88,7 @@ function gRuo() {
     # git remote rename origin upstream
 }
 alias gfu="git fetch upstream"
-alias gfmu="git fetch upstream"
+alias gfmu='git pull upstream $(git get-main-branch)'
 alias grum="git rebase upstream/master"
 alias gpoc='git push origin $(git rev-parse --abbrev-ref HEAD)'
 alias gpocf='git push origin -f $(git rev-parse --abbrev-ref HEAD)'
@@ -132,6 +132,7 @@ alias lscleanup="/System/Library/Frameworks/CoreServices.framework/Frameworks/La
 alias sniff="sudo ngrep -d 'en1' -t '^(GET|POST) ' 'tcp and port 80'"
 alias httpdump="sudo tcpdump -i en1 -n -s 0 -w - | grep -a -o -E \"Host\: .*|GET \/.*\""
 
+command -v lazygit > /dev/null && alias lazygit="TERM=xterm-256color lazygit"
 command -v open > /dev/null || alias open=xdg-open
 # Canonical hex dump; some systems have this symlinked
 command -v hd > /dev/null || alias hd="hexdump -C"

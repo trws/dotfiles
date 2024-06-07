@@ -61,6 +61,7 @@
 
     # editor related
     universal-ctags
+    nodejs
 
     # fish
     fasd

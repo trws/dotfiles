@@ -73,7 +73,7 @@ Host github.com
     User git
 
 # LLNL
-Host rzhasgpu pascal
+Host rzansel ruby rzhasgpu pascal
     Port 22
     ForwardAgent yes
     ForwardX11 yes
@@ -116,10 +116,10 @@ Host chimera
     User scogland1
     LocalForward 5904 localhost:5900
 
-Match exec " ~/.dotfiles/scripts/at-llnl.py" host chimera-relay
-    Port 22
-    HostName chimera
-    ProxyCommand ssh eris -W chimera:22
+# Match exec " ~/.dotfiles/scripts/at-llnl.py" host chimera-relay
+#     Port 22
+#     HostName chimera
+#     ProxyCommand ssh eris -W chimera:22
 
 Match host chimera-funnel exec "~/.dotfiles/scripts/hop-vpn.sh"
     ProxyCommand ssh eris -W chimera:22
@@ -131,6 +131,14 @@ Host chimera-*
     LocalForward 22002 localhost:22000
     LocalForward 2202 localhost:22
     LocalForward 8385 localhost:8384
+    LocalForward 9024 rztopaz.llnl.gov:22
+    LocalForward 4043 outlook.office365.com:443
+    LocalForward 9993 outlook.office365.com:993
+    LocalForward 5587 smtp.office365.com:587
+    DynamicForward localhost:12347
+
+Host chimera-wg
+    HostName 192.168.3.3
 
 Host chimera-funnel
     Port 22
@@ -139,13 +147,8 @@ Host chimera-funnel
 
 Host chimera-relay
     ProxyCommand ssh -W 127.0.0.1:6022 trove
-    DynamicForward localhost:12347
-    LocalForward 9024 rztopaz.llnl.gov:22
-    LocalForward 4043 outlook.office365.com:443
-    LocalForward 9993 outlook.office365.com:993
-    LocalForward 5587 smtp.office365.com:587
 
-Match exec " ~/.dotfiles/scripts/at-llnl.py" !originalhost *.local !originalhost alarm !originalhost debian !originalhost deb !host eris !host eris.llnl.gov !originalhost nix !host localhost !originalhost chimera* !host cz-bit* !originalhost *.*.*.* !originalhost rztopaz !originalhost 10.253.134.139 !originalhost localhost !originalhost 127.0.0.1
+Match exec " ~/.dotfiles/scripts/at-llnl.py" !originalhost trove !originalhost github.com !originalhost lima-default !originalhost *.local !originalhost alarm !originalhost debian !originalhost deb !host eris !host eris.llnl.gov !originalhost nix !host localhost !originalhost chimera* !host cz-bit* !originalhost *.*.*.* !originalhost rztopaz !originalhost 10.253.134.139 !originalhost localhost !originalhost 127.0.0.1
     #this must be overridden above if wrong
     ProxyJump rztopaz
 
@@ -187,65 +190,8 @@ Host !cz-* *
     PermitLocalCommand yes
     SendEnv LC_TERM_PROGRAM LC_ITERM_PROFILE ITERM_PROFILE TERM_PROGRAM
     PreferredAuthentications publickey,password,keyboard-interactive
-ServerAliveCountMax 0
-ServerAliveInterval 900
-ServerAliveCountMax 0
-ServerAliveInterval 900
-ServerAliveCountMax 0
-ServerAliveInterval 900
-ServerAliveCountMax 0
-ServerAliveInterval 900
-ServerAliveCountMax 0
-ServerAliveInterval 900
-ServerAliveCountMax 0
-ServerAliveInterval 900
-ServerAliveCountMax 0
-ServerAliveInterval 900
-ServerAliveCountMax 0
-ServerAliveInterval 900
-ServerAliveCountMax 0
-ServerAliveInterval 900
-ServerAliveCountMax 0
-ServerAliveInterval 900
-ServerAliveCountMax 0
-ServerAliveInterval 900
-ServerAliveCountMax 0
-ServerAliveInterval 900
-ServerAliveCountMax 0
-ServerAliveInterval 900
-ServerAliveCountMax 0
-ServerAliveInterval 900
-ServerAliveCountMax 0
-ServerAliveInterval 900
-ServerAliveCountMax 0
-ServerAliveInterval 900
-ServerAliveCountMax 0
-ServerAliveInterval 900
-ServerAliveCountMax 0
-ServerAliveInterval 900
-ServerAliveCountMax 0
-ServerAliveInterval 900
-ServerAliveCountMax 0
-ServerAliveInterval 900
-ServerAliveCountMax 0
-ServerAliveInterval 900
-ServerAliveCountMax 0
-ServerAliveInterval 900
-ServerAliveCountMax 0
-ServerAliveInterval 900
-ServerAliveCountMax 0
-ServerAliveInterval 900
-ServerAliveCountMax 0
-ServerAliveInterval 900
-ServerAliveCountMax 0
-ServerAliveInterval 900
-ServerAliveCountMax 0
-ServerAliveInterval 900
-ServerAliveCountMax 0
-ServerAliveInterval 900
-ServerAliveCountMax 0
-ServerAliveInterval 900
-ServerAliveCountMax 0
-ServerAliveInterval 900
-ServerAliveCountMax 0
-ServerAliveInterval 900
+    ServerAliveCountMax 0
+    ServerAliveInterval 900
+
+Include /Users/scogland1/.lima/default/ssh.config
+ServerAliveInterval 300

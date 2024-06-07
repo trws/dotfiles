@@ -1,2 +1,3 @@
 #!/bin/bash -x
-pbpaste | clang-format | pygmentize -l cuda -f html -O full=true | textutil -convert rtf -stdin -stdout | /usr/bin/pbcopy -Prefer rtf
+: ${LANG:=cuda}
+pbpaste | clang-format | pygmentize -l $LANG -f html -O full=true | textutil -convert rtf -stdin -stdout | /usr/bin/pbcopy -Prefer rtf

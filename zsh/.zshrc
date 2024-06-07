@@ -41,7 +41,7 @@ function import_terminfo() {
   fi
   local t
   for t in "$@" ; do
-    $TIC -xe $t ~/Downloads/terminfo.src
+    infocmp $t >& /dev/null || $TIC -xe $t ~/Downloads/terminfo.src
   done
 }
 function mydownload() {
@@ -52,9 +52,11 @@ function mydownload() {
   fi
 }
 function update_terminfo() {
-  mydownload https://invisible-island.net/datafiles/current/terminfo.src.gz
-  gunzip -f ~/Downloads/terminfo.src.gz
-  import_terminfo tmux tmux-256color kitty kitty-direct iterm2 iterm2-direct alacritty-direct atpull
+  if [[ ! -e ~/Downloads/terminfo.src || $0:P -nt ~/Downloads/terminfo.src ]] ; then
+    mydownload https://invisible-island.net/datafiles/current/terminfo.src.gz
+    gunzip -f ~/Downloads/terminfo.src.gz
+    import_terminfo tmux tmux-256color kitty kitty-direct iterm2 iterm2-direct alacritty-direct atpull
+  fi
 }
 # update_terminfo
 
@@ -306,6 +308,7 @@ if is-at-least 5.1; then
   typeset -A mytools
   mytools[rg]='--brew ripgrep --cargo ripgrep'
   mytools[dust]='--brew dust --cargo du-dust'
+  mytools[broot]='--brew broot --cargo broot'
   mytools[bat]='--brew bat --cargo bat'
   # mytools[delta]='--brew delta --cargo git-delta'
   mytools[hyperfine]='--brew hyperfine --cargo hyperfine'
@@ -427,8 +430,6 @@ source $ZDOTDIR/bindings
 setopt ALWAYS_TO_END
 
 
-test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
-
 # make tmux behave with bracketed paste supporting terminals
 if [ ${TMUX} ]; then
   unset zle_bracketed_paste
@@ -446,3 +447,5 @@ fi
 
 export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+
+source /home/scogland1.linux/.config/broot/launcher/bash/br

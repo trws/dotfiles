@@ -16,6 +16,8 @@ Chooser*label.label:	XDMCP Host Menu from lazarus
 Chooser*list.font:              -*-*-medium-r-normal-*-*-230-*-*-c-*-iso8859-1
 Chooser*Command.font:           *-new century schoolbook-bold-r-normal-*-180-*
 
+Xcursor.size: 24
+
 
 xterm*toolBar:             false
 xterm*loginShell:             true

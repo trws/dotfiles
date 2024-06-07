@@ -155,7 +155,7 @@ Plug 'glacambre/firenvim', { 'do': { _ -> firenvim#install(0) } }
 Plug 'vim-scripts/TWiki-Syntax'
 Plug 'vim-perl/vim-perl', { 'for': 'perl', 'do': 'make clean carp dancer highlight-all-pragmas moose test-more try-tiny' }
 Plug 'sheerun/vim-polyglot' " pulls in syntax for almost everything
-let g:polyglot_disabled = [ 'markdown', 'org']
+let g:polyglot_disabled = [ 'markdown', 'org', 'nroff']
 " Plug 'darfink/vim-plist'
 " let g:plist_display_format='xml'
 " Plug 'gu-fan/riv.vim' " RST handler etc.
@@ -258,7 +258,8 @@ let g:coc_config_home = '~/.dotfiles/vim'
 let g:coc_data_home = plugged_directory . '/coc-data'
 let g:coc_global_extensions = ['coc-json', 'coc-julia',
     \ 'coc-pyright', 'coc-emoji', 'coc-sh', 'coc-cmake', 'coc-yaml',
-    \ 'coc-yank', 'coc-sumneko-lua', 'coc-snippets', 'coc-vimlsp' ]
+    \ 'coc-yank', 'coc-sumneko-lua', 'coc-snippets', 'coc-vimlsp',
+    \ 'coc-clangd']
 inoremap <silent><expr> <TAB>
       \ coc#pum#visible() ? coc#pum#next(1) :
       \ CheckBackspace() ? "\<Tab>" :
@@ -870,6 +871,9 @@ set suffixes+=.log,.out,.bbl,.blg,.fls,.fdb_latexmk,.synctex.gz,.aux,.latexmain
 "additional buffer types
 augroup extra_filetypes
   autocmd!
+  " sharness for flux
+  au BufNewFile,BufRead */t/*.sh           set      ft=sh.sharness
+  au BufNewFile,BufRead,BufWritePost */t/*.t           set      ft=sh.sharness
   au BufNewFile,BufRead *.cu           set      ft=cuda
   au BufNewFile,BufRead *.cuh          set      ft=cuda
   " au BufNewFile,BufRead *.cl           set      ft=opencl
@@ -959,8 +963,6 @@ if InGui()
     map! <D-v> <C-R>+
     tmap <D-v> <C-R>+
     vmap <D-c> "+y
-    nnoremap <ScrollWheelLeft> <ScrollWheelRight>
-    nnoremap <ScrollWheelRight> <ScrollWheelLeft>
   elseif has("gui_macvim")
     "CRITICAL option, allows alt-based key-bindings to work in macvim
     set macmeta

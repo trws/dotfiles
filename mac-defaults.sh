@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh
+#!/bin/sh
 
 # This is going to be my script for configuring a new mac, many things come from
 # the following sources:

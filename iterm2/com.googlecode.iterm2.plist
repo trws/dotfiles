@@ -23,7 +23,7 @@
 	<key>ColorInvertedCursor</key>
 	<true/>
 	<key>Command</key>
-	<string>/opt/homebrew/bin/zsh</string>
+	<string></string>
 	<key>CommandSelection</key>
 	<true/>
 	<key>Control</key>
@@ -2057,7 +2057,7 @@
 			<key>Columns</key>
 			<integer>80</integer>
 			<key>Command</key>
-			<string>/opt/homebrew/bin/zsh</string>
+			<string>zsh</string>
 			<key>Cursor Color</key>
 			<dict>
 				<key>Blue Component</key>
@@ -2430,7 +2430,7 @@
 			<key>Non-ASCII Ligatures</key>
 			<true/>
 			<key>Normal Font</key>
-			<string>JetBrainsMonoNFM-Regular 11</string>
+			<string>HackNFM-Regular 11</string>
 			<key>Option Key Sends</key>
 			<integer>2</integer>
 			<key>Prompt Before Closing 2</key>

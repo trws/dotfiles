@@ -15,6 +15,7 @@
   get-main-branch = !git branch -rl '*/HEAD' | rev | cut -d/ -f1 | rev
   ; get-parent-branch
   diff-base = !git diff $(git merge-base $(git get-upstream)/$(git get-main-branch) HEAD)
+  reb-base = !git rebase -i $(git merge-base $(git get-upstream)/$(git get-main-branch) HEAD)
 
   files = !git diff --name-only $(git merge-base HEAD \"${REVIEW_BASE:-$(git rev-parse --abbrev-ref upstream)}\")
 
@@ -162,6 +163,7 @@
 
 [push]
   default = current
+  autoSetupRemote = true
 ######## TOOLS
 [merge "wiggle"]
   name = "Wiggle flexible merging"
@@ -193,3 +195,5 @@
 # 	helper = !/home/njustn/.cache/zsh/zinit/plugins/cli---cli/usr/bin/gh auth git-credential
 [pull]
 	rebase = false
+[fetch]
+  recurseSubmodules = true

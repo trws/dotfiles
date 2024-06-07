@@ -16,8 +16,8 @@ if any(hn in host for hn in (b"storm", b"bolt", b"abrams")):
         check_output('networksetup -getairportnetwork en0 2>&1 | grep LLNL-GREEN',
                      shell=True)
     except CalledProcessError:
-        sys.exit(0)
-    sys.exit(-1)
+        sys.exit(-1)
+    sys.exit(0)
 if b"vpn" in host:
     sys.exit(0)
 sys.exit(-1)

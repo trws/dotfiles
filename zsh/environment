@@ -74,6 +74,7 @@ export BAT_PAGER="less -L $LESS" # -L avoids LESSOPEN being interpreted, no loop
 alias vman="env -u MANPAGER man"
 if (( $+commands[bat] )) ; then
   export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+  export MANROFFOPT=-c
 elif (( $+commands[vimpager] )) ; then
   export MANPAGER=vimpager
 
