@@ -76,6 +76,9 @@ fi
 
 [[ -x /usr/local/bin/defaultpaths ]] && eval `/usr/local/bin/defaultpaths`
 
+test -e "${ZDOTDIR}/.iterm2_shell_integration.zsh" && source "${ZDOTDIR}/.iterm2_shell_integration.zsh"
+
+add_to_path_front ~/.iterm2
 add_to_path_front /usr/local /opt/homebrew
 add_to_path_front ~/.nix-profile/
 add_to_path_back /usr ""

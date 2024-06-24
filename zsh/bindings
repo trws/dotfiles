@@ -18,4 +18,15 @@ bindkey '[1;3C' end-of-line
 bindkey '[1;9C' forward-word
 bindkey '[1;9D' backward-word
 
-
+### Jetbrains terminal
+if [[ "$TERMINAL_EMULATOR" == "JetBrains-JediTerm" ]]; then
+  bindkey -s "µ" "^E | less ^M" # Personal Alt-M shortcut
+  bindkey "ƒ" forward-word
+  bindkey "∫" backward-word
+  bindkey "∂" kill-word
+  bindkey "¬" downcase-word
+  bindkey "ç" capitalize-word
+  bindkey "†" transpose-words
+  bindkey "≥" insert-last-word
+  # bindkey "¨ " upcase-word
+fi

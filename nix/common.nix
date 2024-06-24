@@ -12,7 +12,10 @@
       set rtp+=~/.dotfiles/vim
       source ~/.dotfiles/vim/vimrc
     '';
-    plugins = with pkgs.vimPlugins; [ vim-nix vim-plug fzf-vim ];
+    plugins= with pkgs.vimPlugins; [
+      vim-nix
+      vim-plug
+    ];
     withNodeJs = true;
     withPython3 = true;
     viAlias = true;
@@ -23,8 +26,10 @@
   programs.zsh = {
     enable = true;
     # dotDir = ".dotfiles/zsh";
-    envExtra =
-      "\n    export ZDOTDIR=~/.dotfiles/zsh\n    source ~/.dotfiles/zsh/zshenv-link\n    ";
+    envExtra = "
+    export ZDOTDIR=~/.dotfiles/zsh
+    source ~/.dotfiles/zsh/zshenv-link
+    ";
   };
 
   programs.carapace.enable = true;
@@ -32,7 +37,8 @@
   programs.starship.enable = true;
   programs.fish = {
     enable = true;
-    plugins = with pkgs; [{
+    plugins = with pkgs; [
+      {
       name = "fasd";
       src = pkgs.fetchFromGitHub {
         owner = "oh-my-fish";
@@ -73,17 +79,16 @@
       # all shells
       starship
 
-      # shell tools
-      fzf
-      direnv
-      hyperfine
-      ripgrep
-      eza
-      bat
-      fd
-      du-dust
-      tree
-      wget
+    # shell tools
+    direnv
+    hyperfine
+    ripgrep
+    eza
+    bat
+    fd
+    du-dust
+    tree
+    wget
 
       # testing
       bfs # fast find/fd-like thing that does breadth-first order traversals

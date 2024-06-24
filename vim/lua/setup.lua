@@ -10,7 +10,7 @@ vim.g.firenvim_config = {
 }
 
 -- Load custom treesitter grammar for org filetype
-require('orgmode').setup_ts_grammar()
+-- require('orgmode').setup_ts_grammar()
 
 -- Treesitter configuration
 require('nvim-treesitter.configs').setup {
@@ -21,6 +21,7 @@ require('nvim-treesitter.configs').setup {
     -- Required for spellcheck, some LaTex highlights and
     -- code block highlights that do not have ts grammar
     additional_vim_regex_highlighting = { 'org' },
+    disable = { 'bash' }
   },
   ensure_installed = { 'org' },   -- Or run :TSUpdate org
 }

@@ -14,7 +14,11 @@
       configuration = { pkgs, ... }: {
         # List packages installed in system profile. To search by name, run:
         # $ nix-env -qaP | grep wget
-        environment.systemPackages = [ pkgs.vim pkgs.neovim ];
+      environment.systemPackages =
+        [
+          pkgs.vim
+          pkgs.neovim
+        ];
 
         users.users.scogland1 = {
           name = "scogland1";
@@ -31,7 +35,6 @@
           # Let Home Manager install and manage itself.
           programs.home-manager.enable = true;
           home.packages = with pkgs; [
-            lima
             # document tools
             pandoc
             ## latex stuff
@@ -46,30 +49,44 @@
             starship
           ];
         };
-        homebrew.enable = true;
-        homebrew.casks = [
-          # necessities
-          "iterm2"
-          "mailmate"
-          "neovide"
-          "1password"
-          ## interface
-          "alfred"
-          "hammerspoon"
-          "bettertouchtool"
-          "karabiner-elements"
+  homebrew = {
+    enable = true;
+    brews = [
+      "lima"
+    ];
+    masApps = {
+      WireGuard = 1451685025;
+      "1password for safari" = 1569813296;
+    };
+    casks = [
+        # necessities
+        "iterm2"
+        "mailmate"
+        "neovide"
+        "1password"
+        ## interface
+        "alfred"
+        "hammerspoon"
+        "bettertouchtool"
 
-          "rstudio"
-          "quarto"
-          "bibdesk"
-          "syncthing"
-          "mactex"
-          "omnifocus"
-          "vanilla"
 
-          "dash"
-          "arc"
-        ];
+        "rstudio"
+        "quarto"
+        "bibdesk"
+        "syncthing"
+        "mactex"
+        "omnifocus"
+        "vanilla"
+
+        "dash"
+        "arc"
+
+        "font-profont-nerd-font"
+
+        # bartender replacement
+        "jordanbaird-ice"
+      ];
+  };
         fonts.fonts = with pkgs;
           [ (nerdfonts.override { fonts = [ "FiraCode" "ProFont" ]; }) ];
         # Auto upgrade nix package and the daemon service.
