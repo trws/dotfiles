@@ -10,7 +10,6 @@
     plugins= with pkgs.vimPlugins; [
       vim-nix
       vim-plug
-      fzf-vim
     ];
     withNodeJs = true;
     withPython3 = true;
@@ -71,7 +70,6 @@
     starship
 
     # shell tools
-    fzf
     direnv
     hyperfine
     ripgrep

@@ -195,3 +195,15 @@ Host !cz-* *
 
 Include /Users/scogland1/.lima/default/ssh.config
 ServerAliveInterval 300
+ServerAliveInterval 300
+ServerAliveInterval 300
+ServerAliveInterval 300
+ServerAliveInterval 300
+ServerAliveInterval 300
+ServerAliveInterval 300
+ServerAliveInterval 300
+ServerAliveInterval 300
+ServerAliveInterval 300
+ServerAliveInterval 300
+ServerAliveInterval 300
+ServerAliveInterval 300

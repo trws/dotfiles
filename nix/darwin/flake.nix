@@ -35,7 +35,6 @@
     # Let Home Manager install and manage itself.
     programs.home-manager.enable = true;
     home.packages = with pkgs; [
-      lima
       # document tools
       pandoc
       ## latex stuff
@@ -50,30 +49,44 @@
       starship
     ];
   };
-  homebrew.enable = true;
-  homebrew.casks = [
-    # necessities
-    "iterm2"
-    "mailmate"
-    "neovide"
-    "1password"
-    ## interface
-    "alfred"
-    "hammerspoon"
-    "bettertouchtool"
+  homebrew = {
+    enable = true;
+    brews = [
+      "lima"
+    ];
+    masApps = {
+      WireGuard = 1451685025;
+      "1password for safari" = 1569813296;
+    };
+    casks = [
+        # necessities
+        "iterm2"
+        "mailmate"
+        "neovide"
+        "1password"
+        ## interface
+        "alfred"
+        "hammerspoon"
+        "bettertouchtool"
 
 
-    "rstudio"
-    "quarto"
-    "bibdesk"
-    "syncthing"
-    "mactex"
-    "omnifocus"
-    "vanilla"
+        "rstudio"
+        "quarto"
+        "bibdesk"
+        "syncthing"
+        "mactex"
+        "omnifocus"
+        "vanilla"
 
-    "dash"
-    "arc"
-  ];
+        "dash"
+        "arc"
+
+        "font-profont-nerd-font"
+
+        # bartender replacement
+        "jordanbaird-ice"
+      ];
+  };
   fonts.fonts = with pkgs; [
     (nerdfonts.override { fonts = [ "FiraCode" "ProFont" ]; })
   ];
@@ -115,7 +128,7 @@
   {
     # Build darwin flake using:
     # $ darwin-rebuild build --flake .#simple
-    darwinConfigurations."loftpro-50" = nix-darwin.lib.darwinSystem {
+    darwinConfigurations."loftpro-62" = nix-darwin.lib.darwinSystem {
       modules = [ configuration home-manager.darwinModules.home-manager ];
     };
 

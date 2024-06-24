@@ -480,7 +480,7 @@ xmap <leader>x  <Plug>(coc-convert-snippet)
 """"""" vim-lsp stuff
 
 if !executable('fzf')
-Plug 'junegunn/fzf', { 'dir': plugged_directory . '/fzf', 'do': './install --all' }
+  Plug 'junegunn/fzf', { 'dir': plugged_directory . '/fzf', 'do': './install --all' }
 else
   Plug 'junegunn/fzf', { 'dir': plugged_directory . '/fzf' }
 endif
@@ -601,8 +601,8 @@ Plug 'tpope/vim-rsi'
 " Plug 'airblade/vim-gitgutter'
 "
 " Python poetry and pipenv
-let g:poetv_executables=['poetry']
-Plug 'petobens/poet-v', { 'for': 'python' }
+" let g:poetv_executables=['poetry']
+" Plug 'petobens/poet-v', { 'for': 'python' }
 
 " load tcomment before vim-swap so vim-swap mappings win
 " Plug 'tomtom/tcomment_vim'
@@ -957,12 +957,17 @@ if InGui()
     set gfn=ProFont\ IIx\ Nerd\ Font\ Mono:h10
   endif
   if exists("g:neovide")
-    let g:neovide_input_macos_alt_is_meta = v:true
+    let g:neovide_input_macos_option_key_is_meta = v:true
     let g:neovide_input_use_logo = v:true
     map <D-v> "+p<CR>
     map! <D-v> <C-R>+
     tmap <D-v> <C-R>+
     vmap <D-c> "+y
+    call helpers#Map_for_all("<D-t>", ":tabnew<CR>", 1, 1, 1)
+    call helpers#Map_for_all("<D-w>", ":tabnew<CR>", 1, 1, 1)
+    call helpers#Map_for_all('w', ":call CloseWindowOrTab()<CR>", 1, 1, 1)
+    call helpers#Map_for_all('}', ":tabnext<CR>", 1, 1, 1)
+    call helpers#Map_for_all('{', ":tabprevious<CR>", 1, 1, 1)
   elseif has("gui_macvim")
     "CRITICAL option, allows alt-based key-bindings to work in macvim
     set macmeta

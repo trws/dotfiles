@@ -145,11 +145,6 @@ function zupdate() {
 # autoenv support, for .autoenv.zsh files
 Tarrasch/zsh-autoenv
 
-junegunn/fzf path:shell
-junegunn/fzf path:shell/key-bindings.zsh
-wookayin/fzf-fasd
-
-
 # get gnu-utility support from prezto
 $HOME/.dotfiles/zsh/gnu-utility
 
@@ -170,10 +165,6 @@ sorin-ionescu/prezto path:modules/homebrew
 zsh-users/zsh-completions
 sorin-ionescu/prezto path:modules/completion
 
-wfxr/forgit
-
-# fzf for completion - buggy
-# zmodule Aloxaf/fzf-tab
 
 # -------
 # Modules
@@ -213,6 +204,14 @@ zsh-users/zsh-history-substring-search
 
 # Tmux
 tmux-plugins/tpm kind:clone
+
+wfxr/forgit
+
+junegunn/fzf path:shell
+junegunn/fzf path:shell/key-bindings.zsh
+wookayin/fzf-fasd
+# fzf for completion - buggy
+# zmodule Aloxaf/fzf-tab
 EOF
   update_terminfo
 }
@@ -330,10 +329,6 @@ if is-at-least 5.1; then
 fi
 
 if ! (( ${+commands[fzf]} )) ; then
-  go get -u github.com/junegunn/fzf
-fi
-
-if ! (( ${+commands[fzf]} )) ; then
   echo no fzf
   if ! (( ${+commands[go]} )) ; then
     echo go is missing, fix it to get fzf
@@ -447,5 +442,4 @@ fi
 
 export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-
-source /home/scogland1.linux/.config/broot/launcher/bash/br
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
