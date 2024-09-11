@@ -106,6 +106,7 @@ nnoremap <silent> <leader>wp :call WindowSwap#DoWindowSwap()<CR>
 nnoremap <silent> <leader>ws :call WindowSwap#EasyWindowSwap()<CR>
 
 
+Plug 'flux-framework/flux-core', { 'rtp': 't/sharness/vim' }
 
 "colorschemes
 " Plug 'tomasr/molokai'
@@ -710,7 +711,11 @@ endif
 " fix :Man command in neovim, why on earth this works is beyond me
 command! -nargs=+ Man :Vman <args>
 
-colorscheme apprentice
+try
+  colorscheme apprentice
+catch /^Vim\%((\a\+)\)\=:E185/
+  colorscheme elflord
+endtry
 
 let mapleader      = ','
 let maplocalleader = ','
@@ -872,6 +877,8 @@ set suffixes+=.log,.out,.bbl,.blg,.fls,.fdb_latexmk,.synctex.gz,.aux,.latexmain
 "additional buffer types
 augroup extra_filetypes
   autocmd!
+  " direnv
+  au BufNewFile,BufRead .envrc           set      ft=bash
   " sharness for flux
   au BufNewFile,BufRead */t/*.sh           set      ft=sh.sharness
   au BufNewFile,BufRead,BufWritePost */t/*.t           set      ft=sh.sharness
@@ -967,8 +974,8 @@ if InGui()
     call helpers#Map_for_all("<D-t>", ":tabnew<CR>", 1, 1, 1)
     call helpers#Map_for_all("<D-w>", ":tabnew<CR>", 1, 1, 1)
     call helpers#Map_for_all('w', ":call CloseWindowOrTab()<CR>", 1, 1, 1)
-    call helpers#Map_for_all('}', ":tabnext<CR>", 1, 1, 1)
-    call helpers#Map_for_all('{', ":tabprevious<CR>", 1, 1, 1)
+    call helpers#Map_for_all_meta('}', ":tabnext<CR>", 1, 1, 1)
+    call helpers#Map_for_all_meta('{', ":tabprevious<CR>", 1, 1, 1)
   elseif has("gui_macvim")
     "CRITICAL option, allows alt-based key-bindings to work in macvim
     set macmeta
@@ -1235,6 +1242,8 @@ set splitright
 call helpers#Map_for_all_meta('t', ":tabnew<CR>", 2, 1, 1)
 call helpers#Map_for_all_meta('}', ":tabnext<CR>", 2, 1, 1)
 call helpers#Map_for_all_meta('{', ":tabprevious<CR>", 2, 1, 1)
+call helpers#Map_for_all_meta('S-}', ":tabnext<CR>", 2, 1, 1)
+call helpers#Map_for_all_meta('S-{', ":tabprevious<CR>", 2, 1, 1)
 
 if exists("g:neovide")
   call helpers#Map_for_all_meta('S-]', ":tabnext<CR>", 2, 1, 1)

@@ -163,6 +163,7 @@ sorin-ionescu/prezto path:modules/homebrew
 # Enables and configures smart and extensive tab completion.
 # completion must be sourced after zsh-users/zsh-completions
 zsh-users/zsh-completions
+pseyfert/zsh-ctest-completion
 sorin-ionescu/prezto path:modules/completion
 
 
