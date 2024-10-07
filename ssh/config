@@ -19,6 +19,10 @@ Host ubu ubuntu
     User scogland1
     HostName 192.168.215.4
 
+Host arch
+    User scogland1
+    HostName 192.168.64.3
+
 Host nix nixos
     User scogland1
     # HostName 192.168.219.209
@@ -140,6 +144,9 @@ Host chimera-*
 Host chimera-wg
     HostName 192.168.3.3
 
+Host chimera-ts
+    ProxyCommand ssh -W 127.0.0.1:6022 njustn@trove.tailf3f86.ts.net
+
 Host chimera-funnel
     Port 22
     HostName chimera
@@ -147,6 +154,9 @@ Host chimera-funnel
 
 Host chimera-relay
     ProxyCommand ssh -W 127.0.0.1:6022 trove
+
+Host chimera-relay-wg
+    ProxyCommand ssh -W 192.168.3.3:22 trove
 
 Match exec " ~/.dotfiles/scripts/at-llnl.py" !originalhost trove !originalhost github.com !originalhost lima-default !originalhost *.local !originalhost alarm !originalhost debian !originalhost deb !host eris !host eris.llnl.gov !originalhost nix !host localhost !originalhost chimera* !host cz-bit* !originalhost *.*.*.* !originalhost rztopaz !originalhost 10.253.134.139 !originalhost localhost !originalhost 127.0.0.1
     #this must be overridden above if wrong
@@ -160,6 +170,11 @@ Host eris
   HostName eris.llnl.gov
   User scogland
   PreferredAuthentications publickey,keyboard-interactive,password
+
+Host eli
+  User scogland
+  HostName elcapi
+  ProxyJump rzansel
 
 Match originalhost rztopaz
     PubkeyAuthentication no
@@ -194,16 +209,4 @@ Host !cz-* *
     ServerAliveInterval 900
 
 Include /Users/scogland1/.lima/default/ssh.config
-ServerAliveInterval 300
-ServerAliveInterval 300
-ServerAliveInterval 300
-ServerAliveInterval 300
-ServerAliveInterval 300
-ServerAliveInterval 300
-ServerAliveInterval 300
-ServerAliveInterval 300
-ServerAliveInterval 300
-ServerAliveInterval 300
-ServerAliveInterval 300
-ServerAliveInterval 300
-ServerAliveInterval 300
+Include /Users/scogland1/.lima/tw/ssh.config

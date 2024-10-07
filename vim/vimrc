@@ -22,11 +22,11 @@ endif
 let plugged_directory = expand("~/.cache/vim-plugged/" . plugged_directory)
 
 if !exists("*plug#begin")
-if !filereadable(expand("~/.dotfiles/vim/autoload/plug.vim"))
-  echo('fetching plug for initial install')
-  call system('curl -fLo ~/.dotfiles/vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
-  call system('mkdir -p ' . plugged_directory)
-endif
+  if !filereadable(expand("~/.dotfiles/vim/autoload/plug.vim"))
+    echo('fetching plug for initial install')
+    call system('curl -fLo ~/.dotfiles/vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim')
+    call system('mkdir -p ' . plugged_directory)
+  endif
 endif
 
 function! StatusEncFmt(current)
@@ -258,16 +258,16 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 let g:coc_config_home = '~/.dotfiles/vim'
 let g:coc_data_home = plugged_directory . '/coc-data'
 let g:coc_global_extensions = ['coc-json', 'coc-julia',
-    \ 'coc-pyright', 'coc-emoji', 'coc-sh', 'coc-cmake', 'coc-yaml',
-    \ 'coc-yank', 'coc-sumneko-lua', 'coc-snippets', 'coc-vimlsp',
-    \ 'coc-clangd']
+      \ 'coc-pyright', 'coc-emoji', 'coc-sh', 'coc-cmake', 'coc-yaml',
+      \ 'coc-yank', 'coc-sumneko-lua', 'coc-snippets', 'coc-vimlsp',
+      \ 'coc-clangd']
 inoremap <silent><expr> <TAB>
       \ coc#pum#visible() ? coc#pum#next(1) :
       \ CheckBackspace() ? "\<Tab>" :
       \ coc#refresh()
 inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
 inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
-                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+      \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
 " set signcolumn=yes #avoid shifting back and forth
 
@@ -500,9 +500,11 @@ if has('nvim')
   Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
   Plug 'nvim-orgmode/orgmode'
   Plug 'fannheyward/telescope-coc.nvim'
-  Plug 'phaazon/hop.nvim'
-  Plug 'ggandor/leap.nvim'
-  Plug 'ggandor/leap-spooky.nvim'
+  Plug 'folke/flash.nvim'
+  " Plug 'smoka7/hop.nvim'
+  " Plug 'ggandor/leap.nvim'
+  " Plug 'ggandor/leap-spooky.nvim'
+  " Plug 'ggandor/flit.nvim' " Didn't work, wouldn't even load for some reason
 else
   Plug 'justinmk/vim-sneak'
   let g:sneak#label=1
@@ -577,16 +579,6 @@ endif
 
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-vinegar'
-" gui font size control, must be after vinegar
-nnoremap <silent> <D--> :ZoomOut<cr>
-nnoremap <silent> <D-=> :ZoomIn<cr>
-nnoremap <silent> <M--> :ZoomOut<cr>
-nnoremap <silent> <M-=> :ZoomIn<cr>
-Plug 'vim-scripts/zoom.vim'
-" fix vinegar - shortcut
-nnoremap - <Plug>VinegarUp
-nnoremap <silent> <C-_> <Plug>VinegarVerticalSplitUp
-nnoremap <silent> _ :Rexplore<cr>
 Plug 'tpope/vim-rhubarb' " github links
 
 " cmdline-mode mappings
@@ -707,6 +699,55 @@ if has('nvim')
   lua require('setup')
 endif
 
+if InGui()
+  let s:save_cpo = &cpo
+  set cpo&vim
+
+  " keep default value
+  let s:current_font = &guifont
+
+  " command
+  command! -narg=0 ZoomIn    :call s:ZoomIn()
+  command! -narg=0 ZoomOut   :call s:ZoomOut()
+  command! -narg=0 ZoomReset :call s:ZoomReset()
+
+  " map
+  nmap + :ZoomIn<CR>
+  nmap - :ZoomOut<CR>
+
+  " guifont size + 1
+  function! s:ZoomIn()
+    let l:fsize = substitute(&guifont, '^.*:h\([^:]*\).*$', '\1', '')
+    let l:fsize += 1
+    let l:guifont = substitute(&guifont, ':h\([^:]*\)', ':h' . l:fsize, '')
+    let &guifont = l:guifont
+  endfunction
+
+  " guifont size - 1
+  function! s:ZoomOut()
+    let l:fsize = substitute(&guifont, '^.*:h\([^:]*\).*$', '\1', '')
+    let l:fsize -= 1
+    let l:guifont = substitute(&guifont, ':h\([^:]*\)', ':h' . l:fsize, '')
+    let &guifont = l:guifont
+  endfunction
+
+  " reset guifont size
+  function! s:ZoomReset()
+    let &guifont = s:current_font
+  endfunction
+
+  let &cpo = s:save_cpo
+  " gui font size control, must be after vinegar
+  nnoremap <silent> <D--> :ZoomOut<cr>
+  nnoremap <silent> <D-=> :ZoomIn<cr>
+  nnoremap <silent> <M--> :ZoomOut<cr>
+  nnoremap <silent> <M-=> :ZoomIn<cr>
+endif
+" fix vinegar - shortcut
+nmap - <Plug>VinegarUp
+nmap <silent> <C-_> <Plug>VinegarVerticalSplitUp
+nmap <silent> _ :Rexplore<cr>
+
 
 " fix :Man command in neovim, why on earth this works is beyond me
 command! -nargs=+ Man :Vman <args>
@@ -798,9 +839,9 @@ function! Files_with_ur_dir()
   :execute 'Files ' . l:dir
 endfunction
 command! -bang -nargs=* Rgp
-  \ call fzf#vim#grep(
-  \   'rg --column --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 1,
-  \   fzf#vim#with_preview(), <bang>0)
+      \ call fzf#vim#grep(
+      \   'rg --column --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 1,
+      \   fzf#vim#with_preview(), <bang>0)
 " fzf version of the mappings, experimental
 " nnoremap <silent> <leader>fr  :call Files_with_ur_dir()<CR>
 nnoremap <silent> <leader>fr  :Files<CR>
@@ -1170,9 +1211,9 @@ if ! InGui()
   vnoremap <leader>c <Plug>OSCYankVisual
 
   autocmd TextYankPost *
-    \ if v:event.operator is 'y' && v:event.regname is '+' |
-    \ execute 'OSCYankRegister +' |
-    \ endif
+        \ if v:event.operator is 'y' && v:event.regname is '+' |
+        \ execute 'OSCYankRegister +' |
+        \ endif
 
   if has('macunix')
     "paste from pbpaste as paste normally works, from the current cursor position

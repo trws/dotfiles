@@ -5,11 +5,15 @@ import os
 import re
 from subprocess import call, check_output, CalledProcessError
 
+try:
+    if int(os.environ["FORCE_HOME"]):
+        sys.exit(0)
+except KeyError:
+    pass
 host = check_output("hostname", shell=True).decode()
-
 if 'hurricane' in host or 'gale' in host:
     sys.exit(0)
-if "abrams" in host or "typhoon" in host or "storm" in host or "bolt" in host:
+if host in ("abrams", "typhoon", "storm", "bolt", "loftpro", "codex"):
     output = check_output('ifconfig', shell=True).decode()
     if re.search(r"58:ef:68:e7:39:44", output):
         sys.exit(0)

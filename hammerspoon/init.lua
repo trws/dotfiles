@@ -205,6 +205,7 @@ bindings:insert(hotkey.bind({"ctrl","cmd"}, "t", function() toggle_application("
 bindings:insert(hotkey.bind({"ctrl","cmd","shift"}, "v", function() toggle_application("com.microsoft.VSCode") end))
 bindings:insert(hotkey.bind({"ctrl","cmd"}, "v", function() toggle_application("com.neovide.neovide") end))
 bindings:insert(hotkey.bind({"ctrl","cmd"}, "w", function() toggle_application("com.bookry.wavebox") end))
+bindings:insert(hotkey.bind({"ctrl","cmd"}, "m", function() toggle_application("com.amazingmarvin.marvindesktop") end))
 
 -- alternatively, call .nextWindow() or .previousWindow() directly (same as hs.window.switcher.new():next())
 -- hs.hotkey.bind('alt','tab','Next window',hs.window.switcher.nextWindow)

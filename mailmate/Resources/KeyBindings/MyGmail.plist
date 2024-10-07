@@ -19,18 +19,19 @@
     "j"  = "nextThread:";
     "k"  = "previousThread:";
     "o"  = "openMessages:"; // Gmail: Also expands or collapses a message if you are in 'Conversation View.'
-    "L"  = "expandThread:";
+    "O"  = "expandThread:";
+    "L"  = "collapseThread:";
     // "e"  = "archive:";
     "e"  = ("performBundleItemWithUUID:","A4E60AFE-94F5-42B0-850D-9E486B4CB63D");
     // "e"  = ( "selectWithFilter:", "#body-part-id = ${#body-part-id} and #source.path.noinbox = INBOX", "archive:");
     "y"  = ("removeTag:", "Marked", "archive:");
     // "Y"  = ( "selectWithFilter:", "#flags.flag = 'Marked'", "removeTag:", "Marked", "archive:");
-    "Y"  = ( "selectWithFilter:", "#thread-id = ${#thread-id} and #source.path.noinbox = INBOX", "archive:");
+    "Y"  = ( "selectWithFilter:", "#thread-id = ${##thread-id} and #source.path.noinbox = INBOX", "archive:");
     "m"  = ( "toggleMuteState:", "archive:" ); // FIXME: Should be 'markAsMuted:'
     "s"  = "toggleFlag:";
     "x"  = ("toggleTag:", "Marked");
-    // "X"  = ("selectWithFilter:", "#thread-id = ${#thread-id}", "toggleTag:", "Marked");
-    "X"  = ("selectWithFilter:", "#thread-id = ${#thread-id}");
+    // "X"  = ("selectWithFilter:", "#thread-id = ${##thread-id}", "toggleTag:", "Marked");
+    "X"  = ("selectWithFilter:", "#thread-id = ${##thread-id}");
     "!"  = "moveToJunk:";
     "#"  = "deleteMessage:";
     "r"  = "reply:";
@@ -62,6 +63,9 @@
         "g" = "selectFirstMessageRow:";
         "a" = ( "goToMailbox:", "ALL_MESSAGES" );
         "s" = ( "goToMailbox:", "FLAGGED" );
+        "c" = ( "goToMailbox:", "0BDA5A3E-8766-4923-8755-74CC08B25AA5" );
+        "p" = ( "goToMailbox:", "07C13676-64CA-485B-B2C4-6943F26D9700" );
+        "f" = ( "goToMailbox:", "26A5A7C8-F87F-421F-84B5-E49AA6B913C1" );
         // g then c	Go to 'Contacts'	Takes you to your Contacts list.
         "d" = ( "goToMailbox:", "DRAFTS" );
         "l" = "goToMailbox:";
@@ -80,7 +84,7 @@
     };
 
     "*" = {
-        "c" = ("selectWithFilter:", "#thread-id = ${#thread-id}");
+        "c" = ("selectWithFilter:", "#thread-id = ${##thread-id}");
         "a" = "selectAll:";
         "n" = "deselectAll:";
         "r" = ( "selectWithFilter:", "#flags.flag = '\\Seen'"); // Selects all mail you've read.

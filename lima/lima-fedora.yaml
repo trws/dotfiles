@@ -1,0 +1,260 @@
+#
+# Example to run ubuntu using vmType: vz instead of qemu (Default)
+# This example requires Lima v0.14.0 or later and macOS 13.
+vmType: "vz"
+rosetta:
+  # Enable Rosetta for Linux.
+  # Hint: try `softwareupdate --install-rosetta` if Lima gets stuck at `Installing rosetta...`
+  enabled: true
+  # Register rosetta to /proc/sys/fs/binfmt_misc
+  binfmt: true
+
+# template requires Lima v0.8.0 or later
+images:
+- location: "https://download.fedoraproject.org/pub/fedora/linux/releases/40/Cloud/x86_64/images/Fedora-Cloud-Base-Generic.x86_64-40-1.14.qcow2"
+  arch: "x86_64"
+  digest: "sha256:ac58f3c35b73272d5986fa6d3bc44fd246b45df4c334e99a07b3bbd00684adee"
+- location: "https://download.fedoraproject.org/pub/fedora/linux/releases/40/Cloud/aarch64/images/Fedora-Cloud-Base-Generic.aarch64-40-1.14.qcow2"
+  arch: "aarch64"
+  digest: "sha256:ebdce26d861a9d15072affe1919ed753ec7015bd97b3a7d0d0df6a10834f7459"
+
+cpus: 6
+disk: 128GiB
+memory: 12GiB
+caCerts:
+  files:
+  - ~/Projects/certs/cacerts_all.pem
+
+mounts:
+- location: "~"
+  writable: true
+- location: "/tmp/lima"
+  writable: true
+- location: "/tmp/misc"
+  writable: true
+- location: "/private"
+  writable: true
+mountType: "virtiofs"
+containerd:
+  system: false
+  user: false
+
+# networks:
+# # The "vzNAT" IP address is accessible from the host, but not from other guests.
+# - vzNAT: true
+
+provision:
+- mode: system
+  # This script defines the host.docker.internal hostname when hostResolver is disabled.
+  # It is also needed for lima 0.8.2 and earlier, which does not support hostResolver.hosts.
+  # Names defined in /etc/hosts inside the VM are not resolved inside containers when
+  # using the hostResolver; use hostResolver.hosts instead (requires lima 0.8.3 or later).
+  script: |
+    #!/bin/sh
+    sed -i 's/host.lima.internal.*/host.lima.internal host.docker.internal lima-default/' /etc/hosts
+- mode: system
+  script: |
+    #!/bin/bash
+    set -eux -o pipefail
+    command -v docker >/dev/null 2>&1 && exit 0
+    if [ ! -e /etc/systemd/system/docker.socket.d/override.conf ]; then
+      mkdir -p /etc/systemd/system/docker.socket.d
+      # Alternatively we could just add the user to the "docker" group, but that requires restarting the user session
+      cat <<-EOF >/etc/systemd/system/docker.socket.d/override.conf
+      [Socket]
+      SocketUser={{.User}}
+    EOF
+    fi
+    curl -fsSL https://get.docker.com | sh
+    systemctl enable docker
+    systemctl start docker
+- mode: system
+  script: |
+    #!/bin/bash
+    set -eux -o pipefail
+    dnf copr enable atim/lazygit -y
+    # flux core
+    pkgs=(
+      # flux core
+      autoconf
+      automake
+      git
+      libtool
+      make
+      pkgconfig
+      glibc-devel
+      zeromq-devel
+      libuuid-devel
+      jansson-devel
+      lz4-devel
+      libarchive-devel
+      hwloc-devel
+      sqlite-devel
+      lua
+      lua-devel
+      lua-posix
+      python3-devel
+      python3-cffi
+      python3-ply
+      python3-yaml
+      python3-sphinx
+      aspell
+      aspell-en
+      valgrind-devel
+      mpich-devel
+      jq
+      time
+
+      # flux sched
+      boost-devel
+      boost-graph
+      boost-system
+      boost-filesystem
+      boost-regex
+      readline-devel
+      python3-pyyaml
+      yaml-cpp-devel
+      libedit-devel
+      ninja-build
+      cmake
+      clang
+      lcov
+
+      clang-tools-extra
+      perf
+
+      # VM/rosetta stuff
+      qemu-user-static
+      # dotfiles stuff
+      vim
+      ripgrep
+      fd-find
+      bat
+      bfs
+      cargo
+      eza
+      # fzf # installed by zshrc
+      gh
+      hyperfine
+      nodejs
+      neovim
+      python3-neovim
+      tree
+      tmux
+      rust
+      rustfmt
+      rust-analyzer
+      zsh
+      lazygit # note, requires copr above
+      ncurses-term # get terminfo for other terms, like iterm2
+      libxcb # broot dep
+      patch # spack needs it
+      ctags
+      direnv
+      man-pages
+      strace
+      htop
+      gdb
+      gdb-gdbserver
+
+      python3-clang
+
+
+      # common build deps
+      gettext-devel
+      openssl-devel
+      libcurl-devel
+    )
+
+    dnf -y install "${pkgs[@]}"
+- mode: system
+  script: |
+    #!/bin/bash
+    chsh -s /usr/bin/zsh {{.User}}
+- mode: user
+  script: |
+    #!/bin/bash
+    ln -s /Users/{{.User}}/Repos ~/
+    ln -s /Users/{{.User}}/Downloads ~/
+    ln -s /Users/{{.User}}/Projects ~/
+    ln -s /Users/{{.User}}/.dotfiles ~/
+    (cd ~/.dotfiles ; python3 ~/.dotfiles/update.py)
+    # install vim plugins
+    vim +'PlugInstall --sync' +qa
+    # install zsh and tmux plugins and rust tools
+    zsh -c 'source ~/.dotfiles/zsh/.zshrc'
+- mode: system
+  script: |
+    #!/bin/bash
+    echo 0 > /proc/sys/kernel/yama/ptrace_scope
+    echo kernel.yama.ptrace_scope = 0 > /etc/sysctl.d/10-ptrace.conf
+    echo kernel.perf_event_paranoid = -1 > /etc/sysctl.d/11-paranoid.conf
+    echo kernel.kptr_restrict = 0 > /etc/sysctl.d/12-kptr_restrict.conf
+- mode: system
+  script: |
+    #!/bin/bash
+    # Add systemd units to keep clock in sync
+    systemctl status hwclock-sync.service && exit || true
+    cat > /etc/systemd/system/hwclock-sync.service <<EOF
+    [Unit]
+    Description=Synchronizes the VM clock with the host
+    Wants=hwclock-sync.timer
+
+    [Service]
+    Type=oneshot
+    User=root
+    ExecStart=/usr/sbin/hwclock --hctosys
+
+    [Install]
+    WantedBy=multi-user.target
+    EOF
+
+    cat > /etc/systemd/system/hwclock-sync.timer <<EOF
+    [Unit]
+    Description=Timer to fire hwclock-sync.service
+    Requires=hwclock-sync.service
+
+    [Timer]
+    Unit=hwclock-sync.service
+    OnBootSec=1m
+    OnUnitActiveSec=1m
+
+    [Install]
+    WantedBy=timers.target
+    EOF
+
+    systemctl enable --now hwclock-sync.timer
+probes:
+- script: |
+    #!/bin/bash
+    set -eux -o pipefail
+    if ! timeout 30s bash -c "until command -v docker >/dev/null 2>&1; do sleep 3; done"; then
+      echo >&2 "docker is not installed yet"
+      exit 1
+    fi
+    if ! timeout 30s bash -c "until pgrep dockerd; do sleep 3; done"; then
+      echo >&2 "dockerd is not running"
+      exit 1
+    fi
+  hint: See "/var/log/cloud-init-output.log". in the guest
+hostResolver:
+  # hostResolver.hosts requires lima 0.8.3 or later. Names defined here will also
+  #
+  # resolve inside containers, and not just inside the VM itself.
+  hosts:
+    host.docker.internal: host.lima.internal
+portForwards:
+- guestSocket: "/var/run/docker.sock"
+  hostSocket: "{{.Dir}}/sock/docker.sock"
+- guestSocket: "/var/run/docker.sock"
+  hostSocket: "/var/run/docker.sock"
+video:
+  display: vz
+message: |
+  To run `docker` on the host (assumes docker-cli is installed), run the following commands:
+  ------
+  docker context create lima-{{.Name}} --docker "host=unix://{{.Dir}}/sock/docker.sock"
+
+  docker context use lima-{{.Name}}
+  docker run hello-world
+  ------

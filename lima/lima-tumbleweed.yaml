@@ -1,0 +1,295 @@
+# NOTE: Tumbleweed image is known to be broken as of April 2023:
+# https://github.com/lima-vm/lima/issues/1496
+#
+# This template requires Lima v0.11.3 or later
+vmType: "vz"
+rosetta:
+  # Enable Rosetta for Linux.
+  # Hint: try `softwareupdate --install-rosetta` if Lima gets stuck at `Installing rosetta...`
+  enabled: true
+  # Register rosetta to /proc/sys/fs/binfmt_misc
+  binfmt: true
+
+images:
+# Hint: run `limactl prune` to invalidate the "Current" cache
+- location: "https://download.opensuse.org/tumbleweed/appliances/openSUSE-Tumbleweed-Minimal-VM.x86_64-Cloud.qcow2"
+  arch: "x86_64"
+# JeOS is deprecated and will be removed probably, but Minimal-VM.aarch64-kvm-and-xen still lacks cloud-init
+# https://bugzilla.opensuse.org/show_bug.cgi?id=1210246
+#location: "https://download.opensuse.org/ports/aarch64/tumbleweed/appliances/openSUSE-Tumbleweed-ARM-JeOS-efi.aarch64.qcow2"
+- location: "https://download.opensuse.org/ports/aarch64/tumbleweed/appliances/openSUSE-Tumbleweed-Minimal-VM.aarch64-Cloud.qcow2"
+  arch: "aarch64"
+# download.opensuse.org is inaccessible from Japan (500 Internal Server Error)
+# https://bugzilla.opensuse.org/show_bug.cgi?id=1210240
+- location: "https://provo-mirror.opensuse.org/tumbleweed/appliances/openSUSE-Tumbleweed-Minimal-VM.x86_64-Cloud.qcow2"
+  arch: "x86_64"
+- location: "https://provo-mirror.opensuse.org/ports/aarch64/tumbleweed/appliances/openSUSE-Tumbleweed-ARM-JeOS-efi.aarch64.qcow2"
+  arch: "aarch64"
+
+cpus: 6
+disk: 128GiB
+memory: 8GiB
+caCerts:
+  files:
+  - ~/Projects/certs/cacerts_all.pem
+
+mounts:
+- location: "~"
+  writable: true
+- location: "/tmp/lima"
+  writable: true
+- location: "/tmp/misc"
+  writable: true
+- location: "/private"
+  writable: true
+mountType: "virtiofs"
+containerd:
+  system: false
+  user: false
+
+# networks:
+# # The "vzNAT" IP address is accessible from the host, but not from other guests.
+# - vzNAT: true
+
+provision:
+- mode: system
+  # This script defines the host.docker.internal hostname when hostResolver is disabled.
+  # It is also needed for lima 0.8.2 and earlier, which does not support hostResolver.hosts.
+  # Names defined in /etc/hosts inside the VM are not resolved inside containers when
+  # using the hostResolver; use hostResolver.hosts instead (requires lima 0.8.3 or later).
+  script: |
+    #!/bin/sh
+    sed -i 's/host.lima.internal.*/host.lima.internal host.docker.internal lima-default/' /etc/hosts
+- mode: system
+  # add dnf and swap in virtiofs-enabled kernel
+  script: |
+    #!/bin/bash
+    set -eux -o pipefail
+    command -v dnf >/dev/null 2>&1 && exit 0
+    zypper --non-interactive remove kernel-default-base
+    zypper --non-interactive install -y kernel-default qemu-guest-agent dnf libdnf-repo-config-zypp
+    echo allow_vendor_change=True >> /etc/dnf/dnf.conf
+    shutdown -hP now
+- mode: system
+  script: |
+    #!/bin/bash
+    set -eux -o pipefail
+    command -v docker >/dev/null 2>&1 && exit 0
+    if [ ! -e /etc/systemd/system/docker.socket.d/override.conf ]; then
+      mkdir -p /etc/systemd/system/docker.socket.d
+      # Alternatively we could just add the user to the "docker" group, but that requires restarting the user session
+      cat <<-EOF >/etc/systemd/system/docker.socket.d/override.conf
+      [Socket]
+      SocketUser={{.User}}
+    EOF
+    fi
+    zypper --non-interactive install docker
+    systemctl enable docker
+    systemctl start docker
+- mode: system
+  script: |
+    #!/bin/bash
+    set -eux -o pipefail
+    # flux core
+    pkgs=(
+      # flux core
+      autoconf
+      automake
+      git
+      libtool
+      make
+      pkgconf-pkg-config
+      glibc-devel
+      zeromq-devel
+      libuuid-devel
+      libjansson-devel
+      liblz4-devel
+      libarchive-devel
+      hwloc-devel
+      sqlite3-devel
+      lua51
+      lua51-devel
+      lua51-luaposix
+      aspell
+      aspell-en
+      valgrind-devel
+      mpich-devel
+      jq
+      time
+
+      python311-devel
+      python311-cffi
+      python311-ply
+      python311-Sphinx
+      python311-pyaml
+      python311-neovim
+      python311-nvim-remote
+      python311-black
+      python311-pipx
+      python311-pre-commit
+
+      # flux sched
+      boost-devel
+      libboost_graph-devel
+      readline-devel
+      yaml-cpp-devel
+      libedit-devel
+      ninja
+      cmake
+      clang
+      clang-tools
+      lcov
+      Catch2-devel
+
+      # clang-tools-extra # in clang package
+      perf
+
+      # VM/rosetta stuff
+      qemu-linux-user
+      # dotfiles stuff
+      vim
+      ripgrep
+      fd
+      bat
+      # bfs # not in tumbleweed?
+      broot
+      eza
+      dust
+      fzf # installed by zshrc
+      gh
+      hyperfine
+      nodejs-default
+      npm-default
+      neovim
+      tree
+      tmux
+      rustup
+      zsh
+      lazygit # note, requires copr above
+      ncurses-devel # get terminfo for other terms, like iterm2
+      libxcb-devel # broot dep
+      patch # spack needs it
+      ctags
+      direnv
+      man-pages
+      strace
+      htop
+      gdb
+      # gdb-gdbserver
+
+      python3-clang
+
+
+      # common build deps
+      gettext-tools
+      libopenssl-devel
+      libcurl-devel
+
+      # latex
+      texlive
+      texlive-texfot
+      texlive-latexindent
+      texlive-latexmk
+      texlive-latexdiff
+      texlive-scheme-tetex
+      qpdf
+      perl-Algorithm-Diff # for latexdiff
+    )
+
+    dnf -y install "${pkgs[@]}"
+
+    command -v cargo >/dev/null 2>&1 && exit 0
+    rustup default stable
+- mode: system
+  script: |
+    #!/bin/bash
+    chsh -s /usr/bin/zsh {{.User}}
+- mode: user
+  script: |
+    #!/bin/bash
+    [[ -e ~/Repos ]] && exit 0
+    ln -s /Users/{{.User}}/Repos ~/
+    ln -s /Users/{{.User}}/Downloads ~/
+    ln -s /Users/{{.User}}/Projects ~/
+    ln -s /Users/{{.User}}/.dotfiles ~/
+    ln -s /Users/{{.User}}/.cache ~/
+    (cd ~/.dotfiles ; python3 ~/.dotfiles/update.py)
+    # install vim plugins
+    nvim +'PlugInstall --sync' +qa
+    # install zsh and tmux plugins and rust tools
+    zsh -c 'source ~/.dotfiles/zsh/.zshrc'
+- mode: system
+  script: |
+    #!/bin/bash
+    echo 0 > /proc/sys/kernel/yama/ptrace_scope
+    echo kernel.yama.ptrace_scope = 0 > /etc/sysctl.d/10-ptrace.conf
+    echo kernel.perf_event_paranoid = -1 > /etc/sysctl.d/11-paranoid.conf
+    echo kernel.kptr_restrict = 0 > /etc/sysctl.d/12-kptr_restrict.conf
+- mode: system
+  script: |
+    #!/bin/bash
+    # Add systemd units to keep clock in sync
+    systemctl status hwclock-sync.service && exit || true
+    cat > /etc/systemd/system/hwclock-sync.service <<EOF
+    [Unit]
+    Description=Synchronizes the VM clock with the host
+    Wants=hwclock-sync.timer
+
+    [Service]
+    Type=oneshot
+    User=root
+    ExecStart=/usr/sbin/hwclock --hctosys
+
+    [Install]
+    WantedBy=multi-user.target
+    EOF
+
+    cat > /etc/systemd/system/hwclock-sync.timer <<EOF
+    [Unit]
+    Description=Timer to fire hwclock-sync.service
+    Requires=hwclock-sync.service
+
+    [Timer]
+    Unit=hwclock-sync.service
+    OnBootSec=1m
+    OnUnitActiveSec=1m
+
+    [Install]
+    WantedBy=timers.target
+    EOF
+
+    systemctl enable --now hwclock-sync.timer
+probes:
+- script: |
+    #!/bin/bash
+    set -eux -o pipefail
+    if ! timeout 30s bash -c "until command -v docker >/dev/null 2>&1; do sleep 3; done"; then
+      echo >&2 "docker is not installed yet"
+      exit 1
+    fi
+    if ! timeout 30s bash -c "until pgrep dockerd; do sleep 3; done"; then
+      echo >&2 "dockerd is not running"
+      exit 1
+    fi
+  hint: See "/var/log/cloud-init-output.log". in the guest
+hostResolver:
+  # hostResolver.hosts requires lima 0.8.3 or later. Names defined here will also
+  #
+  # resolve inside containers, and not just inside the VM itself.
+  hosts:
+    host.docker.internal: host.lima.internal
+portForwards:
+- guestSocket: "/var/run/docker.sock"
+  hostSocket: "{{.Dir}}/sock/docker.sock"
+- guestSocket: "/var/run/docker.sock"
+  hostSocket: "/var/run/docker.sock"
+video:
+  display: vz
+message: |
+  To run `docker` on the host (assumes docker-cli is installed), run the following commands:
+  ------
+  docker context create lima-{{.Name}} --docker "host=unix://{{.Dir}}/sock/docker.sock"
+
+  docker context use lima-{{.Name}}
+  docker run hello-world
+  ------
