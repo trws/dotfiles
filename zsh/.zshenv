@@ -1,1 +1,41 @@
-zshenv-link
+# Basic universal setup, pull in environment and path
+# Author: Tom Scogland
+# [[ ! -z $WSLENV ]] && export XDG_RUNTIME_DIR=/tmp/$UID && mkdir -m 0700 $XDG_RUNTIME_DIR
+if [[ -n "$WSLENV" ]] ; then
+  export BROWSER=wslview
+  pgrep -f syncthing >& /dev/null || syncthing -no-browser 1> /dev/null 2>&1 &
+fi
+: ${ZDOTDIR:=~/.dotfiles/zsh}
+export ZDOTDIR
+
+# ensure my funcs, and prompts are there before load
+fpath=($ZDOTDIR/funcs $fpath)
+autoload -Uz $ZDOTDIR/funcs/*(.:t)
+source $ZDOTDIR/sysmagic
+
+# XDG setup and notes
+# NOTE: every path must be absolute, must be after sys-magic
+h=~/
+h=${h:A}
+# portable scripts go in ~/.local/bin
+# portable binaries go in ~/.local/lib
+# arch specific binaries go in ~/.local/lib/$SYS_TYPE
+export XDG_DATA_HOME=$h/.local/share
+export XDG_CONFIG_HOME=$h/.config
+export XDG_CACHE_HOME=$h/.cache # non-essential (cached) data
+export XDG_STATE_HOME=$h/.local/state # cross-run state but not long-term, logs, history, swap files possibly
+# export XDG_DATA_DIRS= # additional data directories
+# export XDG_CONFIG_DIRS= # additional config directories
+# export XDG_RUNTIME_DIR # runtime files, sockets etc.  Not sure we can safely set this
+unset h
+
+if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then . ~/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
+source $ZDOTDIR/pathsetup
+source $ZDOTDIR/environment
+
+export SHELL=$(which $SHELL)
+
+# Skip the not really helping Ubuntu global compinit
+skip_global_compinit=1
+[[ -e "$HOME/.cargo/env" ]] && . "$HOME/.cargo/env"
+[[ -e "/home/scogland1/programs/linux-aarch64/cargo/env" ]] && . "/home/scogland1/programs/linux-aarch64/cargo/env"

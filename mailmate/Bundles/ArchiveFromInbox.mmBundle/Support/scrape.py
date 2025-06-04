@@ -15,10 +15,7 @@ logging.basicConfig(filename="/tmp/mmfilter", level=logging.INFO, filemode="w")
 log = logging.getLogger("filter")
 
 
-if platform.node().startswith('abrams'):
-    mbox =  "imap://scogland1%40llnl.gov@localhost/"
-else:
-    mbox = "imap://scogland1%40llnl.gov@outlook.office365.com/"
+mbox =  "imap://scogland1%40llnl.gov@localhost/"
 
 targets = {
     "INBOX": "Archive",
@@ -27,9 +24,9 @@ targets = {
     "News": "feed/archive",
     "paper_trail": "paper_trail/archive",
     "feed/by_subject": "feed/by_subject_archive",
-    "feed/by_to": "feed/by_to_archive",
+    "feed/by_to": "feed/archive",
     "paper_trail/by_subject": "paper_trail/by_subject_archive",
-    "paper_trail/by_to": "paper_trail/by_to_archive",
+    "paper_trail/by_to": "paper_trail/archive",
 }
 
 log.info("starting filter")

@@ -143,6 +143,10 @@ export CARGO_HOME="$PRGPATH/cargo"
 add_to_path_front "$PRGPATH/cargo"
 
 add_to_path_front "$PRGPATH/spack"
+# production spack on laptop
+if is-darwin ; then
+  add_to_path_front ~/Repos/spack-prod/env/.spack-env/view
+fi
 
 remove_from_path ~/scripts ~/.dotfiles/scripts
 path=(~/.dotfiles/scripts $path)

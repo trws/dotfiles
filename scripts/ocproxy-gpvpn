@@ -1,1 +1,16 @@
-vpn/ocproxy-gpvpn
+#!/usr/bin/env zsh
+extra=()
+if [[ "$(hostname)" == "falcon" ]] ; then
+  # no 22002, locallu used
+else
+  extra=($extra -L 22002:vortex.llnl.gov:17434 )
+fi
+ocproxy -v \
+  -D 12347 \
+  -L 9025:eris.llnl.gov:922 \
+  -L 9024:rztopaz.llnl.gov:22 \
+  -L 9023:eris.llnl.gov:22 \
+  $extra \
+  -L 4043:outlook.office365.com:443 \
+  -L 9993:outlook.office365.com:993 \
+  -L 5587:outlook.office365.com:587

@@ -33,6 +33,8 @@ if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then . ~/.nix-profile/etc/profile
 source $ZDOTDIR/pathsetup
 source $ZDOTDIR/environment
 
+export SHELL=$(which $SHELL)
+
 # Skip the not really helping Ubuntu global compinit
 skip_global_compinit=1
 [[ -e "$HOME/.cargo/env" ]] && . "$HOME/.cargo/env"

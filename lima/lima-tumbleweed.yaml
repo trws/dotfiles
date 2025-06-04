@@ -66,8 +66,10 @@ provision:
     #!/bin/bash
     set -eux -o pipefail
     command -v dnf >/dev/null 2>&1 && exit 0
+    # must update in case image has an old python that would conflict
+    zypper dup --non-interactive -y
     zypper --non-interactive remove kernel-default-base
-    zypper --non-interactive install -y kernel-default qemu-guest-agent dnf libdnf-repo-config-zypp
+    zypper --non-interactive install -y kernel-default qemu-guest-agent dnf libdnf-repo-config-zypp zsh
     echo allow_vendor_change=True >> /etc/dnf/dnf.conf
     shutdown -hP now
 - mode: system
@@ -136,13 +138,16 @@ provision:
       libedit-devel
       ninja
       cmake
+      meson
       clang
       clang-tools
+      llvm-devel
       lcov
       Catch2-devel
 
       # clang-tools-extra # in clang package
       perf
+      patchelf
 
       # VM/rosetta stuff
       qemu-linux-user
@@ -164,7 +169,7 @@ provision:
       tree
       tmux
       rustup
-      zsh
+      # added above so shell can be set zsh
       lazygit # note, requires copr above
       ncurses-devel # get terminfo for other terms, like iterm2
       libxcb-devel # broot dep
@@ -179,6 +184,9 @@ provision:
 
       python3-clang
 
+      man
+      gcc
+      gcc-c++
 
       # common build deps
       gettext-tools
@@ -187,16 +195,21 @@ provision:
 
       # latex
       texlive
+      texlive-glossaries-english
       texlive-texfot
       texlive-latexindent
       texlive-latexmk
       texlive-latexdiff
+      texlive-lstaddons
       texlive-scheme-tetex
+      texlive-toolbox
+      texlive-xsavebox
       qpdf
       perl-Algorithm-Diff # for latexdiff
     )
 
-    dnf -y install "${pkgs[@]}"
+    # dnf -y install "${pkgs[@]}"
+    zypper --non-interactive install -y "${pkgs[@]}"
 
     command -v cargo >/dev/null 2>&1 && exit 0
     rustup default stable
